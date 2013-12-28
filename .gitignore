@@ -1,0 +1,17 @@
+cgi-bin/
+error/
+common/
+icons/
+html/user_image/
+html/upload_pic/
+html/mood/
+html/gift/
+html/favicon.ico
+html/png/
+html/smiley/
+html/sound/
+html/tornado/demos/chat/nohup.out
+html/tornado/demos/chat/nohup
+html/.htaccess
+html/ajax/.htaccess
+

@@ -1,0 +1,45 @@
+*{border:none;}
+*{font-size:11px;font-family:Lucida Grande,verdana;}
+*{margin:0em;padding:0em;}
+#header{z-index:10;background-color:#003153;height:7.3em;width:100%;}
+#header-wrapper{text-align:center;width:65em;margin:0em auto;display:table;}
+#wrapper{		
+		width: 111em;
+		margin: 0 auto;
+		position:relative;
+		}
+#recover_password_box{}
+#recover_password_box input{padding:.5em;}
+#forgot_password_box{}
+#forgot_password_box input{padding:.5em;}
+#qm-flogo{float:left;margin-right:4em;}
+#login_box{display:table;text-align:left;padding:1.6em 0em 0em 0em;}
+#email_pass_label{color:white;margin:1em 1em .5em 0em;}
+#email_label{}
+#password_label{margin-left:14em;}
+#remember_forgot{color:white;margin:.1em 1em .5em 0em;}
+#remember_forgot a{color:white;text-decoration:none;}
+form input{height:1.6em;padding:.5em;}
+#login_email{width:16em;}
+#login_pass{width:14em;}
+#login_button{height:2.6em;background:#00ccff;color:white;font-weight:bold;cursor:pointer;}
+#forgot_link{margin-left:8.3em;}
+#main_container{clear:left;background:url("/png/main_bg.png") left top;}
+#qm_description{float:left;padding:4em;width:42em;}
+#qm_description div{font-size:1.5em;color:#336699;text-align:center;margin:1em;}
+#register_box{border-left:0.1em solid #f9f9f9;padding:3em 0em 7em 0em;overflow:hidden;text-align:center;}
+#register_title{font-size:1.5em;color:#003399;margin:0em 0em 1em .5em;}
+#register_box h1{font-size:1.5em;color:#003399;margin:0em 0em 1em .5em;}
+#register_box h2{color:#003399;margin:0em 0em 1.5em .5em;}
+#register_box div{margin:1em;}
+#register_box label{color:#003399;}
+#signup_gender,#day,#month,#year{border:.1em solid #336699;height:3em;padding:.5em;}
+#signup_name{width:20em;height:2em;padding:.5em;margin-left:4em;border:.1em solid #336699;}
+#signup_password{width:20em;height:2em;padding:.5em;margin-left:2em;border:.1em solid #336699;}
+#signup_gender{margin-left:3em;}
+#day{margin-left:2.5em;}
+#signup_button{height:3em;background:#00ccff;color:white;font-weight:bold;cursor:pointer;padding:.5em;}
+#signup_button_container{padding-left:7.8em;}
+#footer{clear:left;margin:1em 0em 2em 0em;text-align:center;}
+#footer .separator{margin:0em .5em 0em .5em;}
+#footer a{text-decoration:none;}

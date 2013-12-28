@@ -1,0 +1,12 @@
+# robots.txt file to crawl http://www.quipmate.com/
+
+User-agent: *
+Allow: http://blog.quipmate.com/
+Allow: http://help.quipmate.com/
+Allow: http://developers.quipmate.com/
+Allow: /public
+
+User-agent: *
+Disallow: /ajax
+Disallow: /script
+Disallow: /style

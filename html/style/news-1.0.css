@@ -1,0 +1,25 @@
+.nf_post{clear:both;position:relative;padding:1.5em;border-bottom:0.1em solid #e0e0e0;}
+.pageclass_json{clear:both;}
+.pclass_json{margin:0.3em 0em; 0.6em 0em;}
+.post_name{position:relative;top:-4.5em;left:5.5em;font-weight:bold;margin-bottom:.5em;}
+.cclass_json{padding:0.4em 0.5em;min-height:2.6em;position:relative;margin:0em;background-color:#edeff4;border:0.1em solid #ffffff;border-bottom:none;}
+.cclass_box{padding:0.4em 0.5em;min-height:3.2em;margin:0em;background-color:#edeff4;border:0.1em solid #ffffff;}
+.likeclass_json{margin:1em 0em 0em 0em;padding:0.3em 0.5em;position:relative;background-color:#edeff4;border:0.1em solid #ffffff;border-bottom:none;} 
+.time_tag_json{color:gray;margin:0.5em 0em .5em 0em;}
+.time_tag_json a{color:#888888;font-size:0.8em;}
+.comment_excite_json{color:#003399;font-size:.9em;margin:0em 0em 0em 1em;cursor:pointer;}
+.comment_time_json{color:#888888;margin:0em 0em 0em 0em;font-size:0.8em;}
+.more_excite_json{cursor:pointer;color:#003399;font-size:.9em;margin-left:1em;}
+.comment_name{margin:0em 4em 0em .5em;}
+.comment_name a{color:#336699;font-weight:bold;} 
+.show_all_comments{cursor:pointer;} 
+.comments_show{padding:0.2em 0.2em 0.2em 0.5em;margin:0em;background-color:#edeff4;border:0.1em solid #ffffff;border-bottom:none;}
+.bold{font-weight:bold;} 
+.post_setting{position:absolute;top:0em;right:0em;cursor:pointer;width:0em;height:0em;border-top:solid 1em #cccccc;border-left: solid 1em transparent;border-right: solid 1em transparent;}
+.comment_setting{position:absolute;top:0em;right:0.4em;cursor:pointer;color:#cccccc;}
+.post_pointer{ border-bottom:solid 0.7em #dddddd;border-left: solid 0.5em transparent;border-right: solid 0.5em transparent;position:absolute;
+    width: 0;
+    height: 0;
+    top: -0.7em;
+    left: 1em;
+}
