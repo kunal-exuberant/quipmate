@@ -284,6 +284,18 @@ if(isset($_SESSION['auth']))
 			{
 				$api->news_feed();
 			}
+			else if($_GET['action'] == 'user_details_fetch')
+			{
+				$api->user_details_fetch();
+			}
+			else if($_GET['action'] == 'user_delete')
+			{
+				$api->user_delete();
+			}
+			else if($_GET['action'] == 'admin_feed')
+			{
+				$api->admin_feed();
+			}
 			else if($_GET['action'] == 'notice_count')
 			{
 				$api->notice_count();

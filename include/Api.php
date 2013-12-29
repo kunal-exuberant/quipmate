@@ -276,7 +276,7 @@ class Api
 					  $rnotice = $database->setting_notice_select($myprofileid);
 					  if($rnotice['friend_request'])
 					  {
-						  $result = $database->notice_insert($actionid,$profileid,$actiontype,$actionid);
+						  $database->notice_insert($actionid,$profileid,$actiontype,$actionid);
 					  }
 					  $remail = $database->setting_email_select($myprofileid);
 					  if($remail['friend_request'])
@@ -831,7 +831,7 @@ class Api
 							$rnotice = $database->setting_notice_select($myprofileid);
 						    if($rnotice['event_invite'])
 						    {
-							  $result = $database->notice_insert($actionid,$profileid,$actiontype,$actionid);
+								$database->notice_insert($actionid,$profileid,$actiontype,$actionid);
 						    }
 							$remail = $database->setting_email_select($profileid);
 						    if($remail['event_invite'])
@@ -902,7 +902,7 @@ class Api
 							$rnotice = $database->setting_notice_select($myprofileid);
 						    if($rnotice['group_invite'])
 						    {
-							    $result = $database->notice_insert($actionid,$profileid,$actiontype,$actionid);
+							    $database->notice_insert($actionid,$profileid,$actiontype,$actionid);
 						    }
 							$remail = $database->setting_email_select($profileid);
 						    if($remail['group_invite'])
@@ -1698,7 +1698,7 @@ class Api
 										$rnotice = $database->setting_notice_select($myprofileid);
 										if($rnotice['post_comment'])
 										{
-											$result = $database->notice_insert($actionid,$profileid,$ctype,$actionid);
+											$database->notice_insert($actionid,$profileid,$ctype,$actionid);
 										}
 										$remail = $database->setting_email_select($profileid);
 										if($remail['post_comment'])
@@ -2566,7 +2566,7 @@ class Api
 												$rnotice = $database->setting_notice_select($myprofileid);
 												if($rnotice['gift'])
 												{
-													$result = $database->notice_insert($actionid,$profileid,$actiontype,$actionid);
+													$database->notice_insert($actionid,$profileid,$actiontype,$actionid);
 												}
 												$remail = $database->setting_email_select($profileid);
 												if($remail['gift'])
@@ -2701,7 +2701,7 @@ class Api
 								$rnotice = $database->setting_notice_select($myprofileid);
 								if($rnotice['group_admin'])
 								{
-									$result = $database->notice_insert(0,$profileid,$actiontype,0);
+									$database->notice_insert(0,$profileid,$actiontype,0);
 								}
 								$remail = $database->setting_email_select($profileid);
 								if($remail['group_admin'])
@@ -3446,7 +3446,7 @@ class Api
 								$rnotice = $database->setting_notice_select($myprofileid);
 								if($rnotice['message'])
 								{
-									$result = $database->notice_insert($actionid,$profileid,$actiontype,$actionid);
+									$database->notice_insert($actionid,$profileid,$actiontype,$actionid);
 								}
 								$remail = $database->setting_email_select($profileid);
 								if($remail['message'])
@@ -3774,7 +3774,7 @@ class Api
 										$rnotice = $database->setting_notice_select($profileid);
 										if($rnotice['missu'])
 										{
-											$result = $database->notice_insert($actionid,$profileid,$actiontype,$actionid);
+											$database->notice_insert($actionid,$profileid,$actiontype,$actionid);
 										}
 										$remail = $database->setting_email_select($profileid);
 										if($remail['missu'])
@@ -3810,7 +3810,7 @@ class Api
 										$rnotice = $database->setting_notice_select($profileid);
 										if($rnotice['missu'])
 										{
-											$result = $database->notice_insert($actionid,$profileid,$actiontype,$pageid);
+											$database->notice_insert($actionid,$profileid,$actiontype,$pageid);
 										}
 										$remail = $database->setting_email_select($profileid);
 										if($remail['missu'])
@@ -3927,6 +3927,147 @@ class Api
 		else
 		{
 				$help->error_description(9);		
+		}
+	}
+	
+	
+	function user_delete()
+	{
+		$help = new Help();
+		if(isset($_GET['profileid']))
+		{
+			if(isset($_GET['profileid']))
+			{
+				$database = new Database();
+				$myprofileid = $_SESSION['userid'];
+				if($database->moderator_check($myprofileid))
+				{
+					$profileid = $_GET['profileid'];
+					$row = $database->is_user($profileid);
+					if($row['USERID'] == $profileid)
+					{
+						$database->user_delete($profileid);
+						$data['ack']  = 1;
+						echo json_encode($data);
+					}
+					else
+					{
+						$help->error_description(16);						
+					}
+				}
+				else
+				{
+					$help->error_description(12);					
+				}
+			}
+			else
+			{
+				$help->error_description(18);			
+			}	
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
+	
+	function user_details_fetch()
+	{
+		$help = new Help();
+		if(isset($_GET['email']))
+		{
+			if(isset($_GET['email']))
+			{
+				$database = new Database();
+				$myprofileid = $_SESSION['userid'];
+				if($database->moderator_check($myprofileid))
+				{
+					$memcache = new Memcached();
+					$email = $_GET['email'];
+					if($help->is_email($email))
+					{
+						$row = $database->is_already_user($email);
+						if($email == $row['EMAIL'])
+						{
+							$profileid = $row['USERID'];
+							$data['ack']  = 1;
+							$data['profileid']  = $profileid;
+							$data['name'] = $help->name_fetch($profileid, $memcache, $database);
+							$data['pimage'] = $help->pimage_fetch($profileid, $memcache, $database);
+							echo json_encode($data);
+						}
+						else
+						{
+							$help->error_description(16);						
+						}
+					}
+					else
+					{
+						$help->error_description(23);
+					}
+				}
+				else
+				{
+					$help->error_description(12);					
+				}
+			}
+			else
+			{
+				$help->error_description(18);			
+			}	
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
+	
+	
+	function admin_feed()
+	{
+		$help = new Help();
+		if(isset($_GET['start']))
+		{ 
+			if(isset($_GET['start']))
+			{
+				global $action,$name,$pimage;
+				$feed = new Feed();
+				$database = new Database();
+				$myprofileid = $_SESSION['userid'];
+				if($database->moderator_check($myprofileid))
+				{
+					$memcache = new Memcached();
+					$json = new Json();
+					$encode = new Encode();
+					$start = $_GET['start'];
+					$res = $database->everything_select($start,10);
+					$k = 0;
+					while($NROW =$res->fetch_array())
+					{
+						$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+						$k++;
+					}
+					$data['action'] = $action;
+					$data['myprofileid'] = $_SESSION['USERID']; 
+					$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+					$data['name'] = $name; 
+					$data['pimage'] = $pimage;
+					$data['tag'] = $_SESSION['tag_json'];
+					echo json_encode($data);
+				}
+				else
+				{
+					$help->error_description(12);					
+				}
+			}
+			else
+			{
+				$help->error_description(18);			
+			}	
+		}
+		else
+		{
+			$help->error_description(9);
 		}
 	}
 	
@@ -4379,7 +4520,7 @@ class Api
 									$data['file'] = $cdn.$actual_image_name;
 									$data['caption']=$name;
 									echo json_encode($data); 
-									$result = $database->get_event_members($profileid);
+									$result = $database->guest_select($profileid);
 									$email = new Email();
 									$param = array();
 									$param['type'] = 'event_post';
@@ -4389,13 +4530,13 @@ class Api
 									$param['actionid'] = $actionid;
 									while ($res = $result->fetch_array())
 									{
-										$memberid = $res['PROFILEID'] ;
+										$memberid = $res['profileid'] ;
 										if($memberid != $myprofileid )
 										{
 											$rnotice = $database->setting_notice_select($memberid);
 											if($rnotice['event_post'])
 											{
-												$result = $database->notice_insert($actionid,$memberid,$actiontype,$actionid);
+												$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
 											}
 											$remail = $database->setting_email_select($memberid);
 											if($remail['event_post'])
@@ -4529,7 +4670,7 @@ class Api
 									$data['file'] = $cdn.$actual_image_name;
 									$data['caption']=$name;
 									echo json_encode($data); 
-									$result = $database->get_group_members($profileid);		
+									$result = $database->member_select($profileid);		
 									$email = new Email();
 									$param = array();
 									$param['type'] = 'group_post';
@@ -4539,13 +4680,13 @@ class Api
 									$param['actionid'] = $actionid;
 									 while ($res = $result->fetch_array())
 									 {
-										$memberid = $res['PROFILEID'] ;
+										$memberid = $res['profileid'] ;
 										if($memberid != $myprofileid )
 										{
 											$rnotice = $database->setting_notice_select($memberid);
 											if($rnotice['group_post'])
 											{
-												$result = $database->notice_insert($actionid,$memberid,$actiontype,$actionid);
+												$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
 											}
 											$remail = $database->setting_email_select($memberid);
 											if($remail['group_post'])
@@ -4682,7 +4823,7 @@ class Api
 									$rnotice = $database->setting_notice_select($profileid);
 									if($rnotice['profile_post'])
 									{
-										$result = $database->notice_insert($actionid,$profileid,$actiontype,$actionid);
+										$database->notice_insert($actionid,$profileid,$actiontype,$actionid);
 									}
 									$remail = $database->setting_email_select($profileid);
 									if($remail['profile_post'])
@@ -4842,7 +4983,7 @@ class Api
 							$rnotice = $database->setting_notice_select($profileid);
 							if($rnotice['praise'])
 							{
-								$result = $database->notice_insert($actionid,$profileid,$actiontype,$actionid);
+								$database->notice_insert($actionid,$profileid,$actiontype,$actionid);
 							}
 						/*
 	
@@ -4921,7 +5062,7 @@ class Api
 							$rnotice = $database->setting_notice_select($profileid);
 							if($rnotice['direct_letter'])
 							{
-								$result = $database->notice_insert($actionid,$profileid,$actiontype,$actionid);
+								$database->notice_insert($actionid,$profileid,$actiontype,$actionid);
 							}
 						/*
 							$remail = $database->setting_email_select($profileid);
@@ -5002,7 +5143,7 @@ class Api
 										$rnotice = $database->setting_notice_select($profileid);
 										if($rnotice['answer'])
 										{
-											$result = $database->notice_insert($actionid,$profileid,$ctype,$pageid);
+											$database->notice_insert($actionid,$profileid,$ctype,$pageid);
 										}
 										/*
 										$remail = $database->setting_email_select($profileid);
@@ -5111,7 +5252,7 @@ class Api
 								}
 								if($result)
 								{
-									$result = $database->get_group_members($profileid);
+									$result = $database->member_select($profileid);
 									$email = new Email();
 									$param = array();
 									$param['type'] = 'event_post';
@@ -5121,13 +5262,13 @@ class Api
 									$param['actionid'] = $actionid;
 									while ($res = $result->fetch_array())
 									{
-										$memberid = $res['PROFILEID'] ;
+										$memberid = $res['profileid'] ;
 										if($memberid != $myprofileid )
 										{
 											$rnotice = $database->setting_notice_select($memberid);
 											if($rnotice['group_post'])
 											{
-												$result = $database->notice_insert($actionid,$memberid,$actiontype,$actionid);
+												$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
 											}
 											$remail = $database->setting_email_select($memberid);
 											if($remail['group_post'])
@@ -5392,24 +5533,23 @@ class Api
 								$result = $database->diary_insert($actionid,$page);
 								if($result)
 								{
-									$email = new Email(); 
-									$result = $database->get_group_members($profileid);
+									$result = $database->member_select($profileid);
 									$email = new Email();
 									$param = array();
-									$param['type'] = 'event_post';
+									$param['type'] = 'group_post';
 									$param['profileid'] = $profileid; 
 									$param['page'] = $page;
 									$param['myprofileid'] = $myprofileid;
 									$param['actionid'] = $actionid;
-									while ($res = $result->fetch_array())
+									while($res = $result->fetch_array())
 									{
-										$memberid = $res['PROFILEID'] ;
+										$memberid = $res['profileid'] ;
 										if($memberid != $myprofileid )
 										{
 											$rnotice = $database->setting_notice_select($memberid);
 											if($rnotice['group_post'])
 											{
-												$result = $database->notice_insert($actionid,$memberid,$actiontype,$actionid);
+												$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
 											}
 											$remail = $database->setting_email_select($memberid);
 											if($remail['group_post'])
@@ -5481,8 +5621,7 @@ class Api
 								$result = $database->diary_insert($actionid,$page);
 								if($result)
 								{
-									$result = $database->get_event_members($eventid);
-									
+									$result = $database->guest_select($eventid);
 									$email = new Email();
 									$param = array();
 									$param['type'] = 'event_post';
@@ -5492,13 +5631,13 @@ class Api
 									$param['actionid'] = $actionid;
 									while ($res = $result->fetch_array())
 									 {
-										$memberid = $res['PROFILEID'] ;
+										$memberid = $res['profileid'] ;
 										if($memberid != $myprofileid )
 										{
 											$rnotice = $database->setting_notice_select($memberid);
 											if($rnotice['event_post'])
 											{
-												$result = $database->notice_insert($actionid,$memberid,$actiontype,$actionid);
+												$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
 											}
 											$remail = $database->setting_notice_select($memberid);
 											if($remail['event_post'])
@@ -5580,7 +5719,7 @@ class Api
 									$data['actionid'] = $actionid; 
 									$data['page'] = $page; 
 									echo json_encode($data);
-									$result = $database->get_event_members($profileid);
+									$result = $database->guest_select($profileid);
 									$email = new Email();
 									$param = array();
 									$param['type'] = 'group_post';
@@ -5590,13 +5729,13 @@ class Api
 									$param['actionid'] = $actionid;
 									while ($res = $result->fetch_array())
 									{
-										$memberid = $res['PROFILEID'] ;
+										$memberid = $res['profileid'] ;
 										if($memberid != $myprofileid )
 										{
 											$rnotice = $database->setting_notice_select($memberid);
 											if($rnotice['event_post'])
 											{
-												$result = $database->notice_insert($actionid,$memberid,$actiontype,$actionid);
+												$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
 											}
 											$remail = $database->setting_notice_select($memberid);
 											if($remail['event_post'])
@@ -5678,7 +5817,7 @@ class Api
 									$data['actionid'] = $actionid; 
 									$data['page'] = $page; 
 									echo json_encode($data);
-									$result = $database->get_group_members($profileid);
+									$result = $database->member_select($profileid);
 									$email = new Email();
 									$param = array();
 									$param['type'] = 'group_post';
@@ -5688,13 +5827,13 @@ class Api
 									$param['actionid'] = $actionid;
 									 while ($res = $result->fetch_array())
 									 {
-										$memberid = $res['PROFILEID'] ;
+										$memberid = $res['profileid'] ;
 										if($memberid != $myprofileid )
 										{
 											$rnotice = $database->setting_notice_select($memberid);
 											if($rnotice['group_post'])
 											{
-												$result = $database->notice_insert($actionid,$memberid,$actiontype,$actionid);
+												$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
 											}
 											$remail = $database->setting_email_select($memberid);
 											if($remail['group_post'])
@@ -7214,9 +7353,8 @@ class Api
 						if($actionid)
 						{
 							$eventname = $row['name'];
-							$guests = $database->get_event_members($eventid);
+							$guests = $database->guest_select($eventid);
 							$result = $database->event_delete($eventid);
-							
 							$email = new Email();
 							$param = array();
 							$param['type'] = 'event_cancel';
@@ -7226,7 +7364,7 @@ class Api
 							
 							while ($res = $guests->fetch_array())
 							{
-								$memberid = $res['PROFILEID'] ;
+								$memberid = $res['profileid'] ;
 								if ($memberid != $myprofileid )
 								{
 									$rnotice = $database->setting_notice_select($profileid);
@@ -7601,11 +7739,14 @@ class Api
 				if($password==$pass)
 				{	
 					$myprofileid=$row['USERID'];
-					setcookie(session_name(),session_id(),time()+3600000,'/');
+					$_SESSION['auth'] = $row['USERID'];
+					$_SESSION['userid'] = $_SESSION['USERID']=$row['USERID'];
+					$sid = session_id();
+					setcookie(session_name(),$sid,time()+3600000,'/');
 					$data['ack'] = 1;
 					$data['message'] = 'Login Successful';
 					$data['myprofileid'] = $row['USERID'];
-					$data['sessionid'] = session_id();
+					$data['sessionid'] = $sid;
 					$data['session_name'] = session_name();
                     echo json_encode($data);					
 				}	

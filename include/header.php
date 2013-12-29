@@ -44,6 +44,21 @@ if($_SERVER['SCRIPT_NAME'] == '/index.php')
 		}
 	}
 }
+else if($_SERVER['SCRIPT_NAME'] == '/admin.php') 
+{
+	$page = 'admin_json';
+	$profile_relation = 0;
+	if(isset($_GET['hl']))
+	{
+		$hl = $_GET['hl']; 
+		switch($hl)
+		{
+			case 'inbox': $page = 'inbox'; break;
+			case 'remove_user': $page = 'remove_user'; break;	
+			default: $page = 'admin_json';
+		}
+	}
+}
 else if($_SERVER['SCRIPT_NAME'] == '/settings.php') 
 {
 	$page = 'notification';

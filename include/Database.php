@@ -35,6 +35,16 @@ class Database
 		$fn =  $res1->fetch_row();
 		return $fn[0];
 	} 
+	function user_delete($profileid)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		$this->con->query("DELETE FROM `signup` Where USERID ='$profileid' ");
+		$this->con->query("DELETE FROM `action` Where ACTIONBY ='$profileid' OR PROFILEID ='$profileid'");
+		$this->con->query("DELETE FROM `notice` Where ACTIONBY ='$profileid' OR PROFILEID ='$profileid'");
+		$this->con->query("DELETE FROM `subscribe` Where FRIENDID ='$profileid' OR PROFILEID ='$profileid'");
+		$result=$this->con->query("DELETE FROM `inbox` Where Where ACTIONBY ='$profileid' OR ACTIONON ='$profileid'");
+		return $result;
+	}
 	function photo_friend_select($profileid,$limit,$count)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
@@ -1204,6 +1214,17 @@ class Database
 		$result=$this->con->query("SELECT * FROM action INNER JOIN action ON action.actionid = action.pageid WHERE action.ACTIONID = '$actionid' AND action.ACTIONTYPE = '$prtype'");
 		return $result->fetch_array();
 	}
+	function moderator_select()
+	{
+		return $this->con->query("Select * from moderator");
+	}
+	function moderator_check($profileid)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		$result = $this->con->query("SELECT IF( EXISTS( SELECT * FROM `moderator` WHERE profileid = '$profileid'),1, 0) as result");
+		$ret = $result->fetch_array();
+		return $ret['result'];
+	}
 	
     function update_extra($actionid, $extra)
 	{	
@@ -1251,6 +1272,11 @@ FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action INNER
 		$result=$this->con->query("SELECT A.* FROM action as A INNER JOIN(SELECT MAX(a.actionid) as actionid FROM action as a inner join actiontype on actiontype.actiontypeid = a.ACTIONTYPE WHERE (a.PROFILEID ='$profileid') AND actiontype.profile_feed ='1' GROUP BY PAGEID ORDER BY a.ACTIONID DESC LIMIT $limit,$count) AS B ON A.ACTIONID = B.ACTIONID"); 
 		return $result;
 	} 	
+	function everything_select($limit,$count=10)
+	{
+		$result=$this->con->query("SELECT A.* FROM action as A INNER JOIN(SELECT MAX(a.actionid) as actionid FROM action as a inner join actiontype on actiontype.actiontypeid = a.ACTIONTYPE WHERE actiontype.profile_feed ='1' GROUP BY PAGEID ORDER BY a.ACTIONID DESC LIMIT $limit,$count) AS B ON A.ACTIONID = B.ACTIONID"); 
+		return $result;
+	} 
 	
 	function group_feed_select($profileid,$limit,$count=10)
 	{
