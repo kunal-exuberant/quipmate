@@ -4,7 +4,7 @@ if($page == 'group_json' && ($profile_relation == 0 || $profile_relation == 1))
 ?>
 <div id="upload_box"> 
 	<div id="actions">
-		<span id="status_link" style="margin-left:0em;cursor:pointer;"><img src="http://icon.qmcdn.net/post_blue.png" height="20" width="20" /><span class="">Post</span></span>
+		<span id="status_link" style="margin-left:0em;cursor:pointer;"><img src="http://icon.qmcdn.net/post_blue.png" height="20" width="20" /><span class="">Discussion</span></span>
 		<span id="photo_link" style="margin-left:1.5em;cursor:pointer;"><img src="http://icon.qmcdn.net/file_upload_blue.png" height="20" width="20" /><span class="">Photo/Video/Doc</span></span>
 		<span onclick="ui.group_question(this)" style="margin-left:1.5em;cursor:pointer;"><img src="http://icon.qmcdn.net/poll_blue.png" height="20" width="20" /><span class="">Question</span></span>	
 	</div> 

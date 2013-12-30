@@ -47,7 +47,7 @@ class File
 		?>
 	   <script type="text/javascript" src="<?php echo $this->script_cdn.'chat-1.0.js'; ?>" charset="utf-8"></script>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'friend_event-1.0.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'search-1.0.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'search-1.1.js'; ?>" charset="utf-8"></script>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'action-1.0.js'; ?>" charset="utf-8"></script> 
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'feed-1.0.js'; ?>" charset="utf-8"></script>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'deploy-1.1.js'; ?>" charset="utf-8"></script>
@@ -73,6 +73,13 @@ class File
 	{	
 		?>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'jquery-1.8.2.min.js'; ?>" charset="utf-8"></script>
+		<?php			
+	}
+	
+	function script_jquery_public()
+	{	
+		?>
+			<script type="text/javascript" src="<?php echo '../'.$this->script_cdn.'jquery-1.8.2.min.js'; ?>" charset="utf-8"></script>
 		<?php			
 	}
 
