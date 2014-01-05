@@ -345,6 +345,11 @@ function reply_encode($actionid, $help, $database, $memcache)
 		{
 			 $com[$j]['com_time'] = $help->get_utc($comrow['TIMESTAMP']);
 			 $com[$j]['commentby'] = $comrow['ACTIONBY'];
+			 $com[$j]['remove'] = 0;
+			 if($com[$j]['commentby'] == $myprofileid)
+			 {
+				$com[$j]['remove'] = 1;
+			 }
 			 $com[$j]['com_pageid'] = $comrow['PAGEID'];
 			 $com_actionid = $com[$j]['com_actionid'] = $comrow['ACTIONID'];
 			 $com[$j]['comment'] = stripslashes($comrow['COMMENT']);
@@ -361,7 +366,7 @@ function reply_encode($actionid, $help, $database, $memcache)
 			 $name[$com[$j]['commentby']] = $help->name_fetch($com[$j]['commentby'], $memcache, $database);
 			 $pimage[$com[$j]['commentby']] = $help->pimage_fetch($com[$j]['commentby'], $memcache, $database); 
 			 $j++;
-		}
+		} 
 			 return $com;
 	}		
 	

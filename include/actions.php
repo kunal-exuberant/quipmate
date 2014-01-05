@@ -55,7 +55,7 @@ else if($profile_relation == 1)
 <div id="upload_box"> 
 	<div id="actions">
 		<span id="status_link" style="margin-left:0em;cursor:pointer;"><img src="http://icon.qmcdn.net/post_blue.png" height="20" width="20" /><span class="">Post</span></span>
-		<span id="photo_link" style="margin-left:1.5em;cursor:pointer;"><img src="http://icon.qmcdn.net/file_upload_blue.png" height="20" width="20" /><span class="">Photo</span></span>
+		<span id="photo_link" style="margin-left:1.5em;cursor:pointer;"><img src="http://icon.qmcdn.net/file_upload_blue.png" height="20" width="20" /><span class="">Photo/Video/Doc</span></span>
 		<span id="moment_link" style="margin-left:1.5em;cursor:pointer;"><img src="http://icon.qmcdn.net/album_upload_blue.gif" height="20" width="20" /><span class="">Album</span></span>
 		<span class="gift_button" style="margin-left:1.5em;cursor:pointer;" onclick="ui.gift_ui_create(this)"><img src="http://icon.qmcdn.net/gift_icon.ico" height="20" width="20" /><span class="">Send-Gift</span></span>
 	</div> 

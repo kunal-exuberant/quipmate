@@ -9,24 +9,49 @@ require_once '../include/header.php';
 <div id="wrapper">
 <input type="hidden" id="search_key_hidden" value="<?php if(isset($_GET['q'])) echo $_GET['q']; ?>">
 <input type="hidden" id="filter_hidden" value="<?php if(isset($_GET['filter'])) echo $_GET['filter']; ?>">
-	<div id="left">
-		Filter Search
+<?php 
+$filter = ''; 
+if(isset($_GET['filter']))
+{
+	$filter = $_GET['filter']; 
+}
+	function link_echo($type)
+	{
+		?>
 		<div class="links">
-			<a  href="search.php?filter=people<?php if(isset($_GET['q'])) echo '&q='.$_GET['q']; ?>" title="Search for people">People</a>
+			<a class="<?php if($type == $filter) echo ' selected'; ?>" href="search.php?filter=<?php echo $type; ?><?php if(isset($_GET['q'])) echo '&q='.$_GET['q']; ?>" title="Search for <?php echo $type; ?>"><img class="lfloat" src="http://icon.qmcdn.net/search_icon.png" height="18" width="18" /><span class="name_20"><?php echo $type; ?></span></a>
 		</div>
-		<div class="links">
-			<a  href="search.php?filter=post<?php if(isset($_GET['q'])) echo '&q='.$_GET['q']; ?>" title="Search for posts">Posts</a>
-		</div>
-		<div class="links">
-			<a  href="search.php?filter=comment<?php if(isset($_GET['q'])) echo '&q='.$_GET['q']; ?>" title="Search for Comments">Comments</a>
-		</div>
-		<div class="links">
-			<a  href="search.php?filter=group<?php if(isset($_GET['q'])) echo '&q='.$_GET['q']; ?>" title="Search for groups">Groups</a>
-		</div>
-		<div class="links">
-			<a  href="search.php?filter=event<?php if(isset($_GET['q'])) echo '&q='.$_GET['q']; ?>" title="Search for events">Events</a>
-		</div>
-	
+		<?php
+	}
+?>
+	<div id="left" style="padding:2em 0em 2em 0em;">
+		
+		<h1>Search for :</h1>
+		<?php
+		
+		link_echo('people');
+		link_echo('post');
+		link_echo('comment');
+		link_echo('group');
+		link_echo('event');
+		link_echo('skill');
+		link_echo('project');
+		link_echo('tool');
+		link_echo('major');
+		link_echo('certificate');
+		link_echo('award');
+		link_echo('hobby');
+		link_echo('sport');
+		link_echo('book');
+		link_echo('movie');
+		link_echo('music');
+		link_echo('company');
+		link_echo('college');
+		link_echo('school');
+		link_echo('profession');
+		link_echo('city');
+		?>
+		
 	</div>
 	<div id="center" style="height:auto;">
 	<h1 class="page_title" id="search_count">Search results</h1>

@@ -40,6 +40,14 @@ if(isset($_SESSION['auth']))
 			{
 				$api->album_fetch();
 			}			
+			else if($_GET['action'] == 'technical_feed_fetch')
+			{
+				$api->technical_feed_fetch();
+			}
+			else if($_GET['action'] == 'group_top_influencer_fetch')
+			{
+				$api->group_top_influencer_fetch();
+			}
 			else if($_GET['action'] == 'bio_item_remove')
 			{
 				$api->bio_item_remove();
@@ -331,6 +339,10 @@ if(isset($_SESSION['auth']))
 			else if($_GET['action'] == 'post_question')
 			{
 				$api->post_question();
+			}
+			else if($_GET['action'] == 'option_add')
+			{
+				$api->option_add();
 			}
 			else if($_GET['action'] == 'group_post_question')
 			{

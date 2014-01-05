@@ -12,7 +12,7 @@ $('#status_link').click(function(){
 });		
 
 $('#question_link').click(function(){
-      $('#uploader').html('<textarea id="question_box" placeholder="Ask your question"/></textarea><input id="question_button" type="submit" value="Ask" onclick="action.question_button(this)"><div class="option_container"><input type="text" placeholder="+Add option" value="" class="option_add" onkeydown="action.option_add(this,event)"><div>'); 
+      $('#uploader').html('<textarea id="question_box" placeholder="Ask your question"/></textarea><input id="question_button" type="submit" value="Ask" onclick="action.question_button(this)"><div class="option_container"><input type="text" placeholder="+Add option" value="" class="option_add" onkeydown="action.option(this,event)"><div>');  
 	$('#question_box').focus();
 });	
 

@@ -131,6 +131,7 @@ require_once '../include/header.php';
 		if($n['invite'] == 0 || $profile_relation == 0)
 		{
 		?>
+		<div id="friend_match" style="margin-top:1em;"></div>
 		<div id="member_request" class="right_item"></div>
 		<div id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div>
 		<input type="text" style="border:0.1em solid #999999;width:20em;height:1.2em;padding:0.5em;" id="invite_box" value="" onkeyup="ui.group_friend_invite(this)" placeholder="Add a friend to this group" />
@@ -174,4 +175,3 @@ require_once '../include/header.php';
 <?php require_once('../include/footer.php'); ?>
 </body>
 </html>
-

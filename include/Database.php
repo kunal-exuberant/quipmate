@@ -69,6 +69,12 @@ class Database
 		return $this->con->query("SELECT gp.profileid AS PROFILEID FROM guest AS gp INNER JOIN setting_email AS sm ON gp.profileid = sm.profileid AND sm.event_post =1 WHERE gp.eventid ='$eventid'");
 	}
 	
+	function top_influencer_select($groupid)
+	{
+		$eventid = $this->con->real_escape_string($eventid); 
+		return $this->con->query("select actionby as profileid,count(*) as count from action where profileid ='$groupid' group by profileid,actionby order by count desc limit 5");
+	}
+	
 	function photo_json($profileid,$limit,$count)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
@@ -630,6 +636,14 @@ class Database
 		$result = $this->con->query("SELECT * FROM member WHERE profileid = '$profileid2' and groupid = '$profileid1' ");
 		return $result->fetch_array();
 	} 
+	
+	function is_host($profileid1, $profileid2)
+	{	
+		$profileid1 = $this->con->real_escape_string($profileid1);
+		$profileid2 = $this->con->real_escape_string($profileid2);		
+		$result = $this->con->query("SELECT * FROM `guest` WHERE profileid = '$profileid2' and `eventid` = '$profileid1' ");
+		return $result->fetch_array();
+	}
 	
 	function is_guest($profileid1, $profileid2)
 	{	
@@ -1255,6 +1269,8 @@ class Database
 	function new_friend_action_select($profileid,$limit,$count)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
+		$limit = $this->con->real_escape_string($limit);
+		$count = $this->con->real_escape_string($count);
 		$result= $this->con->query("SELECT  A.ACTIONID,A.ACTIONBY,A.ACTIONTYPE,A.PAGEID,A.VISIBLE,A.PROFILEID,A.TIMESTAMP 
 FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action INNER JOIN subscribe as sub ON CASE WHEN action.profileid <1000000000 THEN action.PROFILEID ELSE action.ACTIONBY END = sub.FRIENDID INNER JOIN actiontype on actiontype.actiontypeid = action.ACTIONTYPE WHERE sub.PROFILEID='$profileid' AND actiontype.news_feed ='1' group by pageid ORDER BY action.ACTIONID DESC LIMIT $limit,$count) AS B  ON A.ACTIONID = B.ACTIONID "); 
 		return $result; 
@@ -1262,6 +1278,8 @@ FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action INNER
 	function friend_action_select($profileid,$limit,$count=10)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
+		$limit = $this->con->real_escape_string($limit);
+		$count = $this->con->real_escape_string($count);
 		$result= $this->con->query("SELECT  A.ACTIONID,A.ACTIONBY,A.ACTIONTYPE,A.PAGEID,A.VISIBLE,A.PROFILEID,A.TIMESTAMP 
 FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action INNER JOIN subscribe as sub ON CASE WHEN action.profileid <1000000000 THEN action.PROFILEID ELSE action.ACTIONBY END = sub.FRIENDID INNER JOIN actiontype on actiontype.actiontypeid = action.ACTIONTYPE WHERE sub.PROFILEID='$profileid' AND actiontype.live_feed ='1' group by pageid ORDER BY action.ACTIONID DESC LIMIT $limit,$count) AS B  ON A.ACTIONID = B.ACTIONID");
 		return $result; 
@@ -1269,11 +1287,15 @@ FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action INNER
 	function get_profile_post($profileid,$limit,$count=10)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
+		$limit = $this->con->real_escape_string($limit);
+		$count = $this->con->real_escape_string($count);
 		$result=$this->con->query("SELECT A.* FROM action as A INNER JOIN(SELECT MAX(a.actionid) as actionid FROM action as a inner join actiontype on actiontype.actiontypeid = a.ACTIONTYPE WHERE (a.PROFILEID ='$profileid') AND actiontype.profile_feed ='1' GROUP BY PAGEID ORDER BY a.ACTIONID DESC LIMIT $limit,$count) AS B ON A.ACTIONID = B.ACTIONID"); 
 		return $result;
 	} 	
 	function everything_select($limit,$count=10)
 	{
+		$limit = $this->con->real_escape_string($limit);
+		$count = $this->con->real_escape_string($count);
 		$result=$this->con->query("SELECT A.* FROM action as A INNER JOIN(SELECT MAX(a.actionid) as actionid FROM action as a inner join actiontype on actiontype.actiontypeid = a.ACTIONTYPE WHERE actiontype.profile_feed ='1' GROUP BY PAGEID ORDER BY a.ACTIONID DESC LIMIT $limit,$count) AS B ON A.ACTIONID = B.ACTIONID"); 
 		return $result;
 	} 
@@ -1290,13 +1312,25 @@ FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action INNER
 	function event_feed_select($profileid,$limit,$count=10)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
+		$limit = $this->con->real_escape_string($limit);
+		$count = $this->con->real_escape_string($count);
 		$result=$this->con->query("SELECT A.* FROM action as A INNER JOIN (SELECT MAX(ACTIONID) AS ACTIONID FROM action as a INNER JOIN actiontype on actiontype.actiontypeid = a.ACTIONTYPE WHERE (PROFILEID ='$profileid') AND actiontype.event_feed ='1' GROUP BY PAGEID ORDER BY a.ACTIONID DESC LIMIT $limit,$count) AS B ON A.ACTIONID = B.ACTIONID"); 
 		return $result;
+	}
+	function tech_feed_select($profileid,$limit,$count=10)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		$limit = $this->con->real_escape_string($limit);
+		$count = $this->con->real_escape_string($count);
+		$result=$this->con->query("SELECT A.* FROM action as A INNER JOIN (SELECT MAX(a.ACTIONID) AS ACTIONID FROM action as a inner join `group` as gp on gp.groupid = a.profileid inner join member as mem on gp.groupid =  mem.groupid inner join actiontype as at on at.actiontypeid = a.actiontype where gp.type=1 and at.group_feed ='1' and mem.profileid='$profileid' group by PAGEID order by a.ACTIONID DESC LIMIT $limit,$count) AS B ON A.ACTIONID = B.ACTIONID");
+		return $result;
+		
 	}
 	
 	function news_poll($profileid,$time)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
+		$time = $this->con->real_escape_string($time);
 		$result= $this->con->query("SELECT  A.ACTIONID,A.ACTIONBY,A.ACTIONTYPE,A.PAGEID,A.VISIBLE,A.PROFILEID,A.TIMESTAMP 
 FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER JOIN subscribe as sub ON CASE WHEN action.PROFILEID <1000000000 THEN action.PROFILEID ELSE action.ACTIONBY END = sub.FRIENDID INNER JOIN actiontype on actiontype.actiontypeid = action.ACTIONTYPE WHERE sub.PROFILEID='$profileid' AND actiontype.poll_feed ='1' AND UNIX_TIMESTAMP(action.TIMESTAMP) > '$time'  GROUP BY PAGEID ORDER BY ACTIONID DESC) AS B ON A.ACTIONID = B.ACTIONID ");
 		return $result; 
@@ -1355,6 +1389,15 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 	{
 		$questionid = $this->con->real_escape_string($questionid);
 		return $this->con->query("select * from `option` where questionid = '$questionid' ");
+	}
+	
+	function optionid_select($questionid,$option) 
+	{
+		$questionid = $this->con->real_escape_string($questionid);
+		$option = $this->con->real_escape_string($option);
+		$result = $this->con->query("select `optionid` from `option` where questionid = '$questionid' and `option`= '$option' ");
+		$orow = $result->fetch_array();
+		return $orow['optionid'];
 	}
 	
 	function answer_insert($questionid,$answerid,$optionid,$profileid)
@@ -2139,18 +2182,18 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		{
 			return 0;
 		}
-		$fresult = $this->guest_select($profileid1);
-		while($row = $fresult->fetch_array())
+		$frow = $this->is_host($profileid1, $profileid2);
+		if($frow)
 		{
-			if($profileid2 == $row['profileid'] && $row['priviledge'] == 1)
+			if($frow['priviledge'] == 1)
 			{
 				return 1;
 			}
-			else if($profileid2 == $row['profileid'] && $row['priviledge'] == 0)
+			else if($frow['priviledge'] == 0)
 			{
 				return 2;
 			}
-			else if($profileid2 == $row['profileid'] && $row['priviledge'] == 2)
+			else if($frow['priviledge'] == 2)
 			{
 				return 3;
 			}
@@ -2158,29 +2201,35 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 	    return 4;
 	}
 	
+	
+	
+	
 	function membership_status($profileid1,$profileid2)
 	{
-		$fresult= $this->member_select($profileid1);
-		while($row=$fresult->fetch_array())
+		$frow = $this->is_group_admin($profileid1, $profileid2);
+		if($frow)
 		{
-			if($profileid2 == $row['profileid'] && $row['priviledge'] == 1)
+			if($frow['priviledge'] == 1)
 			{
 				return 0;
 			}
-			else if($profileid2 == $row['profileid'])
+			else if($frow['priviledge'] == 0)
 			{
 				return 1;
 			}
-		}	
-		$fresult = $this->member_request_select($profileid1, $profileid2);
-		$row=$fresult->fetch_array();
-		{
-			if($profileid2 == $row['profileid'])
-			{
-				return 2;
-			}
 		}
-	    return 3;
+		else
+		{
+			$fresult = $this->member_request_select($profileid1, $profileid2);
+			$row=$fresult->fetch_array();
+			{
+				if($profileid2 == $row['profileid'])
+				{
+					return 2;
+				}
+			}
+			return 3;
+		}
 	}
 			
 	/*
@@ -2408,7 +2457,7 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 	function get_image($profileid,$sex=1,$type=1) 
 	{ 		
 		$profileid = $this->con->real_escape_string($profileid); 		
-		$result=$this->con->query("SELECT CDN,FILENAME FROM profile_image WHERE PROFILEID = '$profileid' ORDER BY IMAGEID DESC LIMIT 1"); 	
+		$result=$this->con->query("SELECT CDN,FILENAME,IMAGEID FROM profile_image WHERE PROFILEID = '$profileid' ORDER BY IMAGEID DESC LIMIT 1"); 	
 		if(!$result->num_rows)
 		{		
 			if($sex)
@@ -2469,13 +2518,19 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 	function post_search($k)
 	{
 		$k = $this->con->real_escape_string($k);
-		return $this->con->query("SELECT * FROM action inner join diary on action.actionid = diary.actionid WHERE page REGEXP '^$k'");
+		return $this->con->query("SELECT * FROM action inner join diary on action.actionid = diary.actionid WHERE page like '%$k%'");
+	}
+	function bio_history_search($type,$k)
+	{
+		$k = $this->con->real_escape_string($k);
+		$type = $this->con->real_escape_string($type);
+		return $this->con->query("SELECT i.name as skill,bh.profileid as profileid FROM `info` as i INNER JOIN bio_history as bh on i.DIARYID = bh.diaryid WHERE i.type='$type' and (i.name REGEXP '^$k') ");
 	}
 	
 	function comment_search($k)
 	{
 		$k = $this->con->real_escape_string($k);
-		return $this->con->query("SELECT * FROM action inner join comment on action.actionid = comment.actionid WHERE comment REGEXP '^$k'");
+		return $this->con->query("SELECT * FROM action inner join comment on action.actionid = comment.actionid WHERE comment like '%$k%'");
 	}
 	
 	function song_search($k,$limit,$count)

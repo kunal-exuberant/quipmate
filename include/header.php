@@ -32,6 +32,7 @@ if($_SERVER['SCRIPT_NAME'] == '/index.php')
 		{
 			case 'inbox': $page = 'inbox'; break;
 			case 'friend': $page = 'friend'; break;
+			case 'technical': $page = 'tech_json'; break;
 			case 'fan': $page = 'fan'; break;
 			case 'image': $page = 'photo'; break;
 			case 'album': $page = 'album'; break;
@@ -100,6 +101,7 @@ else if($_SERVER['SCRIPT_NAME'] == '/profile.php')
 	{
 		$profile_name = $_SESSION['NAME'];
 		$profile_image = $_SESSION['pimage'];
+		$profile_imageid = $_SESSION['profile_imageid'];
 		$profile_relation = 0;
 	}
 	else
@@ -108,6 +110,7 @@ else if($_SERVER['SCRIPT_NAME'] == '/profile.php')
 		$profile_name = $n['NAME'];
 		$pirow = $database->get_image($profileid);
 		$profile_image	= $pirow['CDN'].$pirow['FILENAME'];
+		$profile_imageid = $pirow['IMAGEID'];
 		$row = $database->is_friend($myprofileid, $profileid);
 		if($row->num_rows)
 		{

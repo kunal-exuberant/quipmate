@@ -6,10 +6,10 @@ require_once '../include/header.php';
 ?>
 <div id="wrapper">
 	<div id="left">
-			<div style="text-align:center;">	
-				<a href="profile.php?id=<?php echo $profileid ?>">
-					<img style="max-width:16em;margin:0em 0em 0em 0em;" src="<?php echo $profile_image; ?>" />
-				</a>
+			<div style="text-align:center;" class="photo_feed">	
+					<input type="hidden" value="<?php echo $profileid; ?>" />
+					<input type="hidden" value="50" />
+					<img class="viewable" id="<?php echo $profile_imageid; ?>" style="cursor:pointer;max-width:16em;margin:0em 0em 0em 0em;" data="<?php echo $profile_image; ?>" src="<?php echo $profile_image; ?>" />
 			</div>
 			<div style="text-align:center;">
 				<a style="font-weight:bold;display:block;color:#ffffff;background-color:#003153;height:1.2em;padding:0.5em;background: url('http://icon.qmcdn.net/top_bar_1.png') repeat scroll 0 0 #003153"; href="profile.php?id=<?php echo $profileid; ?>" style=""><?php echo $profile_name; ?></a>

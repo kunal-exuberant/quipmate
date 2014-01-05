@@ -18,7 +18,7 @@ body{background:#ededed;}
 		});
 		
 		$('#pform').ajaxForm(function(){});  
-		$('#photo_box').change(function()
+		$('#photo_upload_button').click(function()
 		{
 			$("#photo_preview").html('<img src="http://icon.qmcdn.net/upload.gif" alt="Uploading...."/>');
 			$("#pform").ajaxSubmit(
@@ -82,10 +82,10 @@ body{background:#ededed;}
 			<div id="photo_preview"></div>	
 			
 					<form id="pform" method="post" enctype="multipart/form-data" action="/ajax/write.php">
-						<div style="height:0px;overflow:hidden">
+						<div style="">
 							<input type="file" id="photo_box" name="photo_box" />
+						<button type="button" style=" color: #003153;cursor: pointer;height: 5em;width:20em;" id="photo_upload_button">Upload</button>
 						</div>
-						<button type="button" style=" color: #003153;cursor: pointer;height: 5em;width: 20em;" onclick="chooseFile();">Select a photo on your computer</button>
 						<input type="hidden" name="action" value="profile_picture_upload"/>
 					</form>
 			</div>

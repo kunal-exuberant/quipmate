@@ -8,7 +8,7 @@
    background:#ffa500 
 }
 
-.if_post{position:fixed;top:1em;right:19.2em;width:48em;text-align:left;background-color:#f9f9f9;z-index:4000;border:0.1em solid #cccccc;}
+.if_post{position:fixed;top:1em;right:19.2em;width:48em;text-align:left;background-color:#f9f9f9;z-index:500;border:0.1em solid #cccccc;}
 .rtm_pointer{position:absolute;top:1em;right:-1.1em;border-left:solid 1em #cccccc;border-top: solid 0.7em transparent;border-bottom: solid 0.7em transparent;width: 0;height: 0;} 
 
 .people_status{position:fixed;top:1em;right:19.2em;width:20em;height:8em;padding:1em 0em 0em 1em;text-align:left;background-color:#f9f9f9;z-index:95;border:0.1em solid #cccccc;}

@@ -348,7 +348,10 @@ class Feed
 		$e = $database->group_select($action[$k]['actionon']);
 		$action[$k]['groupid'] = $e['groupid'];
 		$action[$k]['group_name'] = $e['name'];
-		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
+		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);
+		$myprofileid = $_SESSION['userid'];
+		$grow = $database->is_group_admin($e['groupid'],$myprofileid);
+		$action[$k]['remove'] = $grow['priviledge'];
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
 	}
 	
@@ -360,6 +363,9 @@ class Feed
 		$q = $encode->question_encode($action[$k]['pageid'],$database);	
 		$action[$k]['question'] = $q['question'];
 		$action[$k]['option'] = $q['option'];
+		$myprofileid = $_SESSION['userid'];
+		$grow = $database->is_group_admin($e['groupid'],$myprofileid);
+		$action[$k]['remove'] = $grow['priviledge'];
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);
 	}
 	
@@ -438,6 +444,9 @@ class Feed
 		$action[$k]['page'] = $link['page'];
 		$action[$k]['video'] = $link['video'];
 		$action[$k]['file'] = $link['file'];	 
+		$myprofileid = $_SESSION['userid'];
+		$grow = $database->is_group_admin($e['groupid'],$myprofileid);
+		$action[$k]['remove'] = $grow['priviledge'];
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);
 	}	
 	
@@ -597,6 +606,9 @@ class Feed
 		$action[$k]['group_name'] = $e['name'];
 		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
 		$action[$k]['file'] = $encode->image_encode($action[$k]['pageid'],$database);	
+		$myprofileid = $_SESSION['userid'];
+		$grow = $database->is_group_admin($e['groupid'],$myprofileid);
+		$action[$k]['remove'] = $grow['priviledge'];
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
 	}
 	

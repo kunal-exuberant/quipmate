@@ -247,6 +247,10 @@ class Help
 					 $error['message'] = 'Incorrect email or password'; 
 				     $error['type'] = 'IncorrectEmailPasswordException';
 					 break;			
+			case 38: $error['code'] = 38;
+					 $error['message'] = 'This person is already a member of this event'; 
+				     $error['type'] = 'AlreadyGuestException';
+		             break;				 
 			default: $error['code'] = -1;
 					 $error['message'] = 'Unknown error Occured'; 
 				     $error['type'] = 'UnknownException';	 
@@ -322,6 +326,30 @@ class Help
 		$value = $memcache->get($_SESSION['database'].'_friend_'.$profileid);
 		if($value)
 		{
+			$res = $database->message_order($profileid);
+			while($NROW =$res->fetch_array())
+			{		
+				if($NROW['ACTIONBY'] == $profileid)
+				{
+					if(!in_array($NROW['ACTIONON'], $friend))
+					{
+						if($database->check_friendship($profileid,$NROW['ACTIONON']) == 2)
+						{
+							$friend[] = $NROW['ACTIONON'];
+						}
+					}	
+				}
+				else if($NROW['ACTIONON'] == $profileid)
+				{
+					if(!in_array($NROW['ACTIONBY'], $friend))
+					{
+						if($database->check_friendship($profileid,$NROW['ACTIONBY']) == 2)
+						{
+							$friend[] = $NROW['ACTIONBY'];
+						}
+					}	
+				}
+			}
 			$res = $database->friend_select($profileid);
 			while($NROW =$res->fetch_array())
 			{	
@@ -345,6 +373,7 @@ class Help
 		$_SESSION['userid'] = $_SESSION['USERID']=$row['USERID'];
 		$_SESSION['visible'] = $pri['profile_post_next'];
 		$_SESSION['pimage'] = $imgrow['CDN'].$imgrow['FILENAME']; 
+		$_SESSION['profile_imageid'] = $imgrow['IMAGEID'];
 		$_SESSION['SEX'] = $prow['SEX']; 
 		$_SESSION['STEP'] = $row['STEP']; 
 		$_SESSION['SCHOOL'] = $prow['SCHOOL']; 

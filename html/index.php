@@ -19,7 +19,8 @@ $mcount = $database->unread_message_select($profileid,$college);
 					<a style="color:#003399;" href="profile.php?hl=bio">Edit My Profile</a>
 				</div>
 			</div>  
-			<ul style="list-style:none;clear:left;margin-top:3em;" id="links">  
+			<div name="option" >
+				<ul style="list-style:none;clear:left;margin-top:3em;" id="links">  
 					<li class="links"><a class="ajax_nav<?php if($page=='news_json') echo ' selected'; ?>" id="news_json" href="?hl=update" title="Updates from your friends"><img class="lfloat" src="http://icon.qmcdn.net/news_rss.png" height="18" width="18" /><span class="name_20">News Feed</span></a></li>
 					
 					<li class="links"><a  class="ajax_nav<?php if($page=='inbox') echo ' selected'; ?>" id="inbox" href="?hl=inbox" title="Messages from your friends"><img class="lfloat" src="http://icon.qmcdn.net/message.png" height="18" width="18" /><span class="name_20"><?php if($mcount) echo 'Messages('.$mcount.')'; else echo 'Messages'; ?></span></a></li>
@@ -35,10 +36,14 @@ $mcount = $database->unread_message_select($profileid,$college);
 						<li class="links"><a href="college_connect.php" title="Connect with people from different colleges"><img class="lfloat" src="http://icon.qmcdn.net/connect.png"  height="18" width="18" /><span class="name_20">College Connect</span></a></li>
 					<?php
 					}
-					?>
-					
-					<li class="links"><a href="#" onclick="ui.event_create(this)" title="Create an event"><img class="lfloat" src="http://icon.qmcdn.net/event.png"  height="18" width="18"  /><span class="name_20">Create Event</span></a></li>
-					<?php
+					?>	
+
+				</ul> 
+			</div>
+			<div name="event" style="margin-top:1em;">
+			<span style="font-weight:bold;font-size:1em;color:gray">Events</span>
+			<ul>
+				<?php
 					$result = $database->myevent_select($myprofileid);
 						while($row = $result->fetch_array())
 						{
@@ -48,12 +53,14 @@ $mcount = $database->unread_message_select($profileid,$college);
 							<li class="links"><a href="event.php?id=<?php echo $eventid;?>" title="Events"><img class="lfloat" src="http://icon.qmcdn.net/event.png" height="18" width="18"  /><span class="name_20"><?php echo $nrow['name'];?></span></a></li>
 							<?php
 						}
-					?>	
-					
-					<li class="links"><a href="#" onclick="ui.group_create(this)" title="Create a group for people with a specific interest"><img class="lfloat" src="http://icon.qmcdn.net/group.png" height="20" width="20" /><span class="name_20">Create Group</span></a></li>
-					
-					<?php
-						
+				?>
+				<li class="links"><a href="#" onclick="ui.event_create(this)" title="Create an event"><img class="lfloat" src="http://icon.qmcdn.net/plus.png"  height="13" width="13"  /><span class="name_20">Create Event</span></a></li>
+			</ul>
+			</div>
+			<div name="group">
+			<span style="font-weight:bold;font-size:1em;color:gray">Groups</span>
+			<ul>
+					<?php						
 						$result = $database->mygroup_select($myprofileid);
 						while($row = $result->fetch_array())
 						{
@@ -64,8 +71,9 @@ $mcount = $database->unread_message_select($profileid,$college);
 							<?php
 						}
 					?>
-
-			</ul> 
+				<li class="links"><a href="#" onclick="ui.group_create(this)" title="Create a group for people with a specific interest"><img class="lfloat" src="http://icon.qmcdn.net/plus.png" height="13" width="13" /><span class="name_20">Create Group</span></a></li>
+			</ul>
+			</div>
 			<div id="friend_event" class="right_item" style="margin:1em 0em 0em 0em;padding:0em;"></div>
 			<div style="margin-top:1em;padding-top:.5em;border-top:.1em solid #cccccc;">
 				<a href="#" target="_blank"><small>&copy; Quipmate</small></a><span class="separator">|</span>
