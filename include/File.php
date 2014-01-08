@@ -13,7 +13,7 @@ class File
 		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'actiontype-1.0.css'; ?>" charset="utf-8"/>
 		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'inbox-1.0.css'; ?>" charset="utf-8" />
 		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'news-1.0.css'; ?>" charset="utf-8"/>
-		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'chat-1.0.css'; ?>" charset="utf-8"/>
+		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'chat-1.1.css'; ?>" charset="utf-8"/>
 		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'profile_edit-1.0.css'; ?>" charset="utf-8" media="screen" />
 		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'bio_match-1.0.css'; ?>" charset="utf-8" media = "screen"/>
 		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'action-1.1.css'; ?>" charset="utf-8" media = "screen"/>
