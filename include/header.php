@@ -298,6 +298,7 @@ $database->page_view_insert($myprofileid, $profileid, $_SERVER['HTTP_REFERER'], 
 <meta name="Description" content="Your life experiences and activities are put online in your diary.
 Make an entry of your daily activities by filling your diary.Invite your friends to write your diary. Also get updates from your friends diary. Share the special moments of your life with friends. Use letters to send personal messages to your friends.
 "/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
 <meta name= "url" content="http://www.quipmate.com"/>
 <meta name= "keywords" content="quipmate, mate, friend, friends, social, diary, moments, moments of life, life, online, profile"/>
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" charset="utf-8"/>

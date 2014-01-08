@@ -35,7 +35,7 @@ require_once '../include/header.php';
 		});
 		</script>
 		<?php
-	if($profile_relation == 0)
+	if($profile_relation == 0 && $n['cancel'] == 0)
 	{
 	?>
 		<div style="margin-top:2em;text-align:center;">
@@ -120,6 +120,12 @@ require_once '../include/header.php';
 	?>
 	<div id="right">
 		<?php
+	if($n['cancel'] == 1)
+	{
+		?>
+		<div style="clear:both;margin:1em 0em;font-weight:bold;">This event has been cancelled</div>
+		<?php
+	}
 	if($profile_relation == 0 || $profile_relation == 1)
 	{
 		?>

@@ -248,7 +248,7 @@ class Help
 				     $error['type'] = 'IncorrectEmailPasswordException';
 					 break;			
 			case 38: $error['code'] = 38;
-					 $error['message'] = 'This person is already a member of this event'; 
+					 $error['message'] = 'This person is already a guest of this event'; 
 				     $error['type'] = 'AlreadyGuestException';
 		             break;				 
 			default: $error['code'] = -1;
@@ -443,7 +443,7 @@ class Help
 		$return = array();
 		foreach($action as $act)
 		{
-			if($act['visible'] == 0)
+			if($act['visible'] == 0 || $act['visible'] == 5 || $act['visible'] == 6)
 			{
 				$return[] = $act;
 			}
@@ -782,8 +782,7 @@ class Help
 		$arr[0] = "Everyone";
 		$arr[1] = "Friends of Friends";
 		$arr[2] = "Friends";
-		$arr[3] = "Myself";
-		for($i=0; $i < 4; $i++)
+		for($i=0; $i < 3; $i++)
 		{
 			if($i==$level)
 			echo "<option value=".$i." "."selected".">".$arr[$i]."</option>";

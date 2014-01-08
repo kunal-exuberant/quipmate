@@ -152,6 +152,10 @@ if(isset($_SESSION['auth']))
 			{
 				$api->event_feed();
 			}
+			else if($_GET['action'] == 'group_event_create')
+			{
+				$api->group_event_create();
+			}
 			else if($_GET['action'] == 'event_cancel')
 			{
 				$api->event_cancel();

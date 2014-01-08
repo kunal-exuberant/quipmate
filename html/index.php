@@ -44,15 +44,14 @@ $mcount = $database->unread_message_select($profileid,$college);
 			<span style="font-weight:bold;font-size:1em;color:gray">Events</span>
 			<ul>
 				<?php
-					$result = $database->myevent_select($myprofileid);
-						while($row = $result->fetch_array())
-						{
-							$eventid = $row['eventid'];
-							$nrow = $database->event_select($eventid);
-							?>
-							<li class="links"><a href="event.php?id=<?php echo $eventid;?>" title="Events"><img class="lfloat" src="http://icon.qmcdn.net/event.png" height="18" width="18"  /><span class="name_20"><?php echo $nrow['name'];?></span></a></li>
-							<?php
-						}
+					$result = $database->myevent_select($myprofileid,time());
+					while($row = $result->fetch_array())
+					{
+						$eventid = $row['eventid'];
+						?>
+						<li class="links"><a href="event.php?id=<?php echo $eventid;?>" title="Events"><img class="lfloat" src="http://icon.qmcdn.net/event.png" height="18" width="18"  /><span class="name_20"><?php echo $row['name'];?></span></a></li>
+						<?php
+					}
 				?>
 				<li class="links"><a href="#" onclick="ui.event_create(this)" title="Create an event"><img class="lfloat" src="http://icon.qmcdn.net/plus.png"  height="13" width="13"  /><span class="name_20">Create Event</span></a></li>
 			</ul>
@@ -110,4 +109,3 @@ $mcount = $database->unread_message_select($profileid,$college);
 	<?php require_once('../include/footer.php'); ?>
 </body> 
 </html>
-

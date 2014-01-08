@@ -11,16 +11,16 @@ $myprofileid = $_SESSION['userid'];
 <div id="wrapper">
 	<div id="left" style="margin-top:4em;">
 		<div class="links">
-			<a  href="?hl=notification_settings" title="Notification Settings">Notification Settings</a>
+			<a <?php if($page == 'notification') echo 'class="selected"'; ?> href="?hl=notification_settings" title="Notification Settings">Notification Settings</a>
 		</div>
 		<div class="links">
-			<a  href="?hl=email_settings" title="Email Settings">Email Settings</a>
+			<a <?php if($page == 'email_settings') echo 'class="selected"'; ?> href="?hl=email_settings" title="Email Settings">Email Settings</a>
 		</div>
 		<div class="links">
-			<a  href="?hl=account_settings" title="Account Settings">Account Settings</a>
+			<a <?php if($page == 'account') echo 'class="selected"'; ?> href="?hl=account_settings" title="Account Settings">Account Settings</a>
 		</div>
 		<div class="links">
-			<a  href="?hl=privacy_settings" title="Account Settings">Privacy Settings</a>
+			<a <?php if($page == 'privacy') echo 'class="selected"'; ?> href="?hl=privacy_settings" title="Account Settings">Privacy Settings</a>
 		</div>
 	</div>
 	<div id="center" style="height:auto;margin-top:4em;">
@@ -189,17 +189,19 @@ $myprofileid = $_SESSION['userid'];
 					<?php $help->privacy_level('profile_post_next', $row['profile_post_next']); ?>
 				</div>
 				<div class="setting_each bgcolor">
-					<span class="setting_category_name"> Who can post in your profile:</span>
-					<?php $help->privacy_level('profile_post', $row['profile_post']); ?>
+					<span class="setting_category_name"> Who can post in your profile:</span> Only your Friends
+					<?php //$help->privacy_level('profile_post', $row['profile_post']); ?>
 				</div>
 				<div class="setting_each">
-					<span class="setting_category_name"> Who sees when someone posts in your profile:</span>
-					<?php $help->privacy_level('profile_post_see', $row['profile_post_see']); ?>
+					<span class="setting_category_name"> Who sees when someone posts in your profile:</span> Depends on the privacy of your next post
+					<?php //$help->privacy_level('profile_post_see', $row['profile_post_see']); ?>
 				</div>
+				<!--
 				<div class="setting_each bgcolor">
 					<span class="setting_category_name"> Who can see your friendlist:</span>
-					<?php $help->privacy_level('friend_list', $row['friend_list']); ?>
+					<?php //$help->privacy_level('friend_list', $row['friend_list']); ?>
 				</div>
+				-->
 			</div>
 		<?php	
 		

@@ -430,14 +430,30 @@ class Database
 		$result=$this->con->query("SELECT * FROM `event` WHERE eventid='$profileid'");
 		return $result->fetch_array();
 	}
-	
-	function event_delete($profileid)
+	function event_active_select($profileid,$time)
 	{
+		$time = $this->con->real_escape_string($time);
 		$profileid = $this->con->real_escape_string($profileid);
-		return $this->con->query("delete FROM `event` WHERE eventid='$profileid'");
+		$v_date = date('Y-m-d H:i:s',$time);	
+		$result=$this->con->query("SELECT * FROM `event` WHERE eventid='$profileid' and cancel='0' and CONCAT(`date`,' ',`timing`) >= '$v_date'");
+		return $result->fetch_array();
+	}
+	function myevent_select($profileid,$time)
+	{
+		$time = $this->con->real_escape_string($time);
+		$profileid = $this->con->real_escape_string($profileid);
+		$v_date = date('Y-m-d H:i:s',$time);	
+		$result=$this->con->query("SELECT e.eventid as eventid,e.name as name FROM `event` as e inner join guest as g on e.eventid = g.eventid	Where g.profileid = '$profileid' and e.cancel='0' and CONCAT(e.`date`,' ',e.`timing`) >= '$v_date'");
+		return $result;		
 	}
 	
-	function event_create($actionid, $invite, $privacy, $name, $desc, $date, $timing, $venue, $createdby, $time)
+	function event_cancel($profileid)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		return $this->con->query("update `event` set cancel='1' WHERE eventid='$profileid'");
+	}
+	
+	function event_create($actionid, $invite, $privacy, $name, $desc, $date, $timing, $venue, $createdby, $time,$groupid=0)
 	{
 		$actionid = strip_tags($this->con->real_escape_string($actionid));
 		$invite = strip_tags($this->con->real_escape_string($invite));
@@ -449,9 +465,14 @@ class Database
 		$venue = strip_tags($this->con->real_escape_string($venue));
 		$createdby = strip_tags($this->con->real_escape_string($createdby));
 		$time = strip_tags($this->con->real_escape_string($time));
+		$groupid = strip_tags($this->con->real_escape_string($groupid));
 		
-		$result = $this->con->query("INSERT INTO `event`(`eventid`,`invite`,`privacy`,`name` ,`description`,`date`,`timing`,`venue`,`host`,`time`) VALUES('$actionid', '$invite','$privacy','$name','$description','$date','$timing','$venue','$createdby','$time')");
+		$result = $this->con->query("INSERT INTO `event`(`eventid`,`invite`,`privacy`,`name` ,`description`,`date`,`timing`,`venue`,`host`,`time`,`groupid`) VALUES('$actionid', '$invite','$privacy','$name','$description','$date','$timing','$venue','$createdby','$time','$groupid')");
 		
+		if($groupid != 0)
+		{
+			$this->con->query("INSERT INTO `guest`(`actionid`, `eventid`, `profileid`, `priviledge`) SELECT '$actionid',e.eventid,m.profileid,'0' from `event` as e inner join `member` as m on e.groupid = m.groupid where e.groupid = '$groupid' and m.profileid <> '$createdby' and e.eventid ='$actionid' ");
+		}
 		if($result)
 		{
 			$result = $this->guest_insert($actionid,$actionid,$createdby, 1);
@@ -486,7 +507,7 @@ class Database
 		$profileid2 = $this->con->real_escape_string($profileid2);
 		$priviledge = $this->con->real_escape_string($priviledge);		
 		$result= $this->con->query("insert into member(actionid, groupid, profileid, priviledge) values('$actionid','$profileid1', '$profileid2','$priviledge')");
-		return $this->con->query("insert into suscribe(profileid,friendid) values('$profileid2','$profileid1')");
+		return $this->con->query("insert into subscribe(profileid,friendid) values('$profileid2','$profileid1')");
 	}
 	
 	function guest_insert($actionid, $profileid1, $profileid2, $priviledge)
@@ -524,12 +545,18 @@ class Database
 		return $res['COUNT(*)'];
 	}
 	
-	function member_delete($profileid1, $profileid2)
+	function member_delete($profileid1,$profileid2)
 	{	
 		$profileid1 = $this->con->real_escape_string($profileid1);
 		$profileid2 = $this->con->real_escape_string($profileid2);		
 		$result= $this->con->query("delete FROM member WHERE profileid = '$profileid2' and groupid = '$profileid1' ");
 		return $this->con->query("delete FROM subscribe WHERE profileid = '$profileid2' and friendid = '$profileid1' ");
+	}
+	function unsubscribe($profileid1,$profileid2)
+	{
+		$profileid1 = $this->con->real_escape_string($profileid1);
+		$profileid2 = $this->con->real_escape_string($profileid2);		
+		return $this->con->query("delete FROM subscribe WHERE profileid = '$profileid2' and friendid = '$profileid1' ");	
 	}
 	
 	function member_request_insert($actionid, $groupid, $profileid, $time)
@@ -600,12 +627,6 @@ class Database
 		$profileid = $this->con->real_escape_string($profileid);
 		$priviledge = $this->con->real_escape_string($priviledge);		
 		return $this->con->query("update guest set priviledge = '$priviledge' where eventid = '$groupid' and profileid = '$profileid'");
-	}
-	
-	function myevent_select($profileid)
-	{
-		$profileid = $this->con->real_escape_string($profileid);
-		return $this->con->query("SELECT eventid FROM guest WHERE profileid = '$profileid' order by actionid desc");
 	}
 	
 	function mygroup_select($profileid)
@@ -1639,7 +1660,7 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 	{
 		$profileid = $this->con->real_escape_string($profileid);
 		$limit = $this->con->real_escape_string($limit);
-		$result=$this->con->query("select e.eventid as eventid,e.name as eventname from event as e where privacy='0' and eventid not in(select eventid from guest where profileid =$profileid) ORDER BY RAND() LIMIT $limit");
+		$result=$this->con->query("select e.eventid as eventid,e.name as eventname from event as e where privacy='0' and cancel='0' and eventid not in(select eventid from guest where profileid =$profileid) ORDER BY RAND() LIMIT $limit");
 		return $result;
 	}
 	function group_suggest($profileid,$limit) 
@@ -2512,7 +2533,7 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 	function event_search($k)
 	{
 		$k = $this->con->real_escape_string($k);
-		return $this->con->query("SELECT * FROM `event` WHERE (name REGEXP '^$k') OR (description REGEXP '^$k') ");
+		return $this->con->query("SELECT * FROM `event` WHERE ((name REGEXP '^$k') OR (description REGEXP '^$k')) AND cancel='0' ");
 	}
 
 	function post_search($k)

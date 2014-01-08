@@ -10,7 +10,7 @@ $flag = 0;
 while($brow = $res->fetch_array())
 {
 	if($brow['type'] == 205)
-	{
+	{ 
 		$company[] = $brow['name'];
 		$companyid[] = $brow['actionid'];
 	}

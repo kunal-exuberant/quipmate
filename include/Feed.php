@@ -107,6 +107,10 @@ class Feed
 		{
 			$this->group_question_complete_encode($k,$json,$help,$encode,$database,$memcache, 311, 302);
 		}
+		else if($action[$k]['actiontype']==330)
+		{
+			$this->event_complete_encode($k,$json,$help,$encode,$database,$memcache, 411, 402);
+		}
 		else if($action[$k]['actiontype']==400)
 		{
 			$this->event_complete_encode($k,$json,$help,$encode,$database,$memcache, 411, 402);
@@ -130,6 +134,10 @@ class Feed
 			$name[$action[$k]['actionon']] = $help->name_fetch($action[$k]['actionon'], $memcache, $database);
 			$pimage[$action[$k]['actionon']] = $help->pimage_fetch($action[$k]['actionon'], $memcache, $database); 
 			$this->friendship_complete_encode($k,$json,$help,$encode,$database,$memcache, 411, 402);
+		}
+		else if($action[$k]['actiontype']==410)
+		{
+			$this->event_cancel_encode($k,$json,$help,$encode,$database,$memcache, 411, 402);
 		}
 		else if($action[$k]['actiontype']==416)
 		{
@@ -327,11 +335,22 @@ class Feed
 		$action[$k]['event_name'] = $e['name'];
 		$action[$k]['event_description'] = $e['description'];
 		$action[$k]['venue'] = $e['venue'];
-		$action[$k]['date'] = $e['date'];	
+		$action[$k]['date'] = date('j M,Y',strtotime($e['date']));
 		$action[$k]['timing'] = $e['timing'];	
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
 	} 
 	
+	function event_cancel_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
+	{   global $action;
+		$e = $database->event_select($action[$k]['actionon']);
+		$action[$k]['eventid'] = $e['eventid'];
+		$action[$k]['event_name'] = $e['name'];
+		$action[$k]['event_description'] = $e['description'];
+		$action[$k]['venue'] = $e['venue'];
+		$action[$k]['date'] = date('j M,Y',strtotime($e['date']));
+		$action[$k]['timing'] = $e['timing'];	
+		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
+	}
 	
 	function group_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
 	{   
@@ -585,7 +604,6 @@ class Feed
 		$action[$k]['file'] = $encode->video_encode($action[$k]['pageid'],$database);	
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
 	}
-	
 	
 	function event_image_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype, $ctype)
 	{   

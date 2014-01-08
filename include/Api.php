@@ -401,8 +401,46 @@ class Api
 		$myprofileid = $_SESSION['userid'];
 		$visible_id = $_SESSION['visible'];
 		$actiontype = 5;
+		
+		while($count >= 0)
+		{
+			$name = $_FILES['photo_box']['name'][$count];
+			$size = $_FILES['photo_box']['size'][$count];
+			if(strlen($name))
+			{
+				$ext = pathinfo($name,PATHINFO_EXTENSION);
+				if(in_array(strtolower($ext),$valid_formats))
+				{
+					if($size<(10240*1024)) 
+					{
+						;			
+					}
+					else
+					{
+						$data['ack']= 3;
+						echo json_encode($data);
+						exit();	
+					}
+				}
+				else
+				{
+					$data['ack']= 4;
+					echo json_encode($data);
+					exit();	
+				}
+			}
+			else
+			{
+				$data['ack']= 5;
+				json_encode($data);
+				exit();
+			}
+			$count--;
+		}	
+		
 		$database = new Database();
 		$aid = $database->get_actionid($profileid, $actiontype, 0,$visible_id);
+		$count = $_POST['moment_photo_count'];
 		$c = $count + 1;
 		$momentid = $database->moment_insert($profileid,$aid,$c,$moment_name,$desc = '');
 		$data = array();
@@ -415,52 +453,28 @@ class Api
 		$k = 0;
 		while($count >= 0)
 		{
-			$name = $_FILES['photo_box']['name'][$count];
-			$size = $_FILES['photo_box']['size'][$count];
-			if(strlen($name))
+			$actual_image_name[$count] = $count.time().".".$ext;
+			$tmp = $_FILES['photo_box']['tmp_name'][$count];
+			$filename = $help->photo_name($ext);
+			if($actual_image_name[$count] = $help->cdn_upload($tmp,'photo',$filename))
 			{
-				$ext = pathinfo($name,PATHINFO_EXTENSION);
-				if(in_array(strtolower($ext),$valid_formats))
+				$caption = $_SESSION['NAME'];
+				$actionid = array();  
+				$visible_id = $_SESSION['visible'];
+				$actionid[$count] = $database->get_actionid($profileid,51,-1,$visible_id);
+				if($actionid[$count])
 				{
-					if($size<(10240*1024)) 
-					{
-						$actual_image_name[$count] = $count.time().".".$ext;
-						$tmp = $_FILES['photo_box']['tmp_name'][$count];
-						$filename = $help->photo_name($ext);
-						if($actual_image_name[$count] = $help->cdn_upload($tmp,'photo',$filename))
-						{
-							$caption = $_SESSION['NAME'];
-							$actionid = array();  
-							$visible_id = $_SESSION['visible'];
-							$actionid[$count] = $database->get_actionid($profileid,51,-1,$visible_id);
-							if($actionid[$count])
-							{
-								$result = $database->image_insert($profileid,$actionid[$count],$actual_image_name[$count],$momentid,'http://photo.qmcdn.net/');	
-								$photo[$k]['file'] = 'http://photo.qmcdn.net/'.$actual_image_name[$count];
-								$photo[$k]['actionid'] = $actionid[$count];
-								$data['ack']= 1;
-								$k++;	
-							}		
-						}
-						else
-						{
-							$data['ack']= 2;				
-						}	
-					}
-					else
-					{
-						$data['ack']= 3;				
-					}
-				}
-				else
-				{
-					$data['ack']= 4;		
-				}
+					$result = $database->image_insert($profileid,$actionid[$count],$actual_image_name[$count],$momentid,'http://photo.qmcdn.net/');	
+					$photo[$k]['file'] = 'http://photo.qmcdn.net/'.$actual_image_name[$count];
+					$photo[$k]['actionid'] = $actionid[$count];
+					$data['ack']= 1;
+					$k++;	
+				}		
 			}
 			else
 			{
-				$data['ack']= 5;
-			}
+				$data['ack']= 2;				
+			}	
 			$count--;
 		}	
 		$data['photo'] = $photo;
@@ -2679,9 +2693,16 @@ class Api
 					{
 						if($database->action_delete($mrow['actionid']))
 						{
-							$data['ack'] = 1;
-							$data['message'] = 'Removed';
-							echo json_encode($data);
+							if($database->unsubscribe($groupid,$profileid))
+							{
+								$data['ack'] = 1;
+								$data['message'] = 'Removed';
+								echo json_encode($data);
+							}
+							else
+							{
+								$help->error_description(15);								
+							}
 						}
 						else
 						{
@@ -2838,7 +2859,7 @@ class Api
 		$database = new Database();
 		if(isset($_GET['groupid']) && isset($_GET['invite']) && isset($_GET['description'])  && isset($_GET['privacy'])  && isset($_GET['link']))
 		{
-			if(!empty($_GET['groupid']) && $_GET['invite'] != '' && !empty($_GET['privacy']))
+			if(!empty($_GET['groupid']) && $_GET['invite'] != '' && $_GET['privacy'] != '')
 			{
 				if(strlen($_GET['link']) < 500)
 				{
@@ -3054,6 +3075,87 @@ class Api
 			$help->error_description(9);				
 		}	
 	}
+	
+	function group_event_create()
+	{
+		$help = new Help();
+		$database = new Database();
+		if(isset($_GET['groupid']) && isset($_GET['name']) && isset($_GET['description'])  && isset($_GET['day']) && isset($_GET['month']) && isset($_GET['year']) && isset($_GET['time']) && isset($_GET['venue']))
+		{
+			if(!empty($_GET['groupid']) && !empty($_GET['name']) && !empty($_GET['description'])  && !empty($_GET['day']) && !empty($_GET['month']) && !empty($_GET['year']) && !empty($_GET['time']) && !empty($_GET['venue']))
+			{
+				if(strlen($_GET['name']) < 100)
+				{
+					if(strlen($_GET['description']) < 400)
+					{
+						if($help->validate_bday($_GET['day'], $_GET['month'], $_GET['year']))
+						{
+							if($help->validate_time($_GET['time']))
+							{
+								$name = $_GET['name'];
+								$description = $_GET['description'];
+								$privacy = 2;
+								$invite = 0;
+								$groupid = $_GET['groupid'];
+								$day = $_GET['day'];
+								$month = $_GET['month'];
+								$year = $_GET['year'];
+								$timimg = $_GET['time'];
+								$venue = $_GET['venue'];
+								$date = $year.'-'.$month.'-'.$day;
+								$myprofileid = $_SESSION['userid'];
+								$time = time();
+								if($actionid = $database->get_actionid($myprofileid, 400))
+								{
+									if($aid = $database->get_actionid($groupid, 330, $actionid))
+									{
+										$eventid = $database->event_create($actionid, $invite, $privacy, $name, $description,$date, $timimg, $venue, $myprofileid, $time, $groupid);
+										$database->action_update($actionid, $eventid);
+										$data['ack'] = 1;
+										$data['eventid'] = $eventid;
+										echo json_encode($data);
+									}
+									else
+									{
+										$help->error_description(15);								
+									}
+								}
+								else
+								{
+									$help->error_description(29);
+								}
+							}
+							else
+							{
+								$help->error_description(29);
+							}
+						}
+						else
+						{
+							$help->error_description(28);									
+						}
+					}
+					else
+					{
+						$help->error_description(10);					
+					}
+				}
+				else
+				{
+					$help->error_description(10);			
+				}
+			}
+			else
+			{
+				$help->error_description(18);				
+			}
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
+	
 	
 	function event_create()
 	{
@@ -7881,39 +7983,45 @@ class Api
 					$row = $database->event_select($eventid);
 				    if($row['host'] == $myprofileid)
 					{
-						$actionid = $database->get_actionid($eventid,410,0,5);
+						$actiontype  = 410;
+						$actionid = $database->get_actionid($eventid,$actiontype,0,6);
 						if($actionid)
 						{
 							$eventname = $row['name'];
-							$guests = $database->guest_select($eventid);
-							$result = $database->event_delete($eventid);
-							$email = new Email();
-							$param = array();
-							$param['type'] = 'event_cancel';
-							$param['eventname'] = $eventname; 
-							$param['myprofileid'] = $myprofileid;
-							$param['actionid'] = $actionid;
-							
-							while ($res = $guests->fetch_array())
+							if($database->event_cancel($eventid))
 							{
-								$memberid = $res['profileid'] ;
-								if ($memberid != $myprofileid )
+								$guests = $database->guest_select($eventid);
+								$email = new Email();
+								$param = array();
+								$param['type'] = 'event_cancel';
+								$param['eventname'] = $eventname; 
+								$param['myprofileid'] = $myprofileid;
+								$param['actionid'] = $actionid;
+								while ($res = $guests->fetch_array())
 								{
-									$rnotice = $database->setting_notice_select($profileid);
-									if($rnotice['event_cancel'])
+									$memberid = $res['profileid'] ;
+									if ($memberid != $myprofileid )
 									{
-										$email->notice_insert($actionid,$eventid,$memberid,$actionid);
+										$rnotice = $database->setting_notice_select($memberid);
+										if($rnotice['event_cancel'])
+										{
+											$database->notice_insert($actionid,$eventid,$actiontype,$actionid);
+										}
+										$remail = $database->setting_email_select($memberid);
+										if($remail['event_cancel'])
+										{
+											$param['memberid'] = $memberid;
+											$email->email_sample($param);		
+										}	
 									}
-									$remail = $database->setting_email_select($profileid);
-									if($remail['event_cancel'])
-									{
-										$param['memberid'] = $memberid;
-										$email->email_sample($param);		
-									}	
 								}
+								$data['ack'] = 1;
+								echo json_encode($data);
 							}
-							$data['ack'] = 1;
-							echo json_encode($data);
+							else
+							{
+								$help->error_description(15);					
+							}
 						}
                         else
                         {

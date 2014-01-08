@@ -10,6 +10,7 @@ import tornado.options
 import tornado.web
 import os.path
 import tornado.httpclient
+from HTMLParser import HTMLParser
 from tornado.options import define, options
 global cursorDict
 cursorDict = {}
@@ -196,6 +197,19 @@ class Query(Database):
         sql_query = "update inbox set READBIT ='1' where ACTIONBY='%s' and ACTIONON='%s'" %(sentby, sentto)
         return self.query(sql_query, cursor)
 		
+class MLStripper(HTMLParser):
+    def __init__(self):
+        self.reset()
+        self.fed = []
+    def handle_data(self, d):
+        self.fed.append(d)
+    def get_data(self):
+        return ''.join(self.fed)
+
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
 
 class BaseHandler(tornado.web.RequestHandler, Query):
     def get_name(self, profileid):
@@ -375,11 +389,11 @@ class ChatNewHandler(BaseHandler, ChatMixin):
 		cursor = self.get_globalid()
 		rows = cursor.fetchall()
 		for row in rows:
-			self.chat_insert(row[0], self.get_argument("profileid"), self.get_argument("userid"), self.get_argument("message"), time.time())
+			self.chat_insert(row[0], self.get_argument("profileid"), self.get_argument("userid"), strip_tags(self.get_argument("message")), time.time())
 			chat['actionid'] = row[0]
 			chat['sentby'] = self.get_argument("profileid")
 			chat['sentto'] = self.get_argument("userid")
-			chat['message'] = self.get_argument("message")
+			chat['message'] = strip_tags(self.get_argument("message"))
 			chat['time'] = time.time();
 			chat['type'] = 3
 			name[chat['sentby']] = self.get_argument("name")
