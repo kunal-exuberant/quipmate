@@ -12,7 +12,7 @@ require_once '../include/header.php';
 					<img class="viewable" id="<?php echo $profile_imageid; ?>" style="cursor:pointer;max-width:16em;margin:0em 0em 0em 0em;" data="<?php echo $profile_image; ?>" src="<?php echo $profile_image; ?>" />
 			</div>
 			<div style="text-align:center;">
-				<a style="font-weight:bold;display:block;color:#ffffff;background-color:#003153;padding:0.5em;background: url('http://icon.qmcdn.net/top_bar_1.png') repeat scroll 0 0 #003153"; href="profile.php?id=<?php echo $profileid; ?>" style=""><?php echo $profile_name; ?></a>
+				<a style="font-weight:bold;display:block;color:#ffffff;padding:0.5em;background:#4C66A4"; href="profile.php?id=<?php echo $profileid; ?>" style=""><?php echo $profile_name; ?></a>
 			</div>
 			
 			
@@ -97,7 +97,7 @@ require_once '../include/header.php';
 	?>
 	<div id="right">
 		<script type="text/javascript">
-		$(function(){
+		/*$(function(){
 			var profileid=$('#profileid_hidden').attr('value');
 			var myprofileid=$('#myprofileid_hidden').attr('value');
 			if(profileid != myprofileid)
@@ -106,7 +106,7 @@ require_once '../include/header.php';
 					$('#bio_match').html(data);
 				});
 			}
-		});
+		});*/
 		</script>
 		<?php
 	if($profile_relation != 0)
@@ -194,12 +194,6 @@ require_once '../include/header.php';
 		</span>
 		<?php    
 		}
-		?>
-
-		<span class="profile_actions_container" >
-				<input style="width:5em;" class="profile_actions_button gift_button" type="submit" value="+Gift" onclick="ui.gift_ui_create(this)"/> 
-		</span>
-		<?php
 	}
 	if($profile_relation != 0)
 	{

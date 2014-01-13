@@ -336,7 +336,7 @@ Make an entry of your daily activities by filling your diary.Invite your friends
 			if($_SESSION['database'] != 'profile')
 			{
 				?>
-				<a class="tab_header" href="?hl=technical" target="_parent" title="See only technical feeds">Tech</a>
+				<a class="tab_header" href="index.php?hl=technical" target="_parent" title="See only technical feeds">Tech</a>
 				<?php
 			}
 			?>

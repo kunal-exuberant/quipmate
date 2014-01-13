@@ -8,15 +8,15 @@ $database = new Database();
 $myprofileid = $_SESSION['USERID'];
 $profileid = $_GET['id'];
 
-$arr = Array("School","College");
+//$arr = Array("School","College");
 $arr2 = Array("City","Company","Profession","Hobby","Music","Movie","Book","Sports","Rolemodel","People");
 $ret = Array();
 $ret2 = Array();
-while(list($key,$value) = each($arr))
+/*while(list($key,$value) = each($arr))
 {
 	$field = $value;
 	$ret[$field] = $database->bio_field_match($field,$myprofileid,$profileid);
-}
+}*/
 while(list($key,$value) = each($arr2))
 {
 	$field = $value;

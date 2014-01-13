@@ -19,8 +19,8 @@ $mcount = $database->unread_message_select($profileid,$college);
 					<a style="color:#003399;" href="profile.php?hl=bio">Edit My Profile</a>
 				</div>
 			</div>  
-			<div name="option" >
-				<ul style="list-style:none;clear:left;margin-top:3em;" id="links">  
+			<div name="option" style="clear:left;">
+				<ul style="list-style:none;margin-top:2.5em;" id="links">  
 					<li class="links"><a class="ajax_nav<?php if($page=='news_json') echo ' selected'; ?>" id="news_json" href="?hl=update" title="Updates from your friends"><img class="lfloat" src="http://icon.qmcdn.net/news_rss.png" height="18" width="18" /><span class="name_20">News Feed</span></a></li>
 					
 					<li class="links"><a  class="ajax_nav<?php if($page=='inbox') echo ' selected'; ?>" id="inbox" href="?hl=inbox" title="Messages from your friends"><img class="lfloat" src="http://icon.qmcdn.net/message.png" height="18" width="18" /><span class="name_20"><?php if($mcount) echo 'Messages('.$mcount.')'; else echo 'Messages'; ?></span></a></li>
@@ -56,7 +56,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 				<li class="links"><a href="#" onclick="ui.event_create(this)" title="Create an event"><img class="lfloat" src="http://icon.qmcdn.net/plus.png"  height="13" width="13"  /><span class="name_20">Create Event</span></a></li>
 			</ul>
 			</div>
-			<div name="group">
+			<div name="group" style="margin-top:1em;">
 			<span style="font-weight:bold;font-size:1em;color:gray">Groups</span>
 			<ul>
 					<?php						

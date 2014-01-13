@@ -103,13 +103,21 @@ class Feed
 		{
 			$this->group_link_complete_encode($k,$json,$help,$encode,$database,$memcache, 311, 302);
 		}
+		else if($action[$k]['actiontype']==325)
+		{
+			$this->group_video_complete_encode($k,$json,$help,$encode,$database,$memcache,311,302);
+		}
+		else if($action[$k]['actiontype']==326)
+		{
+			$this->group_doc_complete_encode($k,$json,$help,$encode,$database,$memcache,311,302);
+		}
 		else if($action[$k]['actiontype']==328)
 		{
 			$this->group_question_complete_encode($k,$json,$help,$encode,$database,$memcache, 311, 302);
 		}
 		else if($action[$k]['actiontype']==330)
 		{
-			$this->event_complete_encode($k,$json,$help,$encode,$database,$memcache, 411, 402);
+			$this->group_event_complete_encode($k,$json,$help,$encode,$database,$memcache, 411, 402);
 		}
 		else if($action[$k]['actiontype']==400)
 		{
@@ -142,6 +150,14 @@ class Feed
 		else if($action[$k]['actiontype']==416)
 		{
 			$this->event_link_complete_encode($k,$json,$help,$encode,$database,$memcache, 411, 402);
+		}
+		else if($action[$k]['actiontype']==425)
+		{
+			$this->event_video_complete_encode($k,$json,$help,$encode,$database,$memcache,411,402);
+		}
+		else if($action[$k]['actiontype']==426)
+		{
+			$this->event_doc_complete_encode($k,$json,$help,$encode,$database,$memcache,411,402);
 		}
 		else if($action[$k]['actiontype']==501 || $action[$k]['actiontype']==502)
 		{
@@ -326,6 +342,21 @@ class Feed
 	{
 		global $action;
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	
+	}
+	
+	function group_event_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
+	{   global $action;
+		$g = $database->group_select($action[$k]['actionon']);
+		$action[$k]['groupid'] = $g['groupid'];
+		$action[$k]['group_name'] = $g['name'];
+		$e = $database->event_select($action[$k]['pageid']);
+		$action[$k]['eventid'] = $e['eventid'];
+		$action[$k]['event_name'] = $e['name'];
+		$action[$k]['event_description'] = $e['description'];
+		$action[$k]['venue'] = $e['venue'];
+		$action[$k]['date'] = date('j M,Y',strtotime($e['date']));
+		$action[$k]['timing'] = $e['timing'];	
+		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
 	}
 	
 	function event_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
@@ -600,6 +631,55 @@ class Feed
 	function video_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype, $ctype)
 	{   
 	    global $action;
+		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
+		$action[$k]['file'] = $encode->video_encode($action[$k]['pageid'],$database);	
+		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
+	}
+	
+	function event_doc_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype, $ctype)
+	{   
+	    global $action;
+		$e = $database->event_select($action[$k]['actionon']);
+		$action[$k]['eventid'] = $e['eventid'];
+		$action[$k]['event_name'] = $e['name'];
+		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
+		$d = $encode->doc_encode($action[$k]['pageid'],$database);	
+		$action[$k]['file'] = $d['file'];
+		$action[$k]['caption'] = $d['caption'];
+		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
+	}
+	
+	function event_video_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype, $ctype)
+	{   
+	    global $action;
+		$e = $database->event_select($action[$k]['actionon']);
+		$action[$k]['eventid'] = $e['eventid'];
+		$action[$k]['event_name'] = $e['name'];
+		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
+		$action[$k]['file'] = $encode->video_encode($action[$k]['pageid'],$database);	
+		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
+	}
+	
+		
+	function group_doc_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype, $ctype)
+	{   
+	    global $action;
+		$e = $database->group_select($action[$k]['actionon']);
+		$action[$k]['groupid'] = $e['groupid'];
+		$action[$k]['group_name'] = $e['name'];
+		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
+		$d = $encode->doc_encode($action[$k]['pageid'],$database);	
+		$action[$k]['file'] = $d['file'];
+		$action[$k]['caption'] = $d['caption'];
+		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
+	}
+	
+	function group_video_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype, $ctype)
+	{   
+	    global $action;
+		$e = $database->group_select($action[$k]['actionon']);
+		$action[$k]['groupid'] = $e['groupid'];
+		$action[$k]['group_name'] = $e['name'];
 		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
 		$action[$k]['file'] = $encode->video_encode($action[$k]['pageid'],$database);	
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 

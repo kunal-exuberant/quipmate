@@ -84,7 +84,7 @@ body{background:#ededed;}
 					<form id="pform" method="post" enctype="multipart/form-data" action="/ajax/write.php">
 						<div style="">
 							<input type="file" id="photo_box" name="photo_box" />
-						<button type="button" style=" color: #003153;cursor: pointer;height: 5em;width:20em;" id="photo_upload_button">Upload</button>
+						<button type="button" id="photo_upload_button">Upload</button>
 						</div>
 						<input type="hidden" name="action" value="profile_picture_upload"/>
 					</form>

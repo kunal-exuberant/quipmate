@@ -12,8 +12,6 @@ import os.path
 import tornado.httpclient
 from HTMLParser import HTMLParser
 from tornado.options import define, options
-global cursorDict
-cursorDict = {}
 
 define("port", default=8888, help="Server Port", type=int)
 
@@ -44,158 +42,94 @@ class Database(tornado.database.Connection):
 
     def query(self,query,cursor):
         cursor.execute(query)
-        #self.close()
+        self.close()
         return cursor 
 
 class Query(Database):
 
-    def chat_select(self, user, time):
-        global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
+	def chat_select(self, user, time):
 		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-        sql_query = "select * from inbox where (ACTIONBY = '%s' or ACTIONON = '%s') and time > '%s' order by ACTIONID desc limit 4" %(user, user, time)
-        return self.query(sql_query, cursor)
+		sql_query = "select * from inbox where (ACTIONBY = '%s' or ACTIONON = '%s') and time > '%s' order by ACTIONID desc limit 4" %(user, user, time)
+		return self.query(sql_query, cursor)
 
-    def get_globalid(self):	
-	global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
+	def get_globalid(self):	
 		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-	sql_query = "REPLACE INTO globalid (stub) VALUES ('a')"
-	cursor.execute(sql_query)
-	sql_query = "SELECT LAST_INSERT_ID() as id"
-	return self.query(sql_query,cursor)
-	
-    def chat_insert(self, actionid, sentby, sentto, message, time):
-	global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
-		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-	message = message.replace("'","\\'")
-        sql_query = r"insert into inbox(ACTIONID, ACTIONBY, ACTIONON, MESSAGE, TIME) values( '%s', '%s', '%s', '%s', '%s')" %(actionid, sentby, sentto, message, time)
-	return self.query(sql_query, cursor)
+		sql_query = "REPLACE INTO globalid (stub) VALUES ('a')"
+		cursor.execute(sql_query)
+		sql_query = "SELECT LAST_INSERT_ID() as id"
+		return self.query(sql_query,cursor)
 
-    def name_select(self, profileid):
-        global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
+	def chat_insert(self, actionid, sentby, sentto, message, time):
 		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-        sql_query = "select NAME from bio where PROFILEID = '%s' " %(profileid)
-        return self.query(sql_query, cursor)
+		message = message.replace("'","\\'")
+		sql_query = r"insert into inbox(ACTIONID, ACTIONBY, ACTIONON, MESSAGE, TIME) values( '%s', '%s', '%s', '%s', '%s')" %(actionid, sentby, sentto, message, time)
+		return self.query(sql_query, cursor)
 
-    def photo_select(self, profileid):
-        global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
+	def name_select(self, profileid):
 		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-        sql_query = "select CDN,FILENAME from profile_image where PROFILEID = '%s' order by imageid desc limit 1" %(profileid)
-        return self.query(sql_query, cursor)
+		sql_query = "select NAME from bio where PROFILEID = '%s' " %(profileid)
+		return self.query(sql_query, cursor)
 
-    def online_select(self, profileid):
-        global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
+	def photo_select(self, profileid):
 		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-        sql_query = "SELECT friend.FRIENDID,callback FROM friend inner join online ON friend.FRIENDID = online.profileid WHERE friend.PROFILEID = '%s' and online.time <> '0' " %(profileid)
-        return self.query(sql_query, cursor)
+		sql_query = "select CDN,FILENAME from profile_image where PROFILEID = '%s' order by imageid desc limit 1" %(profileid)
+		return self.query(sql_query, cursor)
 
-    def online_replace(self, profileid, time, callback=""):
-        global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
+	def online_select(self, profileid):
 		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-        sql_query = "replace into online(profileid, callback, time) values( '%s', '%s', '%s')" %(profileid, callback, time)
-        return self.query(sql_query, cursor)
+		sql_query = "SELECT friend.FRIENDID,callback FROM friend inner join online ON friend.FRIENDID = online.profileid WHERE friend.PROFILEID = '%s' and online.time <> '0' " %(profileid)
+		return self.query(sql_query, cursor)
 
-    def new_action_select(self, profileid, last_poll_time):
-        global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
+	def online_replace(self, profileid, time, callback=""):
 		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-        sql_query = "select a.* from action as a inner join subscribe as sub on CASE WHEN a.PROFILEID <1000000000 THEN a.PROFILEID ELSE a.ACTIONBY END = sub.FRIENDID inner join actiontype on actiontype.actiontypeid = a.ACTIONTYPE where sub.PROFILEID='%s' and actiontype.live_feed ='1' and unix_timestamp(a.TIMESTAMP) > '%s' order by a.ACTIONID desc limit 50" %(profileid, last_poll_time)
-        return self.query(sql_query, cursor)
+		sql_query = "replace into online(profileid, callback, time) values( '%s', '%s', '%s')" %(profileid, callback, time)
+		return self.query(sql_query, cursor)
+
+	def new_action_select(self, profileid, last_poll_time):
+		cursor = self.connect()
+		sql_query = "select a.* from action as a inner join subscribe as sub on CASE WHEN a.PROFILEID <1000000000 THEN a.PROFILEID ELSE a.ACTIONBY END = sub.FRIENDID inner join actiontype on actiontype.actiontypeid = a.ACTIONTYPE where sub.PROFILEID='%s' and actiontype.live_feed ='1' and unix_timestamp(a.TIMESTAMP) > '%s' order by a.ACTIONID desc limit 50" %(profileid, last_poll_time)
+		return self.query(sql_query, cursor)
 		
-    def new_event_test(self, profileid, time):
-	global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
+	def new_event_test(self, profileid, time):
 		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-	sql_query = "select unix_timestamp(action.TIMESTAMP) from action inner join friend on action.ACTIONBY = friend.FRIENDID where friend.PROFILEID='%s' and actiontype not in('51','1151') and unix_timestamp(action.TIMESTAMP) > '%s' order by action.ACTIONID desc limit 1" %(profileid, time)
-	cursor = self.query(sql_query, cursor)
-	if cursor.rowcount == 0:
-		return cursor.rowcount
-	else:
-		for row in cursor:
-			return row[0]	
-	    
-    def notice_unread_count(self, profileid):
-	global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
-		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-	sql_query = "select count(*),unix_timestamp(TIMESTAMP) from notice where READBIT ='0' and PROFILEID = '%s' and ACTIONBY <> '%s' and ACTIONTYPE <> '401' order by ACTIONID desc limit 1" %(profileid, profileid)
-	return self.query(sql_query, cursor)	
-	
-    def unread_count(self, profileid):
-	global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
-		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-	sql_query = "select count(*) from inbox where READBIT ='0' and ACTIONON = '%s' group by ACTIONBY" %(profileid)
-	return self.query(sql_query, cursor)
+		sql_query = "select unix_timestamp(action.TIMESTAMP) from action inner join friend on action.ACTIONBY = friend.FRIENDID where friend.PROFILEID='%s' and actiontype not in('51','1151') and unix_timestamp(action.TIMESTAMP) > '%s' order by action.ACTIONID desc limit 1" %(profileid, time)
+		cursor = self.query(sql_query, cursor)
+		if cursor.rowcount == 0:
+			return cursor.rowcount
+		else:
+			for row in cursor:
+				return row[0]	
+		
+	def notice_unread_count(self, profileid):
+		cursor = self.connect
+		sql_query = "select count(*),unix_timestamp(TIMESTAMP) from notice where READBIT ='0' and PROFILEID = '%s' and ACTIONBY <> '%s' and ACTIONTYPE <> '401' order by ACTIONID desc limit 1" %(profileid, profileid)
+		return self.query(sql_query, cursor)	
 
-    def request_unread_count(self, profileid, actiontype1, actiontype2, actiontype3):
-	global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
-		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-	sql_query = "select count(*) from notice where READBIT ='0' and PROFILEID = '%s' and (ACTIONTYPE = '%s' or ACTIONTYPE = '%s' or ACTIONTYPE = '%s') " %(profileid, actiontype1, actiontype2, actiontype3)
-	return self.query(sql_query, cursor)
+	def unread_count(self, profileid):
+		cursor = self.connect
+		sql_query = "select count(*) from inbox where READBIT ='0' and ACTIONON = '%s' group by ACTIONBY" %(profileid)
+		return self.query(sql_query, cursor)
 
-    def offline_replace(self, time):
-        global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
-		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-        sql_query = "update online set time = 0 where time < '%s' " %(time)
-        return self.query(sql_query, cursor)
+	def request_unread_count(self, profileid, actiontype1, actiontype2, actiontype3):
+		cursor = self.connect
+		sql_query = "select count(*) from notice where READBIT ='0' and PROFILEID = '%s' and (ACTIONTYPE = '%s' or ACTIONTYPE = '%s' or ACTIONTYPE = '%s') " %(profileid, actiontype1, actiontype2, actiontype3)
+		return self.query(sql_query, cursor)
 
-    def chat_readbit_update(self, sentby, sentto):
-        global cursorDict
-	if cursorDict.has_key(self.DB_NAME) == False:
+	def offline_replace(self, time):
 		cursor = self.connect()
-		cursorDict[self.DB_NAME] = cursor
-	else:
-		cursor = cursorDict[self.DB_NAME]
-        sql_query = "update inbox set READBIT ='1' where ACTIONBY='%s' and ACTIONON='%s'" %(sentby, sentto)
-        return self.query(sql_query, cursor)
+		sql_query = "update online set time = 0 where time < '%s' " %(time)
+		return self.query(sql_query, cursor)
+
+	def chat_readbit_update(self, sentby, sentto):
+		cursor = self.connect()
+		sql_query = "update inbox set READBIT ='1' where ACTIONBY='%s' and ACTIONON='%s'" %(sentby, sentto)
+		return self.query(sql_query, cursor)
+
+	def session_read(self, sessionid):
+		self.DB_NAME = "session"
+		cursor = self.connect()
+		sql_query = "select data from session where sessionid = '%s'" %(sessionid)
+		return self.query(sql_query, cursor)	
 		
 class MLStripper(HTMLParser):
     def __init__(self):
@@ -212,15 +146,24 @@ def strip_tags(html):
     return s.get_data()
 
 class BaseHandler(tornado.web.RequestHandler, Query):
-    def get_name(self, profileid):
-        cursor = self.name_select(profileid)
-        for row in cursor:                 
-            return row[0]
-         
-    def get_photo(self, profileid):
-        cursor = self.photo_select(profileid)
-        for row in cursor:      
-            return row[0]+row[1]	
+	def authenticate(self):
+		sessionid = self.get_cookie("PHPSESSID")
+		print sessionid 
+		cursor = self.session_read(sessionid)
+		for row in cursor:  
+			print row[0]
+			return row[0]
+		return None	
+		
+	def get_name(self, profileid):
+		cursor = self.name_select(profileid)
+		for row in cursor:                 
+			return row[0]
+		 
+	def get_photo(self, profileid):
+		cursor = self.photo_select(profileid)
+		for row in cursor:      
+			return row[0]+row[1]	
 
 class RealTimeHandler(BaseHandler):
 
@@ -380,27 +323,30 @@ class ChatMixin(tornado.web.RequestHandler, Query):
 class ChatNewHandler(BaseHandler, ChatMixin):
     @tornado.web.asynchronous
     def post(self): 
-		chat = {}
-		name = {}
-		photo = {}
-		action = []
-		self.DB_NAME = self.get_argument("database")
-		database = self.get_argument("database")
-		cursor = self.get_globalid()
-		rows = cursor.fetchall()
-		for row in rows:
-			self.chat_insert(row[0], self.get_argument("profileid"), self.get_argument("userid"), strip_tags(self.get_argument("message")), time.time())
-			chat['actionid'] = row[0]
-			chat['sentby'] = self.get_argument("profileid")
-			chat['sentto'] = self.get_argument("userid")
-			chat['message'] = strip_tags(self.get_argument("message"))
-			chat['time'] = time.time();
-			chat['type'] = 3
-			name[chat['sentby']] = self.get_argument("name")
-			photo[chat['sentby']] = self.get_argument("photo")
-			action.append(chat)
-			self.message(chat,name,photo,database)
-			self.finish(dict(action=action,name=name,photo=photo))
+		if self.authenticate():
+			chat = {}
+			name = {}
+			photo = {}
+			action = []
+			self.DB_NAME = self.get_argument("database")
+			database = self.get_argument("database")
+			cursor = self.get_globalid()
+			rows = cursor.fetchall()
+			for row in rows:
+				self.chat_insert(row[0], self.get_argument("profileid"), self.get_argument("userid"), strip_tags(self.get_argument("message")), time.time())
+				chat['actionid'] = row[0]
+				chat['sentby'] = self.get_argument("profileid")
+				chat['sentto'] = self.get_argument("userid")
+				chat['message'] = strip_tags(self.get_argument("message"))
+				chat['time'] = time.time();
+				chat['type'] = 3
+				name[chat['sentby']] = self.get_argument("name")
+				photo[chat['sentby']] = self.get_argument("photo")
+				action.append(chat)
+				self.message(chat,name,photo,database)
+				self.finish(dict(action=action,name=name,photo=photo))
+		else:
+			self.finish(dict(action="",name="",photo="",ack="0",msg="authentication failure"))
 
 class ChatUpdateHandler(BaseHandler, ChatMixin):
     @tornado.web.asynchronous

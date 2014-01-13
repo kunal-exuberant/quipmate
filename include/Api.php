@@ -3517,6 +3517,7 @@ class Api
 		$database->inbox_update_readbit($myprofileid);
 		$res = $database->get_last_message_exchanged($myprofileid);
 		$k = 0;
+		$data['ack'] = 0;
 		$friend = array();
 		$message_sent_recieve = array();
 		while($NROW = $res->fetch_array())
@@ -3531,7 +3532,8 @@ class Api
 					$message_sent_recieve[$k]['message']=$NROW['MESSAGE'];					
 					$message_sent_recieve[$k]['time']=$NROW['TIME'];	
 					$name[$friend[$k]] = $help->name_fetch($friend[$k], $memcache, $database);
-				   $pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcache, $database);
+					$pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcache, $database);
+				   	$data['ack'] = 1;
 				}	
 			}
 			else if($NROW['ACTIONON'] == $myprofileid)
@@ -3545,11 +3547,11 @@ class Api
 					$message_sent_recieve[$k]['time']=$NROW['TIME'];
 					$name[$friend[$k]] = $help->name_fetch($friend[$k], $memcache, $database);
 				    $pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcache, $database);
+					$data['ack'] = 1;
 				}	
 			}
 			$k++;
 		}
-		$data['ack'] = 1;
 		$data['action'] = $message_sent_recieve;
 		$data['name'] = $name; 
 		$data['pimage'] = $pimage;
@@ -4661,7 +4663,7 @@ class Api
 	function event_photo_upload()
 	{
 		$valid_formats = array("jpg","png","gif","bmp","jpeg");
-		$doc_formats = array("pdf","pptx","ppt","docx","doc","txt");
+		$doc_formats = array("pdf","pptx","ppt","docx","doc","txt","xls","xlsx","ods","one","pps","ps","rtf","msg");
 		$video_formats = array("mp4","flv");
 		$name = $_FILES['photo_box']['name'];
 		$size = $_FILES['photo_box']['size'];
@@ -4718,7 +4720,7 @@ class Api
 								else
 									$visible = 0;
 								$database = new Database();	
-								$actionid = $database->get_actionid($profileid,406,0,$visible);
+								$actionid = $database->get_actionid($profileid,$actiontype,0,$visible);
 								if($actionid)
 								{
 									$result = $database->diary_insert($actionid,$description);
@@ -4767,7 +4769,7 @@ class Api
 											if($remail['event_post'])
 											{
 												$param['memberid'] = $memberid;
-												$email->$email_sample($param);
+												$email->email_sample($param);
 											}	
 										}
 									}
@@ -4810,7 +4812,7 @@ class Api
 	function group_photo_upload()
 	{
 		$valid_formats = array("jpg","png","gif","bmp","jpeg");
-		$doc_formats = array("pdf","pptx","ppt","docx","doc","txt");
+		$doc_formats = array("pdf","pptx","ppt","docx","doc","txt","xls","xlsx","ods","one","pps","ps","rtf","msg");
 		$video_formats = array("mp4","flv");
 		$name = $_FILES['photo_box']['name'];
 		$size = $_FILES['photo_box']['size'];
@@ -4868,7 +4870,7 @@ class Api
 								else
 									$visible = 0;
 								$database = new Database();	
-								$actionid = $database->get_actionid($profileid,'306','0',$visible);
+								$actionid = $database->get_actionid($profileid,$actiontype,'0',$visible);
 								if($actionid)
 								{
 									$result = $database->diary_insert($actionid,$description);
@@ -4961,7 +4963,7 @@ class Api
 	function photo_upload()
 	{
 		$valid_formats = array("jpg","png","gif","bmp","jpeg");
-		$doc_formats = array("pdf","pptx","ppt","docx","doc","txt","xls","xlsx","ods");
+		$doc_formats = array("pdf","pptx","ppt","docx","doc","txt","xls","xlsx","ods","one","pps","ps","rtf","msg");
 		$video_formats = array("mp4","flv");
 		$name = $_FILES['photo_box']['name'];
 		$size = $_FILES['photo_box']['size'];
@@ -5989,7 +5991,7 @@ class Api
 	    $help = new Help();
 	    if(isset($_GET['profileid']) && isset($_GET['title']) && isset($_GET['link']) && isset($_GET['meta']) && isset($_GET['page']) && isset($_GET['file']))
 		{
-			if(!empty($_GET['profileid']) && !empty($_GET['title']) && !empty($_GET['link']) && !empty($_GET['page']))
+			if(!empty($_GET['profileid']) && !empty($_GET['link']) && !empty($_GET['page']))
 			{
 			 	$myprofileid = $_SESSION['userid'];
 				$database = new Database();
@@ -6043,7 +6045,7 @@ class Api
 											if($remail['event_post'])
 											{ 
 												$param['memberid'] = $memberid; 
-												$email->event_post($param);
+												$email->email_sample($param);
 											}	
 										}
 									 }
@@ -6089,7 +6091,7 @@ class Api
 	    $help = new Help();
 	    if(isset($_GET['profileid']) && isset($_GET['title']) && isset($_GET['link']) && isset($_GET['meta']) && isset($_GET['page']) && isset($_GET['file']))
 		{
-			if(!empty($_GET['profileid']) && !empty($_GET['title']) && !empty($_GET['link']) && !empty($_GET['page']))
+			if(!empty($_GET['profileid']) && !empty($_GET['link']) && !empty($_GET['page']))
 			{
 			 	$myprofileid = $_SESSION['userid'];
 				$database = new Database();
@@ -6190,7 +6192,7 @@ class Api
 	    $help = new Help();
 	    if(isset($_GET['profileid']) && isset($_GET['title']) && isset($_GET['link']) && isset($_GET['meta']) && isset($_GET['page']) && isset($_GET['file']))
 		{
-			 if(!empty($_GET['profileid']) && !empty($_GET['title']) && !empty($_GET['link']) && !empty($_GET['page']))
+			 if(!empty($_GET['profileid']) && !empty($_GET['link']) && !empty($_GET['page']))
 			 {
 			 	$myprofileid = $_SESSION['userid'];
 				$database = new Database();
@@ -6702,19 +6704,32 @@ class Api
 				$value = $_GET['name'];
 				if(!isset($_GET['diaryid']) || empty($_GET['diaryid']))
 				{
-					$diaryid = $database->mydiary_create_wo_admin($item, $value);
+					if($diaryid = $database->diaryid_select($item,$value))
+					{
+						;
+					}
+					else
+					{
+						$diaryid = $database->mydiary_create_wo_admin($item, $value);
+					}
 				}
 				else
 				{
 					$diaryid = $_GET['diaryid'];
 				}
 				$myprofileid = $_SESSION['userid'];
-				$actionid = $database->get_actionid($myprofileid, $item);
-				if($database->bio_item_add($actionid,$myprofileid,$item,$diaryid))
+				if($actionid = $database->get_actionid($myprofileid, $item))
 				{
-					$data['ack'] = 1;
-					$data['message'] = 'Added'; 
-					echo json_encode($data);
+					if($database->bio_item_add($actionid,$myprofileid,$item,$diaryid))
+					{
+						$data['ack'] = 1;
+						$data['message'] = 'Added'; 
+						echo json_encode($data);
+					}
+					else
+					{
+						$help->error_description(15);
+					}
 				}
 				else
 				{

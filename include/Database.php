@@ -443,7 +443,7 @@ class Database
 		$time = $this->con->real_escape_string($time);
 		$profileid = $this->con->real_escape_string($profileid);
 		$v_date = date('Y-m-d H:i:s',$time);	
-		$result=$this->con->query("SELECT e.eventid as eventid,e.name as name FROM `event` as e inner join guest as g on e.eventid = g.eventid	Where g.profileid = '$profileid' and e.cancel='0' and CONCAT(e.`date`,' ',e.`timing`) >= '$v_date'");
+		$result=$this->con->query("SELECT e.eventid as eventid,e.name as name FROM `event` as e inner join guest as g on e.eventid = g.eventid	Where g.profileid = '$profileid' and e.cancel='0' and g.priviledge <>'2' and CONCAT(e.`date`,' ',e.`timing`) >= '$v_date'");
 		return $result;		
 	}
 	
@@ -969,6 +969,14 @@ class Database
 		$result = $this->con->query("SELECT DIARYID from info WHERE DIARYID = $profileid and TYPE=$type");
 		return $result->fetch_array();
 	}
+	function diaryid_select($type,$name)
+	{
+		$type = $this->con->real_escape_string($type);
+		$name = $this->con->real_escape_string($name);
+		$result = $this->con->query("SELECT DIARYID from `info` WHERE NAME =TRIM('$name') and TYPE='$type'");
+		$ret = $result->fetch_array();
+		return $ret['DIARYID'];
+	} 
 
     function profile_exists($profileid)
 	{

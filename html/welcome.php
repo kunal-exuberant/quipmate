@@ -47,7 +47,7 @@ $file->google_analytics();
 	<div>Quipmate is an enterprise social tool</div>
 	<div>It helps professionals connect and share</div>
 	<div>with others in their organization</div>
-	<div><a style="background-color:#336699;border:0.1em solid #cccccc;color:#ffffff;font-size: 1.2em;padding:0.2em 1em;text-decoration: none;" href="http://doc.qmcdn.net/How Quipmate helps in employee engagement.pdf" target="_blank">Learn More</a></div>
+	<div><a style="background-color:#336699;border:0.1em solid #cccccc;color:#ffffff;font-size: 1.2em;padding:0.2em 1em;text-decoration: none;" href="http://blog.quipmate.com/" target="_blank">Learn More</a></div>
 </div>
 <div id="register_box">
 <?php if(isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) != '')
