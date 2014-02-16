@@ -4962,8 +4962,8 @@ class Api
 					$row = $database->page_exists($profileid);
 					if($row['pageid'] == $profileid)
 					{
-						$row = $database->is_follower($profileid, $myprofileid);
-						if($row->num_rows)
+						$row1 = $database->is_follower($profileid, $myprofileid);
+						if($row1->num_rows)
 						{
 							$file_to_be_uploaded = $_FILES['photo_box']['tmp_name'];
 							$ext = strtolower(pathinfo($_FILES['photo_box']['name'],PATHINFO_EXTENSION));
