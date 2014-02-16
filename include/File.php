@@ -69,15 +69,15 @@ class File
 		<?php
 	}	
 	
-	function script_jquery()
+	function script_jquery() 
 	{	
 		?>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'jquery-1.8.2.min.js'; ?>" charset="utf-8"></script>
 		<?php			
 	}
 	
-	function script_jquery_public()
-	{	
+	function script_jquery_public()  /*  remember to remove '..' below for this, before moving to production, else blog will not work !   ******/
+	{	 
 		?>
 			<script type="text/javascript" src="<?php echo '../'.$this->script_cdn.'jquery-1.8.2.min.js'; ?>" charset="utf-8"></script>
 		<?php			

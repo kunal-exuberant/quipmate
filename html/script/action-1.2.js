@@ -25,7 +25,11 @@ $('#question_link').click(function(){
 	else if(page == 'group_json')
 	{
 		action = 'group_photo_upload';						
-	} 	
+	}
+	else if(page == 'page_json')
+	{
+		action = 'page_photo_upload';						
+	}  	
 
 $('#photo_link').live('click',function(){
 		ui.file_upload(profileid, action);
@@ -77,7 +81,6 @@ $('#moment_link').live('click',function(){
             });  
 		$('#photo_upload_button').live('click', function()
 		{
-			$(this).remove();
 			$("#photo_preview").html('<img src="http://icon.qmcdn.net/upload.gif" alt="Uploading...."/>');
 			$("#pform").ajaxSubmit(
 			{
@@ -89,23 +92,31 @@ $('#moment_link').live('click',function(){
 						var postid = $('#'+dom_id);
 						var file = data.file; 
 						var myprofileid = $('#myprofileid_hidden').attr('value');
-						var profileid = $('#profileid_hidden').attr('value');						
+						var profileid = $('#profileid_hidden').attr('value');	
+						if( data.actiontype == 2906)
+						{
+						var page_image='http://icon.qmcdn.net/broadcast.png';
+						$('#prev').prepend('<div id="nf_post_'+data.actionid+'" data="'+data.actionid+'" class="nf_post"><div class="name_50"></div><div data=' +data.actionid+ ' class="pageclass_json"><input type="hidden" value=' +profileid+ ' /><input type="hidden" value="6"/><a href="page.php?id=' +data.page_pageid+' "><img class="lfloat" src =' +page_image+ ' height="50" width="50" /></a><div class="name_50"><a class="bold" href="page.php?id=' +data.page_pageid+' " >' +data.page_name+ '</a><div><input type="hidden" value="'+data.life_is_fun+'"/><div style="margin:0.5em 0em;">'+data.page+'</div></div></div>');
+						}
+						else
+						{
 						$('#prev').prepend('<div id="nf_post_'+data.actionid+'" data="'+data.actionid+'" class="nf_post"><div class="name_50"></div><div data=' +data.actionid+ ' class="pageclass_json"><input type="hidden" value=' +profileid+ ' /><input type="hidden" value="6"/><a href="profile.php?id=' +myprofileid+' "><img class="lfloat" src =' +myphoto+ ' height="50" width="50" /></a><div class="name_50"><a class="bold" href="profile.php?id=' +myprofileid+' " >' +myname+ '</a><div><input type="hidden" value="'+data.life_is_fun+'"/><div style="margin:0.5em 0em;">'+data.page+'</div></div></div>');
+						}
 						ui.response_comment('#nf_post_'+data.actionid, data.actionid, data.life_is_fun, data.time, myprofileid, myphoto);
-						if(data.actiontype == 6 || data.actiontype == 306 || data.actiontype == 406)
+						if(data.actiontype == 6 || data.actiontype == 306 || data.actiontype == 406 || data.actiontype == 2906)
 						{
 							$('#nf_post_'+data.actionid).children().eq(1).children().eq(3).children().eq(1).append('<img src ="thumbnail.php?file='+file+'&maxw=368&maxh=400" style="max-width:33.5em;margin-bottom:1em;cursor:pointer;border:0.1em solid #aaaaaa;" data="'+file+'" class="viewable" id="'+data.actionid+' " />');
 						}
-						else if(data.actiontype == 2600 || data.actiontype == 326 || data.actiontype == 426)
+						else if(data.actiontype == 2600 || data.actiontype == 326 || data.actiontype == 426 || data.actiontype == 2926)
 						{
 							var ext = data.caption.split('.').pop();
-							var fileimage ='http://icon.qmcdn.net/'+ext+'.ico';
+							var fileimage ='http://icon.qmcdn.net/'+ext.toLowerCase()+'.ico';
 							$('#nf_post_'+data.actionid).children().eq(1).children().eq(3).children().eq(1).append('<img class="lfloat" src='+fileimage+' height="50" width="50" /><div id="doc_name"><a href='+data.file+' data="'+data.file+'" target="_blank">'+data.caption+'</a></div>');
 						}
-						else if(data.actiontype == 2500  || data.actiontype == 325 || data.actiontype == 425)
+						else if(data.actiontype == 2500  || data.actiontype == 325 || data.actiontype == 425 || data.actiontype == 2925)
 						{
 							$('#nf_post_'+data.actionid).children().eq(1).children().eq(3).children().eq(1).append('<div id="video_'+data.actionid+'">');
-							jwplayer("video_"+data.actionid).setup({file:data.file,title:data.page,width: "100%",aspectratio: "16:9",fallback:"false",primary:"flash"});
+							jwplayer("video_"+data.actionid).setup({file:data.file,image:data.caption,title:data.page,width: "100%",aspectratio: "16:9",fallback:"false",primary:"flash"});
 						}						
 						ui.upload_default_state();
 					}
@@ -171,27 +182,34 @@ $('#moment_link').live('click',function(){
 								{       
 									var f = v.file;  
 									$('#'+dom_id).children().eq(1).children().eq(3).children().eq(1).append('<img class="viewable" data="'+f+'"src ="thumbnail.php?file='+f+'&maxh=150&maxw=150" style="margin-bottom:1.5em;cursor:pointer;border:1px solid #f6f6f6;padding:.3em;" class="thumb" id="'+v.actionid+' " />');
-								});							
+								});	
+								num = -1;								
 								ui.upload_default_state();
+								
 						}
 						else
 						{
 							if(data.ack == '2')
 							{
+								num = -1;	
 								ui.popup_error_prompt('Unable to upload image. Please try again.');
 							}
 							else if(data.ack == '3')
 							{
+								num = -1;	
 								ui.popup_error_prompt('Image size is more than 10Mb. Please compress this image and try again.');
 							}
 							else if(data.ack == '4')
 							{
+								num = -1;	
 								ui.popup_error_prompt('Please upload an image of jpg/jpeg, png, gif, bmp type only. Please change the image type and try again.');
 							}
 							else if(data.ack == '5')
 							{
+								num = -1;	
 								ui.popup_error_prompt('Please chose a photo to upload');
 							}
+							num = -1;	
 							ui.album_upload(profileid, action);
 						}	
 					}
@@ -259,93 +277,120 @@ if(!executed)
 			var myname = $('#myprofilename_hidden').attr('value');
 		
 			$('#link_button').live('click',function(){
-			$(this).hide();
-			if(actiontype == 1)
+			if($.trim($('#link_box').val()) != '')
 			{
-				var profileid = $('#profileid_hidden').val();
-				var entry = $('#link_box').val();
-				if(entry != "")
+				if(actiontype == 1)
 				{
-					$('#link_box').html('');
-					var page = $('#page_hidden').attr('value');
-					var action = 'post_status';
-					if(page == 'news_json' || page == 'profile_json')
+					var profileid = $('#profileid_hidden').val();
+					var entry = $('#link_box').val();
+					if(entry != "")
 					{
-						action = 'post_status';
-					}
-					else if(page == 'group_json')
-					{
-						action = 'group_status';
-					}
-					else if(page == 'event_json')
-					{
-						action = 'event_status';						
-					}	
-					$.getJSON('ajax/write.php',{action:action,profileid:profileid,page:entry},function(data){
-					if(data.ack)
-					{
-						$('#prev').prepend('<div class="nf_post" data="'+data.actionid+'" id="nf_post_'+data.actionid+'"><div class="name_50"></div><div data='+data.actionid+' class="pageclass_json"><input type="hidden" value=' +profileid+ ' /> <input type="hidden" value="'+actiontype+'"/><a href="profile.php?id='+myprofileid+'"><img class="lfloat" src =' +myphoto+ ' height="50" width="50" /></a><div class="name_50"><a class="bold" href="profile.php?id='+myprofileid+'">'+myname+'</a><div class="pclass_json"><pre>'+ui.see_more(ui.get_smiley(ui.link_highlight(data.page)))+'</pre></div></div>');
-						ui.response_comment('#nf_post_'+data.actionid, data.actionid, data.life_is_fun, data.time, myprofileid, myphoto);
-					}
-
-						 ui.upload_default_state();
-					});	
-				}
-			}
-			else if(actiontype == 1600)
-			{
-				var file = '';		
-				if(video)
-				{
-					file = '';
-				}
-				else
-				{
-					file = src[thumb_index];
-					if(src[thumb_index] === undefined)
-						file = '';	
-				}
-				var profileid = $('#profileid_hidden').val();
-				var page = $('#link_box').val();
-				$('#link_box').html('')
-				if(meta === undefined)
-					meta = '';
-				var action = 'post_link';
-                var ppage = $('#page_hidden').attr('value'); 				
-				if(ppage == 'news_json' || ppage == 'profile_json')
-				{
-					action = 'post_link';
-				}
-				else if(ppage == 'group_json')
-				{
-					action = 'group_post_link';
-				}
-				else if(ppage == 'event_json')
-				{
-					action = 'event_post_link';						
-				}
-				$.getJSON('ajax/write.php',{action:action,profileid:profileid,title:title,link:link,meta:meta,page:page,file:file},function(data){
-					if(data.ack)
-					{
-						$('#prev').prepend('<div class="nf_post" data="'+data.actionid+'" id="nf_post_'+data.actionid+'"><div class="name_50"></div><div data='+data.actionid+' class="pageclass_json"><input type="hidden" value=' +profileid+ ' /> <input type="hidden" value="'+actiontype+'"/><a href="profile.php?id='+myprofileid+'"><img class="lfloat" src =' +myphoto+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id='+myprofileid+'">'+myname+'</a> shared <a href="'+link+'">'+title+'</a></div><div style="position:relative;"></div></div>');
-						ui.response_comment('#nf_post_'+data.actionid, data.actionid, data.life_is_fun, data.time, myprofileid, myphoto);
-						if(video)
-						{ 
-							$('#nf_post_'+data.actionid).children().eq(1).children().eq(3).children().eq(1).append('<input type="hidden" value="'+path+'" /><img class="video_play viewable lfloat" style="margin:0em 1em 1em 0em;cursor:pointer;" id="'+data.actionid+'" src="http://img.youtube.com/vi/'+path+'/default.jpg" /><img class="video_play viewable" style="position:absolute;left:4em;top:3em;cursor:pointer;" id="'+data.actionid+'" src="http://icon.qmcdn.net/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>'+title+'</div><a href="'+host+'" target="_blank">'+host+'</a><div>'+meta+'</div><div>'+ui.see_more(ui.get_smiley(ui.link_highlight(page)))+'</div></div><br style= "clear:both;"/></div>');
-						} 
-						else
+						$('#link_box').html('');
+						var page = $('#page_hidden').attr('value');
+						var action = 'post_status';
+						if(page == 'news_json' || page == 'profile_json')
 						{
-							$('#nf_post_'+data.actionid).children().eq(1).children().eq(3).children().eq(1).append('<img class="lfloat" style="max-height:8.2em;max-width:11em;margin-right:1em;" src="'+file+'" ><div style="margin:2em 0em 0em 0em;">'+title+'<br /><a href="'+host+'"  target="_blank">'+host+'</a><br />'+meta+'<br />'+ui.see_more(ui.get_smiley(ui.link_highlight(data.page)))+'</div><div style="clear:left;"></div>');
+							action = 'post_status';
 						}
-					}
-					 ui.upload_default_state();
-					$('#link_callback').remove();
-				
-				});	
+						else if(page == 'group_json')
+						{
+							action = 'group_status';
+						}
+						else if(page == 'page_json')
+						{
+							action = 'page_status';
+						}
+						else if(page == 'event_json')
+						{
+							action = 'event_status';						
+						}	
+						$.getJSON('ajax/write.php',{action:action,profileid:profileid,page:entry},function(data){
+						if(data.ack)
+						{ 
+						//variale problem in case of multitab
+							if(page == 'page_json')
+							{ 
+								var gname = myname; var gimage=myphoto;
+								myname = data.page_name;
+								myphoto = 'http://icon.qmcdn.net/broadcast.png';
+							}
+							$('#prev').prepend('<div class="nf_post" data="'+data.actionid+'" id="nf_post_'+data.actionid+'"><div class="name_50"></div><div data='+data.actionid+' class="pageclass_json"><input type="hidden" value=' +profileid+ ' /> <input type="hidden" value="'+actiontype+'"/><a href="profile.php?id='+myprofileid+'"><img class="lfloat" src =' +myphoto+ ' height="50" width="50" /></a><div class="name_50"><a class="bold" href="profile.php?id='+myprofileid+'">'+myname+'</a><div class="pclass_json"><pre>'+ui.see_more(ui.get_smiley(ui.link_highlight(data.page)))+'</pre></div></div>');
+							ui.response_comment('#nf_post_'+data.actionid, data.actionid, data.life_is_fun, data.time, myprofileid, myphoto);
+							//restore variables
+							myname =gname;
+							myphoto=gimage;
+						}
 
+							 ui.upload_default_state();
+						});	
+					}
+				}
+				else if(actiontype == 1600)
+				{
+					var file = '';		
+					if(video)
+					{
+						file = '';
+					}
+					else
+					{
+						file = src[thumb_index];
+						if(src[thumb_index] === undefined)
+							file = '';	
+					}
+					var profileid = $('#profileid_hidden').val();
+					var page = $('#link_box').val();
+					$('#link_box').html('')
+					if(meta === undefined)
+						meta = '';
+					var action = 'post_link';
+					var ppage = $('#page_hidden').attr('value'); 				
+					if(ppage == 'news_json' || ppage == 'profile_json')
+					{
+						action = 'post_link';
+					}
+					else if(ppage == 'group_json')
+					{
+						action = 'group_post_link';
+					}
+					else if(ppage == 'event_json')
+					{
+						action = 'event_post_link';						
+					}
+					else if(ppage == 'page_json')
+					{
+						action = 'page_post_link';						
+					}
+					$.getJSON('ajax/write.php',{action:action,profileid:profileid,title:title,link:link,meta:meta,page:page,file:file},function(data){
+						if(data.ack)
+						{
+							if(data.actiontype == 2916)
+							{
+							var page_image = 'http://icon.qmcdn.net/broadcast.png';
+							$('#prev').prepend('<div class="nf_post" data="'+data.actionid+'" id="nf_post_'+data.actionid+'"><div class="name_50"></div><div data='+data.actionid+' class="pageclass_json"><input type="hidden" value=' +profileid+ ' /> <input type="hidden" value="'+actiontype+'"/><a href="page.php?id='+data.page_pageid+'"><img class="lfloat" src =' +page_image+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="page.php?id='+page_pageid+'">'+data.page_name+'</a> shared <a href="'+link+'">'+title+'</a></div><div style="position:relative;"></div></div>');
+							}
+							else
+							{
+							$('#prev').prepend('<div class="nf_post" data="'+data.actionid+'" id="nf_post_'+data.actionid+'"><div class="name_50"></div><div data='+data.actionid+' class="pageclass_json"><input type="hidden" value=' +profileid+ ' /> <input type="hidden" value="'+actiontype+'"/><a href="profile.php?id='+myprofileid+'"><img class="lfloat" src =' +myphoto+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id='+myprofileid+'">'+myname+'</a> shared <a href="'+link+'">'+title+'</a></div><div style="position:relative;"></div></div>');
+							}
+							ui.response_comment('#nf_post_'+data.actionid, data.actionid, data.life_is_fun, data.time, myprofileid, myphoto);
+							if(video)
+							{ 
+								$('#nf_post_'+data.actionid).children().eq(1).children().eq(3).children().eq(1).append('<input type="hidden" value="'+path+'" /><img class="video_play viewable lfloat" style="margin:0em 1em 1em 0em;cursor:pointer;" id="'+data.actionid+'" src="http://img.youtube.com/vi/'+path+'/default.jpg" /><img class="video_play viewable" style="position:absolute;left:4em;top:3em;cursor:pointer;" id="'+data.actionid+'" src="http://icon.qmcdn.net/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>'+title+'</div><a href="'+host+'" target="_blank">'+host+'</a><div>'+meta+'</div><div>'+ui.see_more(ui.get_smiley(ui.link_highlight(page)))+'</div></div><br style= "clear:both;"/></div>');
+							} 
+							else
+							{
+								$('#nf_post_'+data.actionid).children().eq(1).children().eq(3).children().eq(1).append('<img class="lfloat" style="max-height:8.2em;max-width:11em;margin-right:1em;" src="'+file+'" ><div style="margin:2em 0em 0em 0em;">'+title+'<br /><a href="'+host+'"  target="_blank">'+host+'</a><br />'+meta+'<br />'+ui.see_more(ui.get_smiley(ui.link_highlight(data.page)))+'</div><div style="clear:left;"></div>');
+							}
+						}
+						 ui.upload_default_state();
+						$('#link_callback').remove();
+					
+					});	
+
+				}
 			}
 			});
 }		
 }); // option link closes
-
 });

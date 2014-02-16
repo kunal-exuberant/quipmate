@@ -4,6 +4,193 @@ var action = (function(){
 			var url = 'ajax/write.php';
 			var param = {};
 			var data = {};
+			var tag_name = [];
+			var tag_index = [];
+			
+			function universal_loader(page,param)
+			{
+				if(param.action !='')
+				{
+					$.getJSON(url,param,function(data){
+					if(data.action.length > 0)
+					{
+					   load = true;  
+						switch(page)
+						{
+							case 'news_json': feed.news_deploy(data,'#prev'); break;
+							case 'admin_json': feed.news_deploy(data,'#prev'); break;
+							case 'tech_json': feed.news_deploy(data,'#prev'); break;
+							case 'quip': feed.news_deploy(data,'#prev'); break;
+							case 'notice_json': deploy.notice_deploy(data,'#prev'); break;
+							case 'action': feed.news_deploy(data,'#prev'); break;
+							case 'profile_json': feed.news_deploy(data,'#prev'); break;
+							case 'group_json': feed.news_deploy(data,'#prev'); break;
+							case 'page_json': feed.news_deploy(data,'#prev'); break;
+							case 'event_json': feed.news_deploy(data,'#prev'); break;
+							case 'album': deploy.album_deploy(data); break;
+							case 'photo': deploy.photo_deploy(data); break;
+							case 'pphoto': deploy.photo_deploy(data); break;
+							case 'college_mate':deploy.people_deploy(data); break;
+							case 'new_user':deploy.people_deploy(data); break;
+							case 'friend': deploy.friend_deploy(data); break;
+							case 'member': deploy.member_deploy(data); break;
+							case 'guest': deploy.guest_deploy(data,'#prev'); break;
+							default: $("#prev").html(data); break;
+						}
+					var oldh = $("#prev").height();
+					oldh = parseInt(oldh) + 500;
+					$("#center").height(oldh);
+					param.start += increment;
+					$('#load_more').show();
+					}
+					else
+					{
+						load = false;    
+						$('#loading').remove();
+						if(page == 'news_json')	
+						{
+							$('#prev').append('<div style="border-bottom: 0.1em solid #CCCCCC;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Find friends" onclick="ui.redirect_friend_suggest()"/></div>');
+							$('#prev').append('<div style="border-bottom: 0.1em solid #CCCCCC;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Join Groups" onclick="ui.redirect_group_suggest()"/></div>');
+						}
+						else
+						{		
+							$('#prev').append('<div style="text-align:center;"><img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRFmAJa2bdiS2NhxFx0rTcfod6D20_YjcY7J9gbGnyuBGG6SGvCsg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
+						}
+					}
+					});
+				}   
+				var lastScrollTop = 0;                           
+				$(window).scroll(function(){
+				var st = $(this).scrollTop();
+				if (st > lastScrollTop)
+				{
+				   // downscroll code
+
+				var scroll_size = $(document).height() - $(window).height();
+				scroll_size = scroll_size * 0.6;
+				if(($(window).scrollTop() > scroll_size) && load)
+				{
+				   load = false;    
+					$('#load_more').hide();
+					$("#prev").append('<p align="center"><img src="png/loading.gif" id="loading"></p>');
+					if(param.action !='')
+					{
+						$.getJSON(url,param,function(data){
+						if(data.action.length > 0)
+						{
+						  load = true;    
+						  $("#loading").remove();
+
+							switch(page)   
+							{
+								case 'news_json': feed.news_deploy(data,'#prev'); break;
+								case 'tech_json': feed.news_deploy(data,'#prev'); break;
+								case 'admin_json': feed.news_deploy(data,'#prev'); break;
+								case 'quip': feed.news_deploy(data,'#prev'); break;
+								case 'notice_json': deploy.notice_deploy(data,'#prev'); break;
+								case 'action': feed.news_deploy(data,'#prev'); break;
+								case 'profile_json': feed.news_deploy(data,'#prev'); break;
+								case 'group_json': feed.news_deploy(data,'#prev'); break;
+								case 'page_json': feed.news_deploy(data,'#prev'); break;
+								case 'event_json': feed.news_deploy(data,'#prev'); break;
+								case 'album': deploy.album_deploy(data); break;
+								case 'photo': deploy.photo_deploy(data); break;
+								case 'pphoto': deploy.photo_deploy(data); break;
+								case 'college_mate':deploy.people_deploy(data); break;
+								case 'new_user':deploy.people_deploy(data); break;
+								case 'friend': deploy.friend_deploy(data); break;
+								case 'member': deploy.member_deploy(data); break;
+								case 'guest': deploy.guest_deploy(data,'#prev'); break;
+								default: $("#prev").html(data); break;
+							}
+							param.start += increment;
+							$('#load_more').show();
+							var oldh = $("#prev").height();
+							oldh = parseInt(oldh) + 500;
+							$("#center").height(oldh);
+						}
+						else
+						{
+							load = false;    
+							$('#loading').remove();
+							if(page == 'news_json')	
+							{
+								$('#prev').append('<div style="border-bottom: 0.1em solid #CCCCCC;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Find friends" onclick="ui.redirect_friend_suggest()"/></div>');
+								$('#prev').append('<div style="border-bottom: 0.1em solid #CCCCCC;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Join Groups" onclick="ui.redirect_group_suggest()"/></div>');
+							}
+							else
+							{
+								$('#prev').append('<div style="text-align:center;"><img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRFmAJa2bdiS2NhxFx0rTcfod6D20_YjcY7J9gbGnyuBGG6SGvCsg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
+							}
+						}
+						});
+					}
+				}
+				}
+				lastScrollTop = st;
+				});
+
+				$('#load_more').click(function(){
+					$('#load_more').hide();
+					if(load)
+					{
+						load = false; 
+					$("#prev").append('<p align="center"><img src="png/loading.gif" id="loading"></p>');
+					if(param.action !='')
+					{
+						$.getJSON(url,param,function(data){
+							if(data.action.length > 0)
+							{
+							  load = true;    
+							$("#loading").remove();
+							var oldh = $("#center").height();
+								switch(page)   
+								{
+									case 'news_json': feed.news_deploy(data,'#prev'); break;
+									case 'tech_json': feed.news_deploy(data,'#prev'); break;
+									case 'admin_json': feed.news_deploy(data,'#prev'); break;
+									case 'quip': feed.news_deploy(data,'#prev'); break;
+									case 'notice_json': deploy.notice_deploy(data,'#prev'); break;
+									case 'action': feed.news_deploy(data,'#prev'); break;
+									case 'profile_json': feed.news_deploy(data,'#prev'); break;
+									case 'group_json': feed.news_deploy(data,'#prev'); break;
+									case 'page_json': feed.news_deploy(data,'#prev'); break;
+									case 'event_json': feed.news_deploy(data,'#prev'); break;
+									case 'album': deploy.album_deploy(data); break;
+									case 'photo': deploy.photo_deploy(data); break;
+									case 'pphoto': deploy.photo_deploy(data); break;
+									case 'college_mate':deploy.people_deploy(data); break;
+									case 'new_user':deploy.people_deploy(data); break;
+									case 'friend': deploy.friend_deploy(data); break;
+									case 'member': deploy.member_deploy(data); break;
+									case 'guest': deploy.guest_deploy(data,'#prev'); break;
+									default: $("#prev").html(data); break;
+								}
+								var oldh = $("#prev").height();
+								oldh = parseInt(oldh) + 500;
+								$("#center").height(oldh);
+								param.start +=increment;
+								$('#load_more').show();
+							}
+							else
+							{
+								load = false;
+								$('#loading').remove();
+								if(page == 'news_json')	
+								{
+									$('#prev').append('<div style="border-bottom:0.1em solid #cccccc;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Find friends" onclick="ui.redirect_friend_suggest()"/></div>');
+									$('#prev').append('<div style="border-bottom: 0.1em solid #cccccc;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Join Groups" onclick="ui.redirect_group_suggest()"/></div>');
+								}
+								else
+								{
+									$('#prev').append('<div style="text-align:center;"><img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRFmAJa2bdiS2NhxFx0rTcfod6D20_YjcY7J9gbGnyuBGG6SGvCsg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
+								}
+							}
+						});
+						}
+					}  
+				});
+			}
 			
 			function actiontype_preview(me)
 			{
@@ -26,7 +213,6 @@ var action = (function(){
 					ajax.getJSON_ajax(url, param, me, callback.friendship_preview);
 				}
 			}
-			
 			function group_join(me)
 			{
 				$(me).attr("value",'Requesting...'); 
@@ -101,7 +287,8 @@ var action = (function(){
 			
 			function birthday_fetch(me)
 			{
-				
+				param.action='birthday_bomb_fetch';
+				ajax.getJSON_ajax(url, param, me, callback.birthday_select);
 			}
 			
 			function birthday_all(me)
@@ -117,9 +304,76 @@ var action = (function(){
 					param.action = 'comment';
 					param.pageid = $(me).parent().parent().parent().attr('data');
 					param.comment = $.trim($(me).val());
+					param.tag_index = tag_index;
+					param.tag_name = tag_name; 
 					$(me).val('');
 					var me = $(me).parent().prev();
 					ajax.getJSON_ajax(url, param, me, callback.comment);
+				}
+				else
+				{
+					// *********************
+					
+					var q = $.trim($(me).val());
+		var me = $(me);
+		if(q.indexOf('@') != '-1')
+		{
+			q = q.substring(1);
+			var posx = $(me).parent().position().left;
+			var posy = $(me).parent().position().top;
+			$('#mention_container').remove();
+			$(me).parent().append('<div id="mention_container" style="position:absolute;text-align:left;z-index:1;cursor:pointer;max-height:18em;width:20em;background-color:#ffffff;top:10em;left:10em;"></div>');
+			$('#mention_container').css('left',50+posx);
+			$('#mention_container').css('top',35+posy);
+			var global_name = JSON.parse($('#myfriends_name_hidden').attr('value'));
+			var global_pimage = JSON.parse($('#myfriends_pimage_hidden').attr('value'));
+			var count = 0;
+				$.each(global_name,function(index,value){
+				   if(value != null)
+				   {
+						if(q.indexOf(' ') == -1)
+						{
+							var search_name = value.toLowerCase().split(" ");
+							for(var i=0;i<search_name.length;i++)
+							{		
+								if((count < 5) && (search_name[i].toLowerCase().search('^'+q.toLowerCase()) != -1)) 
+								{
+									$('#group_invite_'+index).remove();
+									$('#mention_container').append('<div class="con_32" id="group_invite_'+index+'" data="'+index+'"><img class="lfloat" src='+global_pimage[index]+' width="32" height="32" /><div class="name_35">'+global_name[index]+'</div></div>');
+									$('.search_items:first').css('background','#336699');
+									$('.search_items:first .name_50 a').css('color','white');
+									count++;
+								}
+
+							}
+						}
+						else
+						{
+							if((count < 5) && (value.toLowerCase().search('^'+q.toLowerCase()) != -1)) 
+							{
+								$('#group_invite_'+index).remove();
+								$('#mention_container').append('<div class="con_32" id="group_invite_'+index+'" data="'+index+'"><img class="lfloat" src='+global_pimage[index]+' width="35" height="35" /><div class="name_35">'+global_name[index]+'</div></div>');
+								$('.search_items:first').css('background','#336699');
+								$('.search_items:first .name_50 a').css('color','white');
+								count++;
+							}
+						}	
+					}		
+				});
+				
+					$('.con_32').live('click',function()
+					{
+						me.val('@'+global_name[$(this).attr("data")]+': ');
+						tag_name = [];
+						tag_index = [];
+						tag_name.push('@'+global_name[$(this).attr('data')]+': ');
+						tag_index.push($(this).attr('data'));
+						console.log(tag_index+' '+tag_name);
+					});
+				
+			}
+					
+					// ****************
 				}	
 			}
 			
@@ -164,28 +418,34 @@ var action = (function(){
 			
 			function question_button(me)
 			{
-				var option = [];
-				$('.ask_option').each(function(elem){
-					option.push($(this).html());
-				});
-				param.action = 'post_question';
-				param.question = $('#question_box').val();
-				param.option = option;
-				param.profileid = $('#profileid_hidden').attr('value');
-				ajax.getJSON_ajax(url, param, me, callback.question);
+				if($('#question_box').val() != '')
+				{
+					var option = [];
+					$('.ask_option').each(function(elem){
+						option.push($(this).html());
+					});
+					param.action = 'post_question';
+					param.question = $('#question_box').val();
+					param.option = option;
+					param.profileid = $('#profileid_hidden').attr('value');
+					ajax.getJSON_ajax(url, param, me, callback.question);
+				}
 			}
 			
 			function group_question_button(me)
 			{
-				var option = [];
-				$('.ask_option').each(function(elem){
-					option.push($(this).html());
-				});
-				param.action = 'group_post_question';
-				param.question = $('#question_box').val();
-				param.option = option;
-				param.profileid = $('#profileid_hidden').attr('value');
-				ajax.getJSON_ajax(url, param, me, callback.question);
+				if($('#question_box').val() != '')
+				{
+					var option = [];
+					$('.ask_option').each(function(elem){
+						option.push($(this).html());
+					});
+					param.action = 'group_post_question';
+					param.question = $('#question_box').val();
+					param.option = option;
+					param.profileid = $('#profileid_hidden').attr('value');
+					ajax.getJSON_ajax(url, param, me, callback.question);
+				}
 			}
 			
 			function response_fetch(me)
@@ -193,7 +453,7 @@ var action = (function(){
 				param.action = 'response_fetch';
 				param.pageid = $(me).parent().parent().parent().attr('data');
 				$("#more_excite_people").remove(); 
-				$('body').append('<div id="more_excite_people" style="position:fixed;top:18.2em;left:36em;overflow:auto;">Retreiving data</div>');
+				$('body').append('<div id="more_excite_people" ">Retreiving data</div>');
 				$('#more_excite_people').append('<span id="diary_close" style="position:absolute;top:1em;right:1em;cursor:pointer;">x</span>');
 				data = ajax.getJSON_ajax(url, param, me, callback.response_fetch);
 			}
@@ -203,7 +463,7 @@ var action = (function(){
 				param.action = 'answer_people_fetch';
 				param.optionid = optionid;
 				$("#more_excite_people").remove(); 
-				$('body').append('<div id="more_excite_people" style="position:fixed;top:18.2em;left:36em;overflow:auto;">Retreiving data</div>');
+				$('body').append('<div id="more_excite_people" >Retreiving data</div>');
 				$('#more_excite_people').append('<span id="diary_close" style="position:absolute;top:1em;right:1em;cursor:pointer;">x</span>');
 				data = ajax.getJSON_ajax(url, param, me, callback.response_fetch);
 			}
@@ -421,7 +681,6 @@ var action = (function(){
 				param.flag = flag;
 				param.eventid = $(me).attr('data');
 				var me = $(me).parent().parent().parent();
-				$(me).attr('class','accepted');
 				$(me).html('<img src="http://icon.qmcdn.net/loading.gif" />');
 				ajax.getJSON_ajax(url, param, me, callback.guest_accept);
 			}
@@ -482,6 +741,13 @@ var action = (function(){
 				if($('#group_technical:checked').length == 1)
 					param.technical = 1;
 				ajax.getJSON_ajax(url, param, me, callback.group_create);
+			}
+			function page_create(me)
+			{
+				param.action = 'page_create';
+				param.name = $('#page_name').attr('value');
+				param.description = $('#page_description').attr('value');
+				ajax.getJSON_ajax(url, param, me, callback.page_create);
 			}
 			
 				
@@ -729,6 +995,95 @@ var action = (function(){
 				ajax.getJSON_ajax(url, param, me, callback.search);
 			}
 			
+			function message_send(me, event)
+			{
+				var user = $(me).parent().children().eq(0).attr('value');
+				var name = $('#myprofilename_hidden').attr('value'); 
+				var profileid = $('#profileid_hidden').attr('value');
+				if(event.which == 13 && $.trim($(me).val()))
+				{ 
+					typing = true;
+					var message = $(me).val();
+					var photo = $('#myprofileimage_hidden').attr('value'); 
+					$(me).attr('value','');
+					var database = $('#database_hidden').attr('value');
+					var param = {"profileid":profileid,"userid":user,"message":message,"name":name,"photo":photo,"database":database}
+					$.postJSON('/chat/chat_new',param,function(data){
+						$(me).parent().children().eq(3).append('<div class="message_each" id='+data.action[0].actionid+'><img class="message_each_photo" title="'+name+'" height="50" width=50 src="'+photo+'"><div class="message_each_message"><pre>'+ui.get_smiley(ui.link_highlight(message))+'</pre></div><div style="text-align:right;color:gray;"><img width="6" src="http://icon.qmcdn.net/clock.png"><span style="color:gray;">now</span></div><span onclick="ui.message_delete(this,'+data.action[0].actionid+')" class="post_setting"></span></div>');
+						$(me).parent().children().eq(3).scrollTop($('.inboxui_msg').get(0).scrollHeight);
+					});
+				}
+			}
+			
+			function message_recent_fetch()
+			{
+				$.getJSON('ajax/write.php',{action:'message_recent_fetch'},function(data){
+				if(data.ack != 0)
+				{
+					$('#session_name_hidden').attr('value', JSON.stringify(data.name));
+					$('#session_pimage_hidden').attr('value', JSON.stringify(data.pimage));
+					$.each(data.action,function(index,value){
+						//id = "friend_"+value;
+					if(value.actionby == myprofileid)
+					{	
+						showuser = value.actionon; 
+						showimage ='http://icon.qmcdn.net/out.png'
+					}
+					else 
+					{
+						showuser = value.actionby;
+						showimage ='http://icon.qmcdn.net/in.png'
+					}
+					if((value.message).length > 20) value.message = (value.message).slice(0,17)+'...';
+					
+					  $('#show_inbox').append('<div class="inbox_user" data="'+showuser+'" id="'+showuser+'"><img class="online_photo" height="50" width="50" src="'+data.pimage[showuser]+'" /><span class="online_name" style="font-weight:bold;">'+data.name[showuser]+'</span><div><img height="20" width="20" src="'+showimage+'"/>'+value.message+'</div></div>');
+					 $('#'+showuser).append('<div style="margin-left:6em;margin-top:.15em;color:gray;"><img src="http://icon.qmcdn.net/clock.png" width="6" /><span style="color:gray;" data="'+value.time+'">'+ui.time_difference(value.time)+'</span></a></div>');
+					if(index == 0)
+					{
+							$('#inbox_container').html('');
+							user = showuser;
+							$('#inbox_container').append('<h1 id="message_user_name">'+data.name[user]+'</h1>');
+							ui.createMessageUI(user, name);
+							previous_talk_message(user, 0, 1);
+					}
+					});
+				}
+				else
+				{ 
+					if(data.ack == 0)
+					{
+						$('#inbox_container').append('<h1 id="no_message">No message to show<h1>');
+					}
+				
+				}
+					   $('.inbox_user').live('click',function(){
+						$('#inbox_container').html('');
+						user = $(this).attr('data');
+						$('#inbox_container').append('<h1 id="message_user_name">'+data.name[user]+'</h1>');
+								ui.createMessageUI(user, name);
+								previous_talk_message(user, 0, 1);
+					   });
+				});
+			}
+			
+			function previous_talk_message(user, chat_start, opening)
+			{
+				$.getJSON('ajax/write.php',{action:'message_fetch',profileid:user,start:chat_start},function(data){
+				$.each(data.action,function(index,value){
+					$('#inbox_'+user).children().eq(3).prepend('<div class="message_each" id='+value.actionid+'><img class="message_each_photo" title="'+data.name[value.actionby]+'" height="50" width="50" src="'+data.pimage[value.actionby]+'"><div class="message_each_message">'+ui.get_smiley(ui.link_highlight(value.message))+'</div><div style="text-align:right;color:gray;"><img src="png/clock.png" width="6" /><span style="color:gray;">'+value.time+'</span></a></div><span onclick="ui.message_delete(this,'+value.actionid+')" class="post_setting"></span></div>'); 
+				});
+				if(opening)
+				{ 
+					if($('.inboxui_msg').length > 0)
+					{
+						$('#inbox_'+user).children().eq(3).scrollTop($('.inboxui_msg').get(0).scrollHeight);
+					}	
+				}	
+					chat_load = true;
+				}); 
+			}
+			
+			
 			function search_ajax(me)
 			{
 				var q = $.trim($('#to').attr('value'));
@@ -922,6 +1277,13 @@ var action = (function(){
 				param.del_actionid =del_actionid;
 				data = ajax.getJSON_ajax(url, param, me, callback.post_delete);
 			}
+			function message_delete_positive(me,actionid)
+			{
+				$('.prompt_button').html('');
+				param.action='message_delete';
+				param.del_actionid =actionid;
+				data = ajax.getJSON_ajax(url, param, me, callback.message_delete);
+			}
 			
 			function bio_item_remove(me, diaryid)
 			{
@@ -984,7 +1346,7 @@ var action = (function(){
 				
 				param.action = 'group_suggest';
 				param.count = 1;
-				ajax.getJSON_ajax(url, param, me, ui.group_suggest_single_deploy);
+				ajax.getJSON_ajax(url, param, me, ui.group_suggest_single_deploy_page);
 			}
 			
 			function really_group_join_page(me)
@@ -994,7 +1356,7 @@ var action = (function(){
 				$('#suggest_'+groupid).remove();
 				param.action = 'group_join';
 				param.groupid = groupid;
-				ajax.getJSON_ajax(url, param, me, callback.add_friend);
+				ajax.getJSON_ajax(url, param, me, callback.group_join);
 				
 				param.action = 'group_suggest';
 				param.count = 1;
@@ -1033,11 +1395,18 @@ var action = (function(){
 				data = ajax.getJSON_ajax(url, param, me, callback.group_leave);
 			}
 			
+			function event_leave(me)
+			{
+				param.action = 'event_leave';
+				param.eventid = $('#profileid_hidden').attr('value');
+				data = ajax.getJSON_ajax(url, param, me, callback.event_leave);
+			}
+			
 			function event_cancel_positive(me)
 			{
 				param.action = 'event_cancel';
 				param.eventid = $('#profileid_hidden').attr('value');
-				data = ajax.getJSON_ajax(url, param, me, callback.group_leave);
+				data = ajax.getJSON_ajax(url, param, me, callback.event_cancel);
 			}
 			
 			function unfriend_positive(me)
@@ -1047,9 +1416,53 @@ var action = (function(){
 				data = ajax.getJSON_ajax(url, param, me, callback.unfriend);
 			}
 
-			
+			function name_split(name,value)
+			{
+				var arr = value.split(',');
+				var arrayofprofileid = [];
+				var len = arr.length;
+				//Taking Ids is another array in reverse order
+				for (var j = 0 ; j < len ; j++)
+				{ 
+					arrayofprofileid.push(arr[len - 1 - j]);
+				}
+				var totalcount = arrayofprofileid.length;
+				var count = 0;
+				var names = "";
+				for (var i = 0; i < totalcount ;i++) 
+				{
+					if (i == 0 && totalcount < 3)
+					{
+						names = '<span style="font-weight:bold;">'+name[arrayofprofileid[i]]+'</span>';
+					}
+					else if (i == 0 && totalcount > 2)
+					{
+						names =  '<span style="font-weight:bold;">'+name[arrayofprofileid[i]]+'</span>' + ', ';
+					}
+					else if (i == 1 && totalcount == 2)
+					{
+						names = names +' and '+ name[arrayofprofileid[i]];
+					}
+					else if (i == 1 && totalcount > 2)
+					{
+						names = names + name[arrayofprofileid[i]] ;
+					}
+					else if (i == 2 && totalcount == 3)
+					{
+						names = names +' and '+ name[arrayofprofileid[i]];
+					}
+					else count = count + 1;
+				
+				}
+			if (totalcount <= 3)
+			return names ;
+			else return names+' and '+count+' more ';
+			}
 			
 			return {
+				page_create:page_create,
+				message_delete_positive:message_delete_positive,
+				name_split:name_split,
 				answer_people_fetch : answer_people_fetch, 
 				actiontype_preview : actiontype_preview,
 				add_friend : add_friend,
@@ -1065,6 +1478,7 @@ var action = (function(){
 				event_create : event_create,
 				event_invite : event_invite, 
 				event_join : event_join,
+				event_leave : event_leave,
 				event_cancel_positive : event_cancel_positive,
 				event_suggest_refresh : event_suggest_refresh,
 				group_suggest_refresh : group_suggest_refresh,
@@ -1096,7 +1510,9 @@ var action = (function(){
 				message : message,
 				message_drop : message_drop,
 				member_accept : member_accept,
+				message_send : message_send,
 				member_request_fetch : member_request_fetch,
+				message_recent_fetch : message_recent_fetch,
 				missu : missu,
 				missu_fetch : missu_fetch,
 				mood_done : mood_done,
@@ -1129,7 +1545,8 @@ var action = (function(){
 				tagline : tagline,
 				user_details : user_details,
 				user_delete : user_delete,
-				unfriend_positive : unfriend_positive
+				unfriend_positive : unfriend_positive,
+				universal_loader : universal_loader
 			}
 			
 		})();

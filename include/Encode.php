@@ -140,11 +140,12 @@ function reply_encode($actionid, $help, $database, $memcache)
 					case 236: $field = 'TOOL';  break;
 					case 237: $field = 'EXTENSION';  break;
 					case 238: $field = 'EXPERIENCE';  break;
+					case 239: $field = 'DESIGNATION';  break;
 					default : $field = 'farzi'; break;
 				}
 				$return['actionid'] = $actionid;
 				$return['field'] = strtolower($field);
-				if($actiontype == 201 || $actiontype == 202 || $actiontype == 203 || $actiontype == 204 || $actiontype == 205 || $actiontype == 206 || $actiontype == 207 || $actiontype == 208 || $actiontype == 209 || $actiontype == 211 || $actiontype == 215 || $actiontype == 230 || $actiontype == 231 || $actiontype == 232 || $actiontype == 233 || $actiontype == 234 || $actiontype == 235 || $actiontype == 236 || $actiontype == 237 || $actiontype == 238)
+				if($actiontype == 201 || $actiontype == 202 || $actiontype == 203 || $actiontype == 204 || $actiontype == 205 || $actiontype == 206 || $actiontype == 207 || $actiontype == 208 || $actiontype == 209 || $actiontype == 211 || $actiontype == 215 || $actiontype == 230 || $actiontype == 231 || $actiontype == 232 || $actiontype == 233 || $actiontype == 234 || $actiontype == 235 || $actiontype == 236 || $actiontype == 237 || $actiontype == 238 || $actiontype == 239)
 				{
 					$res = $database->bio_history_select($actionid);
 					$return['value'] = $res['name'];
@@ -255,6 +256,7 @@ function reply_encode($actionid, $help, $database, $memcache)
 		$k = 0;
 		$myprofileid = $_SESSION['userid'];
 		$total = $database->answer_total_select($pageid);
+		$option = array();
 		while($ow = $rw->fetch_array())
 		{
 			$option[$k]['opt'] = $ow['option'];
@@ -299,8 +301,9 @@ function reply_encode($actionid, $help, $database, $memcache)
 	function video_encode($actionid,$database)
 	{
 		$row = $database->video_select($actionid);
-		$file = $row['cdn'].$row['filename'];
-		return $file;
+		$f['file'] = $row['cdn'].$row['filename'];
+		$f['caption'] = $row['cdn'].$row['thumbnail'];
+		return $f;
 	}
 	
 	function response_encode($actionid,$rtype,$json,$help,$database,$memcache)
@@ -353,6 +356,9 @@ function reply_encode($actionid, $help, $database, $memcache)
 			 $com[$j]['com_pageid'] = $comrow['PAGEID'];
 			 $com_actionid = $com[$j]['com_actionid'] = $comrow['ACTIONID'];
 			 $com[$j]['comment'] = stripslashes($comrow['COMMENT']);
+			 $arr = explode('@[',$com[$j]['comment']);
+			 $arr = explode(']',$arr[1]);
+			 $name[$arr[0]] = $help->name_fetch($arr[0], $memcache, $database);
 			 $excited_action = $database->get_excited_action($com_actionid,'63');
 			 $com[$j]['com_excited_mine'] = 0;
 			 while($erow = $excited_action->fetch_array())

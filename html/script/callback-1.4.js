@@ -65,7 +65,7 @@
 		{
 			if($.trim(data)==1)
 			{
-				$('#birthday_wish_container').html('You have successfully sent the birthday wish along with the birthday bomb.');
+				$('#birthday_wish_container').html('You have successfully sent the birthday wish');
 				$('.right_pointer_container').fadeOut(2000);
 			}	
 		}
@@ -93,9 +93,10 @@
 			var pageid = $(me).parent().parent().parent().attr('data');
 			if(data.ack)
 			{
-				$(me).append('<div class="cclass_json" data="'+ data.actionid +'" id="nf_post_'+data.actionid+'"><a href="profile.php?id=' +myprofileid+ '"><img class="lfloat" src =' +myphoto+ ' height="32" width="32" /></a><div class="name_35"><div><a class="bold" style="margin-right:0.4em;" href="profile.php?id=' +myprofileid+ '" >' +myname+ '</a><pre>'+ui.get_smiley(ui.link_highlight(data.comment))+'</pre></div><div><a class="comment_time_json" href="action.php?actionid='+pageid+'&life_is_fun='+data.life_is_fun+'"><img src="http://icon.qmcdn.net/clock.png" width="6" /><span class="time" data="'+Math.floor((new Date()).getTime()/1000)+'">'+time_difference(Math.floor((new Date()).getTime()/1000))+'</span></a><span data=' +myprofileid+ ' class = "comment_excite_json" onclick="action.response(this)">Exciting</span><span class="more_excite_json" onclick="action.response_fetch(this)" data="0"></span></div></div><span class="comment_setting" onclick="ui.post_delete(this)" >x</span></div>');
+				var userid = data.comment.substring(data.comment.indexOf('@[')+2,data.comment.indexOf(']'));
+				data.comment = data.comment.replace('@['+userid+']','<a href="profile.php?id='+userid+'">'+data.name[userid]+'</a>');
+				$(me).append('<div class="cclass_json" data="'+ data.actionid +'" id="nf_post_'+data.actionid+'"><a href="profile.php?id=' +myprofileid+ '"><img class="lfloat" src =' +myphoto+ ' height="32" width="32" /></a><div class="name_35"><div><a class="bold" style="margin-right:0.4em;" href="profile.php?id=' +myprofileid+ '" >' +myname+ '</a><pre>'+ui.get_smiley(ui.link_highlight(data.comment))+'</pre></div><div><a class="comment_time_json" href="action.php?actionid='+pageid+'&life_is_fun='+data.life_is_fun+'"><img src="http://icon.qmcdn.net/clock.png" width="6" /><span class="time" data="'+Math.floor((new Date()).getTime()/1000)+'">'+ui.time_difference(Math.floor((new Date()).getTime()/1000))+'</span></a><span data=' +myprofileid+ ' class = "comment_excite_json" onclick="action.response(this)">Exciting</span><span class="more_excite_json" onclick="action.response_fetch(this)" data="0"></span></div></div><span class="comment_setting" onclick="ui.post_delete(this)" >x</span></div>');
 			}		
-			me.attr('value','');
 		}
 		
 		function option_add(me, data)
@@ -136,7 +137,7 @@
 		
 		function crush_match_preview(me, data)
 		{
-			if(data)
+			if(data.action.length > 0)
 			{
 				$('#right').append('<div id="crush_match_recent" class="right_item"></div>');
 				$('#crush_match_recent').html('<div class="subtitle" >Crush Match</div>');
@@ -152,7 +153,7 @@
 		
 		function crush_preview(me, data)
 		{
-			if(data)
+			if(data.action.length > 0)
 			{
 				$('#right').append('<div id="crush_at_recent" class="right_item"></div>');
 				$('#crush_at_recent').html('<div class="subtitle" >Friends Added As Crush</div>');
@@ -243,11 +244,11 @@
 					$('#birthday_today').append('<div class="container_32_35" id="'+value.profileid+'"><input type="hidden" value="'+value.profileid+'" /><input type="hidden" value="'+value.b+'" /><input type="hidden" value="'+value.pageid+'" /><div><a style="color:#336699;" href="profile.php?id='+value.profileid+'&pl=diary"><img class="lfloat" src="'+data.pimage[value.profileid]+'" height="35" width="32" /></a></div><div class="name_32"><a style="color:#336699;font-weight:bold;" href="profile.php?id='+value.profileid+'&pl=diary">'+data.name[value.profileid]+'</a></div></div>');
 					if(value.bomb_status)
 					{
-						$('#'+value.profileid).append('<div class="name_32">birthday-bomb<span class="birthday_bomb_count" title="Number of people who birthday-bombed">' +value.bomb_count+'</span></div>');
+						$('#'+value.profileid).append('<div class="name_32">birthday wish<span class="birthday_bomb_count" title="Number of people who sent birthday wish">' +value.bomb_count+'</span></div>');
 					}
 					else
 					{
-						$('#'+value.profileid).append('<div class="birthday_bomb name_32" style="cursor:pointer;"  title="Click to add a birthday wish">+birthday-bomb<span class="birthday_bomb_count" title="Number of people who birthday-bombed">' +value.bomb_count+'</span></div>');
+						$('#'+value.profileid).append('<div class="birthday_bomb name_32" style="cursor:pointer;"  title="Click to add a birthday wish">+birthday wish<span class="birthday_bomb_count" title="Number of people who sent birthday wish">' +value.bomb_count+'</span></div>');
 					}
 					count++;
 				}
@@ -304,33 +305,35 @@
 		
 		function friend_invite(me, data)
 		{
-			$('#inviting').attr('id','invite_button');
-			$('#invite_button').attr('value','Invite');
-			$('#invite_box').attr('value',''); 
-			$('html').append('<div id="bg_first" style="position:absolute;top:0em;left:0em;width:100%;height:190em;background:gray;opacity:0.5;filter:alpha(opacity=80);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)"; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);"></div>');
-			$('html').append('<div id="invite_popup_container" style="position:absolute;top:10em;left:38em;border:.5em solid gray;width:35em;height:12em;background:white;"></div>');
-			$('#invite_popup_container').html('<div id="invite_popup_title" style="border-bottom:.1em solid gray;height:1.5em;background:#336699;color:#ffffff;font-weight:bold;padding:.5em;font-size:1.4em;">Invite Prompt</div>');
-			$('#invite_popup_container').append('<div style="color:black;font-size:1.4em;padding:.5em;" id="invite_prompt_text"></div>');
-			$('#invite_popup_container').append('<div style="position:relative;left:20em;top:0em;"><input type="submit" id="invite_song_ok_button" style="margin-left:.5em;background:#336699;height:3em;width:4em;font-weight:bold;color:white;padding:.5em;cursor:pointer;" value="Ok" ></div>');
+				$('#inviting').attr('id','invite_button');
+				$('#invite_button').attr('value','Invite');
+				$('#invite_box').attr('value',''); 
+				$('.prompt_container').remove();     
+				$('.bg_hide_cover').remove();
+				$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
+				
+				$('body').append('<div class="prompt_container"><div class="prompt_title">Invite Prompt</div><div class="prompt_content" id="invite_prompt_text"></div><div class="prompt_button"><input class="prompt_positive" type="submit" value="OK" onclick="ui.bg_hide()" /></div></div>');
+				$('body').css('overflow','hidden');
+				
 			if(data.ack == 0)
 			{
-				$('#invite_prompt_text').html('Ohhh come on! You cannot invite yourself. Try a different email address.');
+				$('#invite_prompt_text').append('Ohhh come on! You cannot invite yourself. Try a different email address.');
 			}
 			else if(data.ack == 1)
 			{
-				$('#invite_prompt_text').html('Your friend having this email address has already joined Quipmate.');
+				$('#invite_prompt_text').append('Your friend having this email address has already joined Quipmate.');
 			}
 			else if(data.ack == 2)
 			{
-				$('#invite_prompt_text').html('You have successfully invited your friend to join Quipmate.');
+				$('#invite_prompt_text').append('You have successfully invited your friend to join Quipmate.');
 			}
 			else if(data.ack == 3)
 			{
-				$('#invite_prompt_text').html('Sorry this email address seems to be invalid. Please check for any possible mistake.');
+				$('#invite_prompt_text').append('Sorry this email address seems to be invalid. Please check for any possible mistake.');
 			}
 			else if(data.error)
 			{
-				$('#invite_prompt_text').html(data.error.message);
+				$('#invite_prompt_text').append(data.error.message);
 			}
 			$('#invite_song_ok_button').live('click',function(){
 				$('#invite_popup_container').remove();
@@ -393,7 +396,14 @@
 		{
 			$('#right').append('<div id="friend_suggest" class="right_item"></div>'); 
 			$('#friend_suggest').html('<div class="subtitle">Friend Suggestions<img title="Show different suggestions" style="float:right;height:1em;cursor:pointer;margin:0.2em 1em 0em 0em;" id="refresh" src="http://icon.qmcdn.net/refresh.jpg" onclick="action.suggest_refresh(this)"/></div><div class="suggest_container" id="suggest_container1"></div><div class="suggest_container" id="suggest_container2"></div><div class="suggest_container" id="suggest_container3"></div><div class="suggest_container" id="suggest_container4"></div><div class="suggest_container" id="suggest_container5"></div><div class="suggest_container" id="suggest_container6"></div>');
-			ui.suggest_deploy(me, data);
+			if(data.action.length > 0)
+			{
+				ui.suggest_deploy(me, data);
+			}
+			else
+			{
+				$('#friend_suggest').remove();
+			}			
 		}
 		
 		function friend_suggest_page(me, data)
@@ -414,19 +424,33 @@
 		{
 			$('#right').append('<div id="group_suggest" class="right_item"></div>'); 
 			$('#group_suggest').html('<div class="subtitle">Group Suggestions<img title="Show different suggestions" style="float:right;height:1em;cursor:pointer;margin:0.2em 1em 0em 0em;" id="refresh" src="http://icon.qmcdn.net/refresh.jpg" onclick="action.group_suggest_refresh(this)"/></div><div class="group_suggest_container" id="group_suggest_container1"></div><div class="group_suggest_container" id="group_suggest_container2"></div><div class="group_suggest_container" id="group_suggest_container3"></div><div class="group_suggest_container" id="group_suggest_container4"></div><div class="group_suggest_container" id="group_suggest_container5"></div><div class="group_suggest_container" id="group_suggest_container6"></div>');
-			ui.group_suggest_deploy(me, data);
+			if(data.action.length > 0)
+			{
+				ui.group_suggest_deploy(me, data);
+			}
+			else
+			{
+				$('#group_suggest').remove();
+			}	
 		}
 		
 		function event_suggest(me, data)
 		{
 			$('#right').append('<div id="event_suggest" class="right_item"></div>'); 
 			$('#event_suggest').html('<div class="subtitle">Event Suggestions<img title="Show different suggestions" style="float:right;height:1em;cursor:pointer;margin:0.2em 1em 0em 0em;" id="refresh" src="http://icon.qmcdn.net/refresh.jpg" onclick="action.event_suggest_refresh(this)"/></div><div class="event_suggest_container" id="event_suggest_container1"></div><div class="event_suggest_container" id="event_suggest_container2"></div><div class="event_suggest_container" id="event_suggest_container3"></div><div class="event_suggest_container" id="event_suggest_container4"></div><div class="event_suggest_container" id="event_suggest_container5"></div><div class="event_suggest_container" id="event_suggest_container6"></div>');
-			ui.event_suggest_deploy(me, data);
+			if(data.action.length > 0)
+			{
+				ui.event_suggest_deploy(me, data);
+			}
+			else
+			{
+				$('#event_suggest').remove();
+			}	
 		}
 		
 		function friendship_preview(me, data)
 		{
-			if(data)
+			if(data.action.length > 0)
 			{
 				$('#friendship_recent').html('<div class="subtitle" >Recent Friendships</div>');
 				$.each(data.action,function(index,value){ 
@@ -444,13 +468,14 @@
 			if(data.ack)
 			{
 				$('#gift_container').html('<span>Your gift has been sent to your friend.</span>');
-				$('#gift_container').fadeOut(2000);
+				$('#gift_container').fadeOut(1000);
+				$('.bg_hide_cover').fadeOut(1000);
 			}
 		}
 		
 		function gift_preview(me, data)
 		{
-			if(data)
+			if(data.action.length > 0)
 			{
 				$('#right').append('<div id="gift_recent" class="right_item"></div>');
 				$('#gift_recent').html('<div class="subtitle" >Who Sent Gift To Whom</div>');
@@ -474,6 +499,17 @@
 			else
 			{
 				window.location = 'group.php?id='+data.groupid;
+			}	
+		}
+		function page_create(me, data)
+		{	
+			if(data.error)
+			{
+				$('#page_info').html(data.error.message);
+			}
+			else
+			{
+				window.location = 'page.php?id='+data.pageid;
 			}	
 		}
 		
@@ -544,13 +580,6 @@
 				if((value.message).length > 30) value.message = (value.message).slice(0,27)+'...';
 				
 				  $(container).append('<div class="inbox_user" data="'+showuser+'" id="'+showuser+'" onclick=ui.redirect_to_inbox()><img class="online_photo" height="40" width="40" src="'+data.pimage[showuser]+'" /><span class="online_name" style="font-weight:bold;">'+data.name[showuser]+'</span><div><img height="20" width="20" src="'+showimage+'"/>'+value.message+'</div></div>');
-				if(index == 0)
-				{
-					$('#inbox_container').html('');
-					user = showuser;
-					createMessageUI(user, name);
-					previous_talk_message(user, 0, 1);
-				}
 				});
 			}
 		}
@@ -609,7 +638,7 @@
 		
 		function missu_preview(me, data)
 		{
-			if(data)
+			if(data.action.length > 0)
 			{
 				$('#right').append('<div id="missu_recent" class="right_item"></div>');
 				$('#missu_recent').html('<div class="subtitle" >Friends Being Missed</div>');
@@ -629,13 +658,14 @@
 			if(data.ack)
 			{
 				$('#mood_container').html('<span>Your new mood has been set and your friends have been informed about your new mood.</span>');
-				$('#mood_container').fadeOut(2000);
+				$('#mood_container').fadeOut(1000);
+				$('.bg_hide_cover').fadeOut(1000);
 			}
 		}				
 		
 		function mood_preview(me, data)
 		{
-			if(data)
+			if(data.action.length > 0)
 			{
 				$('#right').append('<div id="mood_recent" class="right_item"></div>');
 				$('#mood_recent').html('<div class="subtitle" >Friend\'s Mood</div>');
@@ -679,7 +709,7 @@
 			$('#more_excite_people').remove();
 			$('.bg_hide_cover').remove();
 			$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
-			$('body').append('<div id="more_excite_people" class="container" style="position:fixed;top:18.2em;left:36em;overflow:auto;">Retreiving data</div>');
+			$('body').append('<div id="more_excite_people" class="container" >Retreiving data</div>');
 			$('#more_excite_people').append('<span onclick="ui.close()" class="container" style="position:absolute;top:1em;right:1em;cursor:pointer;">x</span>');
 			$("#more_excite_people").remove();
 			$('body').append('<div id="more_excite_people" class="container" style="background-color:#ffffff;left:50%;margin-left:-24em;max-height:40em;text-align:left;overflow:auto;position:fixed;top:9em;width:26em;z-index:1001;"><div style="font-weight:bold;color:#ffffff;font-size:1.3em;padding:0.5em 0em;background-color:#336699;text-align:center;" id="mood_title">People who responded to this<div onclick="ui.close()" style="float:right;cursor:pointer;margin-right:0.5em;">x</div></div></div>');
@@ -732,7 +762,9 @@
 					exciting = 'Unexciting'; 
 					fun = 'action.responsed(this)';
 				}
-				$(me).parent().after('<div class="cclass_json" id="'+com_id+'" data="'+ com.com_actionid +'"><a href="profile.php?id=' +com.commentby+ '"><img class="lfloat" src ="' +data.pimage[com.commentby]+ '" height="32" width="32" /></a><div class="name_35"><div><a class="bold" style="margin-right:0.4em;" href="profile.php?id=' +com.commentby+ '">' +data.name[com.commentby]+ '</a><pre>'+ui.get_smiley(ui.link_highlight(com.comment)) +'</pre></div><div><a class="comment_time_json" href="action.php?actionid='+com.com_pageid+'&life_is_fun='+data.life_is_fun+'"><img src="http://icon.qmcdn.net/clock.png" width="6" /><span class="time" data="'+com.com_time+'">'+time_difference(com.com_time)+'</span></a><span data=' +com.commentby+ ' class = "comment_excite_json" onclick="'+fun+'">'+exciting+'</span></div></div></div>');
+				var userid = com.comment.substring(com.comment.indexOf('@[')+2,com.comment.indexOf(']'));
+				com.comment = com.comment.replace('@['+userid+']','<a href="profile.php?id='+userid+'">'+data.name[userid]+'</a>');
+				$(me).parent().after('<div class="cclass_json" id="'+com_id+'" data="'+ com.com_actionid +'"><a href="profile.php?id=' +com.commentby+ '"><img class="lfloat" src ="' +data.pimage[com.commentby]+ '" height="32" width="32" /></a><div class="name_35"><div><a class="bold" style="margin-right:0.4em;" href="profile.php?id=' +com.commentby+ '">' +data.name[com.commentby]+ '</a><pre>'+ui.get_smiley(ui.link_highlight(com.comment)) +'</pre></div><div><a class="comment_time_json" href="action.php?actionid='+com.com_pageid+'&life_is_fun='+data.life_is_fun+'"><img src="http://icon.qmcdn.net/clock.png" width="6" /><span class="time" data="'+com.com_time+'">'+ui.time_difference(com.com_time)+'</span></a><span data=' +com.commentby+ ' class = "comment_excite_json" onclick="'+fun+'">'+exciting+'</span></div></div></div>');
 				if(com.com_excited)
 				{
 					$("#"+com_id).children().eq(1).children().eq(1).append('<span style="margin-left:0.5em;font-size:0.9em;cursor:pointer;" data="'+ com.com_excited +'" onclick="action.response_fetch(this)" >'+ com.com_excited +' excited</span>');
@@ -751,7 +783,7 @@
 		
 		function song_dedicate_preview(me, data)
 		{
-			if(data)
+			if(data.action.length > 0)
 			{
 				$('#right').append('<div id="dedicate_song" class="right_item"></div>');
 				$('#dedicate_song').html('<div class="subtitle" >Recent Song-Dedications</div>');
@@ -768,7 +800,7 @@
 		
 		function status_song_preview(me, data)
 		{
-			if(data)
+			if(data.action.length > 0)
 			{
 				$('#right').append('<div id="status_song" class="right_item"></div>');
 				$('#status_song').html('<div class="subtitle" >Recent Status-Songs</div>');
@@ -797,13 +829,19 @@
 		{
 			if(data.count >= 0)
 			{
+				$('#to').attr('value',data.key);
 				if(data.count > 1)
 				{
 					$('#search_count').html('Search results : '+data.count+' ' +data.filter+' matches for '+data.key);
 				}
-				else
+				else if(data.count == 1)
 				{
 					$('#search_count').html('Search result : '+data.count+' ' +data.filter+' match for '+data.key);					
+				}
+				else 
+				{
+					$('#search_count').html('Search result : No ' +data.filter+' match for '+data.key);
+					$('#center').append('<div style="text-align:center;margin:12em 0em;"><img src="http://icon.qmcdn.net/search_no_result.jpg"></div>');					
 				}
 				$('#search_result').html('');
 				$.each(data.action, function(index, value)
@@ -833,6 +871,7 @@
 			else
 			{
 				$('#search_count').html('Please enter a search string');
+				$('#center').append('<div style="text-align:center;margin:12em 0em;"><img src="http://icon.qmcdn.net/search_no_result.jpg"></div>');
 			}
 		}
 		
@@ -861,7 +900,7 @@
 		
 		function tagline_preview(me, data)
 		{
-			if(data)
+			if(data.action.length > 0)
 			{
 				$('#right').append('<div id="tagline_recent" class="right_item"></div>');
 				$('#tagline_recent').html('<div class="subtitle" >Friend\'s Tagline</div>');
@@ -884,6 +923,20 @@
 				$('#nf_post_'+data.pageid+'_'+data.actionid).remove();
 				$('#if_post_'+data.pageid+'_'+data.actionid).remove();
 				$('#pf_'+data.pageid+'_'+data.actionid).remove();
+				$('.prompt_content').html('Action successfully performed');
+				$('.prompt_container').remove();
+				$('.prompt_button').html('<input id="prompt_ok" class="prompt_positive" type="submit" value="Ok" onClick='+ui.bg_hide(this)+' />');
+			}
+			else
+			{
+				$('.prompt_content').html('Error performing the action, please try again');
+			}
+		}
+		function message_delete(me,data)
+		{
+			if(data.ack)
+			{
+				$('div#'+data.actionid+'.message_each').remove();
 				$('.prompt_container').remove();
 				$('.prompt_content').html('Action successfully performed');
 				$('.prompt_button').html('<input id="prompt_ok" class="prompt_positive" type="submit" value="Ok" onClick='+ui.bg_hide(this)+' />');
@@ -951,6 +1004,34 @@
 				$(me).show();
 			}
 		}
+		
+		function event_leave(me,data)
+		{
+			var profileid = $('#profileid_hidden').attr('value');
+			if(data.ack)
+			{
+				$('.prompt_content').html('You have successfully left the event');
+				$('.prompt_button').html('<input class="prompt_positive" type="submit" value="Ok" onClick='+ui.goBacktoProfile(profileid)+'/>');
+			}
+			else
+			{
+				$('.prompt_content').html('Error performing the action, please try again');
+			}
+		}
+		
+		function event_cancel(me,data)
+		{
+			var profileid = $('#profileid_hidden').attr('value');
+			if(data.ack)
+			{
+				$('.prompt_content').html('You have successfully cancelled the event');
+				$('.prompt_button').html('<input class="prompt_positive" type="submit" value="Ok" onClick='+ui.goBacktoProfile(profileid)+'/>');
+			}
+			else
+			{
+				$('.prompt_content').html('Error performing the action, please try again');
+			}
+		}
 
 		function group_leave(me,data)
 		{
@@ -964,7 +1045,6 @@
 			{
 				$('.prompt_content').html('Error performing the action, please try again');
 			}
-
 		}		
 		
 		function unfriend(me,data)
@@ -989,15 +1069,15 @@
 			{
 				if(data.privacy == 0)
 				{
-					$(profile_post_privacy_link).html('<img title="Your next post will be shared with everyone on Quipmate" src="http://icon.qmcdn.net/global.png" height="20" width="20" />');
+					$(profile_post_privacy_link).html('<img title="Your next post will be shared with everyone on Quipmate" src="http://icon.qmcdn.net/global.png" height="14" width="14" />');
 				}
 				else if(data.privacy == 1)
 				{
-					$(profile_post_privacy_link).html('<img title="Your next post will be shared with your friends of friends" src="http://icon.qmcdn.net/meeting.png" height="20" width="20" />');
+					$(profile_post_privacy_link).html('<img title="Your next post will be shared with your friends of friends" src="http://icon.qmcdn.net/meeting.png" height="16" width="16" />');
 				}
 				else if(data.privacy == 2)
 				{
-					$(profile_post_privacy_link).html('<img title="Your next post will be shared only with your friends" src="http://icon.qmcdn.net/friend.png" height="20" width="20" />');
+					$(profile_post_privacy_link).html('<img title="Your next post will be shared only with your friends" src="http://icon.qmcdn.net/friend.png" height="14" width="14" />');
 				}
 					
 			}
@@ -1026,9 +1106,71 @@
 				$('#song_dedicate_popup_container').fadeOut(2000);
 			}
 		}
+		function birthday_select(data)
+		{
+		   if(data)
+			{
+				var count = 0, upcoming_count = 0;
+				$.each(data.action,function(index,value){
+				var birthday = new Date(value.birthday * 1000);
+				var today =  new Date();
+				birthday = birthday.toString();
+				today = today.toString();
+				var bday = birthday.substring(4,birthday.length-45);
+				var tday = today.substring(4,today.length-45);
+				if(tday == bday)
+				{
+					$('#birthday_today').append('<div class="container_32_35" id="'+value.profileid+'"><input type="hidden" value="'+value.profileid+'" /><input type="hidden" value="'+value.b+'" /><input type="hidden" value="'+value.pageid+'" /><div><a style="color:#336699;" href="profile.php?id='+value.profileid+'&pl=diary"><img class="lfloat" src="'+data.pimage[value.profileid]+'" height="35" width="32" /></a></div><div class="name_32"><a style="color:#336699;font-weight:bold;" href="profile.php?id='+value.profileid+'&pl=diary">'+data.name[value.profileid]+'</a></div></div>');
+					if(value.bomb_status)
+					{
+						$('#'+value.profileid).append('<div class="name_32">birthday wish<span class="birthday_bomb_count" title="Number of people who sent birthday wish">' +value.bomb_count+'</span></div>');
+					}
+					else
+					{
+						$('#'+value.profileid).append('<div class="birthday_bomb name_32" style="cursor:pointer;"  title="Click to add a birthday wish">+birthday wish<span class="birthday_bomb_count" title="Number of people who sent birthday wish">' +value.bomb_count+'</span></div>');
+					}
+					count++;
+				}
+				else
+				{
+					$('#friend_event').append('<div class="container_32_35"><a style="color:#336699;" href="profile.php?id='+value.profileid+'&pl=diary"><img class="lfloat" src="'+data.pimage[value.profileid]+'" height="35" width="32" /></a><div class="name_32"><a style="color:#336699;font-weight:bold;" href="profile.php?id='+value.profileid+'&pl=diary">'+data.name[value.profileid]+'</a><div>'+bday+'</div></div></div>');
+					upcoming_count = 1;
+				}
+				});
+				if(count)
+				{
+					$('#birthday_today').prepend('<div class="subtitle">Birthday Today('+count+')</div>');
+				}
+				if(upcoming_count)
+				{
+					$('#friend_event').prepend('<div class="subtitle">Upcoming Birthdays<span id="bday_more" style="float:right;cursor:pointer;font-size:.8em;margin:0.3em 1.5em 0 0;color:#336688;">More</span></div>');
+				}
+			}	
+			else
+			{
+				$('#friend_event').remove();
+			}
+		}
+		function birthday_select_all(data)
+		{
+			$('#center').html('<div class="right_item" ><div class="subtitle" style="">Friend\'s Birthday</div></div>');
+			$('#center').append('<table></table>');
+			var i = 0;
+			$.each(data.event,function(index,value){
+			if(i%4==0)
+			{
+			$('table').append('<tr></tr>');
+			}
+			$('tr:last').append('<td style="color:blue;padding:2em;"><a style="color:#336699;" href="profile.php?id='+value.profileid+'&pl=diary"><img class="lfloat" src="'+data.pimage[value.profileid]+'" height="60" width="60" /></a><br /><a style="color:#336699;" href="profile.php?id='+value.profileid+'&pl=diary">'+data.name[value.profileid]+'<br />'+value.birthday+' </a></td>');
+			i++;
+			});
+		}
 		
 	return {
-		
+			page_create:page_create,
+			message_delete:message_delete,
+			birthday_select_all:birthday_select_all,
+			birthday_select:birthday_select,
 		    answer : answer,
 			add_friend : add_friend,
 			birthday_all : birthday_all,
@@ -1040,8 +1182,10 @@
 			crush_preview : crush_preview,
 			crush_match_preview : crush_match_preview,
 			event_create : event_create,
+			event_cancel : event_cancel,
 			event_join : event_join,
 			event_suggest : event_suggest,
+			event_leave : event_leave,
 			group_suggest : group_suggest,
 			group_suggest_page : group_suggest_page,
 			forgot_password : forgot_password,

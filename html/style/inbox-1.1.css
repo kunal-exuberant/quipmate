@@ -13,7 +13,6 @@ textarea
 .page_title{padding:1em;border-bottom:0.1em solid #cccccc;}  
 h1 {font-size:1.5em;}
 #message_container{margin-bottom:1.8em;padding-bottom:1.8em;border-bottom:.1em solid #f2f2f2;}
-.message_each{padding:1.5em;border-bottom:0.1em solid #cccccc;clear:both;}
 #drop_button{position:relative;height:1.8em;width:3.6em;background:#4488bb;color:#fff;cursor:pointer;font-size:1.3em;border-radius:.3em; }
 .reply{cursor:pointer;color:#336699;float:right;}
 .reply_each{position:relative;top:-3.2em;border:.2em solid #fff;left:5em;width:45em;margin-bottom:-2.2em;padding:0em 1em 0em .5em;background:#f2f2f2;}
@@ -37,6 +36,9 @@ h1 {font-size:1.5em;}
    word-wrap: break-word;
    word-break:break-all;
    min-height:4.5em;
+   border-bottom:0.1em solid #cccccc;
+   clear:both;
+   position:relative;
    
 }
 .message_each_message{

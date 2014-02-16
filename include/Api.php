@@ -208,7 +208,7 @@ class Api
 				if($status == 4)
 				{
 					$actionid = $database->get_actionid($eventid,408,0,6);
-					$result = $database->guest_insert($actionid, $eventid, $myprofileid, time());
+					$result = $database->guest_insert($actionid, $eventid, $myprofileid, 1);
 					if($result)
 					{
 					  $data['ack'] = 1;
@@ -401,7 +401,12 @@ class Api
 		$myprofileid = $_SESSION['userid'];
 		$visible_id = $_SESSION['visible'];
 		$actiontype = 5;
-		
+		if($count == '')
+		{
+			$data['ack']= 5;
+			echo json_encode($data);
+			exit();	
+		}
 		while($count >= 0)
 		{
 			$name = $_FILES['photo_box']['name'][$count];
@@ -789,6 +794,7 @@ class Api
 		$memcache->set($_SESSION['database'].'_friend_'.$profileid, $friend);
 		$data['ack'] = 1;
 		$data['action'] = $friend;
+		$data['friend_count'] = count($friend);
 		$data['name'] = $name; 
 		$data['pimage'] = $pimage;
 		echo json_encode($data);
@@ -852,36 +858,44 @@ class Api
 				{
 					if($profileid != $myprofileid)
 					{
-						if($database->guest_status($eventid, $profileid) == 4)
-						{
-							$res=0;
-							$actiontype = 408;
-							$actionid = $database->get_actionid($eventid,$actiontype,0,6);
-							$result = $database->guest_insert($actionid,$eventid, $profileid,0);
-							$rnotice = $database->setting_notice_select($profileid);
-						    if($rnotice['event_invite'])
-						    {
-								$database->notice_insert($actionid,$profileid,$actiontype,$actionid);
-						    }
-							$remail = $database->setting_email_select($profileid);
-						    if($remail['event_invite'])
-						    {
-								$param = array();
-								$email = new Email();
-								$param['type'] = 'event_invite';
-								$param['myprofileid'] = $myprofileid;
-								$param['profileid'] = $profileid;
-								$param['eventid'] = $eventid;
-								$result =  $email->email_sample($param);
-						    }
-							$data['ack'] = 1;
-							$data['response'] = 1;
-							$data['message'] = 'Friend invited to the event';
-							echo json_encode($data);
+						$erw = $database->event_select($eventid);
+						if($erw['groupid'] == 0)
+						{ 
+							if($database->guest_status($eventid, $profileid) == 4)
+							{
+								$res=0;
+								$actiontype = 408;
+								$actionid = $database->get_actionid($eventid,$actiontype,0,6);
+								$result = $database->guest_insert($actionid,$eventid, $profileid,0);
+								$rnotice = $database->setting_notice_select($profileid);
+								if($rnotice['event_invite'])
+								{
+									$database->notice_insert($actionid,$profileid,$actiontype,$actionid);
+								}
+								$remail = $database->setting_email_select($profileid);
+								if($remail['event_invite'])
+								{
+									$param = array();
+									$email = new Email();
+									$param['type'] = 'event_invite';
+									$param['myprofileid'] = $myprofileid;
+									$param['profileid'] = $profileid;
+									$param['eventid'] = $eventid;
+									$result =  $email->email_sample($param);
+								}
+								$data['ack'] = 1;
+								$data['response'] = 1;
+								$data['message'] = 'Friend invited to the event';
+								echo json_encode($data);
+							}
+							else
+							{
+								$help->error_description(38);					
+							}
 						}
 						else
 						{
-							$help->error_description(38);					
+							$help->error_description(41);	
 						}
 					}
 					else
@@ -1338,7 +1352,7 @@ class Api
 			$birthday = $res['BIRTHDAY'];
 			$event[$k]['profileid'] = $res['PROFILEID'];
 			$yr = explode('-',$birthday);
-			$d = '2012'.'-'.$yr[1].'-'.$yr[2];
+			$d = date('Y').'-'.$yr[1].'-'.$yr[2];
 			$b = $database->birthday_bomb_select($event[$k]['profileid'],$d);
 			$event[$k]['bomb_count'] = $b->num_rows;
 			$event[$k]['bomb_status'] = 0;
@@ -1713,6 +1727,8 @@ class Api
 				if(strlen($comment) <= 6072)
 				{
 					$database = new Database();
+					$memcache = new Memcached();
+					$name = array();
 					$result = $database->actionid_select($pageid);
 					if($result->num_rows)
 					{
@@ -1723,14 +1739,29 @@ class Api
 						{		
 							$ctype = $help->comment_type_fetch($row['ACTIONTYPE']);
 							$actionid=$database->get_actionid($profileid,$ctype,$pageid);
+							$tag_name = $_GET['tag_name'];
+							$tn = array();
+							$ti = array();
+							foreach($tag_name as $t)
+							{
+								array_push($tn,'/'.$t.'/');
+							}
+							$tag_index = $_GET['tag_index'];
+							foreach($tag_index as $t)
+							{
+								$name[$t] = $help->name_fetch($t, $memcache, $database);
+								array_push($ti,'@['.$t.'] ');
+							}
 							if($actionid)
 							{
+								$comment = preg_replace($tn, $ti, $comment);
 								$result = $database->comment_insert($actionid,$comment);
 								if($result)
 								{
 									$data = array();
 									$data['ack'] = $result;
 									$data['actionid'] = $actionid;
+									$data['name'] = $name;
 									$data['life_is_fun'] = sha1($pageid.'pass1reset!');
 									$data['comment'] = $comment;
 									$data['length'] = strlen($comment);
@@ -1838,6 +1869,9 @@ class Api
 							 $com[$j]['com_pageid'] = $comrow['PAGEID'];
 							 $com_actionid = $com[$j]['com_actionid'] = $comrow['ACTIONID'];
 							 $com[$j]['comment'] = stripslashes($comrow['COMMENT']);
+							 $arr = explode('@[',$com[$j]['comment']);
+			                 $arr = explode(']',$arr[1]);
+							 $name[$arr[0]] = $help->name_fetch($arr[0], $memcache, $database);
 							 $excited_action = $database->get_excited_action($com_actionid, 63);
 							 $com[$j]['com_excited_mine'] = 0;
 							 while($erow = $excited_action->fetch_array())
@@ -2578,7 +2612,7 @@ class Api
 		$help = new Help();
 		if(isset($_GET['profileid']) && isset($_GET['gift']) && isset($_GET['gift_desc']))
 		{ 
-			if(!empty($_GET['profileid']) && !empty($_GET['gift']) && !empty($_GET['gift_desc']))
+			if(!empty($_GET['profileid']) && !empty($_GET['gift']))
 			{ 
 				$email = new Email();
 				$profileid = $_GET['profileid']; 
@@ -2618,7 +2652,12 @@ class Api
 												$remail = $database->setting_email_select($profileid);
 												if($remail['gift'])
 												{
-													$email->gift($profileid,$myprofileid,$actionid,$gift_desc);
+													$param = array();
+													$param['type'] = 'gift';
+													$param['profileid'] = $profileid;
+													$param['myprofileid'] = $myprofileid;
+													$param['gift_desc'] = $gift_desc;
+													$email->email_sample($profileid,$myprofileid,$actionid,$gift_desc);
 												}	
 												echo json_encode($data);
 											}
@@ -2991,6 +3030,56 @@ class Api
 			$help->error_description(9);
 		}
 	}
+	function page_create()
+	{
+		$help = new Help();
+		$database = new Database();
+		if(isset($_GET['name']) && isset($_GET['description']))
+		{
+			if(!empty($_GET['name']) && !empty($_GET['description']) )
+			{
+				if(strlen($_GET['name']) < 100)
+				{
+					if(strlen($_GET['description']) < 400)
+					{
+								$name = $_GET['name'];
+								$description = $_GET['description'];
+								$myprofileid = $_SESSION['userid'];
+								$time = time();
+								$actionid = $database->get_actionid($myprofileid, 2900);
+								if($pageid = $database->page_create($actionid, $name, $description, $myprofileid, $time))
+								{
+									$database->action_update($actionid, $pageid);
+									$data['ack'] = 1;
+									$data['pageid'] = $pageid;
+									echo json_encode($data);
+								}
+								else
+								{
+									$help->error_description(15);								
+								}
+
+					}
+					else
+					{
+						$help->error_description(10);					
+					}
+				}
+				else
+				{
+					$help->error_description(10);			
+				}
+			}
+			else
+			{
+				$help->error_description(18);				
+			}
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
 	
 	function event_settings_save()
 	{
@@ -3296,6 +3385,10 @@ class Api
 							if($meta->getAttribute('name') == 'description')
 							{
 								$data['meta'] = $meta->getAttribute('content');
+								if(strlen($data['meta']) > 200)
+								{
+									$data['meta'] = substr($data['meta'],0,199);
+								}
 							}
 						}
 						$parse = parse_url($link);
@@ -3436,6 +3529,7 @@ class Api
 	function message_fetch()
 	{
 		$help = new Help();
+		ini_set('default_charset', 'utf-8');
 		if(isset($_GET['start'])&& isset($_GET['profileid']))
 		{
 			if(($_GET['start'] != '') && !empty($_GET['profileid']))
@@ -3473,7 +3567,7 @@ class Api
 						$message[$k]['actionon']=$row['ACTIONON'];
 						$message[$k]['actiontype']= 401;
 						$message[$k]['time']= $help->get_time($row['TIME']);
-						$message[$k]['message']= $row['MESSAGE'];
+						$message[$k]['message']= utf8_encode($row['MESSAGE']);
 						if($message[$k]['profileid'] < 1000000000)
 						{
 							$name[$message[$k]['actionon']] = $help->diary_name_fetch($message[$k]['actionon'], $memcache, $database);
@@ -3487,7 +3581,7 @@ class Api
 						$k++;
 					}
 					$data['myprofileid']=$_SESSION['USERID'];
-					$data['action']=$message;
+					$data['action']= $message;
 					$data['name']= $name;
 					$data['pimage']= $pimage;
 					echo json_encode($data);
@@ -3700,7 +3794,7 @@ class Api
 		$help = new Help();
 		if(isset($_GET['mood']) && isset($_GET['mood_desc']))
 		{ 
-			if(!empty($_GET['mood']) && !empty($_GET['mood_desc']))
+			if(!empty($_GET['mood']))
 			{
 				$myprofileid = $_SESSION['userid']; 
 				$mood = $_GET['mood']; 
@@ -4613,6 +4707,7 @@ class Api
 								$result = $database->image_insert($myprofileid,$actionid,$actual_image_name,'0','http://profile.qmcdn.net/');
 								$result = $database->profile_image_insert($actionid,1,$actual_image_name,'http://profile-1.qmcdn.net/');
 								$_SESSION['pimage'] = 'http://profile-1.qmcdn.net/'.$actual_image_name;
+								$_SESSION['profile_imageid'] = $actionid;
 								$memcache = new Memcached();
 								$help->pimage_memcache_update($myprofileid,'http://profile-1.qmcdn.net/'.$actual_image_name, $memcache);
 								$data = array();
@@ -4664,7 +4759,7 @@ class Api
 	{
 		$valid_formats = array("jpg","png","gif","bmp","jpeg");
 		$doc_formats = array("pdf","pptx","ppt","docx","doc","txt","xls","xlsx","ods","one","pps","ps","rtf","msg");
-		$video_formats = array("mp4","flv");
+		$video_formats = array("mp4","flv","3gp","mov","mkv","avi","wmv");
 		$name = $_FILES['photo_box']['name'];
 		$size = $_FILES['photo_box']['size'];
 		$description = $_POST['photo_description'];		
@@ -4673,7 +4768,7 @@ class Api
 		$help = new Help();
 		if(strlen($name))
 		{
-			$ext = pathinfo($name,PATHINFO_EXTENSION);
+			$ext = strtolower(pathinfo($name,PATHINFO_EXTENSION));
 			if(in_array(strtolower($ext),$valid_formats))
 			{
 				$actiontype = 406;
@@ -4686,7 +4781,7 @@ class Api
 				$actiontype = 425;
 				$container = 'video';
 				$cdn = 'http://video.qmcdn.net/';
-				$limit = 30960*1024;
+				$limit = 100960*1024;
 			}
 			else if(in_array(strtolower($ext),$doc_formats))
 			{
@@ -4711,9 +4806,19 @@ class Api
 								if($row->num_rows)
 						{
 							$file_to_be_uploaded = $_FILES['photo_box']['tmp_name'];
-							$ext = pathinfo($_FILES['photo_box']['name'],PATHINFO_EXTENSION);
+							$ext = strtolower(pathinfo($_FILES['photo_box']['name'],PATHINFO_EXTENSION));
 							$filename = $help->photo_name($ext);
-							if($actual_image_name = $help->cdn_upload($file_to_be_uploaded,'photo',$filename))
+							if($actiontype == 425)
+							{
+								$filename = $help->photo_name('flv');
+								exec('/root/ffmpeg'.' -i '.$file_to_be_uploaded.' -y -f flv -ar 44100 -ab 64 -ac 1 -acodec mp3 '.'/var/www/video/'.$filename.' &');
+								$arr = explode('.',$filename);
+								$vthumb = $arr[0].'.jpg';
+								exec('/root/ffmpeg'.' -i '.'/var/www/video/'.$filename.' -ss 00:00:01.000 -f image2 -vframes 1 /var/www/video/'.$vthumb.' &');
+								$vthumb = $help->cdn_upload('/var/www/video/'.$vthumb,$container,$vthumb);
+								$file_to_be_uploaded='/var/www/video/'.$filename;
+							}
+							if($actual_image_name = $help->cdn_upload($file_to_be_uploaded,$container,$filename))
 							{
 								if(isset($_SESSION['VISIBLE']))
 									$visible = $_SESSION['VISIBLE'];
@@ -4731,6 +4836,7 @@ class Api
 									else if($container == 'video')
 									{
 										$result = $database->video_insert($profileid,$actionid,$actual_image_name,$cdn);
+										$name = $cdn.$vthumb;
 									}
 									else if($container == 'photo')
 									{
@@ -4788,12 +4894,12 @@ class Api
 						}
 						else
 						{
-							$help->error_description();						
+							$help->error_description(12);						
 						}
 					}	
 					else
 					{
-						$help->error_description();
+						$help->error_description(16);
 					}
 				}	
 				else
@@ -4808,12 +4914,171 @@ class Api
 				echo json_encode($data);
 		}
 	}
-	
+	function page_photo_upload()
+	{
+		$valid_formats = array("jpg","png","gif","bmp","jpeg");
+		$doc_formats = array("pdf","pptx","ppt","docx","doc","txt","xls","xlsx","ods","one","pps","ps","rtf","msg");
+		$video_formats = array("mp4","flv","3gp","mov","mkv","avi","wmv");
+		$name = $_FILES['photo_box']['name'];
+		$size = $_FILES['photo_box']['size'];
+		$description = $_POST['photo_description'];		
+		$profileid = $_POST['photo_hidden_profileid'];
+		$myprofileid = $_SESSION['userid'];
+		$help = new Help();
+		if(strlen($name))
+		{
+			$ext = pathinfo($name,PATHINFO_EXTENSION);
+			if(in_array(strtolower($ext),$valid_formats))
+			{
+				$actiontype = 2906;
+				$container = 'photo';
+				$cdn = 'http://photo.qmcdn.net/';
+				$limit = 10240*1024;
+			}
+			else if(in_array(strtolower($ext),$video_formats))
+			{
+				$actiontype = 2925;
+				$container = 'video';
+				$cdn = 'http://video.qmcdn.net/';
+				$limit = 100960*1024;
+			}
+			else if(in_array(strtolower($ext),$doc_formats))
+			{
+				$actiontype = 2926;
+				$container = 'doc';
+				$cdn = 'http://doc.qmcdn.net/';
+				$limit = 10240*1024;
+			}
+			else
+			{
+				$data['ack']= 4;						
+				echo json_encode($data);
+				exit(1);
+			}
+				if($size < $limit)
+				{		
+					$tmp = $_FILES['photo_box']['tmp_name'];
+					$database = new Database();
+					$row = $database->page_exists($profileid);
+					if($row['pageid'] == $profileid)
+					{
+						$row = $database->is_follower($profileid, $myprofileid);
+						if($row->num_rows)
+						{
+							$file_to_be_uploaded = $_FILES['photo_box']['tmp_name'];
+							$ext = strtolower(pathinfo($_FILES['photo_box']['name'],PATHINFO_EXTENSION));
+							$filename = $help->photo_name($ext);
+							if($actiontype == 2925)
+							{
+								$filename = $help->photo_name('flv');
+								exec('/root/ffmpeg'.' -i '.$file_to_be_uploaded.' -y -f flv -ar 44100 -ab 64 -ac 1 -acodec mp3 '.'/var/www/video/'.$filename.' &');
+								$arr = explode('.',$filename);
+								$vthumb = $arr[0].'.jpg';
+								exec('/root/ffmpeg'.' -i '.'/var/www/video/'.$filename.' -ss 00:00:01.000 -f image2 -vframes 1 /var/www/video/'.$vthumb.' &');
+								$vthumb = $help->cdn_upload('/var/www/video/'.$vthumb,$container,$vthumb);
+								$file_to_be_uploaded='/var/www/video/'.$filename;
+							} 
+							if($actual_image_name = $help->cdn_upload($file_to_be_uploaded,$container,$filename))
+							{
+									$visible = 0;
+								$database = new Database();	
+								$actionid = $database->get_actionid($profileid,$actiontype,'0',$visible);
+								if($actionid)
+								{
+									$result = $database->diary_insert($actionid,$description);
+									if($container == 'doc')
+									{
+										$result = $database->doc_insert($profileid,$actionid,$actual_image_name,$name,$cdn);	
+									}
+									else if($container == 'video')
+									{
+										$result = $database->video_insert($profileid,$actionid,$actual_image_name,$cdn);
+										$name = $cdn.$vthumb;
+									}
+									else if($container == 'photo')
+									{
+										$result = $database->image_insert($profileid,$actionid,$actual_image_name,'0',$cdn);
+									}
+									$data = array();
+									$data['ack']= 1;
+									$data['actiontype'] = $actiontype;	
+									$data['profileid']=$profileid; 
+									$data['actionid']=$actionid;
+									$data['page_pageid']=$row['pageid'];
+									$data['page_name']=$row['name'];
+									$data['time']= time();
+									$data['page']= $description; 
+									$data['life_is_fun']= sha1($actionid.'pass1reset!');
+									$data['file'] = $cdn.$actual_image_name;
+									$data['caption']=$name;
+									echo json_encode($data); 
+									$result = $database->member_select($profileid);		
+									$email = new Email();
+									$param = array();
+									$param['type'] = 'page_post';
+									$param['profileid'] = $profileid; 
+									$param['page'] = $description;
+									$param['myprofileid'] = $myprofileid;
+									$param['actionid'] = $actionid;
+									 while ($res = $result->fetch_array())
+									 {
+										$memberid = $res['profileid'] ;
+										if($memberid != $myprofileid )
+										{
+											$rnotice = $database->setting_notice_select($memberid);
+											if($rnotice['page_post'])
+											{
+												$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
+											}
+										/*	$remail = $database->setting_email_select($memberid);
+											if($remail['group_post'])
+											{
+												$param['memberid'] = $memberid; 
+												$email->email_sample($param);	
+												
+											} */	
+										}
+									}
+								}
+								else
+								{
+									$data['ack'] = 0;
+									echo json_encode($data); 
+								}	
+							}
+							else
+							{
+								$data['ack']= 2;						
+								echo json_encode($data);
+							}
+						}
+						else
+						{
+							$help->error_description(12);						
+						}
+					}	
+					else
+					{
+						$help->error_description(16);
+					}
+				}	
+				else
+				{
+						$data['ack']= 3;						
+						echo json_encode($data);
+				}
+		}
+		else
+		{
+				$data['ack']= 5;						
+				echo json_encode($data);
+		}
+	}
 	function group_photo_upload()
 	{
 		$valid_formats = array("jpg","png","gif","bmp","jpeg");
 		$doc_formats = array("pdf","pptx","ppt","docx","doc","txt","xls","xlsx","ods","one","pps","ps","rtf","msg");
-		$video_formats = array("mp4","flv");
+		$video_formats = array("mp4","flv","3gp","mov","mkv","avi","wmv");
 		$name = $_FILES['photo_box']['name'];
 		$size = $_FILES['photo_box']['size'];
 		$description = $_POST['photo_description'];		
@@ -4835,7 +5100,7 @@ class Api
 				$actiontype = 325;
 				$container = 'video';
 				$cdn = 'http://video.qmcdn.net/';
-				$limit = 30960*1024;
+				$limit = 100960*1024;
 			}
 			else if(in_array(strtolower($ext),$doc_formats))
 			{
@@ -4854,16 +5119,25 @@ class Api
 				{		
 					$tmp = $_FILES['photo_box']['tmp_name'];
 					$database = new Database();
-					$check = $database->is_user($profileid);
 					if($database->group_exists($profileid) == $profileid)
 					{
 						$row = $database->is_member($profileid, $myprofileid);
 						if($row->num_rows)
 						{
 							$file_to_be_uploaded = $_FILES['photo_box']['tmp_name'];
-							$ext = pathinfo($_FILES['photo_box']['name'],PATHINFO_EXTENSION);
+							$ext = strtolower(pathinfo($_FILES['photo_box']['name'],PATHINFO_EXTENSION));
 							$filename = $help->photo_name($ext);
-							if($actual_image_name = $help->cdn_upload($file_to_be_uploaded,'photo',$filename))
+							if($actiontype == 325)
+							{
+								$filename = $help->photo_name('flv');
+								exec('/root/ffmpeg'.' -i '.$file_to_be_uploaded.' -y -f flv -ar 44100 -ab 64 -ac 1 -acodec mp3 '.'/var/www/video/'.$filename.' &');
+								$arr = explode('.',$filename);
+								$vthumb = $arr[0].'.jpg';
+								exec('/root/ffmpeg'.' -i '.'/var/www/video/'.$filename.' -ss 00:00:01.000 -f image2 -vframes 1 /var/www/video/'.$vthumb.' &');
+								$vthumb = $help->cdn_upload('/var/www/video/'.$vthumb,$container,$vthumb);
+								$file_to_be_uploaded='/var/www/video/'.$filename;
+							} 
+							if($actual_image_name = $help->cdn_upload($file_to_be_uploaded,$container,$filename))
 							{
 								if(isset($_SESSION['VISIBLE']))
 									$visible = $_SESSION['VISIBLE'];
@@ -4881,6 +5155,7 @@ class Api
 									else if($container == 'video')
 									{
 										$result = $database->video_insert($profileid,$actionid,$actual_image_name,$cdn);
+										$name = $cdn.$vthumb;
 									}
 									else if($container == 'photo')
 									{
@@ -4939,12 +5214,12 @@ class Api
 						}
 						else
 						{
-							$help->error_description();						
+							$help->error_description(12);						
 						}
 					}	
 					else
 					{
-						$help->error_description();
+						$help->error_description(16);
 					}
 				}	
 				else
@@ -4964,7 +5239,7 @@ class Api
 	{
 		$valid_formats = array("jpg","png","gif","bmp","jpeg");
 		$doc_formats = array("pdf","pptx","ppt","docx","doc","txt","xls","xlsx","ods","one","pps","ps","rtf","msg");
-		$video_formats = array("mp4","flv");
+		$video_formats = array("mp4","flv","3gp","mov","mkv","avi","wmv");
 		$name = $_FILES['photo_box']['name'];
 		$size = $_FILES['photo_box']['size'];
 		$description = $_POST['photo_description'];		
@@ -4986,7 +5261,7 @@ class Api
 				$actiontype = 2500;
 				$container = 'video';
 				$cdn = 'http://video.qmcdn.net/';
-				$limit = 30960*1024;
+				$limit = 100960*1024;
 			}
 			else if(in_array(strtolower($ext),$doc_formats))
 			{
@@ -5011,8 +5286,18 @@ class Api
 						if($myprofileid == $profileid || $database->check_friendship($myprofileid,$profileid) == 2)
 						{	
 							$file_to_be_uploaded = $_FILES['photo_box']['tmp_name'];
-							$ext = pathinfo($_FILES['photo_box']['name'],PATHINFO_EXTENSION);
+							$ext = strtolower(pathinfo($_FILES['photo_box']['name'],PATHINFO_EXTENSION));
 							$filename = $help->photo_name($ext);
+							if($actiontype == 2500)
+							{ 
+								$filename = $help->photo_name('flv');
+								exec('/root/ffmpeg'.' -i '.$file_to_be_uploaded.' -y -f flv -ar 44100 -ab 64 -ac 1 -acodec mp3 '.'/var/www/video/'.$filename.' &');
+								$arr = explode('.',$filename);
+								$vthumb = $arr[0].'.jpg';
+								exec('/root/ffmpeg'.' -i '.'/var/www/video/'.$filename.' -ss 00:00:01.000 -f image2 -vframes 1 /var/www/video/'.$vthumb.' &');
+								$vthumb = $help->cdn_upload('/var/www/video/'.$vthumb,$container,$vthumb);
+								$file_to_be_uploaded='/var/www/video/'.$filename;
+							}
 							if($actual_image_name = $help->cdn_upload($file_to_be_uploaded,$container,$filename))
 							{
 								if(isset($_SESSION['VISIBLE']))
@@ -5030,7 +5315,8 @@ class Api
 									}
 									else if($container == 'video')
 									{
-										$result = $database->video_insert($profileid,$actionid,$actual_image_name,$cdn);
+										$result = $database->video_insert($profileid,$actionid,$actual_image_name,$cdn,$vthumb);
+										$name = $cdn.$vthumb;
 									}
 									else if($container == 'photo')
 									{
@@ -5045,7 +5331,7 @@ class Api
 									$data['page']= $description; 
 									$data['life_is_fun']= sha1($actionid.'pass1reset!');
 									$data['file'] = $cdn.$actual_image_name;
-									$data['caption']=$name;
+									$data['caption']= $name;
 									echo json_encode($data); 
 									$rnotice = $database->setting_notice_select($profileid);
 									if($rnotice['profile_post'])
@@ -5079,55 +5365,12 @@ class Api
 						}
 						else
 						{
-							$help->error_description();
+							$help->error_description(12);
 						}	
-					}
-					else if($database->group_exists($profileid) == $profileid)
-					{
-						$row = $database->is_member($profileid, $myprofileid);
-						if($row->num_rows)
-						{
-							$file_to_be_uploaded = $_FILES['photo_box']['tmp_name'];
-							$ext = pathinfo($_FILES['photo_box']['name'],PATHINFO_EXTENSION);
-							$filename = $help->photo_name($ext);
-							if($actual_image_name = $help->cdn_upload($file_to_be_uploaded,'photo',$filename))
-							{
-								if(isset($_SESSION['VISIBLE']))
-									$visible = $_SESSION['VISIBLE'];
-								else
-									$visible = 0;
-								$database = new Database();	
-								$actionid = $database->get_actionid($profileid,'306','0',$visible);
-								if($actionid)
-								{
-									$result = $database->image_insert($profileid,$actionid,$actual_image_name,'0','http://photo.qmcdn.net/');
-									$data = array();
-									$data['ack']= 1;						
-									$data['profileid']=$profileid; 
-									$data['actionid']=$actionid;
-									$data['photo'] = 'http://photo.qmcdn.net/'.$actual_image_name;
-									echo json_encode($data); 
-								}
-								else
-								{
-									$data['ack'] = 0;
-									echo json_encode($data); 
-								}	
-							}
-							else
-							{
-								$data['ack']= 2;						
-								echo json_encode($data);
-							}
-						}
-						else
-						{
-							$help->error_description();						
-						}
 					}	
 					else
 					{
-						$help->error_description();
+						$help->error_description(16);
 					}
 				}	
 				else
@@ -5804,7 +6047,97 @@ class Api
 			$help->error_description(9);			
 		}
 	}
-	
+	function page_status()
+	{
+	    $help = new Help();
+	    if(isset($_GET['page']) && isset($_GET['profileid']))
+		{ 
+		    if(!empty($_GET['page']) && !empty($_GET['profileid']))
+		    {
+			    $myprofileid = $_SESSION['userid'];
+				$profileid = $_GET['profileid'];
+				$database = new Database();
+				$page = $_GET['page'];
+				$row= $database->page_exists($profileid);
+				$profileid = $row['pageid'];
+				if($profileid)
+				{
+					$status = $database->follower_status($profileid, $myprofileid);
+					if($status == 0)
+					{
+						if(strlen($page) <= 6072)
+						{
+							$visible_id = 0;
+							$actiontype = 2901;
+							$actionid = $database->get_actionid($profileid,$actiontype,0,$visible_id);
+							if($actionid)
+							{
+								$result = $database->diary_insert($actionid,$page);
+								if($result)
+								{
+									$result = $database->follower_select($profileid);
+								/*	$email = new Email();
+									$param = array();
+									$param['type'] = 'group_post';
+									$param['profileid'] = $profileid; 
+									$param['page'] = $page;
+									$param['myprofileid'] = $myprofileid;
+									$param['actionid'] = $actionid; */
+									while($res = $result->fetch_array())
+									{
+										$followerid = $res['profileid'] ;
+										if($followerid != $myprofileid )
+										{
+										//Not providing an option to check notification setting . he must not unsubscribe as this
+										// is broadcast .
+											$database->notice_insert($actionid,$followerid,$actiontype,$actionid);
+										/*	$remail = $database->setting_email_select($followerid);
+											if($remail['group_post'])
+											{
+												$param['followerid'] = $followerid; 
+												$email->email_sample($param);												
+											} */	
+										}
+									}
+									$data['ack'] = 1;
+									$data['actionid'] = $actionid; 
+									$data['page_name'] =$row['name'];; 
+									$data['life_is_fun'] = sha1($actionid.'pass1reset!'); 
+									$data['time'] = time(); 
+									$data['page'] = $page;
+									echo json_encode($data);
+								}
+							}
+							else
+							{
+								$help->error_description(15);	
+							}
+						}
+						else
+						{
+							$help->error_description(10);						
+						}
+					}
+					else
+					{
+						$help->error_description(12);		
+					}
+				}
+				else
+				{
+					$help->error_description(16);
+				}
+			}
+			else
+			{
+				$help->error_description(18);			
+			}
+		}
+		else
+		{
+			$help->error_description(9);			
+		}
+	}
 	function group_status()
 	{
 	    $help = new Help();
@@ -5909,65 +6242,57 @@ class Api
 				$page = $_GET['page'];
 				if($eventid = $database->event_exists($eventid))
 				{
-					$status = $database->is_guest($eventid, $myprofileid);
-					if($status->num_rows)
+					if(strlen($page) <= 6072)
 					{
-						if(strlen($page) <= 6072)
+						$actiontype = 403;
+						$actionid = $database->get_actionid($eventid, $actiontype, 0, 6);
+						if($actionid)
 						{
-							$actiontype = 403;
-							$actionid = $database->get_actionid($eventid, $actiontype, 0, 6);
-							if($actionid)
+							$result = $database->diary_insert($actionid,$page);
+							if($result)
 							{
-								$result = $database->diary_insert($actionid,$page);
-								if($result)
-								{
-									$result = $database->guest_select($eventid);
-									$email = new Email();
-									$param = array();
-									$param['type'] = 'event_post';
-									$param['eventid'] = $eventid; 
-									$param['page'] = $page;
-									$param['myprofileid'] = $myprofileid;
-									$param['actionid'] = $actionid;
-									while ($res = $result->fetch_array())
-									 {
-										$memberid = $res['profileid'] ;
-										if($memberid != $myprofileid )
+								$result = $database->guest_select($eventid);
+								$email = new Email();
+								$param = array();
+								$param['type'] = 'event_post';
+								$param['eventid'] = $eventid; 
+								$param['page'] = $page;
+								$param['myprofileid'] = $myprofileid;
+								$param['actionid'] = $actionid;
+								while ($res = $result->fetch_array())
+								 {
+									$memberid = $res['profileid'] ;
+									if($memberid != $myprofileid )
+									{
+										$rnotice = $database->setting_notice_select($memberid);
+										if($rnotice['event_post'])
 										{
-											$rnotice = $database->setting_notice_select($memberid);
-											if($rnotice['event_post'])
-											{
-												$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
-											}
-											$remail = $database->setting_email_select($memberid);
-											if($remail['event_post'])
-											{ 
-												$param['memberid'] = $memberid; 
-												$email->email_sample($param);												
-											}	
+											$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
 										}
-									 }
-									$data['ack'] = 1;
-									$data['actionid'] = $actionid; 
-									$data['life_is_fun'] = sha1($actionid.'pass1reset!'); 
-									$data['time'] = time(); 
-									$data['page'] = $page;
-									echo json_encode($data);
-								}
-							}
-							else
-							{
-								$help->error_description(15);	
+										$remail = $database->setting_email_select($memberid);
+										if($remail['event_post'])
+										{ 
+											$param['memberid'] = $memberid; 
+											$email->email_sample($param);												
+										}	
+									}
+								 }
+								$data['ack'] = 1;
+								$data['actionid'] = $actionid; 
+								$data['life_is_fun'] = sha1($actionid.'pass1reset!'); 
+								$data['time'] = time(); 
+								$data['page'] = $page;
+								echo json_encode($data);
 							}
 						}
 						else
 						{
-							$help->error_description(10);						
+							$help->error_description(15);	
 						}
 					}
 					else
 					{
-						$help->error_description(12);		
+						$help->error_description(10);						
 					}
 				}
 				else
@@ -6147,6 +6472,112 @@ class Api
 												$param['memberid'] = $memberid; 
 												$email->email_sample($param);	
 											}	
+										}
+									}	
+										
+								}
+								else
+								{
+									$help->error_description(15);			
+								}
+							}
+							else
+							{
+								$help->error_description(15);			
+							}
+						}
+						else
+						{
+							$help->error_description(10);	
+						}
+					}
+                    else
+                    {
+						$help->error_description(12);				
+                    }					
+				}
+				else
+				{
+						$help->error_description(16);							
+				}
+			}
+            else
+			{
+				$help->error_description(18);				
+			}	
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
+	function page_post_link()
+	{
+	    $help = new Help();
+	    if(isset($_GET['profileid']) && isset($_GET['title']) && isset($_GET['link']) && isset($_GET['meta']) && isset($_GET['page']) && isset($_GET['file']))
+		{
+			if(!empty($_GET['profileid']) && !empty($_GET['link']) && !empty($_GET['page']))
+			{
+			 	$myprofileid = $_SESSION['userid'];
+				$database = new Database();
+				$profileid = $_GET['profileid'];
+				$row = $database->page_exists($profileid);
+				if($row['pageid'] == $profileid)
+				{
+					$status = $database->follower_status($profileid, $myprofileid);
+					if($status == 0 || $status == 1)
+					{
+						$page = $_GET['page'];
+						if(strlen($page) <= 6072)
+						{
+							$profileid = $_GET['profileid'];
+							$actiontype = 2916;
+							$title = $_GET['title'];
+							$link = $_GET['link'];
+							$meta = $_GET['meta'];
+							$page = $_GET['page'];
+							$file = $_GET['file'];
+							$visible = 0;
+							$actionid = $database->get_actionid($profileid,$actiontype,0,$visible);
+							if($actionid)
+							{
+								$result = $database->link_insert($actionid,$title,$link,$meta,$page,$file);
+								if($result)
+								{
+									$data['ack'] = $result;
+									$data['actionid'] = $actionid; 
+									$data['actiontype'] = $actiontype; 
+									$data['page_name'] =$row['name'];
+									$data['page_pageid'] =$row['pageid'];
+									$data['life_is_fun'] = sha1($actionid.'pass1reset!'); 
+									$data['time'] = time(); 
+									$data['page'] = $page; 
+									echo json_encode($data);
+									$result = $database->follower_select($profileid);
+									$email = new Email();
+									$param = array();
+									$param['type'] = 'page_post';
+									$param['profileid'] = $profileid; 
+									$param['page'] = $page;
+									$param['myprofileid'] = $myprofileid;
+									$param['actionid'] = $actionid;
+									 while ($res = $result->fetch_array())
+									 {
+										$memberid = $res['profileid'] ;
+										if($memberid != $myprofileid )
+										{
+										$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
+											$rnotice = $database->setting_notice_select($memberid);
+											if($rnotice['page_post'])
+											{
+												$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
+											}
+										/*	$remail = $database->setting_email_select($memberid);
+											if($remail['group_post'])
+											{
+												$param['memberid'] = $memberid; 
+												$email->email_sample($param);	
+											}	*/
 										}
 									}	
 										
@@ -6372,7 +6803,45 @@ class Api
 			$help->error_description(9);
 		}
 	}
-	
+	function message_delete()
+	{
+	    $help = new Help();
+		if(isset($_GET['del_actionid']))
+		{ 
+		    if(!empty($_GET['del_actionid']))
+		    {
+				$myprofileid=$_SESSION['userid'];
+				$actionid=$_GET['del_actionid'];
+				$database = new Database();
+				if($database->action_ownership_check_inbox($actionid, $myprofileid))
+				{
+					$result = $database->message_delete($actionid,$myprofileid);
+					if($result)
+					{
+						$data['ack'] = 1;
+						$data['actionid'] = $actionid;
+						echo json_encode($data);
+					}
+					else
+					{
+						$help->error_description(15);
+					}
+				}
+				else
+				{
+					$help->error_description(12);					
+				}
+			}
+			else
+			{
+				$help->error_description(18);				
+			}
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
 	function post_delete()
 	{
 	    $help = new Help();
@@ -6423,7 +6892,46 @@ class Api
 			$help->error_description(9);
 		}
 	}
-	
+	function page_feed()
+	{
+		$help = new Help();
+		if(isset($_GET['start']) && isset($_GET['pageid']))
+		{
+			if($_GET['start'] !='' && !empty($_GET['pageid']))
+			{
+				$feed = new Feed();
+				$database = new Database();
+				$memcache = new Memcached();
+				$json = new Json();
+				$encode = new Encode();
+				global $action,$name,$pimage;
+				$start = $_GET['start'];
+				$pageid = $_GET['pageid'];
+				$res = $database->page_feed_select($pageid,$start);
+				$k = 0;
+				while($NROW =$res->fetch_array())
+				{
+					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+					$k++;
+				}
+			   $data['action'] = $action;
+			   $data['myprofileid'] = $_SESSION['USERID']; 
+			   $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+			   $data['name'] = 	$name; 
+			   $data['pimage'] = $pimage;
+			   $data['tag'] = $_SESSION['tag_json'];
+			   echo json_encode($data);
+			}
+			else
+			{
+				$help->error_desscription(18);
+			}	
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
 	function group_feed()
 	{
 		$help = new Help();
@@ -6802,7 +7310,7 @@ class Api
 		$help = new Help();
 		if(isset($_POST['email']) && isset($_POST['identifier']) && isset($_POST['name']) && isset($_POST['password']) && isset($_POST['gender']) && isset($_POST['day']) && isset($_POST['month']) && isset($_POST['year']))
 		{
-			if(!empty($_POST['email']) && !empty($_POST['identifier']) && !empty($_POST['name']) && !empty($_POST['password']) && !empty($_POST['gender']) && !empty($_POST['day']) && !empty($_POST['month']) && !empty($_POST['year']))
+			if(!empty($_POST['email']) && !empty($_POST['identifier']) && !empty($_POST['name']) && !empty($_POST['password']) && $_POST['gender'] != '' && !empty($_POST['day']) && !empty($_POST['month']) && !empty($_POST['year']))
 			{
 				$email = $_POST['email'];
 				$identifier = $_POST['identifier'];
@@ -7056,7 +7564,15 @@ class Api
 				else
 				{
 					$filter = 'people';
-				}	
+				}
+				if(isset($_GET['start']) && $_GET['start'] != '')
+				{
+					$start = $_GET['start'];
+				}
+				else
+				{
+					$start = 0;
+				}				
 				if($filter == 'people')
 				{	
 					if($help->is_email($q))
@@ -7065,7 +7581,7 @@ class Api
 					}
 					else
 					{
-						$fres=$database->profile_search($q);
+						$fres=$database->profile_search($q,$start);
 					}
 					$k = 0;
 					while($frow=$fres->fetch_array())
@@ -7084,7 +7600,7 @@ class Api
 				}
 				else if($filter == 'group')
 				{
-					$fres=$database->group_search($q);
+					$fres=$database->group_search($q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7104,7 +7620,7 @@ class Api
 				}	
 				else if($filter == 'event')
 				{	
-					$fres=$database->event_search($q);
+					$fres=$database->event_search($q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7124,7 +7640,7 @@ class Api
 				}
 				else if($filter == 'post')
 				{
-					$fres=$database->post_search($q);
+					$fres=$database->post_search($q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7144,7 +7660,7 @@ class Api
 				}
 				else if($filter == 'comment')
 				{
-					$fres=$database->comment_search($q);
+					$fres=$database->comment_search($q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7164,7 +7680,7 @@ class Api
 				}
 				else if($filter == 'skill')
 				{
-					$fres=$database->bio_history_search(230,$q);
+					$fres=$database->bio_history_search(230,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7184,7 +7700,7 @@ class Api
 				}
 				else if($filter == 'project')
 				{
-					$fres=$database->bio_history_search(231,$q);
+					$fres=$database->bio_history_search(231,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7204,7 +7720,7 @@ class Api
 				}
 				else if($filter == 'tool')
 				{
-					$fres=$database->bio_history_search(236,$q);
+					$fres=$database->bio_history_search(236,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7224,7 +7740,7 @@ class Api
 				}
 				else if($filter == 'major')
 				{
-					$fres=$database->bio_history_search(235,$q);
+					$fres=$database->bio_history_search(235,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7244,7 +7760,7 @@ class Api
 				}
 				else if($filter == 'certificate')
 				{
-					$fres=$database->bio_history_search(232,$q);
+					$fres=$database->bio_history_search(232,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7264,7 +7780,7 @@ class Api
 				}
 				else if($filter == 'award')
 				{
-					$fres=$database->bio_history_search(233,$q);
+					$fres=$database->bio_history_search(233,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7284,7 +7800,7 @@ class Api
 				}
 				else if($filter == 'hobby')
 				{
-					$fres=$database->bio_history_search(211,$q);
+					$fres=$database->bio_history_search(211,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7304,7 +7820,7 @@ class Api
 				}
 				else if($filter == 'sports')
 				{
-					$fres=$database->bio_history_search(209,$q);
+					$fres=$database->bio_history_search(209,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7324,7 +7840,7 @@ class Api
 				}
 				else if($filter == 'book')
 				{
-					$fres=$database->bio_history_search(208,$q);
+					$fres=$database->bio_history_search(208,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7344,7 +7860,7 @@ class Api
 				}
 				else if($filter == 'movie')
 				{
-					$fres=$database->bio_history_search(207,$q);
+					$fres=$database->bio_history_search(207,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7364,7 +7880,7 @@ class Api
 				}
 				else if($filter == 'music')
 				{
-					$fres=$database->bio_history_search(206,$q);
+					$fres=$database->bio_history_search(206,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7384,7 +7900,7 @@ class Api
 				}
 				else if($filter == 'company')
 				{
-					$fres=$database->bio_history_search(205,$q);
+					$fres=$database->bio_history_search(205,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7404,7 +7920,7 @@ class Api
 				}
 				else if($filter == 'college')
 				{
-					$fres=$database->bio_history_search(204,$q);
+					$fres=$database->bio_history_search(204,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7424,7 +7940,7 @@ class Api
 				}
 				else if($filter == 'school')
 				{
-					$fres=$database->bio_history_search(203,$q);
+					$fres=$database->bio_history_search(203,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7444,7 +7960,7 @@ class Api
 				}
 				else if($filter == 'profession')
 				{
-					$fres=$database->bio_history_search(202,$q);
+					$fres=$database->bio_history_search(202,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7464,7 +7980,7 @@ class Api
 				}
 				else if($filter == 'city')
 				{
-					$fres=$database->bio_history_search(201,$q);
+					$fres=$database->bio_history_search(201,$q,$start);
 					$k = 0;
 					while($frow=$fres->fetch_array())
 					{
@@ -7511,7 +8027,7 @@ class Api
 				}
 				else
 				{
-					$fres=$database->profile_search($q);
+					$fres=$database->profile_search($q,0);
 				}
 				$k = 0;
 				while($frow=$fres->fetch_array())
@@ -8063,6 +8579,63 @@ class Api
 			$help->error_description(9);
 		}
 	}
+	
+	function event_leave()
+	{
+	    $help = new Help();
+	    if(isset($_GET['eventid']))
+		{
+		    if(!empty($_GET['eventid']))
+		    {
+			    $myprofileid = $_SESSION['userid'];
+				$eventid = $_GET['eventid'];
+				$database = new Database();
+				$check = $database->event_exists($eventid);
+				if($check == $eventid)
+				{
+					$row = $database->is_guest($eventid, $myprofileid);
+				    if($row->num_rows)
+					{
+						$n = $database->guest_select_profileid($eventid, $myprofileid);
+						if($database->action_delete($n['actionid']))
+						{
+							if($database->unsubscribe($eventid,$myprofileid))
+							{
+								$data['actionid'] = $database->get_actionid($eventid,409,0,5);
+								$data['ack'] = 1;
+								echo json_encode($data);
+							}
+							else
+							{
+								$help->error_description(15);	
+							}
+						}
+						else
+						{
+							$help->error_description(15);							
+						}	
+					}
+					else
+					{
+						$help->error_description(39);						
+					}
+				}
+				else
+				{
+					$help->error_description(16);						
+				}
+			}
+            else
+            {
+				$help->error_description(18);			
+            }			
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
+	
 		
 	function group_leave()
 	{
@@ -8094,7 +8667,7 @@ class Api
 					}
 					else
 					{
-						$help->error_description(1);						
+						$help->error_description(40);						
 					}
 				}
 				else
@@ -8420,5 +8993,10 @@ class Api
 			$help->error_description(9);
 		}	
 	}
+    function analytics()
+    {
+       $database = new Database();
+       $row=$database->get_analytics(); 
+    }
 }
 ?>

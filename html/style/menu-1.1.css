@@ -1,5 +1,5 @@
 #account {
-	background-color:#f9f9f9;
+	background-color:#ffffff;
 	border:0.1em solid #cccccc;
 	font-size:1em;
 	color:#336699;
@@ -12,7 +12,7 @@
 	width:16em;
 }
 
-#menu_pointer{position:absolute;top:-1em;right:0em;border-bottom:solid 1em #003153;border-left: solid 0.8em transparent;border-right: solid 0.8em transparent;width: 0;height: 0;} 
+#menu_pointer{position:absolute;top:-1em;right:0em;border-bottom:solid 1em #ffffff;border-left: solid 0.8em transparent;border-right: solid 0.8em transparent;width: 0;height: 0;} 
 
 .menu_each_a{display:block;height:1.6em;font-weight:bold;border-bottom:0.1em solid #cccccc;padding:0.5em;cursor:pointer;}
 

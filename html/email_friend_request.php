@@ -11,7 +11,11 @@ while($prow=$presult->fetch_array())
 	$email = $brow['EMAIL'];
 	$name = $brow['NAME'];
 	$result = 0;
-	$result = $email_object->email_friend_request($email,$profileid,$name);
+	$param = array();
+	$param['type'] = 'friend_request_broadcast';
+	$param['email'] = $email;
+	$param['name'] = $name;
+	$result = $email_object->email_sample($param);
 	echo $result;
 }
 ?> 

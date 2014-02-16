@@ -29,7 +29,7 @@ class Feed
 			$name[$action[$k]['actionby']] = $help->name_fetch($action[$k]['actionby'], $memcache, $database);
 			$pimage[$action[$k]['actionby']] = $help->pimage_fetch($action[$k]['actionby'], $memcache, $database); 
 			
-		if($action[$k]['actiontype'] == 302 || $action[$k]['actiontype'] == 311 || $action[$k]['actiontype'] == 402 || $action[$k]['actiontype'] == 411)
+		if($action[$k]['actiontype'] == 302 || $action[$k]['actiontype'] == 311 || $action[$k]['actiontype'] == 402 || $action[$k]['actiontype'] == 411 || $action[$k]['actiontype'] == 2902 || $action[$k]['actiontype'] == 2911 )
 		{			
 			$parent = $encode->parent_encode($action[$k]['pageid'],$json,$help,$database);
 			$action[$k]['actiontype'] = $parent['parenttype'];
@@ -218,8 +218,27 @@ class Feed
 			$name[$action[$k]['actionby']] = $help->name_fetch($action[$k]['actionby'], $memcache, $database);
 			$this->question_complete_encode($k,$json,$help,$encode,$database,$memcache,2811,2802);
 		}
-		
-		
+		else if($action[$k]['actiontype']==2901)
+		{
+			$name[$action[$k]['actionby']] = $help->name_fetch($action[$k]['actionby'], $memcache, $database);
+			$this->page_page_complete_encode($k,$json,$help,$encode,$database,$memcache,2911,2902);
+		}
+		else if($action[$k]['actiontype']==2906)
+		{
+			$this->page_image_complete_encode($k,$json,$help,$encode,$database,$memcache, 2911, 2902);
+		}
+		else if($action[$k]['actiontype']==2916)
+		{
+			$this->page_link_complete_encode($k,$json,$help,$encode,$database,$memcache, 2911, 2902);
+		}
+		else if($action[$k]['actiontype']==2925)
+		{
+			$this->page_video_complete_encode($k,$json,$help,$encode,$database,$memcache,2911,2902);
+		}
+		else if($action[$k]['actiontype']==2926)
+		{
+			$this->page_doc_complete_encode($k,$json,$help,$encode,$database,$memcache,2911,2902);
+		}
 		else if($action[$k]['actiontype']==2 || $action[$k]['actiontype']==11)
 		{
 			$this->parent_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
@@ -404,7 +423,17 @@ class Feed
 		$action[$k]['remove'] = $grow['priviledge'];
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
 	}
-	
+	function page_page_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
+	{   global $action;
+		$e = $database->page_select($action[$k]['actionon']);
+		$action[$k]['page_pageid'] = $e['pageid'];
+		$action[$k]['page_name'] = $e['name'];
+		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);
+		$myprofileid = $_SESSION['userid'];
+		$grow = $database->is_page_admin($e['pageid'],$myprofileid);
+		$action[$k]['remove'] = $grow['priviledge'];
+		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
+	}
 	function group_question_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
 	{   global $action;
 		$e = $database->group_select($action[$k]['actionon']);
@@ -496,6 +525,24 @@ class Feed
 		$action[$k]['file'] = $link['file'];	 
 		$myprofileid = $_SESSION['userid'];
 		$grow = $database->is_group_admin($e['groupid'],$myprofileid);
+		$action[$k]['remove'] = $grow['priviledge'];
+		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);
+	}
+	function page_link_complete_encode($k,$json,$help,$encode,$database,$memcache, $rtype, $ctype)
+	{   global $action;
+		$e = $database->page_select($action[$k]['actionon']);
+		$action[$k]['page_pageid'] = $e['pageid'];
+		$action[$k]['page_name'] = $e['name'];
+		$link =$encode->link_encode($action[$k]['pageid'],$database);
+		$action[$k]['title'] = $link['title'];
+		$action[$k]['link'] = $link['link'];
+		$action[$k]['host'] = $link['host'];
+		$action[$k]['meta'] = $link['meta'];
+		$action[$k]['page'] = $link['page'];
+		$action[$k]['video'] = $link['video'];
+		$action[$k]['file'] = $link['file'];	 
+		$myprofileid = $_SESSION['userid'];
+		$grow = $database->is_page_admin($e['pageid'],$myprofileid);
 		$action[$k]['remove'] = $grow['priviledge'];
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);
 	}	
@@ -632,7 +679,9 @@ class Feed
 	{   
 	    global $action;
 		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
-		$action[$k]['file'] = $encode->video_encode($action[$k]['pageid'],$database);	
+		$d = $encode->video_encode($action[$k]['pageid'],$database);	
+		$action[$k]['file'] = $d['file'];
+		$action[$k]['caption'] = $d['caption'];
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
 	}
 	
@@ -655,8 +704,10 @@ class Feed
 		$e = $database->event_select($action[$k]['actionon']);
 		$action[$k]['eventid'] = $e['eventid'];
 		$action[$k]['event_name'] = $e['name'];
-		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
-		$action[$k]['file'] = $encode->video_encode($action[$k]['pageid'],$database);	
+		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);		
+		$d = $encode->video_encode($action[$k]['pageid'],$database);	
+		$action[$k]['file'] = $d['file'];
+		$action[$k]['caption'] = $d['caption'];
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
 	}
 	
@@ -681,10 +732,35 @@ class Feed
 		$action[$k]['groupid'] = $e['groupid'];
 		$action[$k]['group_name'] = $e['name'];
 		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
-		$action[$k]['file'] = $encode->video_encode($action[$k]['pageid'],$database);	
+		$d = $encode->video_encode($action[$k]['pageid'],$database);	
+		$action[$k]['file'] = $d['file'];
+		$action[$k]['caption'] = $d['caption'];
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
 	}
-	
+	function page_doc_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype, $ctype)
+	{   
+	    global $action;
+		$e = $database->page_select($action[$k]['actionon']);
+		$action[$k]['page_pageid'] = $e['groupid'];
+		$action[$k]['page_name'] = $e['name'];
+		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
+		$d = $encode->doc_encode($action[$k]['pageid'],$database);	
+		$action[$k]['file'] = $d['file'];
+		$action[$k]['caption'] = $d['caption'];
+		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
+	}
+	function page_video_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype, $ctype)
+	{   
+	    global $action;
+		$e = $database->page_select($action[$k]['actionon']);
+		$action[$k]['page_pageid'] = $e['pageid'];
+		$action[$k]['page_name'] = $e['name'];
+		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
+		$d = $encode->video_encode($action[$k]['pageid'],$database);	
+		$action[$k]['file'] = $d['file'];
+		$action[$k]['caption'] = $d['caption'];
+		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
+	}
 	function event_image_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype, $ctype)
 	{   
 	    global $action;
@@ -709,7 +785,19 @@ class Feed
 		$action[$k]['remove'] = $grow['priviledge'];
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
 	}
-	
+	function page_image_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype, $ctype)
+	{   
+	    global $action;
+		$e = $database->page_select($action[$k]['actionon']);
+		$action[$k]['page_pageid'] = $e['pageid'];
+		$action[$k]['page_name'] = $e['name'];
+		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
+		$action[$k]['file'] = $encode->image_encode($action[$k]['pageid'],$database);	
+		$myprofileid = $_SESSION['userid'];
+		$grow = $database->is_page_admin($e['pageid'],$myprofileid);
+		$action[$k]['remove'] = $grow['priviledge'];
+		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
+	}
     function profile_image_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
 	{   
 	    global $action;

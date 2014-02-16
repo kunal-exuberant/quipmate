@@ -149,7 +149,7 @@ require_once '../include/header.php';
 		?>
 		<div class="right_item" id="group_link">
 			<div class="subtitle">Relevant Links</div>
-			<div><?php echo $n['link'];?></div>
+			<div><?php require_once('../include/Help.php'); $help = new Help(); echo $help->link_highlight($n['link']);?></div>
 		</div>
 		<?php
 		}	 

@@ -71,10 +71,25 @@ height: 1.2em;padding: 0.5em;width: 20em;
 	text-align:left;
 }
 
-.option, .ask_option
+.option_percentage
+{
+	background-color:#4c66a5;
+	height:1.4em;
+	padding:0.5em;
+	padding-right:0em;
+}
+
+.option
+{
+	margin:1em 0em;
+	color:#ffffff;
+	position:relative;
+	background-color:#cccccc;
+}
+
+.ask_option
 {
 	height: 1.6em;
-    padding: 0.2em;
 	background-color: #edeff4;
 	margin:0.2em 0em;
 	padding: 0.6em 0.7em;
@@ -87,8 +102,9 @@ height: 1.2em;padding: 0.5em;width: 20em;
 
 .tcolor
 {
-	color:#336699;
 	cursor:pointer;
+	position:absolute;
+	right:1em;
 }
 
 #entry_textarea

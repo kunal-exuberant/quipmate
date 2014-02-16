@@ -29,7 +29,13 @@ require_once '../include/header.php';
 		<script>
 		$(function(){ 
 		var profileid = $('#profileid_hidden').attr('value'); 
+		var page = $('#page_hidden').attr('value');
 		$.getJSON('ajax/write.php',{action:"guest_load",eventid:profileid,start:0},function(data){
+			if (page == 'guest')
+			{
+			$('#center').html('');//This is to remove "No more feed available" statement
+			deploy.guest_deploy(data,'#center');
+			}
 			deploy.guest_deploy(data,'#left');
 		});
 		});
@@ -40,6 +46,14 @@ require_once '../include/header.php';
 	?>
 		<div style="margin-top:2em;text-align:center;">
 			<a style="color:#003399;" href="#" onclick="ui.event_cancel(this)">Cancel Event </a>
+		</div>
+	<?php
+	}
+	else if($profile_relation == 1)
+	{
+	?>
+		<div style="margin-top:2em;text-align:center;">
+			<a style="color:#003399;" href="#" onclick="ui.event_leave(this) " >Not going to <?php echo ' '.$profile_name; ?></a>
 		</div>
 	<?php
 	}
@@ -130,9 +144,51 @@ require_once '../include/header.php';
 	{
 		?>
 		<div style="clear:both;margin:1em 0em;">You are going to <?php echo $profile_name; ?></div>
-		<div id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div>
-		<input type="text" style="border:0.1em solid #999999;width:20em;height:1.2em;padding:0.5em;" id="invite_box" value="" onkeyup="ui.event_friend_invite(this)" placeholder="Invite a friend to this event" />
-		<div style="position:relative;" id="group_friend_invite"></div>
+		<?php
+			if($n['cancel'] == 0 && $n['groupid'] == 0 )
+			{
+				?>
+					<div id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div>
+					<input type="text" style="border:0.1em solid #999999;width:20em;height:1.2em;padding:0.5em;" id="invite_box" value="" onkeyup="ui.event_friend_invite(this)" placeholder="Invite a friend to this event" />
+					<div style="position:relative;" id="group_friend_invite"></div>
+				<?php
+			}  
+	}
+	else if($profile_relation == 2) 
+	{
+		?>
+		<div style="clear:both;margin:1em 0em;">You have been invited to attend <?php echo $profile_name; ?></div>
+		<div class="subtitle">
+			<div class="friend_request_class">
+				<a href="event.php?id=<?php echo $profileid; ?>">
+					<img class="lfloat" style="margin-right:1em;" src="http://icon.qmcdn.net/event.png" height="50" width="50">
+				</a>
+				<div>
+					<a class="bold" href="event.php?id=<?php echo $profileid; ?>"><?php echo $profile_name; ?></a><div><input type="submit" class="frequest" data="<?php echo $profileid; ?>" id="1" value="Going" onclick="action.guest_accept(this, 1)" /><input type="submit" class="frequest" data="<?php echo $profileid; ?>" style="margin-left:0.5em;" id="0" value="Decline" onclick="action.guest_accept(this, 0)" /></div>
+				</div>
+			</div>
+		</div>
+		<?php    
+	}
+	else if($profile_relation == 3)
+	{
+		?>
+		<div style="clear:both;margin:1em 0em;">You have declined to <?php echo $profile_name; ?></div>
+		<span id="add_container" class="profile_actions_container">
+			<input class="profile_actions_button" id="<?php echo $profileid ?>" style="width:9.5em;" type="submit" onclick="action.event_join(this)" value="+Attend Event" id="<?php echo $profileid; ?>"/> 
+		</span>
+		<?php   
+	}
+	else if($profile_relation == 4)
+	{
+		?>
+		<div style="clear:both;margin:1em 0em;">You are not going to <?php echo $profile_name; ?></div>
+		<span id="add_container" class="profile_actions_container">
+			<input class="profile_actions_button" id="<?php echo $profileid ?>" style="width:9.5em;" type="submit" onclick="action.event_join(this)" value="+Attend Event" id="<?php echo $profileid; ?>"/> 
+		</span>
+		<?php   
+	}
+	?>
 		<div class="right_item" id="group_link">
 			<div class="subtitle">Event Details</div>
 			<div>
@@ -150,29 +206,8 @@ require_once '../include/header.php';
 			<div class="subtitle">Event Description</div>
 			<div><?php echo $n['description'];?></div>
 		</div>
-		<?php   
-	}
-	else if($profile_relation == 2) 
-	{
-		?>
-		<div style="clear:both;margin:1em 0em;">You have been invited to attend <?php echo $profile_name; ?></div>
-		<div class="subtitle"><div class="friend_request_class"><input type="submit" class="frequest" data="<?php echo $profileid; ?>" id="1" value="Going" onclick="action.guest_accept(this, 1)" /><input type="submit" class="frequest" data="<?php echo $profileid; ?>" style="margin-left:0.5em;" id="0" value="Decline" onclick="action.guest_accept(this, 0)" /></div></div>
-		<?php    
-	}
-	else if($profile_relation == 3)
-	{
-		?>
-		<div style="clear:both;margin:1em 0em;">You are not going to <?php echo $profile_name; ?></div>
-		<span id="add_container" class="profile_actions_container">
-			<input class="profile_actions_button" id="<?php echo $profileid ?>" style="width:9.5em;" type="submit" onclick="action.event_join(this)" value="+Attend Event" id="<?php echo $profileid; ?>"/> 
-		</span>
-		<?php   
-	}
-	?>	
 	</div>
 </div>
 <?php require_once('../include/footer.php'); ?>
 </body>
 </html>
-
-

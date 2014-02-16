@@ -9,7 +9,7 @@ $(function() {
 	var photo = $('#myprofileimage_hidden').attr('value'); 
 	
 	$.getJSON('ajax/write.php',{action:'friend_fetch',profileid:profileid},function(data){
-		if(data.ack)
+		if(data.friend_count)
 		{
 			$('#myfriends_name_hidden').attr('value', JSON.stringify(data.name));
 			$('#myfriends_pimage_hidden').attr('value', JSON.stringify(data.pimage));
@@ -30,7 +30,8 @@ $(function() {
 		}
 		else
 		{
-			$('.online_user').append('<div>Nobody is available at chat</div>');
+			$('#sidebar').remove();
+			$('#bottombar').remove();
 		}
 	});
 
@@ -42,28 +43,34 @@ $(function() {
 		{
 			start += 20;
 			real_time_deploy_append(data);
+			scrollToprtm =$('#rtm_container').get(0).scrollTop;
 		}	
 	});
+
 	$('#rtm_container').bind('scroll',function(){ 
 		if($('#rtm_container').get(0).scrollTop > $('#rtm_container').get(0).scrollHeight * 0.2 && rtm_load)
 		{
-			rtm_load = false;
-			$.getJSON('ajax/write.php',{action:'live_feed',start:start},function(data){
-			if(data.ack)
+			var st =$('#rtm_container').get(0).scrollTop;
+			if (st > scrollToprtm)
 			{
-				start += 20;
-				rtm_load = true;
-				real_time_deploy_append(data);
-			}	
-			});
+				rtm_load = false;
+				$.getJSON('ajax/write.php',{action:'live_feed',start:start},function(data){
+				if(data.ack)
+				{
+					start += 20;
+					rtm_load = true;
+					real_time_deploy_append(data);
+				}	
+				});
+			}
 		}
+		scrollToprtm = st;
 	});
 	
 	chat_load = true;
-   onlineUser();
-   //typing_listen(); 
    individualChat();	
    real_time();	
+   
    var typing = true;
    var allow_typing = true;;
    var cook = action.getCookie('chatbox')
@@ -110,7 +117,7 @@ $(function() {
    });
 
    
-   $('.chatbox').live('keypress',function(event)
+   $('.chatbox').live('keyup',function(event)
    {
 	var user = $(this).parent().children().eq(0).attr('value');
 	var name = $('#myprofilename_hidden').attr('value'); 
@@ -284,11 +291,17 @@ function chatbox_scroll(user)
 		var chat_start = parseInt($('#chatbox_'+user).children().eq(5).attr('value'));
 		if($('#chatbox_'+user).children().eq(3).get(0).scrollTop  < $('#chatbox_'+user).children().eq(3).get(0).scrollHeight * 0.1 && chat_load)
 		{
+			var st=$('#chatbox_'+user).children().eq(3).get(0).scrollTop;
+			if(st < lastScrollTopchat)
+			{
 				chat_load = false;
 				previous_talk(user, chat_start, 0);
 				chat_start += 10;
 				$('#chatbox_'+user).children().eq(5).attr('value',chat_start);
+			}
+			
 		}
+		lastScrollTopchat = st;
 }
 
 function chat_sound_play()
@@ -374,7 +387,6 @@ function individualChat()
 					{
 						if($('#chatbox_'+value.sentby).length != 0)
 						{
-							if(!$('#chatbox_'+value.sentby).is(':focus')) $(document).attr('title',data.name[value.sentby] +' is typing');
 							$('#chatbox_'+value.sentby).children().eq(2).html('<img class="chatbox_online_icon" src="http://icon.qmcdn.net/online.png" /><a href="profile.php?id='+value.sentby+' ">'+data.name[value.sentby]+'</a> is typing');
 						}
 					}	 
@@ -417,40 +429,13 @@ function individualChat()
 		});
 }
 
-function typing_listen()
-{
-        var random =  $('#random_hidden').attr('value');
-        var profileid = $('#myprofileid_hidden').attr('value');
-		var database = $('#database_hidden').attr('value');
-		var param = {"profileid":profileid,"random":random,"database":database}
-	$.postJSON('/chat/typing_listen',param,function(data){
-		if(data.s)
-		{
-			$('#chatbox_'+data.sentto).children().eq(2).html('<img class="chatbox_online_icon" src="http://icon.qmcdn.net/online.png" /><a href="profile.php?id='+data.name+' ">'+data.name+'</a> saw your message');
-		}
-		else
-		{
-			if($('#chatbox_'+data.sentby).length == 1)
-			{
-				$(document).attr('title',data.name +' is typing');
-				$('#chatbox_'+data.sentby).children().eq(2).html('<img class="chatbox_online_icon" src="http://icon.qmcdn.net/online.png" /><a href="profile.php?id='+data.name+' ">'+data.name+'</a> is typing');
-			}
-			else
-			{
-				// Nothing happens to corresponding user when his friends starts typing for him fisrt time !
-			}
-		}	
-	    setTimeout(typing_listen,0);
-	});
-}
-
 function createChatBoxUI(user, name, is_online)
 {
-	$('#chatbox_container').append('<div id="chatbox_'+user+'" class="chatboxui" ><input type="hidden" value="'+user+'"/><span class="chatbox_close">x</span><div class="chatboxui_title"><span><a href="profile.php?id='+user+' ">'+name+'</a></span></div><div class="chatboxui_msg"></div><input class="chatbox" type="text"/><input type="hidden" value="10"/></div>');
+	$('#chatbox_container').append('<div id="chatbox_'+user+'" class="chatboxui" ><input type="hidden" value="'+user+'"/><span class="chatbox_close">x</span><div class="chatboxui_title"><span><a href="profile.php?id='+user+' ">'+name+'</a></span></div><div class="chatboxui_msg"></div><textarea class="chatbox"></textarea><input type="hidden" value="10"/></div>');
 	$('#chatbox_'+user).children().eq(4).focus();
     if(is_online)
 	$('#chatbox_'+user).children().eq(2).prepend('<img class="chatbox_online_icon" src="http://icon.qmcdn.net/online.png" />');
-	
+	var lastScrollTopchat = $('#chatbox_'+user).children().eq(3).get(0).scrollTop;
 	$('#chatbox_'+user).children().eq(3).scroll(function(){chatbox_scroll(user)});
 }
 
@@ -470,7 +455,7 @@ function previous_talk(user, chat_start, opening)
         $.getJSON('ajax/write.php',{action:'message_fetch',profileid:user,start:chat_start},function(data){
         $.each(data.action,function(index,value){
 			$('#chat_'+value.actionid).remove();
-			$('#chatbox_'+user).children().eq(3).prepend('<div class="chat_each" id="chat_'+value.actionid+'" onmouseover="chat_time_show(this)" onmouseleave="chat_time_hide(this)"><img class="chat_each_photo" title="'+data.name[value.actionby]+'" height="25" width="25" src="'+data.pimage[value.actionby]+'"><div class="chat_each_message"><pre>'+ui.get_smiley(ui.link_highlight(value.message))+'</pre></div><span class="chat_time">'+value.time+'</span></div>'); 
+			$('#chatbox_'+user).children().eq(3).prepend('<div class="chat_each" id="chat_'+value.actionid+'" onmouseover="chat_time_show(this)" onmouseleave="chat_time_hide(this)"><img class="chat_each_photo" title="'+data.name[value.actionby]+'" height="25" width="25" src="'+data.pimage[value.actionby]+'"><div class="chat_each_message"><pre>'+ui.get_smiley(ui.link_highlight(decodeURIComponent(value.message)))+'</pre></div><span class="chat_time">'+value.time+'</span></div>'); 
         });
 		if(opening)
 		{
@@ -481,14 +466,28 @@ function previous_talk(user, chat_start, opening)
 }
 
 		var last_poll_time_rt = -1;
-
 function real_time()
 {
     var profileid = $('#myprofileid_hidden').attr('value');
 	var database = $('#database_hidden').attr('value');
 	var param = {"profileid":profileid,"last_poll_time":last_poll_time_rt,"database":database}
 	$.postJSON('/chat/real_time',param,function(data){
-		
+		$('#online_hidden').attr('value', JSON.stringify(data.user));
+		$('.online_icon').remove();
+		$('.chatbox_online_icon').remove();   
+		if(data.ack)
+		{ 
+			$.each(data.user,function(index,value){
+				   if(value != profileid)
+				   {
+					 var id = 'friend_'+value;
+					 $('#'+id).remove();
+					  $('.'+id).remove();
+					 $('.online_user').prepend('<div class="chat_user iamonline '+id+'" data="'+value+'" id="'+id+'"><img class="online_photo" height="30" width="30" src="'+data.photo[value]+'" /><span class="online_name">'+data.name[value]+'</span><input type="hidden" value="'+data.name[value]+'" /><img class="online_icon" src="http://icon.qmcdn.net/online.png" /></div>');
+					 $('#chatbox_'+value).children().eq(2).html('<img class="chatbox_online_icon" src="http://icon.qmcdn.net/online.png" /><a href="profile.php?id='+value+' ">'+data.name[value]+'</a>');
+				  } 
+			});
+		}
 		if(data.count != $('#numnotice').attr('data'))
 		{ 
 				if(data.count == 0)
@@ -554,41 +553,6 @@ function real_time_deploy_append(data)
 	}
 	
 }
-
-
-function onlineUser()
-{
-        var random =  $('#random_hidden').attr('value');
-        var profileid = $('#myprofileid_hidden').attr('value');
-		var name = $('#myprofilename_hidden').attr('value');
-		var database = $('#database_hidden').attr('value');
-		var param = {"profileid":profileid,"name":name,"random":random,"database":database}
-	$.postJSON('/chat/online',param,function(data){
-				$('#online_hidden').attr('value', JSON.stringify(data.user));
-                $('.online_icon').remove();
-				$('.chatbox_online_icon').remove();
-                if(data.ack)
-                {
-			$.each(data.user,function(index,value){
-			       if(value != profileid)
-				   {
-		             var id = 'friend_'+value;
-					 $('#'+id).remove();
-					  $('.'+id).remove();
-                     $('.online_user').prepend('<div class="chat_user iamonline '+id+'" data="'+value+'" id="'+id+'"><img class="online_photo" height="30" width="30" src="'+data.photo[value]+'" /><span class="online_name">'+data.name[value]+'</span><input type="hidden" value="'+data.name[value]+'" /><img class="online_icon" src="http://icon.qmcdn.net/online.png" /></div>');
-					 $('#chatbox_'+value).children().eq(2).html('<img class="chatbox_online_icon" src="http://icon.qmcdn.net/online.png" /><a href="profile.php?id='+value+' ">'+data.name[value]+'</a>');
-				  } 
-			});
-                }
-	        setTimeout(onlineUser,0);
-	});
-}
-
-		var last_action_time = -1;
-
-
-var last_poll_time_news  = -1;
-
 
 function getCookie(name) {
     var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");

@@ -250,7 +250,19 @@ class Help
 			case 38: $error['code'] = 38;
 					 $error['message'] = 'This person is already a guest of this event'; 
 				     $error['type'] = 'AlreadyGuestException';
-		             break;				 
+		             break;
+			case 39: $error['code'] = 39;
+					 $error['message'] = 'This person is not a guest of this event'; 
+				     $error['type'] = 'NotAGuestException';
+		             break;
+			case 40: $error['code'] = 40;
+					 $error['message'] = 'This person is not a member of this group'; 
+				     $error['type'] = 'NotAMemberException';
+		             break;			
+			case 41: $error['code'] = 41; 
+					 $error['message'] = 'You cannot invite a person to group event'; 
+				     $error['type'] = 'GroupEventInviteException';
+		             break;						 
 			default: $error['code'] = -1;
 					 $error['message'] = 'Unknown error Occured'; 
 				     $error['type'] = 'UnknownException';	 
@@ -677,7 +689,7 @@ class Help
 	
 	function permission_check($myprofileid, $profileid, $visible)
 	{
-		if($myprofileid == $profileid || $visible == 0)
+		if($myprofileid == $profileid || $visible == 0 || $visible == 6)
 		{
 			return 1;
 		}
@@ -685,16 +697,6 @@ class Help
 		{
 			$database = new Database();
 			$result =  $database->is_member($profileid, $myprofileid);
-			if($result->num_rows)
-			{
-				return 1;
-			}
-			return 0;	
-		}
-		else if($visible == 6)
-		{
-			$database = new Database();
-			$result =  $database->is_guest($profileid, $myprofileid);
 			if($result->num_rows)
 			{
 				return 1;
@@ -808,6 +810,10 @@ class Help
 		{
 			$rtype = 411;
 		}
+		else if(($pagetype >= 2900 && $pagetype < 3000) && $pagetype != 2902)
+		{
+			$rtype = 2911;
+		}
 		else
 		{
 			switch($pagetype)
@@ -891,6 +897,10 @@ class Help
 		else if($pagetype >= 400 && $pagetype < 500)
 		{
 			$ctype = 402;
+		}
+		else if($pagetype >= 2900 && $pagetype < 3000)
+		{
+			$ctype = 2902;
 		}
 		else
 		{
@@ -1082,6 +1092,9 @@ class Help
 							$fid = $frw['ACTIONBY'];
 							$actionid = $database->get_actionid($fid,'8');
 							$r = $database->invited_friend_insert($fid,$profileid);
+							$memcache = new Memcached();
+							$this->friend_memcache_update($fid, $database, $memcache);
+							$this->friend_memcache_update($profileid, $database, $memcache);
 						}
 						$data['ack']=1;
 						echo json_encode($data);
@@ -1302,7 +1315,7 @@ class Help
 	function is_email($email)
 	{
 		$flag = 0;
-		if((preg_match("/^[a-zA-Z0-9]+[a-zA-Z0-9(\.|\_)]*@[a-zA-Z]\w{2,30}(\.[a-zA-Z]{2,30}[\.][a-zA-Z]{2,30})$/", $email)) || (preg_match("/^[a-zA-Z0-9]+[a-zA-Z0-9(\.|\_)]*@[a-zA-Z]\w{2,30}(\.[a-zA-Z]{2,30})$/", $email)) || (preg_match("/^[a-zA-Z0-9]+[a-zA-Z0-9(\.|\_)]*@[a-zA-Z]\w{2,30}(\.[a-zA-Z]+[\.][a-zA-Z]{2,30}[\.][a-zA-Z]{2,30})$/", $email)))
+		if((preg_match("/^[a-zA-Z0-9]+[a-zA-Z0-9(\.|\_)]*@[a-zA-Z]\w{1,30}(\.[a-zA-Z]{2,30}[\.][a-zA-Z]{2,30})$/", $email)) || (preg_match("/^[a-zA-Z0-9]+[a-zA-Z0-9(\.|\_)]*@[a-zA-Z]\w{1,30}(\.[a-zA-Z]{2,30})$/", $email)) || (preg_match("/^[a-zA-Z0-9]+[a-zA-Z0-9(\.|\_)]*@[a-zA-Z]\w{1,30}(\.[a-zA-Z]+[\.][a-zA-Z]{2,30}[\.][a-zA-Z]{2,30})$/", $email)))
 		{ 
 			$flag = 1;
 		}

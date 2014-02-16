@@ -272,6 +272,9 @@ else
 	<a href="http://developers.quipmate.com/" target="_blank">Developers</a><span class="separator">|</span>
 	<a href="public/terms.php" target="_blank">Terms of Use</a>
 </div>
+<div style="position:fixed;bottom:0em;right:1em;text-align:center;width:16em;border:0.1em solid #cccccc;background-color:#ffffff;" id="message_leave">
+    <div id="message_leave_title" onclick="ui.message_leave(this)" style="height:1.5em;cursor:pointer;font-size:1.2em;padding:0.5em;background-color:#336699;color:#ffffff;font-weight:bold;">Leave a message</div>
+</div>
 </div>	  
 </body>
 </html>

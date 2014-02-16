@@ -18,7 +18,7 @@ require_once '../include/header.php';
 			
 			<?php if($myprofileid == $profileid) {?>
 			<div style="margin-top:0.5em;text-align:center;">
-				<a style="color:#003399;" href="profile.php?hl=bio">Edit My Profile</a>
+				<a style="color:#003399;" href="register.php?hl=profile_picture">Change Profile Picture</a>
 			</div>
 			<?php }?>
 			<ul style="list-style:none;clear:left;margin-top:1em;" id="links"> 

@@ -31,6 +31,21 @@ else if($page == 'event_json')
 </div>
 <?php
 }
+else if($page == 'page_json' && $profile_relation == 0 )
+{ 
+?>
+<div id="upload_box"> 
+	<div id="actions">
+		<span id="status_link" style="margin-left:0em;cursor:pointer;"><img src="http://icon.qmcdn.net/post_blue.png" height="16" width="16" /><span class="">Post</span></span>
+		<span id="photo_link" style="margin-left:0.5em;cursor:pointer;"><img src="http://icon.qmcdn.net/file_upload_blue.png" height="16" width="16" /><span class="">Photo/Video/Doc</span></span>
+	</div> 
+	<div style="margin-top:.5em;text-align:center;" id="uploader">  
+		<input type="text" id="status_box" value="" placeholder="Post in <?php echo $profile_name;?> page"/>
+		<input id="link_button" type="submit" value="Post">     
+	</div>
+</div>
+<?php
+}
 else if($profile_relation == 0)
 {
 ?>
@@ -41,7 +56,7 @@ else if($profile_relation == 0)
 		<span id="moment_link" style="margin-left:0.5em;cursor:pointer;"><img src="http://icon.qmcdn.net/album_upload_blue.gif" height="16" width="16" /><span class="action_item">Album</span></span>
 		<span id="question_link" style="margin-left:0.5em;cursor:pointer;"><img src="http://icon.qmcdn.net/poll_blue.png" height="16" width="16" /><span class="action_item">Question</span></span>		
 		<span onclick="ui.mood(this)" style="margin-left:0.5em;cursor:pointer;"><img width="16" height="16" src="http://icon.qmcdn.net/mood_blue.png" /><span class="action_item">Set-Mood</span></span>
-		<span id="profile_post_privacy_link" onclick="ui.profile_post_privacy(this,event)" style="margin-left:0.5em;cursor:pointer;"><img title="Set the privacy of your next post" src="http://icon.qmcdn.net/privacy_cc.png" height="16" width="16" /></span>
+		<span id="profile_post_privacy_link" onclick="ui.profile_post_privacy(this,event)" style="margin-left:0.5em;cursor:pointer;"><img title="Set the privacy of your next post" src="http://icon.qmcdn.net/privacy_cc.png" height="14" width="14" /></span>
 	</div> 
 	<div style="margin-top:.5em;text-align:center;" id="uploader">
 		<input type="text" id="status_box" value="" placeholder="What's going in your life?"/>

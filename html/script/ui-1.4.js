@@ -1,25 +1,108 @@
 		
 var ui = (function(){
 	
-				bring = true;
-	
-			function birthday_bomb(me, profileid, date, pageid)
+			bring = true;
+			function page_call(page)
 			{
+				if(page == 'search') 
+				{
+					action.search();
+					action.friend_suggest(this,6);
+				}
+				else if(page == 'group_json' || page == 'member' || page == 'group_about' || page == 'group_settings')
+				{
+					action.group_suggest(this,6);
+					action.member_request_fetch();
+					action.group_top_influencer(this);
+				}
+				else if(page == 'page_json' || page == 'Followers' || page == 'page_about' || page == 'page_settings')
+				{
+					//action.page_suggest(this,6);
+				}
+				else if(page == 'friend_suggest')
+				{
+					action.friend_suggest_page(this,16);
+				}
+				else if(page == 'group_suggest')
+				{
+					action.group_suggest_page(this,16);
+				}
+				else if(page == 'event_json' || page == 'guest' || page == 'event_about' || page == 'event_settings')
+				{
+					action.event_suggest(this,6);
+				}
+				else if(page == 'inbox')
+				{
+					$('.right_item').remove();
+					$('html').css('overflow','hidden')
+					$('#left').html('');
+					$('#left').css('top','auto');
+					$('#left').append('<h1 style="color:gray;">Messages</h1>');
+					$('#left').append('<div id="show_inbox"></div>');
+					$('#show_inbox').css('height',$(window).height()-100);
+					$('#left').css('width','206');
+					$('#show_inbox').css('overflow','auto');
+					action.message_recent_fetch();
+					action.actiontype_preview();
+				} 
+				else if(page == 'friend' || page == 'bio' || page == 'pphoto' || page == 'profile_json')
+				{
+					action.friend_match();
+					action.friend_suggest(this,6);
+					action.actiontype_preview();
+				}
+				else if(page == 'news_json' || page == 'photo' || page == 'new_user' || page != 'technical' || page != 'college_mate' || page != 'notice_json')
+				{
+					action.friend_suggest(this,6);
+					ui.friend_invite();
+					action.actiontype_preview();
+					action.birthday_fetch(this);
+				}
+			}
+	
+			function birthday_bomb(me, profileid, date, pageid,event)
+			{
+				if(navigator.appName == 'Microsoft Internet Explorer')
+				{
+					event.cancelBubble = true
+				}
+				else
+				{
+					event.stopPropagation();
+				}
 				$('.right_pointer_container').remove();
-				$('body').append('<div class="right_pointer_container"><div class="right_item_pointer"></div></div>');
-				$('.right_pointer_container').css('top',$(this).parent().position().top+50+'px');
-				$('.right_pointer_container').css('left',$('#search_form').position().left+285+'px');			
-				$('.right_pointer_container').append('<div id="birthday_wish_container"><input type="hidden" id="birthday_wish_profileid_hidden" value=""/></div>');
-				$('#birthday_wish_container').append('<div class="right_pointer_title">Send Birthday Wish with Birthday Bomb</div>');
-				$('#birthday_wish_container').append('<div style="margin-top:1em;"><input style="padding:0.5em;height:1.4em;width:26em;" id="birthday_wish_box" type="text" placeholder="Write birthday wish"/></div>');
-				$('#birthday_wish_container').append('<div style="margin-top:0.8em;"><input style="width:6em;height:2em;background:#336699;color:#ffffff;cursor:pointer;" type="submit" value="Wish" id="wish_ok" /><input style="margin-left:100px;width:6em;height:2em;background:#336699;color:#fff;cursor:pointer;" type="submit" value="Cancel" id="birthday_wish_close" /></div>');
-				$('#birthday_wish_box').focus();	
+		$('body').append('<div class="right_pointer_container"><div class="right_item_pointer"></div></div>');
+			$('.right_pointer_container').css('top',$(this).parent().position().top+50+'px');
+			$('.right_pointer_container').css('left',$('#search_form').position().left+285+'px');			
+			$('.right_pointer_container').append('<div id="birthday_wish_container"><input type="hidden" id="birthday_wish_profileid_hidden" value=""/></div>');
+			$('#birthday_wish_container').append('<div class="right_pointer_title">Send Birthday Wish with Birthday Bomb</div>');
+		$('#birthday_wish_container').append('<div style="margin-top:1em;"><input style="padding:0.5em;height:1.4em;width:26em;" id="birthday_wish_box" type="text" placeholder="Write birthday wish"/></div>');
+		$('#birthday_wish_container').append('<div style="margin-top:0.8em;"><input style="width:6em;height:2em;background:#336699;color:#ffffff;cursor:pointer;" type="submit" value="Wish" id="wish_ok" /><input style="margin-left:100px;width:6em;height:2em;background:#336699;color:#fff;cursor:pointer;" type="submit" value="Cancel" id="birthday_wish_close" /></div>');
+		$('#birthday_wish_box').focus();
 			}
 			
 			function birthday_wish_close()
 			{
 				$('.right_pointer_container').remove();
-			}				
+			}
+
+			function disable_upload_area()
+			{
+				var nodes = document.getElementById("upload_box").getElementsByTagName('*');
+				for(var i = 0; i < nodes.length; i++)
+				{
+					nodes[i].disabled = true;
+				}
+			}
+
+			function enable_upload_area()
+			{
+				var nodes = document.getElementById("upload_box").getElementsByTagName('*');
+				for(var i = 0; i < nodes.length; i++)
+				{
+					nodes[i].disabled = false;
+				}
+			}	
 			
 			function group_question()
 			{
@@ -54,6 +137,172 @@ var ui = (function(){
 				$('#friend_invite').append('<div><input type="text" style="border:0.1em solid #aaaaaa;width:14.6em;height:1.2em;padding:0.5em;margin-right:0.2em;" id="invite_box" value="" placeholder="Enter an email address" /><input type="submit" title="Invite A Friend" id="invite_button" value="Invite" onclick="action.friend_invite(this)" /></div>');
 			}
 			
+			function page_init(page,param)
+			{
+				if(page == 'news_json')
+				{
+					param.action = 'news_feed';
+					increment = 10;
+					$('#center').append('<div id="news_poll"></div>');
+					$('#center').append('<div id="prev"></div>');
+					$('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Updates" />');
+				} 
+				else if(page == 'admin_json')
+				{
+					param.action = 'admin_feed';
+					increment = 10;
+					$('#center').append('<div id="news_poll"></div>');
+					$('#center').append('<div id="prev"></div>');
+					$('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Updates" />');
+				}
+				else if(page == 'tech_json')
+				{
+					param.action = 'technical_feed_fetch';
+					increment = 10;
+					$('#center').append('<div id="news_poll"></div>');
+					$('#center').append('<div id="prev"></div>');
+					$('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Updates" />');
+				}
+				else if(page == 'notice_json')
+				{
+					param.action = 'notice_fetch';
+					increment = 10;
+					$('#center').append('<div id="prev"><h1 class="page_title">All Notifications</h1></div>');
+					$('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Notices" />');
+				}
+				else if(page == 'action')
+				{ 
+					param.action = 'action_fetch';
+					param.actionid = $('#actionid_hidden').attr('value');
+					param.life_is_fun = $('#life_is_fun_hidden').attr('value');
+					increment = 10;
+					$('#center').append('<div id="prev"></div>');
+				}
+				else if(page == 'profile_json')
+				{
+					param.action = 'profile_feed';
+					param.profileid = $('#profileid_hidden').attr('value');
+					increment = 10;
+					$('#center').append('<div id="prev"></div>');
+					$('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Diary Entry" />');
+				}
+				else if(page == 'group_json')
+				{
+					param.action = 'group_feed';
+					param.groupid = $('#profileid_hidden').attr('value');
+					increment = 10;
+					$('#center').append('<div id="prev"></div>');
+					$('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Group Posts" />');
+				}
+				else if(page == 'page_json')
+				{
+					param.action = 'page_feed';
+					param.pageid = $('#profileid_hidden').attr('value');
+					increment = 10;
+					$('#center').append('<div id="prev"></div>');
+					$('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Page Posts" />');
+				}
+				else if(page == 'event_json')
+				{
+					param.action = 'event_feed';
+					param.eventid = $('#profileid_hidden').attr('value');
+					increment = 10;
+					$('#center').append('<div id="prev"></div>');
+					$('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Event Posts" />');
+				}
+				else if(page == 'album')
+				{
+					param.action = 'pin_fetch';
+					increment = 10;
+					var profile_name = $('#myprofilename_hidden').attr('value');
+					$('#center').remove();
+					$('#left').remove();
+					$('#right').remove();
+					$('body').css('background','#E7EBF2');
+					$('body').append('<div style="position:absolute;left:2em;top:5em;width:21em" id="tr0"></div><div style="position:absolute;left:24em;top:5em;width:21em" id="tr1"></div><div style="position:absolute;left:46em;top:5em;width:21em" id="tr2"></div><div style="position:absolute;left:68em;top:5em;width:21em" id="tr3"></div><div style="position:absolute;left:90em;top:5em;width:21em" id="tr4"></div>');
+				}
+				else if(page == 'photo')
+				{
+					param.action = 'photo_friend_fetch';
+					increment = 25;
+					var profile_name = $('#myprofilename_hidden').attr('value');
+					$('#center').append('<div id="prev"></div>');
+					$('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Photo" />');
+					$('#prev').append('<h1 class="page_title">'+profile_name+' - Friends - Photo</h1>');
+					$('#prev').append('<table style="padding:1.5em;"></table>');
+				}  
+				else if(page == 'pphoto')
+				{
+					param.action = 'photo_fetch';
+					param.profileid = $('#profileid_hidden').attr('value');
+					increment = 25;
+					var profile_name = $('#profilename_hidden').attr('value');
+					$('#center').append('<div id="prev"></div>');
+					$('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Photo" />');
+					$('#prev').append('<h1 class="page_title">'+profile_name+' - Photo</h1>');
+					$('#prev').append('<table style="padding:1.5em;"></table>');
+				}
+				else if(page == 'college_mate')
+				{
+					param.action = 'people_fetch';
+					param.college = 'college';
+					increment = 10;
+					$('#center').append('<h1 class="page_title">People having same college as you</h1>');	
+				}
+				else if(page == 'new_user')
+				{
+					param.action = 'people_fetch';
+					param.new_user = 'new_user';
+					increment = 10;
+					$('#center').append('<h1 class="page_title">People Who Recently Joined Quipmate</h1>');	
+				}
+				else if(page == 'friend')
+				{
+					param.action = 'friend_load';
+					param.profileid = $('#profileid_hidden').attr('value');
+					increment = 50;
+					var profile_name = $('#profilename_hidden').attr('value');
+					$('#center').append('<div id="prev"></div>');
+					$('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Friends" />');
+					$('#prev').append('<h1 class="page_title">'+profile_name+' - Friends</h1>');
+				}
+				else if(page == 'member')
+				{
+					param.action = 'member_load';
+					param.groupid = $('#profileid_hidden').attr('value');
+					increment = 50;
+					var profile_name = $('#profilename_hidden').attr('value');
+					$('#center').append('<div id="prev"></div>');
+					$('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Members" />');
+					$('#prev').append('<h1 class="page_title">Group Members</h1>');
+				}
+				else if(page == 'guest')
+				{
+					param.action = 'guest_load';
+					param.eventid = $('#profileid_hidden').attr('value');
+					increment = 50;
+					var profile_name = $('#profilename_hidden').attr('value');
+					$('#center').append('<div id="prev"></div>');
+					$('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Guests" />');
+					$('#prev').append('<h1 class="page_title">Guests</h1>');
+				}
+				else if(page == 'inbox')
+				{
+					param.action = 'message_fetch';
+					param.profileid = $('#profileid_hidden').attr('value');
+					var profileid = $('#profileid_hidden').attr('value');
+					var myprofileid = $('#myprofileid_hidden').attr('value');
+					var profileid_name = $('#profilename_hidden').attr('value');
+					var myprofileid = $('#myprofileid_hidden').attr('value');
+					var myprofileid_name = $('#myprofilename_hidden').attr('value');
+					var myprofileid_image = $('#myprofileimage_hidden').attr('value');
+					var showuser ;
+					param.profileid = profileid;
+					$('#center').append('<div id="inbox_container"></div>');
+				}
+			}
+			
+			
 			function praise(me)
 			{	
 				$('.right_pointer_container').remove();
@@ -63,7 +312,7 @@ var ui = (function(){
 				$('.right_pointer_container').append('<div id="direct_to_md__container" style="width:45em;height:32em;"><input type="hidden" id="birthday_wish_profileid_hidden" value=""/></div>');
 				$('#direct_to_md__container').append('<div class="right_pointer_title">Publically praise for outstanding work</div>');
 				$('#direct_to_md__container').append('<div style="margin-top:1em;"><input style="padding:0.5em;height:1.4em;width:32em;" id="letter_title" type="text" placeholder="What is the outstanding contribution?"/></div><div style="margin-top:1em;"><textarea placeholder="Word of applause" id="letter_content" style="padding:0.5em;height:16em;width:32em;resize:none;"></textarea></div>');
-				$('#direct_to_md__container').append('<div style="margin-top:0.8em;"><input style="width:7em;height:2.8em;background:#336699;color:#ffffff;cursor:pointer;" type="submit" value="Cancel" id="birthday_wish_close" /><input style="background-color:#336699;color:#ffffff;cursor:pointer;width:7em;height:2.8em;margin-left:16.5em;" type="submit" value="Praise" id="letter_send" /></div>');
+				$('#direct_to_md__container').append('<div style="margin-top:0.8em;"><input class="prompt_negative" type="submit" value="Cancel" id="birthday_wish_close" /><input class="group_create_positive" type="submit" value="Praise" id="letter_send" /></div>');
 				$('#birthday_wish_box').focus();
 				$('#birthday_wish_close').live('click',function(){
 					$('.right_pointer_container').remove();
@@ -99,7 +348,7 @@ var ui = (function(){
 				$('.right_pointer_container').append('<div id="direct_to_md__container" style="width:45em;height:32em;"><input type="hidden" id="birthday_wish_profileid_hidden" value=""/></div>');
 				$('#direct_to_md__container').append('<div class="right_pointer_title">Direct Letter to the Managing Director</div>');
 				$('#direct_to_md__container').append('<div style="margin-top:1em;"><input style="padding:0.5em;height:1.4em;width:32em;" id="letter_title" type="text" placeholder="What is this letter about?"/></div><div style="margin-top:1em;"><textarea placeholder="Letter Content" id="letter_content" style="padding:0.5em;height:16em;width:32em;resize:none;"></textarea></div><div style="margin-top:1em;"><input id="letter_open" type="checkbox" checked/>Open Letter</div>');
-				$('#direct_to_md__container').append('<div style="margin-top:0.8em;"><input style="width:7em;height:2.8em;background:#336699;color:#ffffff;cursor:pointer;" type="submit" value="Cancel" id="birthday_wish_close" /><input style="background-color:#336699;color:#ffffff;cursor:pointer;width:10em;height:2.8em;margin-left:16.5em;" type="submit" value="Send Letter" id="letter_send" /></div>');
+				$('#direct_to_md__container').append('<div style="margin-top:0.8em;"><input class="prompt_negative" type="submit" value="Cancel" id="birthday_wish_close" /><input class="group_create_positive" type="submit" value="Send Letter" id="letter_send" /></div>');
 				$('#birthday_wish_box').focus();
 				$('#birthday_wish_close').live('click',function(){
 					$('.right_pointer_container').remove();
@@ -176,6 +425,43 @@ var ui = (function(){
 			}
 			
 			
+		function createMessageUI(user, name)
+		{
+			$('#inbox_container').append('<div id="inbox_'+user+'" class="inboxui" ><input type="hidden" value="'+user+'"/><span ></span><div class="inboxui_title"><span><a href="profile.php?id='+user+' ">'+name+'</a></span></div><div class="inboxui_msg"></div><textarea class="sendbox" onkeypress="action.message_send(this,event)"></textarea><input type="hidden" value="10"/></div>');
+			$('.inboxui_msg').css('height',$(window).height()-150);
+			$('.inboxui_msg').css('overflow','auto');
+			$('#inbox_'+user).children().eq(4).focus();
+			lastScrollTopinbox = $('#inbox_'+user).children().eq(3).get(0).scrollTop;
+			$('#inbox_'+user).children().eq(3).scroll(function(){messagebox_scroll(user)});
+		}
+		
+		function messagebox_scroll(user)
+		{ 
+			var chat_start = parseInt($('#inbox_'+user).children().eq(5).attr('value'));
+			if($('#inbox_'+user).children().eq(3).get(0).scrollTop  < $('#inbox_'+user).children().eq(3).get(0).scrollHeight * 0.1 && chat_load)
+			{
+				var st=$('#inbox_'+user).children().eq(3).get(0).scrollTop;
+				if(st < lastScrollTopinbox)
+				{
+					chat_load = false;
+					previous_talk_message(user, chat_start, 0);
+					chat_start += 10;
+					$('#inbox_'+user).children().eq(5).attr('value',chat_start);
+				}
+			}
+			lastScrollTopinbox = st;
+		}
+		
+		function message_leave()
+		{
+			$('#message_leave').css('width','24em');
+			$('#message_leave').html('<div id="message_leave_title" style="height:1.5em;cursor:pointer;font-size:1.2em;padding:0.5em;background-color:#336699;color:#ffffff;font-weight:bold;">Leave a message</div>');
+			$('#message_leave').append('<div style="padding:1em;"><input style="border:0.1em solid #cccccc;height:2em;padding:0.4em;width:20em;" placeholder="Name" type="text" value=""/></div>');
+			$('#message_leave').append('<div style="padding:1em;"><input style="border:0.1em solid #cccccc;height:2em;padding:0.4em;width:20em;"  placeholder="Email"  type="text" value=""/></div>');
+			$('#message_leave').append('<div style="padding:1em;"><input style="border:0.1em solid #cccccc;height:2em;padding:0.4em;width:20em;"  placeholder="Contact No"  type="text" value=""/></div>');
+			$('#message_leave').append('<div style="padding:1em;"><textarea style="border:0.1em solid #cccccc;height:6em;padding:0.4em;width:20em;" placeholder="Message" ></textarea></div>');
+			$('#message_leave').append('<div style="padding:1em;"><input style="border:0.1em solid #cccccc;background-color:#336699;color:#ffffff;font-weight:bold;height:3em;padding:0.4em;width:6em;" type="submit" value="Send"/></div>');
+		}
 			
 			function event_friend_invite(me)
 			{
@@ -237,22 +523,37 @@ var ui = (function(){
 			{
 				var i =1;
 				var con_name;
-				$.each(data.action,function(index,value){
-				con_name = '#'+'suggest_container'+i;
-				$(con_name).html('<div class="people" id="suggest_'+value.profileid+'" data="'+value.profileid+'" ><a href="profile.php?id='+value.profileid+'"><img class="lfloat" src='+data.pimage[value.profileid]+' height="80" width="80" /></a><div class="name_80"><a style="font-weight:bold;"href="profile.php?id='+value.profileid+'">'+data.name[value.profileid]+'</a><div  style="cursor:pointer;padding:0.2em 0em 0em 0em;"><span class="really_add_friend" onclick="action.really_add_friend_page(this)" >+Friend</span></div></div></div>');
-				i++;
-				});
+				if(data.action.length > 0)
+				{
+					$.each(data.action,function(index,value){
+						con_name = '#'+'suggest_container'+i;
+						$(con_name).html('<div class="people" id="suggest_'+value.profileid+'" data="'+value.profileid+'" ><a href="profile.php?id='+value.profileid+'"><img class="lfloat" src='+data.pimage[value.profileid]+' height="80" width="80" /></a><div class="name_80"><a style="font-weight:bold;"href="profile.php?id='+value.profileid+'">'+data.name[value.profileid]+'</a><div  style="cursor:pointer;padding:0.2em 0em 0em 0em;"><span class="really_add_friend" onclick="action.really_add_friend_page(this)" >+Friend</span></div></div></div>');
+						i++;
+					});
+				}
+				else
+				{
+					$('#friend_suggest').html('<div style="text-align:center;margin-top:5em;">No suggestions to show !</div>');
+				}
 			}
 			
 			function group_suggest_page_deploy(me, data)
 			{
 				var i =1;
 				var con_name;
-				$.each(data.action,function(index,value){
-				con_name = '#'+'group_suggest_container'+i;
-				$(con_name).html('<div class="people" id="group_suggest_'+value.profileid+'" data="'+value.profileid+'" ><a href="profile.php?id='+value.profileid+'"><img class="lfloat" src='+data.pimage[value.profileid]+' height="80" width="80" /></a><div class="name_80"><a style="font-weight:bold;"href="group.php?id='+value.profileid+'">'+data.name[value.profileid]+'</a><div  style="cursor:pointer;padding:0.2em 0em 0em 0em;"><span class="really_group_join" onclick="action.really_group_join(this)" >+Join Group</span></div></div></div>');
-				i++;
-				});
+				if(data.action.length > 0)
+				{
+					$.each(data.action,function(index,value){
+					con_name = '#'+'group_suggest_container'+i;
+					$(con_name).html('<div class="people" id="group_suggest_'+value.profileid+'" data="'+value.profileid+'" ><a href="profile.php?id='+value.profileid+'"><img class="lfloat" src='+data.pimage[value.profileid]+' height="80" width="80" /></a><div class="name_80"><a style="font-weight:bold;"href="group.php?id='+value.profileid+'">'+data.name[value.profileid]+'</a><div  style="cursor:pointer;padding:0.2em 0em 0em 0em;"><span class="really_group_join" onclick="action.really_group_join(this)" >+Join Group</span></div></div></div>');
+					i++;
+					});
+				}
+				else
+				{
+					$('#group_suggest').html('<div style="text-align:center;margin-top:4em;">No suggestions to show !</div>');
+					$('#group_suggest').append('<div style="text-align:center;margin-top:1em;">Create a group to get started !</div>');
+				}
 			}
 			
 			function group_suggest_deploy(me, data)
@@ -272,7 +573,7 @@ var ui = (function(){
 				var con_name;
 				$.each(data.action,function(index,value){
 				con_name = '#'+'event_suggest_container'+i;
-				$(con_name).html('<div class="people" id="event_suggest_'+value.profileid+'" data="'+value.profileid+'" ><a href="profile.php?id='+value.profileid+'"><img class="lfloat" src='+data.pimage[value.profileid]+' height="35" width="35" /></a><div class="name_35"><a style="font-weight:bold;"href="event.php?id='+value.profileid+'">'+data.name[value.profileid]+'</a><div  style="cursor:pointer;padding:0.2em 0em 0em 0em;"><span class="really_going_event" onclick="action.really_going_event(this)" >+Going</span></div></div></div>');
+				$(con_name).html('<div class="people" id="event_suggest_'+value.profileid+'" data="'+value.profileid+'" ><a href="event.php?id='+value.profileid+'"><img class="lfloat" src='+data.pimage[value.profileid]+' height="35" width="35" /></a><div class="name_35"><a style="font-weight:bold;"href="event.php?id='+value.profileid+'">'+data.name[value.profileid]+'</a><div  style="cursor:pointer;padding:0.2em 0em 0em 0em;"><span class="really_going_event" onclick="action.really_going_event(this)" >+Going</span></div></div></div>');
 				i++;
 				});
 			}
@@ -280,11 +581,12 @@ var ui = (function(){
 			function upload_default_state()
 			{
 				$('#uploader').html('<input type="text" id="status_box" value="" placeholder="What \'s going in your life?"/><input id="link_button" type="submit" value="Share">');
+				ui.enable_upload_area();
 			}
 			
 			function response_comment(container,actionid,life_is_fun,time,myprofileid,myphoto)
 			{
-				$(container).children().eq(1).children().eq(3).append('<div class="time_tag_json"><span onclick="action.response(this)" class="response" style="color:#336699;">Exciting: </span><a href="action.php?actionid='+actionid+'&life_is_fun='+life_is_fun+'"><img src="http://icon.qmcdn.net/clock.png" width="6" /><span class="time" data="'+time+'">'+time_difference(time)+'</span></a></div><div class="likeclass_json"><span class="excited_people"></span><span class="post_pointer"></span></div><div></div><div class="cclass_box" ><a href="profile.php?id=' +myprofileid+ '"><img class="lfloat" src="'+myphoto+'"  width="35" height="36"/></a><textarea class="commentbox" style="margin:0em 0em 0em 0.5em;" placeholder="Add a comment..." onkeydown="action.comment(this, event)"></textarea></div></div></div>');
+				$(container).children().eq(1).children().eq(3).append('<div class="time_tag_json"><span onclick="action.response(this)" class="response" style="color:#336699;">Exciting: </span><a href="action.php?actionid='+actionid+'&life_is_fun='+life_is_fun+'"><img src="http://icon.qmcdn.net/clock.png" width="6" /><span class="time" data="'+time+'">'+ui.time_difference(time)+'</span></a></div><div class="likeclass_json"><span class="excited_people"></span><span class="post_pointer"></span></div><div></div><div class="cclass_box" ><a href="profile.php?id=' +myprofileid+ '"><img class="lfloat" src="'+myphoto+'"  width="35" height="36"/></a><textarea class="commentbox" style="margin:0em 0em 0em 0.5em;" placeholder="Add a comment..." onkeyup="action.comment(this, event)"></textarea></div></div></div>');
 				$(container).append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
 			} 
 			
@@ -299,13 +601,18 @@ var ui = (function(){
 			function file_upload(profileid, action)
 			{
 				$('#uploader').html('<div id="main_div"><input type="hidden" value="6"/><div></div><div style="margin:0.5em;"><Strong>Select a file on your computer</strong></div><div style="margin-top:15px 0 20 0px;"><div id="photo_preview"></div><form id="pform" method="post" enctype="multipart/form-data" action="/ajax/write.php"><input style="border:1px solid #cccccc;width:30em;height:1.5em;padding:0.5em;margin:0.5em;" type="text" placeholder="Say something about this file" maxlength="200" id="photo_description" name="photo_description"/><input  size="30" type="file" name="photo_box" id="photo_box" /><input type="submit" name="upload" id="photo_upload_button" value="Upload"><input type="hidden" id="photo_hidden_profileid" name="photo_hidden_profileid" value="'+profileid+'"/><input type="hidden" name="action" value="'+action+'"/></form></div></div>');
+				ui.enable_upload_area();
 			}
 			
 			function album_upload(profileid)
 			{
 				$('#uploader').html('<div id="main_div"><input type="hidden" value="5"/><div></div><div style="margin:0.5em;"><Strong>Add multiple photo from your computer in an album</strong></div><div style="margin-top:15px 0 20 0px;"><div id="moment_preview"></div><form id="mform" method="post" enctype="multipart/form-data" action="/ajax/write.php"><input style="border:1px solid #cccccc;width:30em;height:1.5em;padding:0.5em;margin:0.5em;" type="text" value="" placeholder="Enter album name" maxlength="100" id="moment_name" name="moment_name"/><div  style="display:inline;" id="moment_photo_browser"><input size="40" type="file" class="mom" name="photo_box[]" id="photo_box" /></div><input  type="submit" name="upload" id="moment_upload_button" value="Upload"><input type="hidden" id="moment_hidden_profileid" name="moment_hidden_profileid" value="'+profileid+'"/><input type="hidden" id="moment_photo_count" name="moment_photo_count" value=""/><input type="hidden" name="action" value="album_upload"/></form></div></div>');
+				ui.enable_upload_area();
 			}
-			
+			function restore_action_field()
+			{
+				$('#uploader').html('<input type="text" id="status_box" value="" /><input id="link_button" type="submit" value="Share">');
+			}
 			function suggest_single_deploy_page(me, data)
 			{
 				$.each(data.action,function(index,value){
@@ -322,6 +629,7 @@ var ui = (function(){
 			
 			function group_suggest_single_deploy_page(me, data)
 			{
+
 				$.each(data.action,function(index,value){
 				$(me).html('<div class="people" id="suggest_'+value.profileid+'" data="'+value.profileid+'" ><a href="group.php?id='+value.profileid+'"><img class="lfloat" src='+data.pimage[value.profileid]+' height="80" width="80" /></a><div class="name_80"><a style="font-weight:bold;"href="group.php?id='+value.profileid+'">'+data.name[value.profileid]+'</a><div  style="cursor:pointer;padding:0.2em 0em 0em 0em;"><span class="really_add_friend" onclick="action.really_group_join_page(this)" >+Join Group</span></div></div></div>');
 				});
@@ -349,6 +657,13 @@ var ui = (function(){
 				$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
 				$('body').append('<div class="group_create_container"><div class="group_create_title">Create a group</div><div class="group_create_content"><div id="group_info"></div><div><input type="text" id="group_name" style="margin: 1em 0em;padding:0.5em;" placeholder="Group name" value=""></div><div><textarea style="margin: 1em 0em;padding:0.5em;" id="group_description" placeholder="What is this group about ?"></textarea> </div><div style="margin:2em 0em;text-align:left;margin-left:15em;"><div style="margin:1em 0em;">Privacy: <select id="group_privacy"><option value="0">Public</option><option value="1">Private</option></select></div><div style="margin:1em 0em"><input type="checkbox" id="group_technical"> Technical</div></div><div class="group_create_button" style="margin-left:5em;"><input type="submit" onclick="ui.bg_hide()" value="Cancel" class="group_create_negative"><input style="margin:0em 1em" type="submit" onclick="action.group_create(this)" value="Create Group" class="group_create_positive"></div></div>');
 			}
+			function page_create(me)
+			{
+				$('.group_create_container').remove();     
+				$('.bg_hide_cover').remove();
+				$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
+				$('body').append('<div class="group_create_container"><div class="group_create_title">Create a new Page</div><div class="group_create_content"><div id="page_info"></div><div><input type="text" id="page_name" style="margin: 1em 0em;padding:0.5em;" placeholder="Page name" value=""></div><div><textarea style="margin: 1em 0em;padding:0.5em;" id="page_description" placeholder="What is this page about ?"></textarea> </div><div class="group_create_button" style="margin-left:5em;"><input type="submit" onclick="ui.bg_hide()" value="Cancel" class="group_create_negative"><input style="margin:0em 1em" type="submit" onclick="action.page_create(this)" value="Create Page" class="group_create_positive"></div></div>');
+			}
 			
 			function group_event_create(me)
 			{
@@ -370,21 +685,31 @@ var ui = (function(){
 			{ 
 				if($('#text').get(0).scrollTop > $('#text').get(0).scrollHeight * 0.1 && notice_load)
 				{
+					var st = $('#text').get(0).scrollTop;
+					if (st > lastScrollTop)
+					{
 					notice_load = false;
 					$.getJSON('ajax/write.php',{action:'notice_fetch',start:notice_start},function(data){
 						notice_start += 10;
 						notice_load = true;
 						deploy.notice_deploy(data, '#text');
 					});
-				}
+					}
+			    } 
+				lastScrollTop = st;
 			}
 
 			function notice_fetch(me,event)
 			{
 				$(document).attr('title','Quipmate');
 				$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
-				$('body').append('<div id="notice_container" value="notice"></div>');
-				$('#notice_container').css('left',$('#search_form').position().left+416+'px');
+				$('body').append('<div id="notice_container" data="notice"></div>');
+				$('#notice_container').css('left',$('#search_form').position().left+391+'px');
+				var database = $('#database_hidden').attr('value');
+				if(database == 'ballytech')
+				{
+					$('#notice_container').css('left',$('#search_form').position().left+370+'px');
+				}
 				notice_start = 0;
 				notice_load = true;
 				$('#text').remove();
@@ -397,6 +722,7 @@ var ui = (function(){
 					$('.notice_drop').live('mouseover',function(){
 					  var actionid = $(this).attr('id');
 					});
+				var lastScrollTop = $('#text').get(0).scrollTop;
 					$('#text').scroll(notice_scroll);
 				});				
 			}
@@ -408,9 +734,14 @@ var ui = (function(){
 				$('#notice_container').remove();	
 				$('.bg_hide_cover').remove();
 				$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
-				$('body').append('<div id="notice_container" value="message"></div>');
-				$('#notice_container').css('left',$('#search_form').position().left+382+'px');
-				$('#notice_container').append('<div id="notice_icon_pointer"></div><div id="notice_container_title" style = "background:#f5f5f5;cursor:pointer;font-weight:bold;color:#000000;font-size:1.1em;padding-left:1em;"><span>All Messages</span><span class= "seeall" style = "margin-right:0.5em;float:right;">See All</span></div><div id="text"><img id="loading" src="http://icon.qmcdn.net/loading.gif" alt="Loading..."></div><div class = "seeall" style = "background:#f5f5f5;color:#000000;cursor:pointer;font-weight:bold;" align ="center">See All Messages</div>');				
+				$('body').append('<div id="notice_container" data="message"></div>');
+				$('#notice_container').css('left',$('#search_form').position().left+355+'px');
+				var database = $('#database_hidden').attr('value');
+				if(database == 'ballytech')
+				{
+					$('#notice_container').css('left',$('#search_form').position().left+336+'px');
+				}
+				$('#notice_container').append('<div id="notice_icon_pointer"></div><div id="notice_container_title" style = "background:#f5f5f5;cursor:pointer;font-weight:bold;color:#000000;font-size:1.1em;padding-left:1em;"><span>All Messages</span><span class= "message_seeall" style = "margin-right:0.5em;float:right;">See All</span></div><div id="text"><img id="loading" src="http://icon.qmcdn.net/loading.gif" alt="Loading..."></div><div class = "message_seeall" style = "background:#f5f5f5;color:#000000;cursor:pointer;font-weight:bold;" align ="center">See All Messages</div>');				
 				$.getJSON('ajax/write.php',{action:'message_recent_fetch',start:'0'},function(data){
 					$('#loading').remove();
 					callback.message_recent_fetch('#bring_message',data,'#text');
@@ -428,9 +759,14 @@ var ui = (function(){
 				$('#notice_container').remove();	
 				$('.bg_hide_cover').remove();
 				$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
-				$('body').append('<div id="notice_container" value="fr_missu_ei"></div>');
-				$('#notice_container').css('left',$('#search_form').position().left+345+'px');
-				$('#notice_container').append('<div id="notice_icon_pointer"></div><div id="notice_container_title" style = "background:#f5f5f5;cursor:pointer;font-weight:bold;color:#000000;font-size:1.1em;padding-left:1em;"><span>All Requests</span><span class= "message_seeall" style = "margin-right:0.5em;float:right;">See All</span></div><div id="text"><img id="loading" src="http://icon.qmcdn.net/loading.gif" alt="Loading..."></div><div class = "seeall" style = "background:#f5f5f5;color:#000000;cursor:pointer;font-weight:bold;" align ="center">See All Requests</div>');	
+				$('body').append('<div id="notice_container" data="fr_missu_ei"></div>');
+				$('#notice_container').css('left',$('#search_form').position().left+318+'px');
+				var database = $('#database_hidden').attr('value');
+				if(database == 'ballytech')
+				{
+					$('#notice_container').css('left',$('#search_form').position().left+300+'px');
+				}
+				$('#notice_container').append('<div id="notice_icon_pointer"></div><div id="notice_container_title" style = "background:#f5f5f5;cursor:pointer;font-weight:bold;color:#000000;font-size:1.1em;padding-left:1em;"><span>All Requests</span></div><div id="text"><img id="loading" src="http://icon.qmcdn.net/loading.gif" alt="Loading..."></div>');	
 				$.getJSON('ajax/write.php',{action:'request_fetch',start:'0'},function(data){
 					$('#loading').remove();
 					callback.request_fetch('#bring_friend_request',data);
@@ -452,7 +788,7 @@ var ui = (function(){
 				} 
 				$('#account').remove();
 				$('body').append('<div id="account" ></div>');
-				$('#account').css('left',$('#search_form').position().left+670+'px');
+				$('#account').css('left',$('#search_form').position().left+661+'px');
 				$('#account').append('<div id="menu_pointer"></div><div class="menu_each"><a class="menu_each_a"  href="profile.php?hl=bio">Edit Profile</a></div><div class="menu_each"><a class="menu_each_a"  href="register.php?hl=profile_picture">Change Profile Picture</a></div><div class="menu_each"><a class="menu_each_a" href="settings.php">Account Settings</a></div><div class="menu_each"><a class="menu_each_a" href="logout.php">Logout</a></div>'); 
 			}
 			
@@ -467,7 +803,7 @@ var ui = (function(){
 					event.stopPropagation();
 				}
 				 $('#profile_post_privacy_drop').remove();
-				 var pleft = event.pageX-117+'px';
+				 var pleft = event.pageX-101+'px';
 				 var ptop = event.pageY+17+'px';
 				 $('body').append('<div id ="profile_post_privacy_drop" style="position:absolute;background-color:#ffffff;border:0.1em solid #cccccc;"><div id="menu_pointer"></div><div class="menu_each"><a class="menu_each_a" value="0" data="profile_post_next" onclick="action.profile_privacy_update(this)">Public</a></div><div class="menu_each"><a class="menu_each_a" value="1" data="profile_post_next" onclick="action.profile_privacy_update(this)">Friends of friends</a></div><div class="menu_each"><a class="menu_each_a"  value="2" data="profile_post_next" onclick="action.profile_privacy_update(this)">Friends</a></div></div>'); 
 				 $('#profile_post_privacy_drop').css('left',pleft);
@@ -531,7 +867,7 @@ var ui = (function(){
 				$('body').append('<div id="message_container" style="position:fixed;left:50%;margin-left:-29em;top:9em;background-color:#ffffff;width:34em;z-index:100;overflow:auto;"></div>');
 				$('#message_container').html('<div id="message_title" style="font-weight:bold;color:#ffffff;font-size:1.3em;padding:0.5em 0em;background-color:#4C66A4;text-align:center;">Write a Message</div>');
 				$('#message_title').append('<div style="float:right;cursor:pointer;margin-right:0.5em;" onClick ="ui.message_close()">x</div>');
-				$('#message_container').append('<div style="font-size:1.1em;padding:0.5em;"><textarea id="message_textarea" style="border:0.1em solid #cccccc;color:#808080;height:5em;padding:0.5em;resize:none;width:28em;"></textarea></div>');
+				$('#message_container').append('<div style="font-size:1.1em;padding:0.5em;"><textarea id="message_textarea" placeholder="Write a message ..." style="border:0.1em solid #cccccc;color:#808080;height:5em;padding:0.5em;resize:none;width:28em;"></textarea></div>');
 				$('#message_container').append('<div style="margin: 1em 0em;"><input style="width:6.5em;height:3em;font-weight:bold;background-color:#4C66A4;color:#ffffff;cursor:pointer;border: 0.1em solid #FFFFFF;" type="submit" value="Cancel" class="message_ok" onclick="ui.message_close(this)" /><input style="margin-left:2em;font-weight:bold;width:6em;height:3em;background-color:#4C66A4;color:#ffffff;cursor:pointer;border: 0.1em solid #FFFFFF;" type="submit" value="Send" id="mood_done" onclick="action.message(this)"/></div>');
 			}
 			
@@ -796,7 +1132,8 @@ var ui = (function(){
 				};
 
 				$.each(smiley,function(index,value){
-					message = message.replace(index,value);
+					if(message)
+						message = message.replace(index,value);
 				});
 			  	return message; 
 			}
@@ -810,6 +1147,14 @@ var ui = (function(){
 				$('body').append('<div class="prompt_container"><div class="prompt_title">Please confirm your action</div><div class="prompt_content">Do you want to delete?</div><div class="prompt_button"><input class="prompt_positive" type="submit" value="Sure" onClick="action.post_delete_positive(this, '+del_actionid+')"/><input class="prompt_negative" type="submit" value="Cancel" onclick="ui.bg_hide()"/></div></div>');
 				$('body').css('overflow','hidden');
 		}
+		function message_delete(me,actionid)
+		{
+				$('.prompt_container').remove();     
+				$('.bg_hide_cover').remove();
+				$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
+				$('body').append('<div class="prompt_container"><div class="prompt_title">Please confirm your action</div><div class="prompt_content">Do you want to delete this message?</div><div class="prompt_button"><input class="prompt_positive" type="submit" value="Sure" onClick="action.message_delete_positive(this, '+actionid+')"/><input class="prompt_negative" type="submit" value="Cancel" onclick="ui.bg_hide()"/></div></div>');
+				$('body').css('overflow','hidden');
+		}
 		function group_leave(me)
 		{
 				var profile_name = $('#profilename_hidden').attr('value');	
@@ -817,6 +1162,15 @@ var ui = (function(){
 				$('.bg_hide_cover').remove();
 				$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
 				$('body').append('<div class="prompt_container"><div class="prompt_title">Please confirm your action</div><div class="prompt_content">Leave group '+profile_name+'</div><div class="prompt_button"><input class="prompt_positive" type="submit" value="Sure" onClick ="action.group_leave_positive(this)"/><input class="prompt_negative" type="submit" value="Cancel" onClick ="ui.bg_hide()"/></div></div>');
+				$('body').css('overflow','hidden');
+		}
+		function event_leave(me)
+		{
+				var profile_name = $('#profilename_hidden').attr('value');	
+				$('.prompt_container').remove();     
+				$('.bg_hide_cover').remove();
+				$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
+				$('body').append('<div class="prompt_container"><div class="prompt_title">Please confirm your action</div><div class="prompt_content">Leave event '+profile_name+'</div><div class="prompt_button"><input class="prompt_positive" type="submit" value="Sure" onClick ="action.event_leave(this)"/><input class="prompt_negative" type="submit" value="Cancel" onClick ="ui.bg_hide()"/></div></div>');
 				$('body').css('overflow','hidden');
 		}
 		function event_cancel(me)
@@ -848,6 +1202,7 @@ var ui = (function(){
 		}
 		function bg_hide(me)
 		{
+			$('#message_container').remove();
 			$('.prompt_container').remove();
 			$('#notice_container').remove();
 			$('#mood_container').remove();
@@ -868,27 +1223,45 @@ var ui = (function(){
 			$('#'+id).remove();
 		}
 		
-		function diary_suggest(me, type)
+		function diary_suggest(me, type,event)
 		{
-			if(bring)
+			if(navigator.appName == 'Microsoft Internet Explorer')
+			{
+				event.cancelBubble = true
+			}
+			else
+			{
+				event.stopPropagation();
+			} 
+			$(me).parent().append('<div class="callback_con"></div>');
+			/*if(bring)
 			{
 				$('.callback_con').remove();
 				$(me).parent().append('<div class="callback_con"></div>');
 				bring = false;
-			} 
-			$.getJSON('ajax/write.php',{action:'callback',type:type,k:$(me).val()},function(data){
-				$('.callback_con').html('');
-				$.each(data, function(index,value){
-					$('.callback_con').append('<div data="'+type+'" id="'+value.id+'" class="callback_class" style="height:25px;border-bottom:1px solid #eeeeee;cursor:pointer;padding:0px;">'+value.school+'</div>');
-				});
-				
-				$('.callback_con').append('<div id=""  data="'+type+'" class="callback_class" style="height:25px;border-bottom:1px solid #eeeeee;cursor:pointer;padding:0px;background:#336699;color:#ffffff;font-weight:bold">'+$(me).val()+'</div>');
-				
-			});    
+			} */
+			var val =$(me).val();
+			if(val !='')
+			{
+				$.getJSON('ajax/write.php',{action:'callback',type:type,k:val},function(data){
+				if(data)
+				{
+					$('.callback_con').html('');
+					$.each(data, function(index,value){
+						$('.callback_con').append('<div data="'+type+'" id="'+value.id+'" class="callback_class callback_class_click" style="min-height:25px;border-bottom:1px solid #eeeeee;cursor:pointer;padding:0px;">'+value.school+'</div>');
+					});
+				}
+					$('.callback_con').append('<div id=""  data="'+type+'" class="callback_class_new_item callback_class_click" style="min-height:25px;border-bottom:1px solid #eeeeee;cursor:pointer;padding:0px;background:#4C66A4;color:#ffffff;font-weight:bold">'+$(me).val()+'</div>');
+				});  
+			}
+			else 
+			{
+				$('.callback_con').hide('');
+			}
 		}	
 		function redirect_to_inbox()
 		{
-			window.location="?hl=inbox";
+			window.location="/?hl=inbox";
 		}
 		
 		function show_more(me)
@@ -907,29 +1280,182 @@ var ui = (function(){
 
 		function see_more(page)
 		{	  	
-			var left;
+			var left,right,pos,pos1;
 			if(page.length > 153)
 			{
-				 left = page.substr(0, 149);
 				 right = page.substr(150,page.length-1);
-				 return left+'<div onclick="ui.show_more(this)" style="margin-top:0.5em;color:#336699;cursor:pointer;">See more</div><span class="see_more" style="display:none;">'+right+'</span><div onclick="ui.show_less(this)" style="margin-top:0.5em;color:#336699;cursor:pointer;display:none;">See less</div>';
+				 pos = right.indexOf(' ');
+				 pos1 = right.indexOf('\n');
+				 if(pos > pos1) pos = pos1;
+				 if(pos+150 > 153)
+				 {
+					 left = page.substr(0,150+pos);
+					 right = ' '+page.substr(150+pos+1,page.length-1);
+					 return left+'<div onclick="ui.show_more(this)" style="margin-top:0.5em;color:#336699;cursor:pointer;font-size:0.9em;">See more</div><span class="see_more" style="display:none;">'+right+'</span><div onclick="ui.show_less(this)" style="margin-top:0.5em;color:#336699;cursor:pointer;display:none;font-size:0.9em;">See less</div>';
+				 }
 			} 
 			return page;
 		}
 		
+		function time_difference(time)
+		{
+			now = Math.floor((new Date()).getTime() / 1000);
+			if(now == time)
+				return ' '+'now';
+			else if(now - 1 < time)
+				return ' '+'a second ago';
+			else if(now - 2 < time)
+				return ' '+'two seconds ago'; 
+			else if(now - 3 < time)
+				return ' '+'three seconds ago';
+			else if(now - 4 < time)
+				return ' '+'four seconds ago';
+			else if(now - 5 < time)
+				return ' '+'five seconds ago';
+			else if(now - 10 < time)
+				return ' '+'ten seconds ago';
+			else if(now - 15 < time)
+				return ' '+'fifteen seconds ago';
+			else if(now - 30 < time)
+				return ' '+'half a minute ago';
+			else if(now - 45 < time)
+				return ' '+'forty-five seconds ago';
+			else if(now - 60 < time)
+				return ' '+' one minute ago';
+			else if(now - 120 < time)
+				return ' '+' two minutes ago';
+			else if(now - 180 < time)
+				return ' '+' three minutes ago';
+			else if(now - 240 < time)
+				return ' '+' four minutes ago';
+			else if(now - 300 < time)
+				return ' '+' five minutes ago';
+			else if(now - 600 < time)
+				return ' '+' ten minutes ago';
+			else if(now - 900 < time)
+				return ' '+' fifteen minutes ago';
+			else if(now - 1200 < time)
+				return ' '+' twenty minutes ago';
+			else if(now - 1500 < time)
+				return ' '+' twenty-five minutes ago';
+			else if(now - 1800 < time)
+				return ' '+' half an hour ago';
+			else if(now - 3600 < time)
+				return ' '+' an hour ago';
+			else if(now - 7200 < time)
+				return ' '+'two hours ago';
+			else if(now - 10800 < time)
+				return ' '+'three hours ago';
+			else if(now - 14400 < time)
+				return ' '+'four hours ago';
+			else if(now - 18000 < time)
+				return ' '+'five hours ago';
+			else if(now - 21600 < time)
+				return ' '+'six hours ago';
+			else if(now - 25200 < time)
+				return ' '+'seven hours ago';
+			else if(now - 28800 < time)
+				return ' '+'eight hours ago';
+			else if(now - 32400 < time)
+				return ' '+'nine hours ago';
+			else if(now - 36000 < time)
+				return ' '+'ten hours ago';
+			else if(now - 36900 < time)
+				return ' '+'eleven hours ago';		
+			else if(now - 43200 < time)
+				return ' '+'twelve hours ago';
+			else if(now - 46800 < time)
+				return ' '+'thirteen hours ago';
+			else if(now - 50400 < time)
+				return ' '+'fourteen hours ago';
+			else if(now - 50400 < time)
+				return ' '+'fifteen hours ago';
+			else if(now - 57600 < time)
+				return ' '+'sixteen hours ago';
+			else if(now - 61200 < time)
+				return ' '+'seventeen hours ago';
+			else if(now - 64800 < time)
+				return ' '+'eighteen hours ago';
+			else if(now - 68400 < time)
+				return ' '+'nineteen hours ago';
+			else if(now - 72000 < time)
+				return ' '+'twenty hours ago';
+			else if(now - 75600 < time)
+				return ' '+'twentyone hours ago';
+			else if(now - 79200 < time)
+				return ' '+'twentytwo hours ago';
+			else if(now - 82800 < time)
+				return ' '+'twentythree hours ago';
+			else if(now - 86400 < time)
+				return ' '+' yesterday';
+			else if(now - 172800 < time)
+				return ' '+'two days ago';
+			else if(now - 259200 < time)
+				return ' '+'three days ago';
+			else if(now - 345600 < time)
+				return ' '+'four days ago';
+			else if(now - 432000 < time)
+				return ' '+'five days ago';
+			else if(now - 518400 < time)
+				return ' '+'six days ago';		
+			else if(now - 604800 < time)
+				return ' last week';
+			else if(now - 1209600 < time)
+				return ' two weeks ago';
+			else if(now - 1814400 < time)
+				return ' three weeks ago';
+			else if(now - 2419200 < time)
+				return ' four weeks ago';
+			else if(now - 2592000 < time)
+				return ' a month ago';		
+			else if(now - 5184000 < time)
+				return ' two months ago';
+			else if(now - 7776000 < time)
+				return ' three months ago';
+			else if(now - 10368000 < time)
+				return ' four months ago';
+			else if(now - 12960000 < time)
+				return ' five months ago';
+			else if(now - 15552000 < time) 
+				return ' six months ago';
+			else if(now - 18144000 < time)
+				return ' seven months ago';
+			else if(now - 20736000 < time)
+				return ' eight months ago';
+			else if(now - 23328000 < time)
+				return ' nine months ago';
+			else if(now - 25920000 < time)
+				return ' ten months ago';
+			else if(now - 28512000 < time)
+				return ' eleven months ago';
+			else if(now - 31104000 < time)
+				return '  a year ago';
+			else
+				return ' over a year ago';	
+		}
+		
 			return {
+				page_create:page_create,
+				message_delete:message_delete,
+				birthday_bomb:birthday_bomb,
+				createMessageUI : createMessageUI,
+				messagebox_scroll : messagebox_scroll,
 				redirect_to_inbox:redirect_to_inbox,
 				redirect_friend_suggest : redirect_friend_suggest,
 				redirect_group_suggest : redirect_group_suggest,
 				redirect_to_action : redirect_to_action,
+				message_leave : message_leave, 
 				album_upload: album_upload,
 				bg_hide : bg_hide,
 				bio_privacy : bio_privacy,
 				close : close,
+				disable_upload_area : disable_upload_area,
 				direct_to_md : direct_to_md,
 				diary_suggest : diary_suggest,
+				enable_upload_area : enable_upload_area,
 				event_cancel : event_cancel,
 				event_create : event_create,
+				event_leave : event_leave,
 				event_friend_invite : event_friend_invite,
 				friend_invite : friend_invite,
 				file_upload : file_upload,
@@ -947,6 +1473,7 @@ var ui = (function(){
 				event_suggest_deploy : event_suggest_deploy,
 				event_suggest_single_deploy : event_suggest_single_deploy,
 				group_suggest_single_deploy : group_suggest_single_deploy,
+				group_suggest_single_deploy_page:group_suggest_single_deploy_page,
 				link_highlight : link_highlight,
 				menu : menu,
 				message : message,
@@ -955,6 +1482,7 @@ var ui = (function(){
 				mood_click : mood_click,
 				message_fetch : message_fetch,
 				notice_fetch : notice_fetch,
+				page_init : page_init,
 				photo_upload : photo_upload,
 				post_delete : post_delete,
 				profile_post_privacy : profile_post_privacy,
@@ -975,12 +1503,16 @@ var ui = (function(){
 				suggest_deploy : suggest_deploy,
 				suggest_deploy_page : suggest_deploy_page,
 				suggest_single_deploy : suggest_single_deploy,
+				suggest_single_deploy_page:suggest_single_deploy_page,
+				time_difference : time_difference,
+				page_call : page_call,
 				tagline : tagline,
 				tagline_close : tagline_close,
 				upload_default_state : upload_default_state,
 				unfriend : unfriend,
 				video_play_click : video_play_click,
 				video_shadow_click : video_shadow_click,
-				mood_close :mood_close
+				mood_close :mood_close,
+				restore_action_field:restore_action_field
 			}
 			})();

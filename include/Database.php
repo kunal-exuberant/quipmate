@@ -321,7 +321,7 @@ class Database
 	    $myprofileid = $this->con->real_escape_string($myprofileid);
 		$profileid = $this->con->real_escape_string($profileid);
 		$start = $this->con->real_escape_string($start);
-		return $this->con->query("select * from inbox where (ACTIONBY = '$profileid' AND ACTIONON = '$myprofileid') OR (ACTIONBY = '$myprofileid' AND ACTIONON = '$profileid') order by ACTIONID desc LIMIT $start,20");
+		return $this->con->query("select * from inbox where (ACTIONBY = '$profileid' AND ACTIONON = '$myprofileid') OR (ACTIONBY = '$myprofileid' AND ACTIONON = '$profileid') AND CASE WHEN ACTIONBY = '$myprofileid' THEN flag_by ELSE flag_on END  ='1' order by ACTIONID desc LIMIT $start,20");
 	}
 	
 	function inbox_select($profileid,$college,$start)
@@ -443,7 +443,7 @@ class Database
 		$time = $this->con->real_escape_string($time);
 		$profileid = $this->con->real_escape_string($profileid);
 		$v_date = date('Y-m-d H:i:s',$time);	
-		$result=$this->con->query("SELECT e.eventid as eventid,e.name as name FROM `event` as e inner join guest as g on e.eventid = g.eventid	Where g.profileid = '$profileid' and e.cancel='0' and g.priviledge <>'2' and CONCAT(e.`date`,' ',e.`timing`) >= '$v_date'");
+		$result=$this->con->query("SELECT e.eventid as eventid,e.name as name FROM `event` as e inner join guest as g on e.eventid = g.eventid	Where g.profileid = '$profileid' and e.cancel='0' and g.priviledge <>'2' and CONCAT(e.`date`,' ',e.`timing`) >= '$v_date' order by e.eventid desc" );
 		return $result;		
 	}
 	
@@ -451,34 +451,6 @@ class Database
 	{
 		$profileid = $this->con->real_escape_string($profileid);
 		return $this->con->query("update `event` set cancel='1' WHERE eventid='$profileid'");
-	}
-	
-	function event_create($actionid, $invite, $privacy, $name, $desc, $date, $timing, $venue, $createdby, $time,$groupid=0)
-	{
-		$actionid = strip_tags($this->con->real_escape_string($actionid));
-		$invite = strip_tags($this->con->real_escape_string($invite));
-		$privacy = strip_tags($this->con->real_escape_string($privacy));		
-		$name = strip_tags($this->con->real_escape_string($name));
-		$description = strip_tags($this->con->real_escape_string($desc));
-		$date = strip_tags($this->con->real_escape_string($date));
-		$timing = strip_tags($this->con->real_escape_string($timing));
-		$venue = strip_tags($this->con->real_escape_string($venue));
-		$createdby = strip_tags($this->con->real_escape_string($createdby));
-		$time = strip_tags($this->con->real_escape_string($time));
-		$groupid = strip_tags($this->con->real_escape_string($groupid));
-		
-		$result = $this->con->query("INSERT INTO `event`(`eventid`,`invite`,`privacy`,`name` ,`description`,`date`,`timing`,`venue`,`host`,`time`,`groupid`) VALUES('$actionid', '$invite','$privacy','$name','$description','$date','$timing','$venue','$createdby','$time','$groupid')");
-		
-		if($groupid != 0)
-		{
-			$this->con->query("INSERT INTO `guest`(`actionid`, `eventid`, `profileid`, `priviledge`) SELECT '$actionid',e.eventid,m.profileid,'0' from `event` as e inner join `member` as m on e.groupid = m.groupid where e.groupid = '$groupid' and m.profileid <> '$createdby' and e.eventid ='$actionid' ");
-		}
-		if($result)
-		{
-			$result = $this->guest_insert($actionid,$actionid,$createdby, 1);
-			return $actionid;
-		}
-		return 0;	
 	}
 	
 	function group_exists($profileid)
@@ -492,6 +464,13 @@ class Database
             return $profileid;	
 		}
 	}
+	function page_exists($profileid)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		$result=$this->con->query("SELECT * FROM `page` WHERE pageid='$profileid'");
+		$row = $result->fetch_array();
+		return $row;
+	}
 	
 	function group_select($profileid)
 	{
@@ -499,7 +478,18 @@ class Database
 		$result=$this->con->query("SELECT * FROM `group` WHERE groupid='$profileid'");
 		return $result->fetch_array();
 	}
-	
+	function page_select($profileid)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		$result=$this->con->query("SELECT * FROM `page` WHERE pageid='$profileid'");
+		return $result->fetch_array();
+	}
+	function page_select_all()
+	{
+		//$profileid = $this->con->real_escape_string($profileid);
+		$result=$this->con->query("SELECT * FROM `page` ");
+		return $result;
+	}
 	function member_insert($actionid, $profileid1, $profileid2, $priviledge)
 	{	
 		$actionid = $this->con->real_escape_string($actionid);
@@ -508,6 +498,17 @@ class Database
 		$priviledge = $this->con->real_escape_string($priviledge);		
 		$result= $this->con->query("insert into member(actionid, groupid, profileid, priviledge) values('$actionid','$profileid1', '$profileid2','$priviledge')");
 		return $this->con->query("insert into subscribe(profileid,friendid) values('$profileid2','$profileid1')");
+	}
+	function subscriber_insert($actionid, $profileid1, $profileid2, $priviledge)
+	{	
+		$actionid = $this->con->real_escape_string($actionid);
+		$profileid1 = $this->con->real_escape_string($profileid1);
+		$profileid2 = $this->con->real_escape_string($profileid2);
+		$priviledge = $this->con->real_escape_string($priviledge);		
+		$result= $this->con->query("insert into `subscriber`(actionid,pageid,priviledge,profileid) select '$actionid','$profileid1','0',USERID from `signup` ");
+		$result= $this->con->query("insert into `subscribe`(friendid,profileid) select '$profileid1',USERID from `signup` ");
+		$result= $this->con->query("update `subscriber` SET priviledge= '$priviledge' Where pageid ='$profileid1' and profileid IN(select profileid from `moderator`)");
+		return $result;
 	}
 	
 	function guest_insert($actionid, $profileid1, $profileid2, $priviledge)
@@ -541,6 +542,13 @@ class Database
 	{
 		$profileid = $this->con->real_escape_string($profileid);
 		$result=$this->con->query("SELECT COUNT(*) FROM member WHERE groupid = '$profileid'");
+		$res =  $result->fetch_array();
+		return $res['COUNT(*)'];
+	}
+	function follower_count($profileid)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		$result=$this->con->query("SELECT COUNT(*) FROM subscriber WHERE pageid = '$profileid'");
 		$res =  $result->fetch_array();
 		return $res['COUNT(*)'];
 	}
@@ -586,12 +594,23 @@ class Database
 		$groupid = $this->con->real_escape_string($groupid);
 		return $this->con->query("SELECT * FROM member WHERE groupid = '$groupid' order by actionid limit $limit, $count");
 	}
-	
+	function follower_select($groupid, $limit=0, $count=50)
+	{
+		$groupid = $this->con->real_escape_string($groupid);
+		return $this->con->query("SELECT * FROM subscriber WHERE pageid = '$groupid' order by actionid limit $limit, $count");
+	}
 	function member_select_profileid($groupid, $profileid)
 	{
 		$groupid = $this->con->real_escape_string($groupid);
 		$profileid = $this->con->real_escape_string($profileid);		
 		$result = $this->con->query("SELECT * FROM member WHERE groupid = '$groupid' and profileid = '$profileid'");
+		return $result->fetch_array();
+	}
+	function guest_select_profileid($eventid, $profileid)
+	{
+		$eventid = $this->con->real_escape_string($eventid);
+		$profileid = $this->con->real_escape_string($profileid);		
+		$result = $this->con->query("SELECT * FROM guest WHERE eventid = '$eventid' and profileid = '$profileid'");
 		return $result->fetch_array();
 	}
 	
@@ -641,7 +660,12 @@ class Database
 		$profileid2 = $this->con->real_escape_string($profileid2);		
 		return $this->con->query("SELECT * FROM member WHERE profileid = '$profileid2' and groupid = '$profileid1' ");
 	}
-	
+	function is_follower($profileid1, $profileid2)
+	{	
+		$profileid1 = $this->con->real_escape_string($profileid1);
+		$profileid2 = $this->con->real_escape_string($profileid2);		
+		return $this->con->query("SELECT * FROM subscriber WHERE profileid = '$profileid2' and pageid = '$profileid1' ");
+	}
 	function group_priviledge_update($profileid1, $profileid2, $priviledge)
 	{	
 		$profileid1 = $this->con->real_escape_string($profileid1);
@@ -657,7 +681,13 @@ class Database
 		$result = $this->con->query("SELECT * FROM member WHERE profileid = '$profileid2' and groupid = '$profileid1' ");
 		return $result->fetch_array();
 	} 
-	
+	function is_page_admin($profileid1, $profileid2)
+	{	
+		$profileid1 = $this->con->real_escape_string($profileid1);
+		$profileid2 = $this->con->real_escape_string($profileid2);		
+		$result = $this->con->query("SELECT * FROM subscriber WHERE profileid = '$profileid2' and pageid = '$profileid1' ");
+		return $result->fetch_array();
+	} 
 	function is_host($profileid1, $profileid2)
 	{	
 		$profileid1 = $this->con->real_escape_string($profileid1);
@@ -916,8 +946,50 @@ class Database
 		} 
 		return 0;	
 	}
-	
-	
+	function page_create($actionid, $name, $description, $createdby, $time)
+	{
+		$actionid = strip_tags($this->con->real_escape_string($actionid));		
+		$name = strip_tags($this->con->real_escape_string($name));
+		$description = strip_tags($this->con->real_escape_string($description));
+		$createdby = strip_tags($this->con->real_escape_string($createdby));
+		$time = strip_tags($this->con->real_escape_string($time));
+		
+		$result = $this->con->query("INSERT INTO `page`(pageid,name,description,createdby, time) VALUES('$actionid','$name','$description','$createdby','$time')");
+		
+		if($result)
+		{
+			$result = $this->subscriber_insert($actionid,$actionid, $createdby,1);
+			return $actionid;
+		} 
+		return 0;	
+	}
+	function event_create($actionid, $invite, $privacy, $name, $desc, $date, $timing, $venue, $createdby, $time,$groupid=0)
+	{
+		$actionid = strip_tags($this->con->real_escape_string($actionid));
+		$invite = strip_tags($this->con->real_escape_string($invite));
+		$privacy = strip_tags($this->con->real_escape_string($privacy));		
+		$name = strip_tags($this->con->real_escape_string($name));
+		$description = strip_tags($this->con->real_escape_string($desc));
+		$date = strip_tags($this->con->real_escape_string($date));
+		$timing = strip_tags($this->con->real_escape_string($timing));
+		$venue = strip_tags($this->con->real_escape_string($venue));
+		$createdby = strip_tags($this->con->real_escape_string($createdby));
+		$time = strip_tags($this->con->real_escape_string($time));
+		$groupid = strip_tags($this->con->real_escape_string($groupid));
+		
+		$result = $this->con->query("INSERT INTO `event`(`eventid`,`invite`,`privacy`,`name` ,`description`,`date`,`timing`,`venue`,`host`,`time`,`groupid`) VALUES('$actionid', '$invite','$privacy','$name','$description','$date','$timing','$venue','$createdby','$time','$groupid')");
+		
+		if($groupid != 0)
+		{
+			$this->con->query("INSERT INTO `guest`(`actionid`, `eventid`, `profileid`, `priviledge`) SELECT '$actionid',e.eventid,m.profileid,'0' from `event` as e inner join `member` as m on e.groupid = m.groupid where e.groupid = '$groupid' and m.profileid <> '$createdby' and e.eventid ='$actionid' ");
+		}
+		if($result)
+		{
+			$result = $this->guest_insert($actionid,$actionid,$createdby, 1);
+			return $actionid;
+		}
+		return 0;	
+	}
 	function id_retrieve($value,$type)
 	{
 		$id = '';
@@ -1335,6 +1407,14 @@ FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action INNER
 		$limit = $this->con->real_escape_string($limit);
 		$count = $this->con->real_escape_string($count);
 		$result=$this->con->query("SELECT A.* FROM action as A INNER JOIN (SELECT MAX(ACTIONID) AS ACTIONID FROM action as a INNER JOIN actiontype on actiontype.actiontypeid = a.ACTIONTYPE WHERE (PROFILEID ='$profileid') AND actiontype.group_feed ='1' GROUP BY PAGEID ORDER BY a.ACTIONID DESC LIMIT $limit,$count) AS B ON A.ACTIONID = B.ACTIONID"); 
+		return $result;
+	}
+	function page_feed_select($profileid,$limit,$count=10)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		$limit = $this->con->real_escape_string($limit);
+		$count = $this->con->real_escape_string($count);
+		$result=$this->con->query("SELECT A.* FROM action as A INNER JOIN (SELECT MAX(ACTIONID) AS ACTIONID FROM action as a INNER JOIN actiontype on actiontype.actiontypeid = a.ACTIONTYPE WHERE (PROFILEID ='$profileid') AND actiontype.page_feed ='1' GROUP BY PAGEID ORDER BY a.ACTIONID DESC LIMIT $limit,$count) AS B ON A.ACTIONID = B.ACTIONID"); 
 		return $result;
 	}
 	
@@ -1977,13 +2057,14 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		$result = $this->con->query("INSERT INTO `image`(`profileid`, `imageid`, `actionby`, `cdn`, `momentid`, `filename`) VALUES('$profileid','$actionid','$myprofileid','$cdn','$momentid','$file')");
 		return $result;
 	}
-	function video_insert($profileid,$videoid,$file,$cdn)
+	function video_insert($profileid,$videoid,$file,$cdn,$thumbnail='')
 	{
 		$myprofileid = $_SESSION['USERID'];
 		$file = $this->con->real_escape_string($file);
 		$profileid = $this->con->real_escape_string($profileid);
 		$videoid = $this->con->real_escape_string($videoid);
-		$result = $this->con->query("INSERT INTO video(profileid,videoid,actionby,cdn,filename,thumbnail) VALUES('$profileid','$videoid','$myprofileid','$cdn','$file','')");
+		$thumbnail = $this->con->real_escape_string($thumbnail);
+		$result = $this->con->query("INSERT INTO video(profileid,videoid,actionby,cdn,filename,thumbnail) VALUES('$profileid','$videoid','$myprofileid','$cdn','$file','$thumbnail')");
 		return $result;
 	}
 	function doc_insert($profileid,$docid,$file,$caption,$cdn)
@@ -2143,11 +2224,26 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		$row = $result->fetch_array();
 		return $row['count(ACTIONID)'];
 	}
+	function action_ownership_check_inbox($actionid, $profileid)
+	{
+        $actionid= $this->con->real_escape_string($actionid);
+        $profileid= $this->con->real_escape_string($profileid);		
+		$result=$this->con->query("SELECT count(ACTIONID) from inbox WHERE (ACTIONID ='$actionid' and ACTIONON ='$profileid') OR (ACTIONID ='$actionid' and ACTIONBY ='$profileid') ");
+		$row = $result->fetch_array();
+		return $row['count(ACTIONID)'];
+	}
 	
     function action_delete($actionid)
 	{
         $actionid= $this->con->real_escape_string($actionid);
 		$result=$this->con->query("DELETE FROM action WHERE ACTIONID ='$actionid' OR PAGEID ='$actionid'");
+		return $result;
+	}
+	function message_delete($actionid,$myprofileid)
+	{
+		$actionid= $this->con->real_escape_string($actionid);
+		$myprofileid= $this->con->real_escape_string($myprofileid);
+		$result=$this->con->query("update inbox set flag_by = CASE WHEN ACTIONBY ='$myprofileid' THEN '0' ELSE '1' END, flag_on = CASE WHEN ACTIONON = '$myprofileid' THEN '0' ELSE '1' END Where ACTIONID='$actionid' ");
 		return $result;
 	}
 	
@@ -2229,10 +2325,25 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		}
 	    return 4;
 	}
-	
-	
-	
-	
+	function follower_status($profileid1,$profileid2)
+	{
+		$frow = $this->is_page_admin($profileid1, $profileid2);
+		if($frow)
+		{
+			if($frow['priviledge'] == 1)
+			{
+				return 0;
+			}
+			else if($frow['priviledge'] == 0)
+			{
+				return 1;
+			}
+		}
+		else
+		{
+			return 3;
+		}
+	}	
 	function membership_status($profileid1,$profileid2)
 	{
 		$frow = $this->is_group_admin($profileid1, $profileid2);
@@ -2525,41 +2636,41 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		return $result;
 	}
 	
-	function profile_search($k)
+	function profile_search($k,$start)
 	{
 		$k = $this->con->real_escape_string($k);
-		$result = $this->con->query("SELECT PROFILEID,NAME FROM bio WHERE NAME REGEXP '^$k' OR LNAME REGEXP '^$k' LIMIT 10");
+		$result = $this->con->query("SELECT PROFILEID,NAME FROM bio WHERE NAME REGEXP '^$k' OR LNAME REGEXP '^$k' LIMIT $start,10");
 		return $result;
 	}
 	
-	function group_search($k)
+	function group_search($k,$start)
 	{
 		$k = $this->con->real_escape_string($k);
-		return $this->con->query("SELECT * FROM `group` WHERE (name REGEXP '^$k') OR (description REGEXP '^$k') ");
+		return $this->con->query("SELECT * FROM `group` WHERE (name REGEXP '^$k') OR (description REGEXP '^$k') LIMIT $start,10");
 	}
 	
-	function event_search($k)
+	function event_search($k,$start)
 	{
 		$k = $this->con->real_escape_string($k);
-		return $this->con->query("SELECT * FROM `event` WHERE ((name REGEXP '^$k') OR (description REGEXP '^$k')) AND cancel='0' ");
+		return $this->con->query("SELECT * FROM `event` WHERE ((name REGEXP '^$k') OR (description REGEXP '^$k')) AND cancel='0' LIMIT $start,10");
 	}
 
-	function post_search($k)
+	function post_search($k,$start)
 	{
 		$k = $this->con->real_escape_string($k);
-		return $this->con->query("SELECT * FROM action inner join diary on action.actionid = diary.actionid WHERE page like '%$k%'");
+		return $this->con->query("SELECT * FROM action inner join diary on action.actionid = diary.actionid WHERE page like '%$k%' LIMIT $start,10");
 	}
-	function bio_history_search($type,$k)
+	function bio_history_search($type,$k,$start)
 	{
 		$k = $this->con->real_escape_string($k);
 		$type = $this->con->real_escape_string($type);
-		return $this->con->query("SELECT i.name as skill,bh.profileid as profileid FROM `info` as i INNER JOIN bio_history as bh on i.DIARYID = bh.diaryid WHERE i.type='$type' and (i.name REGEXP '^$k') ");
+		return $this->con->query("SELECT i.name as skill,bh.profileid as profileid FROM `info` as i INNER JOIN bio_history as bh on i.DIARYID = bh.diaryid WHERE i.type='$type' and (i.name REGEXP '^$k') LIMIT $start,10 ");
 	}
 	
-	function comment_search($k)
+	function comment_search($k,$start)
 	{
 		$k = $this->con->real_escape_string($k);
-		return $this->con->query("SELECT * FROM action inner join comment on action.actionid = comment.actionid WHERE comment like '%$k%'");
+		return $this->con->query("SELECT * FROM action inner join comment on action.actionid = comment.actionid WHERE comment like '%$k%' LIMIT $start,10");
 	}
 	
 	function song_search($k,$limit,$count)

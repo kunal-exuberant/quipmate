@@ -10,9 +10,9 @@ $(function(){
 
        var request = [],i;
 	$('body').append('<div id="search_container"></div>');
-	$('#search_container').css('left',$('#search_form').position().left+82.2+'px');
+	$('#search_container').css('left',$('#search_form').position().left+78.2+'px');
 	$(window).resize(function(){
-		$('#search_container').css('left',$('#search_form').position().left+82.2+'px');
+		$('#search_container').css('left',$('#search_form').position().left+78.2+'px');
 	});
 	
 	$('#to').focus(function(){
@@ -49,8 +49,8 @@ $(function(){
 							if((count < 9) && (search_name[i].toLowerCase().search('^'+q.toLowerCase()) != -1)) 
 							{
 								$('#search_'+index).remove();	
-								$('#search_container').append('<div class="search_items container_50" id="search_'+index+'" data="'+index+'"><a href="profile.php?id='+index+'"><img class="lfloat" src='+global_pimage[index]+' width="50" height="50" /></a><div class="name_50"><a href="profile.php?id='+index+'">'+global_name[index]+'</a></div></div>');
-								$('.search_items:first').css('background','#336699');
+								$('#search_container').append('<div class="search_items container_50" id="search_'+index+'" data="'+index+'"><a href="profile.php?id='+index+'"><img class="lfloat" src='+global_pimage[index]+' width="50" height="50" /></a><div class="name_50"><a class="bold" href="profile.php?id='+index+'">'+global_name[index]+'</a></div></div>');
+								$('.search_items:first').css('background','#4C66A4');
 								$('.search_items:first .name_50 a').css('color','white');
 								count++;
 							}
@@ -62,8 +62,8 @@ $(function(){
 						if((count < 9) && (value.toLowerCase().search('^'+q.toLowerCase()) != -1)) 
 						{
 								$('#search_'+index).remove();	
-								$('#search_container').append('<div class="search_items container_50" id="search_'+index+'" data="'+index+'"><a href="profile.php?id='+index+'"><img class="lfloat" src='+global_pimage[index]+' width="50" height="50" /></a><div class="name_50"><a href="profile.php?id='+index+'">'+global_name[index]+'</a></div></div>');
-								$('.search_items:first').css('background','#336699');
+								$('#search_container').append('<div class="search_items container_50" id="search_'+index+'" data="'+index+'"><a href="profile.php?id='+index+'"><img class="lfloat" src='+global_pimage[index]+' width="50" height="50" /></a><div class="name_50"><a class="bold" href="profile.php?id='+index+'">'+global_name[index]+'</a></div></div>');
+								$('.search_items:first').css('background','#4C66A4');
 								$('.search_items:first .name_50 a').css('color','white');
 								count++;
 						}
@@ -89,8 +89,8 @@ $(function(){
 							if((count < 9) && (search_name[i].toLowerCase().search('^'+q.toLowerCase()) != -1)) 
 							{
 								$('#search_'+index).remove();	
-								$('#search_container').append('<div class="search_items container_50" id="search_'+index+'" data="'+index+'"><a href="profile.php?id='+index+'"><img class="lfloat" src='+global_pimage[index]+' width="50" height="50" /></a><div class="name_50"><a href="profile.php?id='+index+'">'+global_name[index]+'</a></div></div>');
-								$('.search_items:first').css('background','#336699');
+								$('#search_container').append('<div class="search_items container_50" id="search_'+index+'" data="'+index+'"><a href="profile.php?id='+index+'"><img class="lfloat" src='+global_pimage[index]+' width="50" height="50" /></a><div class="name_50"><a class="bold" href="profile.php?id='+index+'">'+global_name[index]+'</a></div></div>');
+								$('.search_items:first').css('background','#4C66A4');
 								$('.search_items:first .name_50 a').css('color','white');
 								count++;
 							}
@@ -102,8 +102,8 @@ $(function(){
 						if((count < 9) && (value.toLowerCase().search('^'+q.toLowerCase()) != -1)) 
 						{
 								$('#search_'+index).remove();	
-								$('#search_container').append('<div class="search_items container_50" id="search_'+index+'" data="'+index+'"><a href="profile.php?id='+index+'"><img class="lfloat" src='+global_pimage[index]+' width="50" height="50" /></a><div class="name_50"><a href="profile.php?id='+index+'">'+global_name[index]+'</a></div></div>');
-								$('.search_items:first').css('background','#336699');
+								$('#search_container').append('<div class="search_items container_50" id="search_'+index+'" data="'+index+'"><a href="profile.php?id='+index+'"><img class="lfloat" src='+global_pimage[index]+' width="50" height="50" /></a><div class="name_50"><a class="bold" href="profile.php?id='+index+'">'+global_name[index]+'</a></div></div>');
+								$('.search_items:first').css('background','#4C66A4');
 								$('.search_items:first .name_50 a').css('color','white');
 								count++;
 						}
@@ -120,7 +120,7 @@ $(function(){
 		}
 		else if($.trim($('#to').attr('value'))== '')
 		{
-			$('#search_container').html('<div class="search_items container_50" data="people"><img class="lfloat" src="http://profile-1.qmcdn.net/male.png" width="50" height="50" /><div class="name_50">Search People</div></div><div class="search_items container_50" data="group"><img class="lfloat" src="http://findicons.com/files/icons/1254/flurry_system/128/group.png" width="50" height="50" /><div class="name_50">Search Group</div></div><div class="search_items container_50" data="skill"><img class="lfloat" src="http://www.obox-design.com/images/new-features/Skills-Icon.png" width="50" height="50" /><div class="name_50">Search Skills</div></div><div class="search_items container_50" data="event"><img class="lfloat" src="http://www.biocircle-project.eu/images/Event.png" width="50" height="50" /><div class="name_50">Search Event</div></div><div class="search_items container_50" data="post"><img class="lfloat" src="http://www.gamingonlinux.com/templates/default/images/last_post.png" width="50" height="50" /><div class="name_50">Search Post</div></div>');
+			$('#search_container').html('<div class="search_items container_50" data="people"><img class="lfloat" src="http://profile-1.qmcdn.net/male.png" width="50" height="50" /><div class="name_50"><a class="bold">Search People</a></div></div><div class="search_items container_50" data="group"><img class="lfloat" src="http://icon.qmcdn.net/group.png" width="50" height="50" /><div class="name_50"><a class="bold">Search Group</a></div></div><div class="search_items container_50" data="skill"><img class="lfloat" src="http://icon.qmcdn.net/skill.png" width="50" height="50" /><div class="name_50"><a class="bold">Search Skills</a></div></div><div class="search_items container_50" data="event"><img class="lfloat" src="http://icon.qmcdn.net/event.png" width="50" height="50" /><div class="name_50"><a class="bold">Search Event</a></div></div><div class="search_items container_50" data="post"><img class="lfloat" src="http://icon.qmcdn.net/post_icon.png" width="50" height="50" /><div class="name_50"><a class="bold">Search Post</a></div></div>');
 		}
 	});
 	
@@ -165,7 +165,7 @@ $(function(){
 	}); 
 
 	$('.search_items').live('mouseover',function(){
-		$(this).css('background','#336699');
+		$(this).css('background','#4C66A4');
 		$(this).children().eq(1).children().eq(0).css('color','#ffffff'); 
 	});
 

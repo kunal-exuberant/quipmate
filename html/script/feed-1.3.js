@@ -173,6 +173,26 @@
 						{
 							question_decode(value,data.name,data.pimage,container,dom_id);
 						}
+						else if(value.actiontype == 2901)
+						{
+							page_page_decode(value,data.name,data.pimage,container,dom_id);
+						}
+						else if(value.actiontype == 2906)
+						{
+							page_image_decode(value,data.name,data.pimage,container,dom_id);
+						}
+						else if(value.actiontype == 2916)
+						{
+							page_link_decode(value,data.name,data.pimage,container,dom_id);
+						}
+						else if(value.actiontype == 2925)
+						{
+							page_video_decode(value,data.name,data.pimage,container,dom_id);
+						}
+						else if(value.actiontype == 2926)
+						{
+							page_doc_decode(value,data.name,data.pimage,container,dom_id);
+						}
 							time_tag_decode(value,data.tag,dom_id);
 							response_decode(value,data.name,dom_id);
 							comment_decode(value,data.name,data.pimage,myprofileid,dom_id);
@@ -227,7 +247,7 @@
 				var postid = $('#'+dom_id);
 				var myprofileid = $('#myprofileid_hidden').attr('value');
 				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="1900"/></div>');
-				postid.children().eq(1).append('<a href="profile.php?id='+value.actionon+'"><img class="lfloat" src =' +pimage[value.actionon]+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id='+value.actionon+'">'+name[value.actionon]+'</a> was birthday-bombed by <a href="profile.php?id='+value.postby+'">' +name[value.postby]+'</a></div><div class="pclass_json"><pre>'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</pre></div></div>');
+				postid.children().eq(1).append('<a href="profile.php?id='+value.actionon+'"><img class="lfloat" src =' +pimage[value.actionon]+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id='+value.actionon+'">'+name[value.actionon]+'</a> was birthday wished by <a href="profile.php?id='+value.postby+'">' +name[value.postby]+'</a></div><div class="pclass_json"><pre>'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</pre></div></div>');
 				if(value.actionby == myprofileid)
 				{
 					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
@@ -267,7 +287,7 @@
 				var postid = $('#'+dom_id);
 				var myprofileid = $('#myprofileid_hidden').attr('value');	
 				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="308"/></div>');
-				postid.children().eq(1).append('<a href="profile.php?id=' +value.actionon+' "><img class="lfloat" src =' +pimage[value.actionon]+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id='+value.actionon+'">'+name[value.actionon]+'</a> was invited by <a href="profile.php?id='+value.postby+'">' +name[value.postby]+ '</a> to <a href="group.php?id='+value.groupid+'">' +value.group_name+ '</a></div></div>');
+				postid.children().eq(1).append('<a href="profile.php?id=' +value.actionon+' "><img class="lfloat" src =' +pimage[value.actionon]+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id='+value.actionon+'">'+name[value.actionon]+'</a> was invited by <a href="profile.php?id='+value.postby+'">' +name[value.postby]+ '</a> to <a href="group.php?id='+value.groupid+'">' +value.group_name+ '</a></div><div></div></div>');
 			}
 			
 			function event_cancelled_decode(value,name,pimage,container,dom_id)
@@ -301,14 +321,14 @@
 				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="408"/></div>');
 				if(value.postby != value.actionon)
 				{
-					postid.children().eq(1).append('<a href="profile.php?id=' +value.postby+' "><img class="lfloat" src =' +pimage[value.actionon]+ ' height="50" width="50" /></a><div class="name_50"><a class="bold" href="profile.php?id=' +value.actionon+' " >' +name[value.actionon]+ '</a> was invited by <a href="profile.php?id='+value.postby+'">' +name[value.postby]+ '</a> to <a href="event.php?id='+value.eventid+'">' +value.event_name+ '</a></div>');
+					postid.children().eq(1).append('<a href="profile.php?id=' +value.postby+' "><img class="lfloat" src =' +pimage[value.actionon]+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id=' +value.actionon+' " >' +name[value.actionon]+ '</a> was invited by <a href="profile.php?id='+value.postby+'">' +name[value.postby]+ '</a> to <a href="event.php?id='+value.eventid+'">' +value.event_name+ '</a></div><div></div></div>');
 				}
 				else
 				{
-					postid.children().eq(1).append('<a href="profile.php?id=' +value.postby+' "><img class="lfloat" src =' +pimage[value.actionon]+ ' height="50" width="50" /></a><div class="name_50"><a class="bold" href="profile.php?id=' +value.actionon+' " >' +name[value.actionon]+ '</a> joined <a href="event.php?id='+value.eventid+'">' +value.event_name+ '</a></div>');
+					postid.children().eq(1).append('<a href="profile.php?id=' +value.postby+' "><img class="lfloat" src =' +pimage[value.actionon]+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id=' +value.actionon+' " >' +name[value.actionon]+ '</a> joined <a href="event.php?id='+value.eventid+'">' +value.event_name+ '</a></div><div></div></div>');
 				}
 			} 
-
+/*
 			function status_song_decode(value,name,pimage,container,dom_id)
 			{
 				var postid = $('#'+dom_id);	
@@ -346,7 +366,7 @@
 				var postid = $('#'+dom_id);	
 				postid.append('<div data="'+value.actionid+'" class="pageclass_json"><input type="hidden" value="'+value.actionon+'" /><input type="hidden" value="1101"/><a href="profile.php?id=' +value.actionon+' " ><img class="lfloat" src =' +pimage[value.actionon]+ ' height="50" width="50" /></a><div class="name_50"><a class="bold" href="profile.php?id=' +value.actionon+' " >' +name[value.actionon]+ '</a> has been added as crush by <a style="color:#003399" href="#">someone</a></div></div>');
 			}
-			
+*/			
 			function missu_decode(value,name,pimage,container,dom_id)
 			{
 				var postid = $('#'+dom_id);	
@@ -358,7 +378,7 @@
 				var postid = $('#'+dom_id);	
 				var myprofileid = $('#myprofileid_hidden').attr('value');
 				var file = 'http://image.qmcdn.net/'+value.file; 
-				postid.append('<div data="'+value.actionid+'" class="pageclass_json"><input type="hidden" value="'+value.actionon+'" /><input type="hidden" value="1401"/><a href="profile.php?id=' +value.actionon+' " ><img class="lfloat" src =' +pimage[value.actionon]+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id=' +value.actionon+' " >' +name[value.actionon]+ '</a> received '+value.gift+' as gift from <a style="color:#003399" href="profile.php?id='+value.postby+'">' +name[value.postby]+ '</a></div><div><div class="pclass_json">Gift message: '+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><img src="'+file+'" /></div></div></div>');
+				postid.append('<div data="'+value.actionid+'" class="pageclass_json"><input type="hidden" value="'+value.actionon+'" /><input type="hidden" value="1401"/><a href="profile.php?id=' +value.actionon+' " ><img class="lfloat" src =' +pimage[value.actionon]+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id=' +value.actionon+' " >' +name[value.actionon]+ '</a> received '+value.gift+' as gift from <a style="color:#003399" href="profile.php?id='+value.postby+'">' +name[value.postby]+ '</a></div><div><div class="pclass_json">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><img src="'+file+'" /></div></div></div>');
 				if(value.postby==myprofileid)
 				{
 					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
@@ -409,15 +429,79 @@
 			} 
 			
 			function group_image_decode(value,name,pimage,container,dom_id)
-			{
+			{ 
 				var postid = $('#'+dom_id);
 				var file = value.file; 
 				var myprofileid = $('#myprofileid_hidden').attr('value');
-				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="6"/><a href="profile.php?id=' +value.postby+' " ><img class="lfloat" src =' +pimage[value.postby]+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id=' +value.postby+' " >' +name[value.postby]+ '</a> added a photo in the group <a href="group.php?id=' +value.groupid+' " >' +value.group_name+ '</a></div><div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><img src ="thumbnail.php?file='+file+'&maxw=368&maxh=400" style="max-width:33.5em;margin-bottom:1em;cursor:pointer;border:0.1em solid #aaaaaa;" data="'+file+'" class="viewable" id="'+value.pageid+' " /></div></div></div>');
+				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /><input type="hidden" value="6"/><a href="profile.php?id=' +value.postby+' " ><img class="lfloat" src =' +pimage[value.postby]+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id=' +value.postby+' " >' +name[value.postby]+ '</a> added a photo in the group <a href="group.php?id=' +value.groupid+' " >' +value.group_name+ '</a></div><div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><img src ="thumbnail.php?file='+file+'&maxw=368&maxh=400" style="max-width:33.5em;margin-bottom:1em;cursor:pointer;border:0.1em solid #aaaaaa;" data="'+file+'" class="viewable" id="'+value.pageid+' " /></div></div></div>');
 				if(value.postby == myprofileid || value.remove == 1)
 				{
 					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
 				}
+			}			
+			
+			function group_video_decode(value,name,pimage,container,dom_id)
+			{
+				var postid = $('#'+dom_id);
+				var file = value.file; 
+				var myprofileid = $('#myprofileid_hidden').attr('value'); 
+				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="2500"/><a href="profile.php?id=' +value.postby+' " ><img class="lfloat" src =' +pimage[value.postby]+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id=' +value.postby+' " >' +name[value.postby]+ '</a> added a video in the group <a href="group.php?id=' +value.groupid+' " >' +value.group_name+ '</a></div><div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><div id="'+dom_id+'video_'+value.actionid+'"></div></div></div></div>');
+				jwplayer(dom_id+"video_"+value.actionid).setup({file:value.file,title:value.page,width: "100%",aspectratio: "16:9",fallback:"false",primary:"flash"});
+				if(value.postby==myprofileid)
+				{
+					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+				} 
+			}
+			function page_image_decode(value,name,pimage,container,dom_id)
+			{ 
+				var postid = $('#'+dom_id);
+				var file = value.file; 
+				var myprofileid = $('#myprofileid_hidden').attr('value');
+				var page_image='http://icon.qmcdn.net/broadcast.png';
+				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /><input type="hidden" value="6"/><a href="page.php?id=' +value.page_pageid+' " ><img class="lfloat" src =' +page_image+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="page.php?id=' +value.page_pageid+' " >' +value.page_name+ '</a></div><div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><img src ="thumbnail.php?file='+file+'&maxw=368&maxh=400" style="max-width:33.5em;margin-bottom:1em;cursor:pointer;border:0.1em solid #aaaaaa;" data="'+file+'" class="viewable" id="'+value.pageid+' " /></div></div></div>');
+				if(value.postby == myprofileid || value.remove == 1)
+				{
+					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+				}
+			}			
+			
+			function page_video_decode(value,name,pimage,container,dom_id)
+			{
+				var postid = $('#'+dom_id);
+				var file = value.file; 
+				var myprofileid = $('#myprofileid_hidden').attr('value'); 
+				var page_image='http://icon.qmcdn.net/broadcast.png';
+				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="2500"/><a href="page.php?id=' +value.page_pageid+' " ><img class="lfloat" src =' +page_image+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="page.php?id=' +value.page_pageid+' " >' +value.page_name+ '</a></div><div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><div id="'+dom_id+'video_'+value.actionid+'"></div></div></div></div>');
+				jwplayer(dom_id+"video_"+value.actionid).setup({file:value.file,title:value.page,width: "100%",aspectratio: "16:9",fallback:"false",primary:"flash"});
+				if(value.postby==myprofileid)
+				{
+					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+				} 
+			}
+			function page_doc_decode(value,name,pimage,container,dom_id)
+			{
+				var postid = $('#'+dom_id);
+				var myprofileid = $('#myprofileid_hidden').attr('value'); 
+				var ext = value.caption.split('.').pop();
+				var fileimage ='http://icon.qmcdn.net/'+ext.toLowerCase()+'.ico';
+				var page_image='http://icon.qmcdn.net/broadcast.png';
+				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="2600"/><a href="page.php?id=' +value.page_pageid+' " ><img class="lfloat" src =' +page_image+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="page.php?id=' +value.page_pageid+' " >' +value.page_name+ '</a></div><div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><img class="lfloat" src='+fileimage+' height="50" width="50" /><div id="doc_name"><a href='+value.file+' data="'+value.file+'" target="_blank">'+value.caption+'</a></div><br style="clear:both;"></div></div></div>');
+				if(value.postby==myprofileid)
+				{
+					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+				} 
+			}
+			function event_doc_decode(value,name,pimage,container,dom_id)
+			{
+				var postid = $('#'+dom_id);
+				var myprofileid = $('#myprofileid_hidden').attr('value'); 
+				var ext = value.caption.split('.').pop();
+				var fileimage ='http://icon.qmcdn.net/'+ext.toLowerCase()+'.ico';
+				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="2600"/><a href="profile.php?id=' +value.postby+' " ><img class="lfloat" src =' +pimage[value.postby]+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id=' +value.postby+' " >' +name[value.postby]+ '</a> added a doc in the event <a href="event.php?id=' +value.eventid+' " >' +value.event_name+ '</a></div><div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><img class="lfloat" src='+fileimage+' height="50" width="50" /><div id="doc_name"><a href='+value.file+' data="'+value.file+'" target="_blank">'+value.caption+'</a></div><br style="clear:both;"></div></div></div>');
+				if(value.postby==myprofileid)
+				{
+					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+				} 
 			}
 			
 			function group_doc_decode(value,name,pimage,container,dom_id)
@@ -425,35 +509,21 @@
 				var postid = $('#'+dom_id);
 				var myprofileid = $('#myprofileid_hidden').attr('value'); 
 				var ext = value.caption.split('.').pop();
-				var fileimage ='http://icon.qmcdn.net/'+ext+'.ico';
-				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="2600"/><a href="profile.php?id=' +value.postby+' " ><img class="lfloat" src =' +pimage[value.postby]+ ' height="50" width="50" /></a><div class="name_50"><a class="bold" href="profile.php?id=' +value.postby+' " >' +name[value.postby]+ '</a> added a doc in the group <a href="group.php?id=' +value.groupid+' " >' +value.group_name+ '</a><div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><img class="lfloat" src='+fileimage+' height="50" width="50" /><div id="doc_name"><a href='+value.file+' data="'+value.file+'" target="_blank">'+value.caption+'</a></div></div></div></div>');
+				var fileimage ='http://icon.qmcdn.net/'+ext.toLowerCase()+'.ico';
+				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="2600"/><a href="profile.php?id=' +value.postby+' " ><img class="lfloat" src =' +pimage[value.postby]+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="profile.php?id=' +value.postby+' " >' +name[value.postby]+ '</a> added a doc in the group <a href="group.php?id=' +value.groupid+' " >' +value.group_name+ '</a></div><div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><img class="lfloat" src='+fileimage+' height="50" width="50" /><div id="doc_name"><a href='+value.file+' data="'+value.file+'" target="_blank">'+value.caption+'</a></div><br style="clear:both;"></div></div></div>');
 				if(value.postby==myprofileid)
 				{
 					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
 				} 
 			}
 			
-			
-			function group_video_decode(value,name,pimage,container,dom_id)
-			{
-				var postid = $('#'+dom_id);
-				var file = value.file; 
-				var myprofileid = $('#myprofileid_hidden').attr('value'); 
-				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="2500"/><a href="profile.php?id=' +value.postby+' " ><img class="lfloat" src =' +pimage[value.postby]+ ' height="50" width="50" /></a><div class="name_50"><a class="bold" href="profile.php?id=' +value.postby+' " >' +name[value.postby]+ '</a> added a video in the group <a href="group.php?id=' +value.groupid+' " >' +value.group_name+ '</a><div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><div id="'+dom_id+'video_'+value.actionid+'"></div></div></div></div>');
-				jwplayer(dom_id+"video_"+value.actionid).setup({file:value.file,title:value.page,width: "100%",aspectratio: "16:9",fallback:"false",primary:"flash"});
-				if(value.postby==myprofileid)
-				{
-					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
-				} 
-			}
-			
-			function event_doc_decode(value,name,pimage,container,dom_id)
+			function doc_decode(value,name,pimage,container,dom_id)
 			{
 				var postid = $('#'+dom_id);
 				var myprofileid = $('#myprofileid_hidden').attr('value'); 
 				var ext = value.caption.split('.').pop();
-				var fileimage ='http://icon.qmcdn.net/'+ext+'.ico';
-				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="2600"/><a href="profile.php?id=' +value.postby+' " ><img class="lfloat" src =' +pimage[value.postby]+ ' height="50" width="50" /></a><div class="name_50"><a class="bold" href="profile.php?id=' +value.postby+' " >' +name[value.postby]+ '</a> added a doc in the event <a href="event.php?id=' +value.eventid+' " >' +value.event_name+ '</a><div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><img class="lfloat" src='+fileimage+' height="50" width="50" /><div id="doc_name"><a href='+value.file+' data="'+value.file+'" target="_blank">'+value.caption+'</a></div></div></div></div>');
+				var fileimage ='http://icon.qmcdn.net/'+ext.toLowerCase()+'.ico';
+				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="2600"/><a href="profile.php?id=' +value.postby+' " ><img class="lfloat" src =' +pimage[value.postby]+ ' height="50" width="50" /></a><div class="name_50"><a class="bold" href="profile.php?id=' +value.postby+' " >' +name[value.postby]+ '</a> added a doc<div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><img class="lfloat" src='+fileimage+' height="50" width="50" /><div id="doc_name"><a href='+value.file+' data="'+value.file+'" target="_blank">'+value.caption+'</a></div><br style="clear:both;"></div></div></div>');
 				if(value.postby==myprofileid)
 				{
 					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
@@ -491,20 +561,7 @@
 				var file = value.file; 
 				var myprofileid = $('#myprofileid_hidden').attr('value'); 
 				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="2500"/><a href="profile.php?id=' +value.postby+' " ><img class="lfloat" src =' +pimage[value.postby]+ ' height="50" width="50" /></a><div class="name_50"><a class="bold" href="profile.php?id=' +value.postby+' " >' +name[value.postby]+ '</a> added a video<div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><div id="'+dom_id+'video_'+value.actionid+'"></div></div></div></div>');
-				jwplayer(dom_id+"video_"+value.actionid).setup({file:value.file,title:value.page,width: "100%",aspectratio: "16:9",fallback:"false",primary:"flash"});
-				if(value.postby==myprofileid)
-				{
-					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
-				} 
-			}
-			
-			function doc_decode(value,name,pimage,container,dom_id)
-			{
-				var postid = $('#'+dom_id);
-				var myprofileid = $('#myprofileid_hidden').attr('value'); 
-				var ext = value.caption.split('.').pop();
-				var fileimage ='http://icon.qmcdn.net/'+ext+'.ico';
-				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="2600"/><a href="profile.php?id=' +value.postby+' " ><img class="lfloat" src =' +pimage[value.postby]+ ' height="50" width="50" /></a><div class="name_50"><a class="bold" href="profile.php?id=' +value.postby+' " >' +name[value.postby]+ '</a> added a doc<div><input type="hidden" value="'+value.life_is_fun+'" /><div style="margin:0.5em 0em;">'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><img class="lfloat" src='+fileimage+' height="50" width="50" /><div id="doc_name"><a href='+value.file+' data="'+value.file+'" target="_blank">'+value.caption+'</a></div></div></div></div>');
+				jwplayer(dom_id+"video_"+value.actionid).setup({file:value.file,image:value.caption,title:value.page,width: "100%",aspectratio: "16:9",fallback:"false",primary:"flash"});
 				if(value.postby==myprofileid)
 				{
 					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
@@ -587,6 +644,18 @@
 					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
 				}
 			}
+			function page_page_decode(value,name,pimage,container,dom_id)
+			{
+				var postid = $('#'+dom_id);
+				var myprofileid = $('#myprofileid_hidden').attr('value');
+				var page_image="http://icon.qmcdn.net/broadcast.png";
+				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="1"/></div>');
+				postid.children().eq(1).append('<a href="page.php?id='+value.page_pageid+'"><img class="lfloat" src =' +page_image+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="page.php?id='+value.page_pageid+'">'+value.page_name+'</a></div><div class="pclass_json"><pre>'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</pre></div></div>');
+				if(value.postby == myprofileid || value.remove == 1)
+				{
+					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+				}
+			}
 			
 			function group_question_decode(value,name,pimage,container,dom_id)
 			{
@@ -597,11 +666,11 @@
 				$.each(value.option,function(i,v){
 					if(v.mine == 1)
 					{
-						postid.children().eq(1).children().eq(3).children().eq(1).append('<div class="option"><input type="checkbox" style="margin-right:0.5em" onchange="action.answer(this, '+value.actionid+', '+v.optid+')" checked/>'+ui.see_more(ui.get_smiley(ui.link_highlight(v.opt)))+'<span class="rfloat tcolor" onclick="action.answer_people_fetch(this,'+v.optid+')">'+v.count+' vote, '+v.percent+'% </span></div>');
+						postid.children().eq(1).children().eq(3).children().eq(1).append('<div class="option"><div class="option_percentage" style="width:'+v.percent+'%"><input type="checkbox" style="margin-right:0.5em" onchange="action.answer(this, '+value.actionid+', '+v.optid+')" checked/>'+ui.see_more(ui.get_smiley(ui.link_highlight(v.opt)))+'<span class="rfloat tcolor" onclick="action.answer_people_fetch(this,'+v.optid+')">'+v.count+' vote, '+v.percent+'% </span></div></div>');
 					}
 					else
 					{
-						postid.children().eq(1).children().eq(3).children().eq(1).append('<div class="option"><input type="checkbox" style="margin-right:0.5em" onchange="action.answer(this, '+value.actionid+', '+v.optid+')"/>'+ui.see_more(ui.get_smiley(ui.link_highlight(v.opt)))+'<span class="rfloat tcolor" onclick="action.answer_people_fetch(this,'+v.optid+')">'+v.count+' vote, '+v.percent+'% </span></div>');
+						postid.children().eq(1).children().eq(3).children().eq(1).append('<div class="option"><div class="option_percentage" style="width:'+v.percent+'%"><input type="checkbox" style="margin-right:0.5em" onchange="action.answer(this, '+value.actionid+', '+v.optid+')"/>'+ui.see_more(ui.get_smiley(ui.link_highlight(v.opt)))+'<span class="rfloat tcolor" onclick="action.answer_people_fetch(this,'+v.optid+')">'+v.count+' vote, '+v.percent+'% </span></div></div>');
 					}
 				});	
 				postid.children().eq(1).children().eq(3).children().eq(1).append('<div><input type="text" placeholder="+Add answer" value="" class="option" onkeydown="action.option_add(this,event)"><div>');
@@ -644,7 +713,26 @@
 					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
 				}
 			}
-			
+			function page_link_decode(value,name,pimage,container,dom_id)
+			{
+				var postid = $('#'+dom_id);	
+				var myprofileid = $('#myprofileid_hidden').attr('value');
+				var page_image ='http://icon.qmcdn.net/broadcast.png';
+				postid.append('<div data=' +value.actionid+ ' class="pageclass_json"><input type="hidden" value=' +value.actionon+ ' /> <input type="hidden" value="1600"/></div>');
+				postid.children().eq(1).append('<a href="page.php?id=' +value.page_pageid+' " ><img class="lfloat" src =' +page_image+ ' height="50" width="50" /></a><div class="name_50"><div><a class="bold" href="page.php?id=' +value.page_pageid+' " >' +value.page_name+ '</a></div></div>');
+				if(value.video)
+				{ 
+					postid.children().eq(1).children().eq(3).append('<div style="position:relative;"><input type="hidden" value="'+value.file+'" /><img class="video_play viewable lfloat" style="margin:0em 1em 1em 0em;cursor:pointer;" id="'+value.actionid+'" src="http://img.youtube.com/vi/'+value.file+'/default.jpg" /><img class="video_play viewable" style="position:absolute;left:4em;top:3em;cursor:pointer;" id="'+value.actionid+'" src="http://icon.qmcdn.net/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><div>'+value.title+'</div><a href="'+value.link+'" target="_blank">'+value.host+'</a><div>'+value.meta+'</div></div><br style= "clear:both;"/></div>');
+				}
+				else
+				{
+					postid.children().eq(1).children().eq(3).append('<div><img class="lfloat" style="max-height:8.2em;max-width:11em;margin-right:1em;" src="'+value.file+'" ><div style="margin:1em 0em 0em 0em;">'+value.title+'<br /><a href="'+value.link+'"  target="_blank">'+value.host+'</a><br />'+value.meta+'<br />'+ui.see_more(ui.get_smiley(ui.link_highlight(value.page)))+'</div><div style="clear:left;"></div></div>');
+				}
+				if(value.postby == myprofileid || value.remove == 1)
+				{
+					postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+				}
+			}
 			function group_link_decode(value,name,pimage,container,dom_id)
 			{
 				var postid = $('#'+dom_id);	
@@ -694,11 +782,11 @@
 				$.each(value.option,function(i,v){
 					if(v.mine == 1)
 					{
-						postid.children().eq(1).children().eq(3).children().eq(1).append('<div class="option"><input type="checkbox" style="margin-right:0.5em" onchange="action.answer(this, '+value.actionid+', '+v.optid+')" checked/>'+ui.see_more(ui.get_smiley(ui.link_highlight(v.opt)))+'<span class="rfloat tcolor" onclick="action.answer_people_fetch(this,'+v.optid+')">'+v.count+' vote, '+v.percent+'% </span></div>');
+						postid.children().eq(1).children().eq(3).children().eq(1).append('<div class="option"><div class="option_percentage" style="width:'+v.percent+'%"><input type="checkbox" style="margin-right:0.5em" onchange="action.answer(this, '+value.actionid+', '+v.optid+')" checked/>'+ui.see_more(ui.get_smiley(ui.link_highlight(v.opt)))+'<span class="rfloat tcolor" onclick="action.answer_people_fetch(this,'+v.optid+')">'+v.count+' vote, '+v.percent+'% </span></div></div>');
 					}
 					else
 					{
-						postid.children().eq(1).children().eq(3).children().eq(1).append('<div class="option"><input type="checkbox" style="margin-right:0.5em" onchange="action.answer(this, '+value.actionid+', '+v.optid+')"/>'+ui.see_more(ui.get_smiley(ui.link_highlight(v.opt)))+'<span class="rfloat tcolor" onclick="action.answer_people_fetch(this,'+v.optid+')">'+v.count+' vote, '+v.percent+'% </span></div>');
+						postid.children().eq(1).children().eq(3).children().eq(1).append('<div class="option"><div class="option_percentage" style="width:'+v.percent+'%"><input type="checkbox" style="margin-right:0.5em" onchange="action.answer(this, '+value.actionid+', '+v.optid+')"/>'+ui.see_more(ui.get_smiley(ui.link_highlight(v.opt)))+'<span class="rfloat tcolor" onclick="action.answer_people_fetch(this,'+v.optid+')">'+v.count+' vote, '+v.percent+'% </span></div></div>');
 					}
 				});	
 				postid.children().eq(1).children().eq(3).children().eq(1).append('<div><input type="text" placeholder="+Add answer" value="" class="option" onkeydown="action.option_add(this,event)"><div>');
@@ -729,7 +817,7 @@
 						exciting = 'Unpinch'; 					
 					}	
 				}
-				postid.children().eq(1).children().eq(3).append('<div class="time_tag_json"><span onclick="'+fun+'" class="'+class_type+'" style="color:#336699;">'+exciting+' </span><a href="action.php?actionid='+value.pageid+'&life_is_fun='+value.life_is_fun+'"><img src="http://icon.qmcdn.net/clock.png" width="6" /><span class="time" data="'+value.time+'">'+time_difference(value.time)+'</span></a></div>');
+				postid.children().eq(1).children().eq(3).append('<div class="time_tag_json"><span onclick="'+fun+'" class="'+class_type+'" style="color:#336699;">'+exciting+' </span><a href="action.php?actionid='+value.pageid+'&life_is_fun='+value.life_is_fun+'"><img src="http://icon.qmcdn.net/clock.png" width="6" /><span class="time" data="'+value.time+'">'+ui.time_difference(value.time)+'</span></a></div>');
 				if(value.visible == 0)
 				{
 					postid.children().eq(1).children().eq(3).children().eq(2).append('<img style="margin:0em 0.5em;" src="http://icon.qmcdn.net/clock.png" width="6" /><span class="post_privacy_display"><img style="height:1em" title="Shared with Everyone" width="15" height="15" src="http://icon.qmcdn.net/global.png"/></span>');
@@ -740,7 +828,7 @@
 				}
 				else if(value.visible == 2)
 				{
-					postid.children().eq(1).children().eq(3).children().eq(2).append('<img style="margin:0em 0.5em;" src="http://icon.qmcdn.net/clock.png" width="6" /><span class="post_privacy_display"><img  style="height:1em" title="Shared with friends" src="http://www.oorvalam.com/Images/friendIcon.png"/></span>');				
+					postid.children().eq(1).children().eq(3).children().eq(2).append('<img style="margin:0em 0.5em;" src="http://icon.qmcdn.net/clock.png" width="6" /><span class="post_privacy_display"><img  style="height:1em" title="Shared with friends" src="http://icon.qmcdn.net/friend.png"/></span>');				
 				}
 				else if(value.visible == 5)
 				{
@@ -849,7 +937,9 @@
 						exciting = 'Unexciting'; 
 						fun = 'action.responsed(this)';
 					} 
-					postid.children().eq(1).children().eq(3).append('<div class="cclass_json" id="'+comid+'" data="'+ com.com_actionid +'" ><a href="profile.php?id=' +com.commentby+ '" target="_parent"><img class="lfloat" src =' +pimage[com.commentby]+ ' height="32" width="32" /></a><div class="name_35"><div><a class="bold" style="margin-right:0.4em;" href="profile.php?id=' +com.commentby+ '" target="_parent">' +name[com.commentby]+ '</a><pre>'+ui.see_more(ui.get_smiley(ui.link_highlight(com.comment)))+'</pre></div><div><a class="comment_time_json" href="action.php?actionid='+value.pageid+'&life_is_fun='+value.life_is_fun+'"><img src="http://icon.qmcdn.net/clock.png" width="6" /><span class="time" data="'+com.com_time+'">'+time_difference(com.com_time)+'</span></a><span data=' +com.commentby+ ' class = "comment_excite_json" onclick="'+fun+'">'+exciting+'</span></div></div></div>');
+					var userid = com.comment.substring(com.comment.indexOf('@[')+2,com.comment.indexOf(']'));
+					com.comment = com.comment.replace('@['+userid+']','<a href="profile.php?id='+userid+'">'+name[userid]+'</a>');
+					postid.children().eq(1).children().eq(3).append('<div class="cclass_json" id="'+comid+'" data="'+ com.com_actionid +'" ><a href="profile.php?id=' +com.commentby+ '" target="_parent"><img class="lfloat" src =' +pimage[com.commentby]+ ' height="32" width="32" /></a><div class="name_35"><div><a class="bold" style="margin-right:0.4em;" href="profile.php?id=' +com.commentby+ '" target="_parent">' +name[com.commentby]+ '</a><pre>'+ui.see_more(ui.get_smiley(ui.link_highlight(com.comment)))+'</pre></div><div><a class="comment_time_json" href="action.php?actionid='+value.pageid+'&life_is_fun='+value.life_is_fun+'"><img src="http://icon.qmcdn.net/clock.png" width="6" /><span class="time" data="'+com.com_time+'">'+ui.time_difference(com.com_time)+'</span></a><span data=' +com.commentby+ ' class = "comment_excite_json" onclick="'+fun+'">'+exciting+'</span></div></div></div>');
 				
 				
 					if(com.com_excited)
@@ -872,7 +962,7 @@
 			{ 
 				var postid = $('#'+dom_id);
 				var myphoto = $('#myprofileimage_hidden').attr('value');
-				postid.children().eq(1).children().eq(3).append('<div></div><div class="cclass_box" ><a href="profile.php?id=' +myprofileid+ '"><img class="lfloat" src="'+myphoto+'"  width="32" height="32"/></a><textarea class="commentbox" style="margin:0em 0em 0em 0.5em;" placeholder="Add a comment..." onkeydown="action.comment(this, event)"></textarea></div>');
+				postid.children().eq(1).children().eq(3).append('<div></div><div class="cclass_box" ><a href="profile.php?id=' +myprofileid+ '"><img class="lfloat" src="'+myphoto+'"  width="32" height="32"/></a><textarea class="commentbox" style="margin:0em 0em 0em 0.5em;" value="" placeholder="Add a comment..." onkeyup="action.comment(this, event)"></textarea></div>');
 			}
 			
 			return {

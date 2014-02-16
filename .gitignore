@@ -14,4 +14,6 @@ html/tornado/demos/chat/nohup.out
 html/tornado/demos/chat/nohup
 html/.htaccess
 html/ajax/.htaccess
-
+nohup.out
+work/
+video/

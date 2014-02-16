@@ -101,17 +101,17 @@ class Query(Database):
 				return row[0]	
 		
 	def notice_unread_count(self, profileid):
-		cursor = self.connect
+		cursor = self.connect()
 		sql_query = "select count(*),unix_timestamp(TIMESTAMP) from notice where READBIT ='0' and PROFILEID = '%s' and ACTIONBY <> '%s' and ACTIONTYPE <> '401' order by ACTIONID desc limit 1" %(profileid, profileid)
 		return self.query(sql_query, cursor)	
 
 	def unread_count(self, profileid):
-		cursor = self.connect
+		cursor = self.connect()
 		sql_query = "select count(*) from inbox where READBIT ='0' and ACTIONON = '%s' group by ACTIONBY" %(profileid)
 		return self.query(sql_query, cursor)
 
 	def request_unread_count(self, profileid, actiontype1, actiontype2, actiontype3):
-		cursor = self.connect
+		cursor = self.connect()
 		sql_query = "select count(*) from notice where READBIT ='0' and PROFILEID = '%s' and (ACTIONTYPE = '%s' or ACTIONTYPE = '%s' or ACTIONTYPE = '%s') " %(profileid, actiontype1, actiontype2, actiontype3)
 		return self.query(sql_query, cursor)
 
@@ -148,10 +148,8 @@ def strip_tags(html):
 class BaseHandler(tornado.web.RequestHandler, Query):
 	def authenticate(self):
 		sessionid = self.get_cookie("PHPSESSID")
-		print sessionid 
 		cursor = self.session_read(sessionid)
 		for row in cursor:  
-			print row[0]
 			return row[0]
 		return None	
 		
@@ -166,13 +164,16 @@ class BaseHandler(tornado.web.RequestHandler, Query):
 			return row[0]+row[1]	
 
 class RealTimeHandler(BaseHandler):
-
+    online = {}
     @tornado.web.asynchronous
     def post(self):
 		self.DB_NAME = self.get_argument("database")
 		self.new_action(self.get_argument("database"),self.get_argument("profileid"), self.ret_rtm, self.get_argument("last_poll_time"))
 
     def new_action(self, database, profileid, callback, last_poll_time):
+		cls = RealTimeHandler
+		self.online_replace(profileid, time.time())
+		cls.online[callback] = profileid
 		count = 0
 		message_count = 0
 		request_count = 0
@@ -180,35 +181,35 @@ class RealTimeHandler(BaseHandler):
 		action = []
 		ack = 0
 		if last_poll_time == '-1':
-			cursor = self.notice_unread_count(profileid)
-			rows = cursor.fetchall()
-			for row in rows:
-				count = row[0]
-				ack = 1
-				
-			cursor = self.unread_count(profileid)
-			rows = cursor.fetchall()
-			for row in rows:
-				message_count = row[0]
-				ack = 1
+			for callback,u in cls.online.iteritems():
+				cursor = self.notice_unread_count(u)
+				rows = cursor.fetchall()
+				for row in rows:
+					count = row[0]
+					ack = 1
+					
+				cursor = self.unread_count(u)
+				rows = cursor.fetchall()
+				for row in rows:
+					message_count = row[0]
+					ack = 1
 
-			cursor = self.request_unread_count(profileid,7,501,408)
-			rows = cursor.fetchall()
-			for row in rows:
-				request_count = row[0]
-				ack = 1				
-			if ack ==1:
-				last_poll_time = time.time()
+				cursor = self.request_unread_count(u,7,501,408)
+				rows = cursor.fetchall()
+				for row in rows:
+					request_count = row[0]
+					ack = 1				
+				if ack ==1:
+					last_poll_time = time.time()
 				try:	
-					callback(response, count, message_count, request_count, database, profileid, action, last_poll_time)
+				  callback(response, count, message_count, request_count, database, u, action, last_poll_time)
 				except:
-					pass
-			else:
-				print "Error in executing db query"		
+				   pass
+			cls.online = {}
 		else:
 			test = self.new_event_test(profileid, last_poll_time)
 			if test == 0:
-			   tornado.ioloop.IOLoop.instance().add_timeout(time.time()+5, lambda:callback(response, count, message_count, request_count, database, profileid, action, last_poll_time, flag=1))
+			   tornado.ioloop.IOLoop.instance().add_timeout(time.time()+10, lambda:callback(response, count, message_count, request_count, database, profileid, action, last_poll_time, callback))
 			else:
 				cursor = self.notice_unread_count(profileid)
 				rows = cursor.fetchall()
@@ -245,25 +246,34 @@ class RealTimeHandler(BaseHandler):
 				url = "http://50.57.190.112/ajax/news_json.php?polling=polling&database="+database+"&profileid="+profileid+"&last_poll_time="+last_poll_time
 				http_client = tornado.httpclient.HTTPClient()
 				try:
-					response = http_client.fetch(url)
+					response = http_client.fetch(url)	
 				except httpclient.HTTPError as e:
 					print "Error:", e
-				http_client.close()				
+				#http_client.close()		
 				if ack ==1:
 					last_poll_time = time.time();
 					try:	
-						callback(response, count, message_count, request_count, database, profileid, action, last_poll_time)
+						callback(response, count, message_count, request_count, database, profileid, action, last_poll_time,callback)
 					except:
 						pass
                			
 	
-    def ret_rtm(self, response, count, message_count, request_count, database, profileid, action, last_poll_time, flag=0):
-		if flag == 1:
-		   return self.new_action(database, profileid, self.ret_rtm, last_poll_time)
+    def ret_rtm(self, response, count, message_count, request_count, database, profileid, action, last_poll_time, callback=None):
 		name = {}
 		photo = {}
+		user = []
 		if self.request.connection.stream.closed():
 			return	
+		if callback:
+			del RealTimeHandler.online[callback]	
+		cursor = self.online_select(profileid)
+		rows = cursor.fetchall()
+		ack = 0
+		for row in rows:
+		   user.append(row[0])	
+		   name[int(row[0])] = self.get_name(row[0])
+		   photo[int(row[0])] = self.get_photo(row[0])
+		   ack = 1	
 		for i in action:
 			if i['actionby'] not in name:
 				name[i['actionby']] = self.get_name(i['actionby'])
@@ -275,7 +285,7 @@ class RealTimeHandler(BaseHandler):
 		   news = {}	
 		   if response != 0:
 				news = response.body
-		   self.finish(dict(response=news, count=count, message_count=message_count, request_count=request_count, action=action, name=name,photo=photo, last_poll_time=last_poll_time))
+		   self.finish(dict(ack=ack, user=user, response=news, count=count, message_count=message_count, request_count=request_count, action=action, name=name,photo=photo, last_poll_time=last_poll_time))
 		except Exception,e:
 			   print e							
 

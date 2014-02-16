@@ -22,11 +22,12 @@ $mcount = $database->unread_message_select($profileid,$college);
 			<div name="option" style="clear:left;">
 				<ul style="list-style:none;margin-top:2.5em;" id="links">  
 					<li class="links"><a class="ajax_nav<?php if($page=='news_json') echo ' selected'; ?>" id="news_json" href="?hl=update" title="Updates from your friends"><img class="lfloat" src="http://icon.qmcdn.net/news_rss.png" height="18" width="18" /><span class="name_20">News Feed</span></a></li>
+					<li class="links"><a class="ajax_nav<?php if($page=='tech_json') echo ' selected'; ?>" id="news_json" href="?hl=technical" title="Feed from all technical groups that you have joined"><img class="lfloat" src="http://icon.qmcdn.net/news_rss.png" height="18" width="18" /><span class="name_20">Technical Feed</span></a></li>
 					
 					<li class="links"><a  class="ajax_nav<?php if($page=='inbox') echo ' selected'; ?>" id="inbox" href="?hl=inbox" title="Messages from your friends"><img class="lfloat" src="http://icon.qmcdn.net/message.png" height="18" width="18" /><span class="name_20"><?php if($mcount) echo 'Messages('.$mcount.')'; else echo 'Messages'; ?></span></a></li>
 					
 					<li class="links"><a class="ajax_nav<?php if($page=='photo') echo ' selected'; ?>" id="photo" href="?hl=image" title="Photo shared by your friends"><img class="lfloat" src="http://icon.qmcdn.net/world.png" height="18" width="18" /><span class="name_20">Photos</span></a></li>  
-					<li class="links"><a class="ajax_nav<?php if($page=='new_user') echo ' selected'; ?>" href="?hl=new_user" title="Find out who joined Quipmate after you"><img class="lfloat" src="http://icon.qmcdn.net/group.png" height="18" width="18" /><span class="name_20">New Users</span></a></li>
+					<li class="links"><a class="ajax_nav<?php if($page=='new_user') echo ' selected'; ?>" href="?hl=new_user" title="Find out who joined Quipmate after you"><img class="lfloat" src="http://icon.qmcdn.net/group_small.png" height="18" width="18" /><span class="name_20">New Users</span></a></li>
 						
 					<?php
 					if($_SESSION['database'] == 'profile')
@@ -49,7 +50,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 					{
 						$eventid = $row['eventid'];
 						?>
-						<li class="links"><a href="event.php?id=<?php echo $eventid;?>" title="Events"><img class="lfloat" src="http://icon.qmcdn.net/event.png" height="18" width="18"  /><span class="name_20"><?php echo $row['name'];?></span></a></li>
+						<li class="links"><a href="event.php?id=<?php echo $eventid;?>" title="Events"><img class="lfloat" src="http://icon.qmcdn.net/event_small.png" height="18" width="18"  /><span class="name_20"><?php echo $row['name'];?></span></a></li>
 						<?php
 					}
 				?>
@@ -66,7 +67,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 							$groupid = $row['groupid'];
 							$nrow = $database->group_select($groupid);
 							?>
-							<li class="links"><a href="group.php?id=<?php echo $groupid;?>" title="Groups"><img class="lfloat" src="http://icon.qmcdn.net/group.png" height="18" width="18" /><span class="name_20"><?php echo $nrow['name'];?></span></a></li>
+							<li class="links"><a href="group.php?id=<?php echo $groupid;?>" title="Groups"><img class="lfloat" src="http://icon.qmcdn.net/group_small.png" height="18" width="18" /><span class="name_20"><?php echo $nrow['name'];?></span></a></li>
 							<?php
 						}
 					?>

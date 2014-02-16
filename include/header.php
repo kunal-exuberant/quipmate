@@ -31,13 +31,8 @@ if($_SERVER['SCRIPT_NAME'] == '/index.php')
 		switch($hl)
 		{
 			case 'inbox': $page = 'inbox'; break;
-			case 'friend': $page = 'friend'; break;
 			case 'technical': $page = 'tech_json'; break;
-			case 'fan': $page = 'fan'; break;
 			case 'image': $page = 'photo'; break;
-			case 'album': $page = 'album'; break;
-			case 'moment': $page = 'moment'; 	break;
-			case 'diary': $page = 'profile_json'; break;
 			case 'college_mate': $page = 'college_mate'; break;
 			case 'new_user': $page = 'new_user'; break;		
 			case 'notice_all': $page  = 'notice_json'; break;		
@@ -54,8 +49,10 @@ else if($_SERVER['SCRIPT_NAME'] == '/admin.php')
 		$hl = $_GET['hl']; 
 		switch($hl)
 		{
-			case 'inbox': $page = 'inbox'; break;
-			case 'remove_user': $page = 'remove_user'; break;	
+			case 'broadcast': $page = 'broadcast'; break;	
+			case 'page_create': $page = 'page_create'; break;
+			case 'remove_user': $page = 'remove_user'; break;
+            case 'analytics': $page = 'analytics'; break;	
 			default: $page = 'admin_json';
 		}
 	}
@@ -180,7 +177,7 @@ else if($_SERVER['SCRIPT_NAME'] == '/event.php')
 		exit(1);
 	}
 	$profile_name = $n['name'];
-	$profile_image	= 'https://en.opensuse.org/images/0/05/Icon-event.png';
+	$profile_image	= 'https://icon.qmcdn.net/event.png';
 	if($profile_relation != 0 && $profile_relation != 1 && $profile_relation != 2)
 	{
 		$page = 'event_about'; 
@@ -236,7 +233,7 @@ else if($_SERVER['SCRIPT_NAME'] == '/group.php')
 		exit(1);
 	}
 	$profile_name = $n['name'];
-	$profile_image	= 'http://findicons.com/files/icons/1254/flurry_system/128/group.png';
+	$profile_image	= 'http://icon.qmcdn.net/group.png';
 	if($profile_relation != 1 && $profile_relation != 0)
 	{
 		$page = 'group_about'; 
@@ -255,6 +252,62 @@ else if($_SERVER['SCRIPT_NAME'] == '/group.php')
 		if($hl == 'settings' && $profile_relation == 0)
 		{
 			$page = 'group_settings';
+		}
+	}  
+}
+else if($_SERVER['SCRIPT_NAME'] == '/page.php')
+{
+	$page = 'page_json'; 
+	$database = new Database();
+	if(isset($_GET['id']))
+	{ 
+		if($_GET['id']=='')
+		{
+			$profileid = 1;
+		}
+		else
+		{
+			$profileid = $_GET['id'];
+		}
+	}
+	else
+	{
+		$profileid = 1;
+	}
+	$row= $database->page_exists($profileid);
+	$profileid = $row['pageid'];
+	if(!$profileid)
+	{
+		header('Location: /');
+		exit(1);
+	}
+	$n = $database->page_select($profileid);
+	$profile_relation = $database->follower_status($profileid, $myprofileid);
+	if($profile_relation != 0 && $profile_relation != 1 && $n['visible'] == 1)
+	{
+		header('Location: /');
+		exit(1);
+	}
+	$profile_name = $n['name'];
+	$profile_image	= 'http://icon.qmcdn.net/broadcast.png';
+	if($profile_relation != 1 && $profile_relation != 0)
+	{
+		$page = 'page_about'; 
+	}	
+	$title = $profile_name; 
+	if(isset($_GET['hl']))
+	{
+		$hl = $_GET['hl'];
+		switch($hl)
+		{
+			case 'follower': $page = 'follower'; break;
+			case 'about': $page = 'page_about'; break;
+			case 'post': $page = 'page_json'; break;
+			default: $page = 'page_json';
+		}
+		if($hl == 'settings' && $profile_relation == 0)
+		{
+			$page = 'page_settings';
 		}
 	}  
 }
@@ -299,6 +352,7 @@ $database->page_view_insert($myprofileid, $profileid, $_SERVER['HTTP_REFERER'], 
 Make an entry of your daily activities by filling your diary.Invite your friends to write your diary. Also get updates from your friends diary. Share the special moments of your life with friends. Use letters to send personal messages to your friends.
 "/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
 <meta name= "url" content="http://www.quipmate.com"/>
 <meta name= "keywords" content="quipmate, mate, friend, friends, social, diary, moments, moments of life, life, online, profile"/>
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" charset="utf-8"/>
@@ -336,7 +390,7 @@ Make an entry of your daily activities by filling your diary.Invite your friends
 			if($_SESSION['database'] != 'profile')
 			{
 				?>
-				<a class="tab_header" href="index.php?hl=technical" target="_parent" title="See only technical feeds">Tech</a>
+				<a class="tab_header" href="/?hl=technical" target="_parent" title="See only technical feeds">Tech</a>
 				<?php
 			}
 			?>

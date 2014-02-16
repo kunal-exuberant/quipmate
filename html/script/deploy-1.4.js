@@ -48,6 +48,7 @@ var deploy = (function(){
 					case '234': action_desc = ' joined the team '; action_object=''; break;
 					case '235': action_desc = ' added the major '; action_object=''; break;
 					case '236': action_desc = ' added a tool '; action_object=''; break;
+					case '239': action_desc = ' changed the designation '; action_object=''; break;
 					
 					case '300': action_desc = ' created the group '; action_object=''; break;
 					case '301': action_desc = ' posted in '; action_object=' a group';  break;		
@@ -101,9 +102,9 @@ var deploy = (function(){
 					case '1602': action_desc = ' commented on '; action_object=' link. '; break;						
 					case '1611': action_desc = ' is excited at '; action_object=' link. '; break;
 					
-					case '1900': action_desc = ' birthday-bombed '; action_object=''; break;
-					case '1902': action_desc = ' commented on '; action_object=' birthday-bomb'; break;		
-					case '1911': action_desc = ' is excited at '; action_object=' birthday-bomb'; break;
+					case '1900': action_desc = ' birthday wished '; action_object=''; break;
+					case '1902': action_desc = ' commented on '; action_object=' birthday wish'; break;		
+					case '1911': action_desc = ' is excited at '; action_object=' birthday wish'; break;
 			
 					case '2000': action_desc = ' set a new status-song'; action_object=''; break;		
 					case '2002': action_desc = ' commented on '; action_object=' status-song '; break;				
@@ -128,6 +129,7 @@ var deploy = (function(){
 					case '2801': action_desc = ' answered '; action_object=' question'; break;
 					case '2802': action_desc = ' commented on '; action_object=' question'; break;		
 					case '2811': action_desc = ' is excited at '; action_object=' question'; break;	
+					case '2901': action_desc = ' has new broadcast'; action_object=''; break;
 								
 					default: action_desc = 'some error occured !'; action_object=' we are fixing it ';
 					
@@ -172,7 +174,7 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'live_feed')
 					{	
-						if(value.postby != value.actionon)
+						if(value.actionby != value.actionon)
 						{
 							postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+pimage[value.actionby]+'" /><span class="rtm_each_text"><b>'+name[value.actionby]+'</b> '+ action_desc +' '+action_object+'</span>');
 						}
@@ -185,7 +187,7 @@ var deploy = (function(){
 					{
 						if(value.postby != value.actionon)
 						{
-							$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ' posted in your diary</div></div>');
+							$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ' posted in your diary</div></div>');
 						}
 					}
 				}
@@ -210,11 +212,11 @@ var deploy = (function(){
 					{
 						if(value.postby == value.actionon)
 						{  
-							$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+''+action_desc+' your '+action_object+' </div></div>');
+							$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+''+action_desc+' your '+action_object+' </div></div>');
 						}
 						else 
 						{
-							$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+'' +name[value.postby]+ '\'s '+action_object+' in your diary</div></div>');
+							$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+'' +name[value.postby]+ '\'s '+action_object+' in your diary</div></div>');
 						}
 					}
 				}
@@ -230,14 +232,14 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' '+action_object+'</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' '+action_object+'</div></div>');
 					}	
 				}
 				else if(value.actiontype == 5)
 				{	
 					if(feed_type == 'news_feed')
 					{
-						if(value.postby != value.actionon)
+						if(value.actionby != value.actionon)
 						{
 							postid.append('<div class="news name_50"><a href="profile.php?id=' +value.actionby+' " >' +name[value.actionby]+ '</a> posted an album in <a href="profile.php?id=' +value.actionon+' " >' +name[value.actionon]+ '</a>\'s diary</div>');
 						}
@@ -248,18 +250,18 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'live_feed')
 					{
-						if(value.postby == value.actionon)
+						if(value.actionby == value.actionon)
 						{	
 							postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+pimage[value.actionby]+'" /><span class="rtm_each_text"><b>'+name[value.actionby]+'</b> '+ action_desc +'</span>');
 						}	
 						else
 						{ 
-							postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+pimage[value.actionby]+'" /><span class="rtm_each_text"><b>'+name[value.actionby]+'</b> posted in '+name[value.actionon]+' \'s diary</span>');		
+							postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+pimage[value.actionby]+'" /><span class="rtm_each_text"><b>'+name[value.actionby]+'</b> posted an album in '+name[value.actionon]+' \'s diary</span>');		
 						}
 					}
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' in your diary</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' in your diary</div></div>');
 					}
 				}	
 				else if(value.actiontype == 6)
@@ -277,18 +279,18 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'live_feed')
 					{
-						if(value.postby == value.actionon)
+						if(value.actionby == value.actionon)
 					  {	
 						postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+pimage[value.actionby]+'" /><span class="rtm_each_text"><b>'+name[value.actionby]+'</b> '+ action_desc +'</span>');
 					  }	
 					  else
 					  { 
-						postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+pimage[value.actionby]+'" /><span class="rtm_each_text"><b>'+name[value.actionby]+'</b> posted in '+name[value.actionon]+' \'s diary</span>');		
+						postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+pimage[value.actionby]+'" /><span class="rtm_each_text"><b>'+name[value.actionby]+'</b> posted a photo in '+name[value.actionon]+' \'s diary</span>');		
 					  }
 					}
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' in your diary</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' in your diary</div></div>');
 					}
 				}
 				else if(value.actiontype == 8)
@@ -303,7 +305,7 @@ var deploy = (function(){
 					}	
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ' and you are friends now.</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ' and you are friends now.</div></div>');
 					}
 				}
 				else if(value.actiontype == 12 || value.actiontype == 23)
@@ -327,11 +329,11 @@ var deploy = (function(){
 					{
 						if(value.postby == value.actionon)
 						{  
-							$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(data,value.actionby)+''+action_desc+' your '+action_object+' </div></div>');
+							$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+''+action_desc+' your '+action_object+' </div></div>');
 						}
 						else 
 						{
-							$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+'' +name[value.postby]+ '\'s '+action_object+' in your diary</div></div>');
+							$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+'' +name[value.postby]+ '\'s '+action_object+' in your diary</div></div>');
 						}
 					}
 				}				
@@ -356,11 +358,11 @@ var deploy = (function(){
 					{
 						if(value.postby == value.actionon)
 						{  
-							$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+''+action_desc+' your '+action_object+' </div></div>');
+							$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+''+action_desc+' your '+action_object+' </div></div>');
 						}
 						else 
 						{
-							$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+'' +name[value.postby]+ '\'s '+action_object+' in your diary</div></div>');
+							$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+'' +name[value.postby]+ '\'s '+action_object+' in your diary</div></div>');
 						}
 					}	
 				}
@@ -376,7 +378,7 @@ var deploy = (function(){
 					}	
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' you</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' you</div></div>');
 					}	
 				}
 				else if(value.actiontype == 17 || value.actiontype == 26)
@@ -391,7 +393,7 @@ var deploy = (function(){
 					}	
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' you.</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' you.</div></div>');
 					}	
 				}
 				else if(value.actiontype == 50)
@@ -413,7 +415,7 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.pageid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' your comment.</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.pageid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' your comment.</div></div>');
 					}					
 				}
 				else if(value.actiontype == 91 || value.actiontype == 92)
@@ -435,7 +437,7 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' you '+action_desc+'.</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' you '+action_object+'.</div></div>');
 					}
 				}
 				else if(value.actiontype == 99)
@@ -453,14 +455,7 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'live_feed')
 					{
-						if(value.postby == value.actionon)
-					  {	
-						postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+pimage[value.actionby]+'" /><span class="rtm_each_text"><b>'+name[value.actionby]+'</b> '+ action_desc +'</span>');
-					  }	
-					  else
-					  { 
 						postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+pimage[value.actionby]+'" /><span class="rtm_each_text"><b>'+name[value.actionby]+'</b> '+ action_desc +'</span>');		
-					  }
 					}
 				}
 				else if(value.actiontype >= 200 && value.actiontype < 300)
@@ -497,7 +492,7 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{						
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' you.</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' you.</div></div>');
 					}	
 				}						
 				else if(value.actiontype == 308 || value.actiontype == 408)
@@ -512,10 +507,10 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{						
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ' invited you to join the ' +action_object+'</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ' invited you to join the ' +action_object+'</div></div>');
 					}						
 				}
-				else if(value.actiontype == 301 || value.actiontype == 403 || value.actiontype == 306 || value.actiontype == 406 || value.actiontype == 316 || value.actiontype == 416 || value.actiontype == 325 || value.actiontype == 425 || value.actiontype == 326 || value.actiontype == 426 || value.actiontype == 328)
+				else if(value.actiontype == 301 || value.actiontype == 403 || value.actiontype == 306 || value.actiontype == 406 || value.actiontype == 316 || value.actiontype == 416 || value.actiontype == 325 || value.actiontype == 425 || value.actiontype == 326 || value.actiontype == 426 || value.actiontype == 328 )
 				{	
 					if(feed_type == 'news_feed')
 					{
@@ -527,7 +522,19 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{						
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' in '+action_object+'</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' in '+action_object+'</div></div>');
+					}	
+				}
+				else if(value.actiontype == 2901 || value.actiontype == 2906 || value.actiontype == 2916 || value.actiontype == 2925 || value.actiontype == 2926)
+				{	
+					if(feed_type == 'news_feed')
+					{
+						postid.append('<div class="name_50"></div>');			
+					}
+					else if(feed_type == 'live_feed')
+					{	
+						var page_image='http://icon.qmcdn.net/broadcast.png';					
+						postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+page_image+'" /><span class="rtm_each_text"><b>'+value.page_name+'</b>'+action_object+'</span>');
 					}	
 				}
 				else if(value.actiontype == 330)
@@ -538,7 +545,7 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{						
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' you.</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' you.</div></div>');
 					}	
 				}
 				else if(value.actiontype == 410)
@@ -553,7 +560,7 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{						
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' you.</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' you.</div></div>');
 					}	 
 				} 
 				else if(value.actiontype == 501 || value.actiontype == 1101)
@@ -568,14 +575,14 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{						
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ' is missing you</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ' is missing you</div></div>');
 					}						
 				}
 				else if(value.actiontype == 502)
 				{	
 					if(feed_type == 'notice_feed')
 					{						
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' you.</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' you.</div></div>');
 					}					
 				} 
 				else if(value.actiontype == 503 || value.actiontype == 511)
@@ -590,7 +597,7 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{						
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' you.</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' you.</div></div>');
 					}					
 				}  
 				else if(value.actiontype == 802 || value.actiontype == 811 || value.actiontype == 1202 || value.actiontype == 1211 || value.actiontype == 1402 || value.actiontype == 1411)
@@ -612,7 +619,7 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' your '+action_object+'</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' your '+action_object+'</div></div>');
 					}
 				}				
 				else if(value.actiontype == 1201)
@@ -634,13 +641,13 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'live_feed')
 					{
-						postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+pimage[value.actionby]+'" /><span class="rtm_each_text"><b>'+name[value.actionby]+'</b> '+ action_desc +'</span>');
+						postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+pimage[value.actionby]+'" /><span class="rtm_each_text"><b>'+name[value.actionby]+'</b> '+ action_desc +' '+name[value.actionon]+' </span>');
 					}
 					else if(feed_type == 'notice_feed')
 					{
 						if(value.postby != value.actionon)
 						{
-							$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ' posted a link your diary</div></div>');
+							$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ' sent you a gift</div></div>');
 						}
 					}
 				}
@@ -665,7 +672,7 @@ var deploy = (function(){
 					{
 						if(value.postby != value.actionon)
 						{
-							$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ' posted a link your diary</div></div>');
+							$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ' posted a link your diary</div></div>');
 						}
 					}
 				}
@@ -688,7 +695,7 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' your '+action_object+'</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' your '+action_object+'</div></div>');
 					}	
 				}
 				else if(value.actiontype == 2002 || value.actiontype == 2011)
@@ -703,7 +710,7 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' your '+action_object+'</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' your '+action_object+'</div></div>');
 					}	
 				}
 				else if(value.actiontype == 2102 || value.actiontype == 2111)
@@ -718,11 +725,11 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' '+action_object+'<a href="profile.php?id=' +value.postby+' " >' +name[value.postby]+ '</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' '+action_object+'<a href="profile.php?id=' +value.postby+' " >' +name[value.postby]+ '</div></div>');
 					}
 					
 				}
-				else if(value.actiontype == 600 || value.actiontype == 700 || value.actiontype == 800 || value.actiontype == 1900 || value.actiontype == 2400 || value.actiontype == 2500 || value.actiontype == 2600 || value.actiontype == 2800)
+				else if(value.actiontype == 600 || value.actiontype == 700 || value.actiontype == 800 || value.actiontype == 2500 || value.actiontype == 2600 || value.actiontype == 2800)
 				{
 					if(feed_type == 'news_feed')
 					{
@@ -734,7 +741,22 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ action_desc +'</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ action_desc +'</div></div>');
+					}
+				}
+				else if(value.actiontype == 1900 || value.actiontype == 2400)
+				{
+					if(feed_type == 'news_feed')
+					{
+						postid.append('<div class="news name_50"></div>'); 
+					}
+					else if(feed_type == 'live_feed')
+					{
+						postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+pimage[value.actionby]+'" /><span class="rtm_each_text"><b>'+name[value.actionby]+'</b> '+ action_desc +' '+name[value.actionon]+'</span>');
+					}
+					else if(feed_type == 'notice_feed')
+					{
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ action_desc +'</div></div>');
 					}
 				}
 				else if(value.actiontype == 2801)
@@ -749,7 +771,7 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ action_desc +' your question</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ action_desc +' your question</div></div>');
 					}
 				}
 				else if(value.actiontype == 602 || value.actiontype == 611 || value.actiontype == 702 || value.actiontype == 711 || value.actiontype == 802 || value.actiontype == 811 || value.actiontype == 1902 || value.actiontype == 1911 || value.actiontype == 2402 || value.actiontype == 2411 || value.actiontype == 2502 || value.actiontype == 2511 || value.actiontype == 2602 || value.actiontype == 2611 || value.actiontype == 2802 || value.actiontype == 2811)
@@ -764,7 +786,7 @@ var deploy = (function(){
 					}
 					else if(feed_type == 'notice_feed')
 					{
-						$(container).append('<div class="notice_drop"  id="'+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +name_split(name,value.actionby)+ ''+action_desc+' your '+action_object+'</div></div>');
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' your '+action_object+'</div></div>');
 					}	
 				}
 			}
@@ -893,6 +915,8 @@ var deploy = (function(){
 			});
 		}
 		
+		var con = 'nf_post';
+		
 		function notice_deploy(data,container)
 		{
 			var myprofileid = $('#myprofileid_hidden').attr('value');
@@ -909,10 +933,14 @@ var deploy = (function(){
 				}	   
 				arr = (value.actionby).split(',');	
 				len = arr.length;
-				lastactionby = arr[len - 1];	   
-				deploy.action_decode('notice_feed',value,data.name,data.pimage,container,'',0,1);	
-				var distinctid=value.actionid+value.actiontype;
-				$('#'+distinctid).append('<div style="margin-left:6em;margin-top:.5em;color:gray;"><a href="action.php?actionid='+value.pageid+'&life_is_fun='+value.life_is_fun+'"><img src="http://icon.qmcdn.net/clock.png" width="6" /><span style="color:gray;" data="'+value.time+'">'+time_difference(value.time)+'</span></a></div>');
+				lastactionby = arr[len - 1];
+				if(container == '#text')	
+				{
+					con = 'notice_post';
+				}				
+				deploy.action_decode('notice_feed',value,data.name,data.pimage,container,'',0,1);
+				var distinctid=con+value.actionid+value.actiontype;
+				$('#'+distinctid).append('<div style="margin-left:6em;margin-top:.5em;color:gray;"><a href="action.php?actionid='+value.pageid+'&life_is_fun='+value.life_is_fun+'"><img src="http://icon.qmcdn.net/clock.png" width="6" /><span style="color:gray;" data="'+value.time+'">'+ui.time_difference(value.time)+'</span></a></div>');
 			});
 		}
 		

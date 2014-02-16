@@ -5,8 +5,11 @@ $database = new Database();
 $help = new Help();
 $newrow = $database->bio_complete_select($profileid);
 $res = $database->bio_select_new($profileid);
-$company = array(); $team = array(); $profession = array();$major = array(); $skill = array(); $tool = array(); $mobile = array();  $extension = array(); $certificate = array(); $project = array(); $award = array(); $college = array(); $school = array(); $music = array(); $movie = array(); $sports = array(); $book = array(); $city = array(); $hobby = array();
+$company = array(); $team = array();$major = array(); $skill = array(); $tool = array(); $mobile = array();  $extension = array(); $certificate = array(); $project = array(); $award = array(); $college = array(); $school = array(); $music = array(); $movie = array(); $sports = array(); $book = array(); $city = array(); $hobby = array();
+$flag_des = 0;
 $flag = 0;
+$profession='';
+$designation='';
 while($brow = $res->fetch_array())
 {
 	if($brow['type'] == 205)
@@ -21,6 +24,15 @@ while($brow = $res->fetch_array())
 			$profession = $brow['name'];
 			$professionid = $brow['actionid'];	
 			$flag = 1;
+		}	
+	}
+	else if($brow['type'] == 239)
+	{
+		if($flag_des == 0)
+		{
+			$designation = $brow['name'];
+			$designationid = $brow['actionid'];	
+			$flag_des = 1;
 		}	
 	}
 	else if($brow['type'] == 204)
@@ -145,6 +157,7 @@ echo '<div class="items">'.$database->get_age($profileid).' years old'.'</div>';
 			<?php
 					bio_item_deploy($profile_relation, 234, 'Team', $team, $teamid, 'team_edit_link', $help, $row['team']);
 					bio_single_deploy($profile_relation, 202, 'Profession', $profession, $professionid, 'profession_edit_link', $help, $row['profession']);
+					bio_single_deploy($profile_relation, 239, 'Designation', $designation, $designationid, 'designation_edit_link', $help, $row['designation']);
 					bio_item_deploy($profile_relation, 235, 'Major', $major, $majorid, 'major_edit_link', $help, $row['major']);
 					bio_item_deploy($profile_relation, 230, 'Skill', $skill, $skillid, 'skill_edit_link', $help, $row['skill']);
 					bio_item_deploy($profile_relation, 236, 'Tools worked on', $tool, $toolid, 'tool_edit_link', $help, $row['Tools worked on']);
@@ -278,15 +291,15 @@ echo '<div class="items">'.$database->get_age($profileid).' years old'.'</div>';
 		$('.profile_edit_each').remove();
 		if(privacy == 1)
 		{
-			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+')" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\''+key+'\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="http://icon.qmcdn.net/meeting.png" height="20" width="20" /></span></div>');
+			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+',event)" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\''+key+'\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="http://icon.qmcdn.net/meeting.png" height="15" width="15" /></span></div>');
 		}
 		else if(privacy == 2)
 		{
-			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+')" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\''+key+'\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="http://icon.qmcdn.net/friend.png" height="20" width="20" /></span></div>');
+			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+',event)" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\''+key+'\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="http://icon.qmcdn.net/friend.png" height="15" width="15" /></span></div>');
 		}
 		else
 		{
-			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+')" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\''+key+'\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="http://icon.qmcdn.net/global.png" height="20" width="20" /></span></div>');
+			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+',event)" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\''+key+'\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="http://icon.qmcdn.net/global.png" height="15" width="15" /></span></div>');
 		}		
 	}
 	
@@ -307,6 +320,6 @@ echo '<div class="items">'.$database->get_age($profileid).' years old'.'</div>';
 			default : placeholder = '';
 		}
 		$('.profile_edit_each').remove();
-		$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+')" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value ="'+value+'" size="40"/></div>');
+		$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+',event)" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value ="'+value+'" size="40"/></div>');
 	}
 </script>

@@ -57,7 +57,7 @@ $('.viewable').live('click',function(){
 					}	
 				}
 			
-			$('#viweable_sidebar').append('<a href="profile.php?id='+value.actionby+' " ><img style="margin-right:0.7em;" class="lfloat" src ='+data.pimage[value.actionby]+ ' height="50" width="50" /></a><div class="name_50_viewable"><a class="bold" href="profile.php?id=' +value.actionby+' " >' +data.name[value.actionby]+ '</a><div style="margin:0.5em 0em;">'+value.page+'</div><div class="time_tag_json"><span onclick="'+fun+'" class="'+class_type+'" style="color:#336699;">'+exciting+' </span><a href="action.php?actionid='+value.pageid+'&life_is_fun='+value.life_is_fun+'"><img src="png/clock.png" width="6" /><span class="time" data="'+value.time+'">'+time_difference(value.time)+'</span></a></div></div>');
+			$('#viweable_sidebar').append('<a href="profile.php?id='+value.actionby+' " ><img style="margin-right:0.7em;" class="lfloat" src ='+data.pimage[value.actionby]+ ' height="50" width="50" /></a><div class="name_50_viewable"><a class="bold" href="profile.php?id=' +value.actionby+' " >' +data.name[value.actionby]+ '</a><div style="margin:0.5em 0em;">'+value.page+'</div><div class="time_tag_json"><span onclick="'+fun+'" class="'+class_type+'" style="color:#336699;">'+exciting+' </span><a href="action.php?actionid='+value.pageid+'&life_is_fun='+value.life_is_fun+'"><img src="png/clock.png" width="6" /><span class="time" data="'+value.time+'">'+ui.time_difference(value.time)+'</span></a></div></div>');
 			$('#viweable_sidebar').children().eq(3).append('<div class="likeclass_json" style="margin-top:3em;"><span id="viewable_sidebar_response" class="excited_people"></span><span class="post_pointer"></span></div>');
 			
 		var excited_count = 0;
@@ -126,7 +126,7 @@ $('.viewable').live('click',function(){
 				exciting = 'Unexciting'; 
 				fun = 'action.responsed(this)';
 			}  
-			$('#viweable_sidebar').children().eq(3).append('<div class="cclass_json" id="'+comid+'" data="'+ com.com_actionid +'" ><a href="profile.php?id=' +com.commentby+ '" target="_parent"><img class="lfloat" src =' +data.pimage[com.commentby]+ ' height="32" width="32" /></a><div class="name_35"><div><a class="bold" href="profile.php?id=' +com.commentby+ '" target="_parent">' +data.name[com.commentby]+ '</a> '+ui.see_more(ui.get_smiley(ui.link_highlight(com.comment)))+'</div><div><a class="comment_time_json" href="action.php?actionid='+value.pageid+'&life_is_fun='+value.life_is_fun+'"><img src="png/clock.png" width="6" /><span class="time" data="'+com.com_time+'">'+time_difference(com.com_time)+'</span></a><span data=' +com.commentby+ ' class = "comment_excite_json" onclick="'+fun+'">'+exciting+'</span></div></div></div>');
+			$('#viweable_sidebar').children().eq(3).append('<div class="cclass_json" id="'+comid+'" data="'+ com.com_actionid +'" ><a href="profile.php?id=' +com.commentby+ '" target="_parent"><img class="lfloat" src =' +data.pimage[com.commentby]+ ' height="32" width="32" /></a><div class="name_35"><div><a class="bold" href="profile.php?id=' +com.commentby+ '" target="_parent">' +data.name[com.commentby]+ '</a> '+ui.see_more(ui.get_smiley(ui.link_highlight(com.comment)))+'</div><div><a class="comment_time_json" href="action.php?actionid='+value.pageid+'&life_is_fun='+value.life_is_fun+'"><img src="png/clock.png" width="6" /><span class="time" data="'+com.com_time+'">'+ui.time_difference(com.com_time)+'</span></a><span data=' +com.commentby+ ' class = "comment_excite_json" onclick="'+fun+'">'+exciting+'</span></div></div></div>');
 		
 			if(com.com_excited)
 			{

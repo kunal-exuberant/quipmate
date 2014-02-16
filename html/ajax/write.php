@@ -36,6 +36,10 @@ if(isset($_SESSION['auth']))
 			{
 				$api->add_friend();
 			}
+			else if($_GET['action'] == 'event_leave')
+			{
+				$api->event_leave();
+			}
 			else if($_GET['action'] == 'album_fetch')
 			{
 				$api->album_fetch();
@@ -148,6 +152,10 @@ if(isset($_SESSION['auth']))
 			{
 				$api->group_feed();
 			}
+			else if($_GET['action'] == 'page_feed')
+			{
+				$api->page_feed();
+			}
 			else if($_GET['action'] == 'event_feed')
 			{
 				$api->event_feed();
@@ -212,9 +220,17 @@ if(isset($_SESSION['auth']))
 			{
 				$api->group_create();
 			}
+			else if($_GET['action'] == 'page_create')
+			{
+				$api->page_create();
+			}
 			else if($_GET['action'] == 'group_status')
 			{
 				$api->group_status();
+			}
+			else if($_GET['action'] == 'page_status')
+			{
+				$api->page_status();
 			}
 			else if($_GET['action'] == 'event_settings_save')
 			{
@@ -336,6 +352,10 @@ if(isset($_SESSION['auth']))
 			{
 				$api->post_delete();
 			}
+			else if($_GET['action'] == 'message_delete')
+			{
+				$api->message_delete();
+			}
 			else if($_GET['action'] == 'post_status')
 			{
 				$api->post_status();
@@ -367,6 +387,10 @@ if(isset($_SESSION['auth']))
 			else if($_GET['action'] == 'event_post_link')
 			{
 				$api->event_post_link();
+			}
+			else if($_GET['action'] == 'page_post_link')
+			{
+				$api->page_post_link();
 			}
 			else if($_GET['action'] == 'profile_privacy_update')
 			{
@@ -538,6 +562,10 @@ if(isset($_SESSION['auth']))
 			{ 
 				$api->event_photo_upload();
 			}
+			else if($_POST['action'] == 'page_photo_upload')
+			{ 
+				$api->page_photo_upload();
+			}
 			else if($_POST['action'] == 'album_upload')
 			{
 				$api->album_upload();
@@ -592,6 +620,10 @@ else if($_GET['action'] == 'self_invite')
 else if($_GET['action'] == 'login')
 {
 	$api->login();
+}
+else if($_GET['action'] == 'analytics')
+{
+    
 }
 else
 {
