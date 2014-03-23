@@ -24,6 +24,140 @@ class Help
 			return 0;
 		}
 	}
+	function assign_database($email,$database)
+	{
+		$flag = 0;
+		$public_email = array("gmail","yahoo","outlook","hotmail","radiffmail","facebook","fb","inbox","mail","shortmail","live","yandex","hushmail","zoho");
+		$arr = explode('@',$email);
+		$ar = explode('.',$arr[1]);
+		$dbname = $ar[0];
+		$result = $database->get_database_list();
+		while ($res = $result->fetch_array())
+		{
+			if ($dbname == $res[0])
+			{
+				$flag = 1;
+				break;
+			}
+		}
+		if($flag == 1)
+		{
+			$_SESSION['database'] =  $dbname;
+		}
+		else if (in_array($dbname,$public_email))
+		{
+			$_SESSION['database'] =  'profile';
+		}
+		else
+		{
+		 $this->create_database($dbname);
+		 $_SESSION['database'] =  $dbname;
+		}
+	
+	}
+	function get_database_from_email($email,$database)
+	{
+		$public_email = array("gmail","yahoo","outlook","hotmail","radiffmail","facebook","fb","inbox","mail","shortmail","live","yandex","hushmail","zoho");
+		$arr = explode('@',$email);
+		$ar = explode('.',$arr[1]);
+		$dbname = $ar[0];
+		$result = $database->get_database_list();
+		while ($res = $result->fetch_array())
+		{
+			if ($dbname == $res[0])
+			{
+				$flag = 1;
+				break;
+			}
+		}
+		if($flag == 1)
+		{
+			return $dbname;
+		}
+		else if (in_array($dbname,$public_email))
+		{
+			$dbname =  'profile';
+			return $dbname;
+		}
+		else
+		$dbname = 'invalid';
+		return $dbname;	
+	}
+	function create_database($db_name)
+	{
+
+		$DB_SRC_HOST='localhost';
+		$DB_SRC_USER='root';
+		$DB_SRC_PASS='Quip4mate$@@OwesomE';
+		$DB_SRC_NAME='profile';
+		$DB_DST_NAME=$db_name;
+
+		$db1 = mysql_connect($DB_SRC_HOST,$DB_SRC_USER,$DB_SRC_PASS) or die(mysql_error());
+		mysql_select_db($DB_SRC_NAME, $db1) or die(mysql_error());
+		$master_tables = array("actiontype","info","mood","gift","feature");
+		$reset_identity_tables = array("globalid","log","page_view","virtual","option","moment","signup");
+		$result = mysql_query("show tables from ". $DB_SRC_NAME.";",$db1) or die(mysql_error());
+		$buf="set foreign_key_checks = 0;\n";
+		$constraints='';
+		$data='';
+		$reset_identity='';
+		$i=0;
+		while($row = mysql_fetch_array($result))
+		{
+			$table = $row[0];
+			$row[0] = "`".$row[0]."`";
+				$result2 = mysql_query("SHOW CREATE TABLE ".$row[0].";",$db1) or die(mysql_error());
+				$res = mysql_fetch_array($result2);
+				if(preg_match_all("/[ ]*CONSTRAINT[ ]+.*\n/",$res[1],$matches))
+				{
+				$i=0;
+				foreach ($matches as $a)
+					{
+						if (is_array($a))
+						{
+						foreach ($a as $value) 
+							{
+							//echo $value;	
+							$value  =  str_replace(",","",$value);
+							$res[1] = preg_replace("/,\n[ ]*CONSTRAINT[ ]+.*\n/","\n",$res[1]);
+							$res[1] = preg_replace("/\n[ ]*CONSTRAINT[ ]+.*\n/","\n",$res[1]);
+							$constraints.="ALTER TABLE ".$row[0]." ADD ".trim($value).";\n";
+							}
+						}
+					}
+				}
+				if(in_array($table,$master_tables))
+				{
+					$data.="Insert into ".$DB_DST_NAME.".".$row[0]." select * from ".$DB_SRC_NAME.".".$row[0].";\n";
+				}
+				if(in_array($table,$reset_identity_tables))
+				{
+					if ($table == "signup")
+					{
+					$reset_identity.="ALTER TABLE ".$row[0]." AUTO_INCREMENT = 1000000000;\n";
+					}
+					else
+					{
+					$reset_identity.="ALTER TABLE ".$row[0]." AUTO_INCREMENT = 1;\n";
+					}
+				}
+				$buf.=$res[1].";\n";
+		}
+		$buf.=$constraints;
+		$buf.=$data;
+		$buf.=$reset_identity;
+		$buf.="set foreign_key_checks = 1";
+
+		/**************** CREATE NEW DB ***************************/
+		$sql = "CREATE DATABASE ".$DB_DST_NAME.";";
+		if(!mysql_query($sql, $db1)) die(mysql_error());
+		mysql_select_db($DB_DST_NAME, $db1) or die(mysql_error());
+		$queries = explode(';',$buf);
+		foreach($queries as $query)
+				if(!mysql_query($query, $db1)) die(mysql_error());
+		return true;
+
+	}
 	
 	function generate_image_thumbnail($source_image_path, $THUMBNAIL_IMAGE_MAX_WIDTH,$THUMBNAIL_IMAGE_MAX_HEIGHT)
 	{
@@ -103,7 +237,11 @@ class Help
 	{
 		switch($code)
 		{
-		    case 1:  $error['code'] = 1;
+			case 0:  $error['code'] = 0;
+					 $error['message'] = 'Permission denied !'; 
+					 $error['type'] = 'UnauthorisedAccessException';
+					 break;
+			case 1:  $error['code'] = 1;
 					 $error['message'] = 'Not a friend'; 
 					 $error['type'] = 'NotAFriendException';
 					 break;
@@ -419,6 +557,20 @@ class Help
 			return $row['NAME'];
 		}
 	}
+	function feature_fetch($key, $memcache, $database,$set=0)
+	{
+		$value = $memcache->get($_SESSION['database'].'_feature_'.$key);
+		if($value && $set==0) // Passing 1 to $set when I want to toggle the flag value.
+		{
+			return $value;
+		}
+		else
+		{
+			$row = $database->setting_feature_field_select($key); 
+			$memcache->set($_SESSION['database'].'_feature_'.$key, $row['flag']);
+			return $row['flag'];
+		}
+	}
 	
 	function pimage_fetch($key, $memcache, $database)
 	{
@@ -719,6 +871,10 @@ class Help
 		if($notice == 1)
 		{
 			$fun = "action.notification_setting_update(this)";
+		}
+		else if($notice == 2)
+		{
+			$fun = "action.feature_setting_update(this)";	
 		}
 		else
 		{
@@ -1039,14 +1195,14 @@ class Help
 		$identifier = strtolower($identifier);
 		$name = ucwords(strtolower($name));
 		$password = strtolower($password);
-		if(strpos($email, '@ballytech.com') > -1)
+/*		if(strpos($email, '@ballytech.com') > -1)
 		{
 			$_SESSION['database'] =  'ballytech';
 		}  
 		else
 		{
 			$_SESSION['database'] =  'profile';
-		}
+		} */
 		$database = new Database();
 		$row = $database->is_already_user($email);
 		if($row['EMAIL'] != $email)

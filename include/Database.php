@@ -15,7 +15,7 @@ class Database
 	  }
 	  else
 	  {
-		  $db_name = 'ballytech';
+		  $db_name = 'mysql';
 	  }
 	  $this->con = new mysqli('localhost', 'root', 'Quip4mate$@@OwesomE', $db_name);
 	}
@@ -35,6 +35,10 @@ class Database
 		$fn =  $res1->fetch_row();
 		return $fn[0];
 	} 
+	function get_database_list()
+	{
+	 return $this->con->query("show databases");
+	}
 	function user_delete($profileid)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
@@ -464,6 +468,17 @@ class Database
             return $profileid;	
 		}
 	}
+	function group_name_exists($groupname)
+	{
+		$groupname = $this->con->real_escape_string($groupname);
+		$result=$this->con->query("SELECT groupid FROM `group` WHERE name='$groupname'");
+		$row = $result->fetch_array();
+		$groupid = $row['groupid'];
+		if($groupid)
+		{
+            return $groupid;	
+		}
+	}
 	function page_exists($profileid)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
@@ -490,24 +505,24 @@ class Database
 		$result=$this->con->query("SELECT * FROM `page` ");
 		return $result;
 	}
-	function member_insert($actionid, $profileid1, $profileid2, $priviledge)
+	function member_insert($actionid, $groupid, $profileid, $priviledge)
 	{	
 		$actionid = $this->con->real_escape_string($actionid);
-		$profileid1 = $this->con->real_escape_string($profileid1);
-		$profileid2 = $this->con->real_escape_string($profileid2);
+		$groupid = $this->con->real_escape_string($groupid);
+		$profileid = $this->con->real_escape_string($profileid);
 		$priviledge = $this->con->real_escape_string($priviledge);		
-		$result= $this->con->query("insert into member(actionid, groupid, profileid, priviledge) values('$actionid','$profileid1', '$profileid2','$priviledge')");
-		return $this->con->query("insert into subscribe(profileid,friendid) values('$profileid2','$profileid1')");
+		$result= $this->con->query("insert into member(actionid, groupid, profileid, priviledge) values('$actionid','$groupid', '$profileid','$priviledge')");
+		return $this->con->query("insert into subscribe(profileid,friendid) values('$profileid','$groupid')");
 	}
-	function subscriber_insert($actionid, $profileid1, $profileid2, $priviledge)
+	function subscriber_insert($actionid, $pageid, $profileid2, $priviledge)
 	{	
 		$actionid = $this->con->real_escape_string($actionid);
-		$profileid1 = $this->con->real_escape_string($profileid1);
+		$pageid = $this->con->real_escape_string($pageid);
 		$profileid2 = $this->con->real_escape_string($profileid2);
 		$priviledge = $this->con->real_escape_string($priviledge);		
-		$result= $this->con->query("insert into `subscriber`(actionid,pageid,priviledge,profileid) select '$actionid','$profileid1','0',USERID from `signup` ");
-		$result= $this->con->query("insert into `subscribe`(friendid,profileid) select '$profileid1',USERID from `signup` ");
-		$result= $this->con->query("update `subscriber` SET priviledge= '$priviledge' Where pageid ='$profileid1' and profileid IN(select profileid from `moderator`)");
+		$result= $this->con->query("insert into `subscriber`(actionid,pageid,priviledge,profileid) select '$actionid','$pageid','0',USERID from `signup` ");
+		$result= $this->con->query("insert into `subscribe`(friendid,profileid) select '$pageid',USERID from `signup` ");
+		$result= $this->con->query("update `subscriber` SET priviledge= '$priviledge' Where pageid ='$pageid' and profileid IN(select profileid from `moderator`)");
 		return $result;
 	}
 	
@@ -925,7 +940,22 @@ class Database
 		
 		return $this->con->query("update `event` set `invite`='$invite', `privacy`='$privacy',`description`='$description',`date`='$date',`timing`='$timing',`venue`='$venue' where eventid = '$eventid' ");	
 	}
-	
+	function team_member_add($actionid,$myprofileid,$value)
+	{
+		$actionid = strip_tags($this->con->real_escape_string($actionid));
+		$myprofileid = strip_tags($this->con->real_escape_string($myprofileid));
+		$value = strip_tags($this->con->real_escape_string($value));
+		if($groupid = $this->group_name_exists($value))
+		{
+		 return $this->member_insert($actionid, $groupid, $myprofileid,0);
+		}
+		else
+		{
+		 $time = time();
+		 $desc='This group is for team '.$value;
+		 return $this->group_create($actionid,0,0,$value, $desc, $myprofileid, $time);
+		}
+	}
 	
 	function group_create($actionid, $type, $visible, $name, $desc, $createdby, $time)
 	{
@@ -1340,6 +1370,18 @@ class Database
 		$ret = $result->fetch_array();
 		return $ret['result'];
 	}
+	function make_moderator($profileid)
+	{ 
+		$profileid = $this->con->real_escape_string($profileid);
+		return $this->con->query("Insert into moderator(profileid) values('$profileid')");
+	
+	}
+	function moderator_remove($profileid)
+	{ 
+		$profileid = $this->con->real_escape_string($profileid);
+		return $this->con->query("Delete from moderator where profileid = '$profileid'");
+	
+	}
 	
     function update_extra($actionid, $extra)
 	{	
@@ -1376,6 +1418,19 @@ class Database
 FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action INNER JOIN subscribe as sub ON CASE WHEN action.profileid <1000000000 THEN action.PROFILEID ELSE action.ACTIONBY END = sub.FRIENDID INNER JOIN actiontype on actiontype.actiontypeid = action.ACTIONTYPE WHERE sub.PROFILEID='$profileid' AND actiontype.news_feed ='1' group by pageid ORDER BY action.ACTIONID DESC LIMIT $limit,$count) AS B  ON A.ACTIONID = B.ACTIONID "); 
 		return $result; 
 	}
+	function action_select($actionid)
+	{
+		$actionid = $this->con->real_escape_string($actionid);
+		$result = $this->con->query("select * from action where ACTIONID = '$actionid'");
+		return $result->fetch_array();
+	}
+	function max_action_select($pageid)
+	{
+		$pageid = $this->con->real_escape_string($pageid);
+		$result = $this->con->query("SELECT  A.ACTIONID,A.ACTIONBY,A.ACTIONTYPE,A.PAGEID,A.VISIBLE,A.PROFILEID,A.TIMESTAMP 
+FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action INNER JOIN subscribe as sub ON CASE WHEN action.profileid <1000000000 THEN action.PROFILEID ELSE action.ACTIONBY END = sub.FRIENDID where pageid ='$pageid' group by pageid ) AS B  ON A.ACTIONID = B.ACTIONID");
+		return $result->fetch_array();
+	} 
 	function friend_action_select($profileid,$limit,$count=10)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
@@ -2469,6 +2524,12 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		$result = $this->con->query("select `$field` from setting_notice WHERE PROFILEID = '$myprofileid'");
 		return $result->fetch_array();
 	}
+	function setting_feature_field_select($field)
+	{
+		$field = $this->con->real_escape_string($field);
+		$result = $this->con->query("select flag from feature WHERE name = '$field'");
+		return $result->fetch_array();
+	}
 	
 	function setting_notice_update($field, $privacy, $myprofileid)
 	{
@@ -2476,6 +2537,12 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		$privacy = $this->con->real_escape_string($privacy);
 		$myprofileid = $this->con->real_escape_string($myprofileid);
 		return $this->con->query("UPDATE setting_notice SET `$field` = '$privacy' WHERE PROFILEID = '$myprofileid'");
+	}
+	function setting_feature_update($field,$flag)
+	{
+		$field = $this->con->real_escape_string($field);
+		$flag = $this->con->real_escape_string($flag);
+		return $this->con->query("UPDATE feature SET flag = '$flag' where name='$field'");
 	}
 	
 	function setting_email_field_select($field, $myprofileid)
@@ -2814,6 +2881,11 @@ AND DATE_FORMAT(BIRTHDAY,'%m,%d') >= DATE_FORMAT(NOW(),'%m,%d') ORDER BY DATE_FO
 		$profileid = $this->con->real_escape_string($profileid);
 		$res= $this->con->query("SELECT * from setting_notice where profileid='$profileid'");
 		return $res->fetch_array();
+	}
+	function setting_feature_select()
+	{
+		$res= $this->con->query("SELECT * from feature where flag='1'");
+		return $res;
 	}
 	
 	function setting_email_complete_update($profileid, $friend_request, $profile_post, $post_comment, $message, $missu)

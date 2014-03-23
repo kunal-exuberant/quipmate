@@ -10,6 +10,7 @@ import tornado.options
 import tornado.web
 import os.path
 import tornado.httpclient
+import gc
 from HTMLParser import HTMLParser
 from tornado.options import define, options
 
@@ -41,9 +42,10 @@ class Database(tornado.database.Connection):
 	return self._cursor()
 
     def query(self,query,cursor):
-        cursor.execute(query)
-        self.close()
-        return cursor 
+		cursor.execute(query)
+		self.close()
+		gc.collect()
+		return cursor 
 
 class Query(Database):
 
@@ -73,7 +75,12 @@ class Query(Database):
 	def photo_select(self, profileid):
 		cursor = self.connect()
 		sql_query = "select CDN,FILENAME from profile_image where PROFILEID = '%s' order by imageid desc limit 1" %(profileid)
-		return self.query(sql_query, cursor)
+		cur = self.query(sql_query, cursor)
+		if cur.rowcount == 0:
+			cursor = self.connect()
+			sql_query = "SELECT 'http://profile-1.qmcdn.net/' as CDN,'male.png' AS FILENAME"
+			return self.query(sql_query, cursor)
+		return cur
 
 	def online_select(self, profileid):
 		cursor = self.connect()
@@ -107,7 +114,9 @@ class Query(Database):
 
 	def unread_count(self, profileid):
 		cursor = self.connect()
-		sql_query = "select count(*) from inbox where READBIT ='0' and ACTIONON = '%s' group by ACTIONBY" %(profileid)
+		sql_query = "select count(distinct actionby) from inbox where READBIT ='0' and ACTIONON = '%s'" %(profileid)
+		
+		
 		return self.query(sql_query, cursor)
 
 	def request_unread_count(self, profileid, actiontype1, actiontype2, actiontype3):
@@ -207,9 +216,9 @@ class RealTimeHandler(BaseHandler):
 				   pass
 			cls.online = {}
 		else:
-			test = self.new_event_test(profileid, last_poll_time)
+			test = self.new_event_test(profileid, last_poll_time) 
 			if test == 0:
-			   tornado.ioloop.IOLoop.instance().add_timeout(time.time()+10, lambda:callback(response, count, message_count, request_count, database, profileid, action, last_poll_time, callback))
+			   tornado.ioloop.IOLoop.instance().add_timeout(time.time()+20, lambda:callback(response, count, message_count, request_count, database, profileid, action, last_poll_time, callback))
 			else:
 				cursor = self.notice_unread_count(profileid)
 				rows = cursor.fetchall()

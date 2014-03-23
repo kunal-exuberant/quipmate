@@ -396,6 +396,26 @@ class Email
 			<br />• Define yourself by setting your Tagline<br />• Set your Mood and share it with your friends ';
 			$additionalHeaders .= 'From:Quipmate<invitation@quipmate.com>\r\n';
 		}
+		else if($email_type == 'people_invite') 
+	    {
+			$email = $param['email'];
+			$identifier = $param['identifier'];
+			/*$myname = $param['myname'];
+			$myphoto = $param['myphoto'];
+			$myprofileid = $param['myprofileid'];	*/ //These params are not needed here.
+			$subject='Invitation to join Quipmate';
+			$message .= 'Hi ';
+			$message .= $email.'</a>,<br /><br />';
+			$message .= 'Admin has invited you to join <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.<br /><br />';
+			$message .='</div>'; 
+			$message .='</div>';
+			$message .= 'Here is your invitation link'."\n\n<br/>";
+			$message .= "http://www.quipmate.com/welcome.php?email=$email&identifier=$identifier";
+			$message .= '<br /><br />You can do the following things at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a><br />';
+			$message .='• Dedicate Song to your friends <br /> • Set a Song as your Status <br /> • Add your Love as Your Crush and Talk anonymously<br />• Say Miss U to your friends in exciting new way<br />• Share Status,Link,Photo,Video and more with your friends<br />• Send Gift,Message and Birhday Bombs to your friends
+			<br />• Define yourself by setting your Tagline<br />• Set your Mood and share it with your friends<br />• Connect with your Alma Mater<br />• Connect with increasing number of colleges across India';
+			$additionalHeaders .= 'From:'.$myname.'<invitation@quipmate.com>\r\n';
+		}
 		else if($email_type == 'friend_invite')
 	    {
 			$email = $param['email'];

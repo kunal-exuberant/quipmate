@@ -18,13 +18,13 @@ body{font-family:tahoma;verdana;background-color:#ededed;}
 .email{color:#336699;font-size:1.3em;margin:0em 1em 0em 1em;}
 .technology_each{padding:1.5em;border:0.1em solid #dddddd;border-top:none;color:#336699;}
 .feature_each{padding:1.5em;border:0.1em solid #dddddd;border-top:none;color:#336699;clear:left;overflow:hidden;}
-.feature_title{font-size:1.2em;}
+.feature_title{font-size:1.2em;font-weight:bold;}
 .feature_title:hover{text-decoration:underline;cursor:pointer;}
 .feature_detail{font-size:1.1em;color:#444444;display:none;padding:1.5em;}
 .lfloat{float:left;margin-right:2em;width:300px;}
 .text_500{font-size:1.1em;}
 .faq_each{padding:1.5em;border:0.1em solid #dddddd;border-top:none;color:#336699;clear:left;overflow:hidden;}
-.faq_title{font-size:1.2em;}
+.faq_title{font-size:1.2em;font-weight:bold;}
 .faq_title:hover{text-decoration:underline;cursor:pointer;}
 .faq_detail{font-size:1.1em;color:#444444;display:none;padding:1.5em;}
 .subtitle{margin:0.8em 0em;color:#336699;}

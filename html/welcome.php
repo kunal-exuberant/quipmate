@@ -3,6 +3,7 @@ require_once('../include/Session.php');
 require_once('../include/Database.php');
 require_once('../include/File.php');
 $session = new Session();
+$database = new Database();
 $session->start();
 if(isset($_SESSION) && isset($_SESSION['auth']))
 {
@@ -42,132 +43,138 @@ $file->google_analytics();
 	</div>
 </div>
 <div id="wrapper">
-<div id="main_container">
-<div id="qm_description">
-	<div>Quipmate is an enterprise social tool</div>
-	<div>It helps professionals connect and share</div>
-	<div>with others in their organization</div>
-	<div><a style="background-color:#336699;border:0.1em solid #cccccc;color:#ffffff;font-size: 1.2em;padding:0.2em 1em;text-decoration: none;" href="http://blog.quipmate.com/" target="_blank">Learn More</a></div>
+
+<div class="tab">
+	<a class="tab_each" href="http://blog.quipmate.com/" target="_blank">Blog</a>
+	<a class="tab_each" href="http://faq.quipmate.com/" target="_blank">FAQ</a>
+	<a class="tab_each" href="http://help.quipmate.com/" target="_blank">Help</a>
+	<a class="tab_each" href="http://developers.quipmate.com/" target="_blank">Developers</a>
+	<a class="tab_each" href="public/terms.php" target="_blank">Terms of Use</a>	
 </div>
+
+<div id="main_container">
 <div id="register_box">
 <?php if(isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) != '')
 {
 	setcookie("console","got all get values",time()+3600000,'/','.quipmate.com');
 require_once('../include/Session.php');
 require_once('../include/Database.php');
+require_once('../include/Help.php');
 $session = new Session();
+$help = new Help();
 $session->start();
 $email = $_GET['email'];
-if(strpos(strtolower($email), '@ballytech.com') > -1)
-{
-	$_SESSION['database'] =  'ballytech';
-}
-else
-{
-	$_SESSION['database'] =  'profile';
-}
-$database = new Database();
-$row = $database->is_already_user($email);
-if($row['EMAIL'] != $email)
-{
-	setcookie("console","is_ not already_user",time()+3600000,'/','.quipmate.com');
-$identifier = $_GET['identifier'];
-$row = $database->virtual_select($email,$identifier);
-if($row != 0 && $email == $row['EMAIL'] && $identifier == $row['UNIQUEID'])
-{
-	$email = $row['EMAIL'];	
-	$nr = explode('@',$email);
-	$new_member = $nr[0];
-?>
-<div style="text-align:left">
-	<h1><?php echo 'Hi '.$new_member.','; ?></h1>
-	<h2>Welcome to the Quipmate community</h2>
-	<h2>Please provide these details</h2>
-	<div id="info"></div>
-	<div id="name_container">
-	<label id ="signup_name_label">Name:</label>
-	<input type="text" id="signup_name" value="" title="Full Name" >
-	</div>
-	<div id="password_container">
-	<label id ="signup_password_label">Password:</label>
-	<input type="password" id="signup_password" value="" size="32" title="Password" >
-	</div>
-	<div id="gender_container">
-	<label id ="signup_gender_label">Gender:</label>
-	<select id="signup_gender">
-	<option value="-1">Gender</option>
-	<option value="0">Female</option>
-	<option value="1">Male</option>
-	</select>
-	</div>
-	<div id="birthday_container">
-	<label id="signup_birthday_label">Birthday:</label> 
-	<select size="1" id="day">
-	  <option value="-1">Day</option>
-	  <?php 
-	  for($i=1;$i<=31;$i++)
-	  {
-		echo '<option value="'.$i.'">'.$i.'</option>';
-	  }
-	  ?>
-	</select>
-	<select id="month">
-	  <option value="-1">Month</option>
-	  <option value="01">JAN</option>
-	  <option value="02">FEB</option>
-	  <option value="03">MAR</option>
-	  <option value="04">APR</option>
-	  <option value="05">MAY</option>
-	  <option value="06">JUN</option>
-	  <option value="07">JUL</option>
-	  <option value="08">AUG</option>
-	  <option value="09">SEP</option>
-	  <option value="10">OCT</option>
-	  <option value="11">NOV</option>
-	  <option value="12">DEC</option>		
-	</select>
-	<select size="1" id="year">
-	  <option value="-1">Year</option>
-	  <?php 
-	  for($i=2002;$i>=1901;$i--)
-	  {
-		echo '<option value="'.$i.'">'.$i.'</option>';
-	  }
-	  ?>
-	</select>
-	</div>
-	<div id="signup_button_container">
-	<input type="hidden" id="email_hidden" value="<?php echo $email; ?>" />
-	<input type="hidden" id="identifier_hidden" value="<?php echo $identifier; ?>" />
-	<input id ="signup_button" type="submit" value="SIGNUP" onclick="action.register(this)" />
-	</div>
-	<span id="icon"></span>
-	<?php
-		$file->script_welcome();
-	?>
-	</div>
-	
-<?php
-}
-else 
-{
-?>
-	<h1 id="register_title"><?php echo 'The invitation link sent to you seems to be broken. Please try again.' ; ?></h1>
-<?php	
-}
-}
-else
-{
-?>
-	<div id="qm_description">
-	<h1>Welcome To Quipmate.</h1>
-	<h1>You are already a part of Quipmate</h1>
-	<h1>Please Login using your email and password.</h1>
-	<h1>If you forgot your password, please use forgot password link to recover it.</h1>
-	</div>
-<?php	
-}
-	$file->script_jquery();
+if($help->is_email($email))
+	{
+		$help->assign_database($email,$database);
+		$database = null;
+		$database = new Database();
+		$row = $database->is_already_user($email);
+		if($row['EMAIL'] != $email)
+		{
+			setcookie("console","is_ not already_user",time()+3600000,'/','.quipmate.com');
+		$identifier = $_GET['identifier'];
+		$row = $database->virtual_select($email,$identifier);
+		if($row != 0 && $email == $row['EMAIL'] && $identifier == $row['UNIQUEID'])
+		{
+			$email = $row['EMAIL'];	
+			$nr = explode('@',$email);
+			$new_member = $nr[0];
+		?>
+		<div style="text-align:left">
+			<h1><?php echo 'Hi '.$new_member.','; ?></h1>
+			<h2>Welcome to the Quipmate community</h2>
+			<h2>Please provide these details</h2>
+			<div id="info"></div>
+			<div id="name_container">
+			<label id ="signup_name_label">Name:</label>
+			<input type="text" id="signup_name" value="" title="Full Name" >
+			</div>
+			<div id="password_container">
+			<label id ="signup_password_label">Password:</label>
+			<input type="password" id="signup_password" value="" size="32" title="Password" >
+			</div>
+			<div id="gender_container">
+			<label id ="signup_gender_label">Gender:</label>
+			<select id="signup_gender">
+			<option value="-1">Gender</option>
+			<option value="0">Female</option>
+			<option value="1">Male</option>
+			</select>
+			</div>
+			<div id="birthday_container">
+			<label id="signup_birthday_label">Birthday:</label> 
+			<select size="1" id="day">
+			  <option value="-1">Day</option>
+			  <?php 
+			  for($i=1;$i<=31;$i++)
+			  {
+				echo '<option value="'.$i.'">'.$i.'</option>';
+			  }
+			  ?>
+			</select>
+			<select id="month">
+			  <option value="-1">Month</option>
+			  <option value="01">JAN</option>
+			  <option value="02">FEB</option>
+			  <option value="03">MAR</option>
+			  <option value="04">APR</option>
+			  <option value="05">MAY</option>
+			  <option value="06">JUN</option>
+			  <option value="07">JUL</option>
+			  <option value="08">AUG</option>
+			  <option value="09">SEP</option>
+			  <option value="10">OCT</option>
+			  <option value="11">NOV</option>
+			  <option value="12">DEC</option>		
+			</select>
+			<select size="1" id="year">
+			  <option value="-1">Year</option>
+			  <?php 
+			  for($i=2002;$i>=1901;$i--)
+			  {
+				echo '<option value="'.$i.'">'.$i.'</option>';
+			  }
+			  ?>
+			</select>
+			</div>
+			<div id="signup_button_container">
+			<input type="hidden" id="email_hidden" value="<?php echo $email; ?>" />
+			<input type="hidden" id="identifier_hidden" value="<?php echo $identifier; ?>" />
+			<input id ="signup_button" type="submit" value="SIGNUP" onclick="action.register(this)" />
+			</div>
+			<span id="icon"></span>
+			<?php
+				$file->script_welcome();
+			?>
+			</div>
+			
+		<?php
+		}
+		else 
+		{
+		?>
+			<h1 id="register_title"><?php echo 'The invitation link sent to you seems to be broken. Please try again.' ; ?></h1>
+		<?php	
+		}
+		}
+		else
+		{
+		?>
+			<div id="qm_description">
+			<h1>Welcome To Quipmate.</h1>
+			<h1>You are already a part of Quipmate</h1>
+			<h1>Please Login using your email and password.</h1>
+			<h1>If you forgot your password, please use forgot password link to recover it.</h1>
+			</div>
+		<?php	
+		}
+			$file->script_jquery();
+	}
+    else
+    {
+  
+    }
 }
 else if(isset($_GET['id']) && isset($_GET['email']) && isset($_GET['click']))
 {
@@ -175,10 +182,13 @@ else if(isset($_GET['id']) && isset($_GET['email']) && isset($_GET['click']))
 	if($click=='recover_password')
 	{
 		require_once('../include/Database.php');
-
+		require_once('../include/Help.php');
 		$flag = 0;
 		$id = $_GET['id'];
+		$help = new Help();
 		$email = $_GET['email'];
+		$help->assign_database($email,$database);
+		$database = null;
 		$database = new Database();
 		$uniqueid = $database->select_uniqueid($email);
 		if($uniqueid == $id)
@@ -196,7 +206,7 @@ else if(isset($_GET['id']) && isset($_GET['email']) && isset($_GET['click']))
 			<span>Confirm Password:</span>
 			<input style="border:1px solid gray;width:200px;height:25px;" type="password" name="confirmpass" id = "confirmpass"/>
 			</div>
-			<input style="border:1px solid gray;width:160px;height:25px;" type="submit" name="change" value="Change Password" id = "change" onclick="action.recover_password(this)"/>
+			<input style="border:1px solid gray;width:160px;height:30px;" type="submit" name="change" value="Change Password" id = "change" onclick="action.recover_password(this)"/>
 			<span id = "recover_password_info" style='color:#00ccff;margin-left:12;'></span>
 			</div>
 		<?php
@@ -272,8 +282,8 @@ else
 	<a href="http://developers.quipmate.com/" target="_blank">Developers</a><span class="separator">|</span>
 	<a href="public/terms.php" target="_blank">Terms of Use</a>
 </div>
-<div style="position:fixed;bottom:0em;right:1em;text-align:center;width:16em;border:0.1em solid #cccccc;background-color:#ffffff;" id="message_leave">
-    <div id="message_leave_title" onclick="ui.message_leave(this)" style="height:1.5em;cursor:pointer;font-size:1.2em;padding:0.5em;background-color:#336699;color:#ffffff;font-weight:bold;">Leave a message</div>
+<div style="position:fixed;bottom:0em;right:1em;text-align:center;width:16em;border:0.1em solid #cccccc;background-color:#ffffff;text-align:left;" id="message_leave">
+    <div id="message_leave_title" onclick="ui.message_leave_grow(this)" style="height:1.5em;cursor:pointer;font-size:1.2em;padding:0.5em;background-color:#336699;color:#ffffff;font-weight:bold;">Leave a message<img src="https://wiki.nci.nih.gov/download/attachments/7475319/downArrow.gif?version=1&amp;modificationDate=1205778301000" style="float:right;" /></div>
 </div>
 </div>	  
 </body>

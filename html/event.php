@@ -9,7 +9,7 @@ require_once '../include/header.php';
 			<a href="event.php?id=<?php echo $profileid ?>"><img style="max-width:16em;margin:0em 0em 0em 0em;" src="<?php echo $profile_image; ?>" /></a>
 			
 			<div style="text-align:center;">
-				<a style="font-weight:bold;display:block;color:#ffffff;background:#4C66A4;padding:0.5em;" href="event.php?id=<?php echo $profileid; ?>" style=""><?php echo $profile_name; ?></a>
+				<a style="font-weight:bold;display:block;color:#ffffff;background:#4C66A4;padding:0.5em;" href="event.php?id=<?php echo $profileid; ?>" class="ellipsis"><?php echo $profile_name; ?></a>
 			</div>
 			<?php if($profile_relation == 0) {?>
 			<div style="margin-top:0.5em;text-align:center;">
@@ -53,7 +53,7 @@ require_once '../include/header.php';
 	{
 	?>
 		<div style="margin-top:2em;text-align:center;">
-			<a style="color:#003399;" href="#" onclick="ui.event_leave(this) " >Not going to <?php echo ' '.$profile_name; ?></a>
+			<a style="color:#003399;" class ="ellipsis" href="#" onclick="ui.event_leave(this) " >Not going to <?php echo ' '.$profile_name; ?></a>
 		</div>
 	<?php
 	}

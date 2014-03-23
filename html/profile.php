@@ -142,16 +142,22 @@ require_once '../include/header.php';
 	}	
 	if($profile_relation == 0)
 	{
-	?>
+	 global $help,$memcached;
+	 if($help->feature_fetch('mood',$memcached, $database))
+	 {
+	 ?>
 		<span class="profile_actions_container" >
 				<input class="profile_actions_button" onclick="ui.mood(this)" style="width:7.3em;" type="submit" value="+Mood" />
 		</span>	
+	 <?php 
+	 }
+	 ?>
 		<span class="profile_actions_container" >
 			<input class="profile_actions_button" onclick="ui.tagline(this)" style="width:8em;" type="submit" value="+Tagline" />
 		</span>
 		<div style="clear:both;"></div>
-		
-	<?php		
+			
+		<?php		
 	}		
 	else if($profile_relation == 1)
 	{
@@ -170,7 +176,7 @@ require_once '../include/header.php';
 		 {
 		     $pageid = $data['pageid'];
 		 }
-		if($status == 0)
+		if($status == 0 && ($help->feature_fetch('missu',$memcached, $database)))
 		{
 		?>
 		<span class="profile_actions_container">
@@ -178,7 +184,7 @@ require_once '../include/header.php';
 		</span>
 		<?php
 		}
-		else if($status == 1)
+		else if($status == 1 && ($help->feature_fetch('missu',$memcached, $database)) )
 		{
 		?>
 		<span class="profile_actions_container">
@@ -186,7 +192,7 @@ require_once '../include/header.php';
 		</span>
 		<?php   
 		}
-		else if($status == 2)
+		else if($status == 2 &&  ($help->feature_fetch('missu',$memcached, $database))) 
 		{
 		?>
 		<span class="profile_actions_container" id="<?php echo $pageid; ?>">

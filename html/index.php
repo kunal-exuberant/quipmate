@@ -3,7 +3,6 @@
 <head>
 <?php
 require_once '../include/header.php';
-$profileid = $myprofileid;
 $college=$_SESSION['COLLEGE'];
 $database= new Database();
 $mcount = $database->unread_message_select($profileid,$college);
@@ -33,8 +32,8 @@ $mcount = $database->unread_message_select($profileid,$college);
 					if($_SESSION['database'] == 'profile')
 					{
 					?>	
-						<li class="links"><a class="ajax_nav<?php if($page=='college_mate') echo ' selected'; ?>" href="?hl=college_mate" title="Connect with people from your college"><img class="lfloat" src="http://icon.qmcdn.net/alma_mater.jpg" height="18" width="18" /><span class="name_20">Collegemates</span></a></li>
-						<li class="links"><a href="college_connect.php" title="Connect with people from different colleges"><img class="lfloat" src="http://icon.qmcdn.net/connect.png"  height="18" width="18" /><span class="name_20">College Connect</span></a></li>
+					<!--	<li class="links"><a class="ajax_nav<?php if($page=='college_mate') echo ' selected'; ?>" href="?hl=college_mate" title="Connect with people from your college"><img class="lfloat" src="http://icon.qmcdn.net/alma_mater.jpg" height="18" width="18" /><span class="name_20">Collegemates</span></a></li>
+						<li class="links"><a href="college_connect.php" title="Connect with people from different colleges"><img class="lfloat" src="http://icon.qmcdn.net/connect.png"  height="18" width="18" /><span class="name_20">College Connect</span></a></li> -->
 					<?php
 					}
 					?>	
@@ -50,7 +49,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 					{
 						$eventid = $row['eventid'];
 						?>
-						<li class="links"><a href="event.php?id=<?php echo $eventid;?>" title="Events"><img class="lfloat" src="http://icon.qmcdn.net/event_small.png" height="18" width="18"  /><span class="name_20"><?php echo $row['name'];?></span></a></li>
+						<li class="links"><a href="event.php?id=<?php echo $eventid;?>" title="Events"><img class="lfloat" src="http://icon.qmcdn.net/event_small.png" height="18" width="18"  /><span class="name_20 ellipsis"><?php echo $row['name'];?></span></a></li>
 						<?php
 					}
 				?>
@@ -67,7 +66,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 							$groupid = $row['groupid'];
 							$nrow = $database->group_select($groupid);
 							?>
-							<li class="links"><a href="group.php?id=<?php echo $groupid;?>" title="Groups"><img class="lfloat" src="http://icon.qmcdn.net/group_small.png" height="18" width="18" /><span class="name_20"><?php echo $nrow['name'];?></span></a></li>
+							<li class="links"><a href="group.php?id=<?php echo $groupid;?>" title="Groups"><img class="lfloat" src="http://icon.qmcdn.net/group_small.png" height="18" width="18" /><span class="name_20 ellipsis"><?php echo $nrow['name'];?></span></a></li>
 							<?php
 						}
 					?>

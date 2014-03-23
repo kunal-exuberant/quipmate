@@ -3,11 +3,30 @@ require_once('../include/Session.php');
 require_once('../include/Database.php');
 require_once('../include/check_session.php');
 require_once('../include/File.php');
+require_once('../include/Help.php');
+require_once('../include/Memcached.php');
 $myprofileid=$_SESSION['userid'];
-$profileid = $myprofileid;
+if(isset($_GET['id']))
+{ 
+	if($_GET['id']=='')
+	{
+		$profileid = $myprofileid;
+	}
+	else
+	{
+		$profileid=$_GET['id'];
+	}
+}
+else
+{
+	$profileid = $myprofileid;
+}
 $myschool=$_SESSION['SCHOOL'];
 $mycollege=$_SESSION['COLLEGE'];
 $title = 'Quipmate';
+$database = new Database();
+$help = new Help ();
+$memcached = new Memcached();
 $profile_relation = -1;
 if(array_key_exists('searchbox',$_GET) && array_key_exists('search',$_GET))
 {
@@ -42,17 +61,23 @@ if($_SERVER['SCRIPT_NAME'] == '/index.php')
 }
 else if($_SERVER['SCRIPT_NAME'] == '/admin.php') 
 {
-	$page = 'admin_json';
-	$profile_relation = 0;
+	if(!$database->moderator_check($myprofileid))
+	{
+		header('Location: /');
+		exit();
+	}
+	$page = 'admin_json';	
 	if(isset($_GET['hl']))
 	{
 		$hl = $_GET['hl']; 
 		switch($hl)
 		{
-			case 'broadcast': $page = 'broadcast'; break;	
 			case 'page_create': $page = 'page_create'; break;
+			case 'admin': $page = 'admin'; break;	
+			case 'invite': $page = 'invite'; break;	
 			case 'remove_user': $page = 'remove_user'; break;
             case 'analytics': $page = 'analytics'; break;	
+			case 'feature': $page = 'feature'; break;	
 			default: $page = 'admin_json';
 		}
 	}
@@ -76,22 +101,6 @@ else if($_SERVER['SCRIPT_NAME'] == '/settings.php')
 else if($_SERVER['SCRIPT_NAME'] == '/profile.php')
 {
 	$page = 'profile_json'; 
-	$database = new Database();
-	if(isset($_GET['id']))
-	{ 
-		if($_GET['id']=='')
-		{
-			$profileid = $myprofileid;
-		}
-		else
-		{
-			$profileid=$_GET['id'];
-		}
-	}
-	else
-	{
-		$profileid = $myprofileid;
-	}
 	$profileid = $database->profile_exists($profileid);
 	if(!$profileid) $profileid = $myprofileid;
 	if($profileid == $myprofileid)
@@ -147,7 +156,6 @@ else if($_SERVER['SCRIPT_NAME'] == '/profile.php')
 else if($_SERVER['SCRIPT_NAME'] == '/event.php')
 {
 	$page = 'event_json'; 
-	$database = new Database();
 	if(isset($_GET['id']))
 	{ 
 		if($_GET['id']=='')
@@ -202,7 +210,6 @@ else if($_SERVER['SCRIPT_NAME'] == '/event.php')
 else if($_SERVER['SCRIPT_NAME'] == '/group.php')
 {
 	$page = 'group_json'; 
-	$database = new Database();
 	if(isset($_GET['id']))
 	{ 
 		if($_GET['id']=='')
@@ -258,7 +265,6 @@ else if($_SERVER['SCRIPT_NAME'] == '/group.php')
 else if($_SERVER['SCRIPT_NAME'] == '/page.php')
 {
 	$page = 'page_json'; 
-	$database = new Database();
 	if(isset($_GET['id']))
 	{ 
 		if($_GET['id']=='')
@@ -345,7 +351,6 @@ else if($_SERVER['SCRIPT_NAME'] == '/register.php')
 		}
 	}
 }
-$database = new Database();
 $database->page_view_insert($myprofileid, $profileid, $_SERVER['HTTP_REFERER'], $_SERVER['REQUEST_URI'], time());
 ?>
 <meta name="Description" content="Your life experiences and activities are put online in your diary.

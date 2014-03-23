@@ -132,6 +132,10 @@ if(isset($_SESSION['auth']))
 			{
 				$api->friend_invite();
 			}
+			else if($_GET['action'] == 'employee_invite')
+			{
+				$api->employee_invite();
+			}
 			else if($_GET['action'] == 'friend_invite_multiple')
 			{
 				$api->friend_invite_multiple();
@@ -320,6 +324,14 @@ if(isset($_SESSION['auth']))
 			{
 				$api->user_delete();
 			}
+			else if($_GET['action'] == 'moderator_remove')
+			{
+				$api->moderator_remove();
+			}
+			else if($_GET['action'] == 'make_moderator')
+			{
+				$api->make_moderator();
+			}
 			else if($_GET['action'] == 'admin_feed')
 			{
 				$api->admin_feed();
@@ -403,6 +415,10 @@ if(isset($_SESSION['auth']))
 			else if($_GET['action'] == 'notification_setting_update')
 			{
 				$api->notification_setting_update();
+			}
+			else if($_GET['action'] == 'feature_setting_update')
+			{
+				$api->feature_setting_update();
 			}
 			else if($_GET['action'] == 'profile_edit_basic')
 			{

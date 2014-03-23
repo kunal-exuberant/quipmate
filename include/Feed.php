@@ -28,7 +28,7 @@ class Feed
 			$action[$k]['actionon'] = $NROW['PROFILEID'];
 			$name[$action[$k]['actionby']] = $help->name_fetch($action[$k]['actionby'], $memcache, $database);
 			$pimage[$action[$k]['actionby']] = $help->pimage_fetch($action[$k]['actionby'], $memcache, $database); 
-			
+		
 		if($action[$k]['actiontype'] == 302 || $action[$k]['actiontype'] == 311 || $action[$k]['actiontype'] == 402 || $action[$k]['actiontype'] == 411 || $action[$k]['actiontype'] == 2902 || $action[$k]['actiontype'] == 2911 )
 		{			
 			$parent = $encode->parent_encode($action[$k]['pageid'],$json,$help,$database);
@@ -343,7 +343,14 @@ class Feed
 		else if($action[$k]['actiontype']==2801 || $action[$k]['actiontype']==2802 || $action[$k]['actiontype']==2811)
 		{
 			$this->parent_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
-			$this->question_complete_encode($k,$json,$help,$encode,$database,$memcache,2811,2802);
+			if ($action[$k]['parenttype'] ==328)
+			{
+				$this->group_question_complete_encode($k,$json,$help,$encode,$database,$memcache,302,311);
+			}
+			else
+			{
+				$this->question_complete_encode($k,$json,$help,$encode,$database,$memcache,2811,2802);
+			}
 		}
 		else if($action[$k]['actiontype'] > 200 && $action[$k]['actiontype'] < 300)
 		{
@@ -355,6 +362,10 @@ class Feed
 			$action[$k]['time']     = $help->get_utc($NROW['TIMESTAMP']);
 			$this->profile_edit_complete_encode($k,$json,$help,$encode,$database,$memcache, 13, 3);
 		}
+	/*	if($action=='notice')
+		{
+		$action[$k]['time'] =$help->get_utc($NROW['TIMESTAMP']);	
+		} */
 	}
 
 	function quipmate_joined_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
