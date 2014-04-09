@@ -1,9 +1,9 @@
 <?php
+require_once($_SERVER['DOCUMENT_ROOT'].'/../common/secret.php');
 class Session
 {
     private static $lifetime = 0;
 	private static $database = null;
-
     function __construct()
     {
        session_set_save_handler(
@@ -29,8 +29,11 @@ class Session
 
     public static function read($sessionid)
     {
+		global $DB_IP;
+		global $DB_USER;
+		global $DB_PASSWORD;
         //Get data from DB with id = $id;
-		$con = new mysqli('localhost', 'root', 'Quip4mate$@@OwesomE', 'session');
+		$con = new mysqli($DB_IP, $DB_USER, $DB_PASSWORD,  'session');
 		$sessionid = $con->real_escape_string($sessionid);
 		$result= $con->query("select data from session where sessionid='$sessionid' ");
 		$row = $result->fetch_array();
@@ -39,6 +42,10 @@ class Session
 
     public static function write($sessionid, $data)
     {
+		global $DB_IP;
+		global $DB_USER;
+		global $DB_PASSWORD;
+
         //insert data to DB, take note of serialize
 		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
 		if(isset($_SESSION) && isset($_SESSION['USERID']))
@@ -51,17 +58,21 @@ class Session
 		}	
 		$time = time();
 		$user_agent = $_SERVER['HTTP_USER_AGENT'];
-		$con = new mysqli('localhost', 'root', 'Quip4mate$@@OwesomE', 'session');
+		$con = new mysqli($DB_IP, $DB_USER, $DB_PASSWORD,'session');
 		$sessionid = $con->real_escape_string($sessionid);
 		return $con->query("replace into session(sessionid, profileid, time, ip, user_agent, data) values('$sessionid', '$myprofileid', '$time', '$ip', '$user_agent', '$data') ");
     }
 
     public static function destroy($sessionid)
     {
+		global $DB_IP;
+		global $DB_USER;
+		global $DB_PASSWORD;
+
        //MySql delete sessions where ID = $id
-		$con = new mysqli('localhost', 'root', 'Quip4mate$@@OwesomE', 'session');
+		$con = new mysqli($DB_IP, $DB_USER, $DB_PASSWORD,'session');
 		$sessionid = $con->real_escape_string($sessionid);
-		return $con->query("delete from ssssion where sessionid='$sessionid' ");
+		return $con->query("delete from session where sessionid='$sessionid' ");
     }
 
     public static function gc()
@@ -79,10 +90,14 @@ class Session
 	
 	public function delete($sessionid)
     {
+		global $DB_IP;
+		global $DB_USER;
+		global $DB_PASSWORD;
+
        //MySql delete sessions where ID = $id
-	   	$con = new mysqli('localhost', 'root', 'Quip4mate$@@OwesomE', 'session');
+	   	$con = new mysqli($DB_IP, $DB_USER, $DB_PASSWORD,'session');
 		$sessionid = $con->real_escape_string($sessionid);
-		return $con->query("delete from ssssion where sessionid='$sessionid' ");
+		return $con->query("delete from session where sessionid='$sessionid' ");
     }
 }
 ?>

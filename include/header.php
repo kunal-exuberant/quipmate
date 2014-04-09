@@ -185,7 +185,7 @@ else if($_SERVER['SCRIPT_NAME'] == '/event.php')
 		exit(1);
 	}
 	$profile_name = $n['name'];
-	$profile_image	= 'https://icon.qmcdn.net/event.png';
+	$profile_image	= 'http://icon.qmcdn.net/event.png';
 	if($profile_relation != 0 && $profile_relation != 1 && $profile_relation != 2)
 	{
 		$page = 'event_about'; 
@@ -391,14 +391,6 @@ Make an entry of your daily activities by filling your diary.Invite your friends
 				<img id="bring_notice" onclick="ui.notice_fetch(this, event)" src="http://icon.qmcdn.net/notification_cccccc1.png" class="notice_icon"/>
 				<span id = "numnotice"  data=""  onclick="ui.notice_fetch(this, event)" class = "unread_count" title = "Unread Notifications"></span>
 			</div>
-			<?php
-			if($_SESSION['database'] != 'profile')
-			{
-				?>
-				<a class="tab_header" href="/?hl=technical" target="_parent" title="See only technical feeds">Tech</a>
-				<?php
-			}
-			?>
 			<a class="tab_header" href="profile.php?id=<?php echo $_SESSION['USERID'];?>" target="_parent" title="Your Profile">Profile</a>
 			<a class="tab_header" href="/" target="_parent" title="Home">Home</a>
 			<div id="menu" onclick="ui.menu(this,event)">

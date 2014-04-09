@@ -59,6 +59,7 @@ var deploy = (function(){
 					case '316': action_desc = ' added a link '; action_object=' a group'; break;
 					case '325': action_desc = ' added a video '; action_object=' a group'; break;
 					case '326': action_desc = ' added a doc '; action_object=' a group'; break;
+					case '327': action_desc = ' added a new version of doc '; action_object=' a group'; break;
 					case '328': action_desc = ' asked a question '; action_object=' a group'; break;
 					
 					case '400': action_desc = ' created the event '; action_object=''; break;
@@ -510,9 +511,9 @@ var deploy = (function(){
 						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ' invited you to join the ' +action_object+'</div></div>');
 					}						
 				}
-				else if(value.actiontype == 301 || value.actiontype == 403 || value.actiontype == 306 || value.actiontype == 406 || value.actiontype == 316 || value.actiontype == 416 || value.actiontype == 325 || value.actiontype == 425 || value.actiontype == 326 || value.actiontype == 426 || value.actiontype == 328 )
+				else if(value.actiontype == 301 || value.actiontype == 403 || value.actiontype == 306 || value.actiontype == 406 || value.actiontype == 316 || value.actiontype == 416 || value.actiontype == 325 || value.actiontype == 425 || value.actiontype == 326 || value.actiontype == 327 || value.actiontype == 426 || value.actiontype == 328 )
 				{	
-					if(feed_type == 'news_feed')
+					if(feed_type == 'news_feed') 
 					{
 						postid.append('<div class="name_50"></div>');			
 					}

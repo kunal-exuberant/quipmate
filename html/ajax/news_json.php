@@ -142,33 +142,24 @@ else if(isset($_GET['friend']) && isset($_GET['profileid']) && isset($_GET['inbo
 }
 else if(isset($_GET['last_poll_time']) && isset($_GET['database']) && isset($_GET['profileid']) && isset($_GET['polling']))
 {
-		if($_GET['database'] == 'ballytech')
-		{
 			$last_poll_time = $_GET['last_poll_time'];
 			$_SESSION['database'] = $_GET['database'];
 			$profileid = $_GET['profileid'];
 			$memcache = new Memcached();
+			$database = new Database();
 			$res = $database->news_poll($profileid,$last_poll_time);
 			$k = 0;
 			while($NROW =$res->fetch_array())
 			{ 
-				$feed->actiontype_encode($NROW,'0',$json,$help,$encode,$database,$memcache);
+				$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+				$k++;
 			}
-			$data['action'] = $action;
 			$data['myprofileid'] = $_SESSION['USERID']; 
+			$data['action'] = $help->feed_privacy_filter($action, $myprofileid, $database);
 			$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
 			$data['name'] = 	$name; 
 			$data['pimage'] = $pimage;
 			echo json_encode($data);
-		}
-		else
-		{
-			$data['action'] = '';
-			$data['myprofileid'] = '';
-			$data['name'] = ''; 
-			$data['pimage'] = '';
-			echo json_encode($data);
-		}
 }
 else if(isset($_GET['diary_entry']) && isset($_GET['profileid']) && isset($_GET['start']))
 {

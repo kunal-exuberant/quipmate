@@ -240,7 +240,7 @@ class Email
 			$memberid = $param['memberid'];
 			$actionby = $param['actionby'];
 			$actionid = $param['actionid'];
-			$post = $param['post'];
+			$post = $param['page'];
 			$grow = $database->event_select($eventid);
 			$eventname = $grow['name'];
 			$subject = '['.$eventname.'] '.$post;
@@ -286,8 +286,8 @@ class Email
 			$memberid = $param['memberid'];
 			$actionby = $param['actionby'];
 			$actionid = $param['actionid'];
-			$post = $param['post'];
-			$grow = $database->get_group($profileid);
+			$post = $param['page'];
+			$grow = $database->get_group($groupid);
 			$groupname = $grow['NAME'];
 			$subject= '['.$groupname.'] '.$post;
 			$brow = $database->bio_complete_select($memberid);
@@ -316,14 +316,14 @@ class Email
 			$message .= '" width="40" height="40" />'; 
 			$message .= '</a>';
 			$message .= '<span style="margin-left:20px;">'.$post.'</span><br /><br />';
-			$message .= '<a style="text-decoration:none;" href="http://www.quipmate.com/group.php?id='.$profileid.'">To reply </a>this post to ';
+			$message .= '<a style="text-decoration:none;" href="http://www.quipmate.com/group.php?id='.$groupid.'">To reply </a>this post to ';
 			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' please click <a style="text-decoration:none;" href="http://www.quipmate.com/group.php?id='.$profileid.'">here</a>.';
+			$message .= ' please click <a style="text-decoration:none;" href="http://www.quipmate.com/group.php?id='.$groupid.'">here</a>.';
 			$additionalHeaders .= 'From:'.$irow['NAME'].'<group-post@quipmate.com>\r\n';
 		}
 		else if($email_type == 'birthday_bomb')
@@ -376,7 +376,7 @@ class Email
 			$message .= '</a>';
 			$additionalHeaders .= 'From:'.$irow['NAME'].'<birthday-wish@quipmate.com>\r\n';
 		}
-		else if($email_type == 'self_invite')
+		else if($email_type == 'self_invite' || $email_type == 'people_invite')
 	    {
 			$email = $param['email'];
 			$identifier = $param['identifier'];
@@ -384,37 +384,21 @@ class Email
 			$message .= 'Hi ';
 			$message .= $email.'</a>,<br /><br />';
 			$message .='<div style="">';
-			$message .= ' You recently initiated signup process at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.<br /><br />';
+			$m = ' You recently initiated signup process at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.<br /><br />';
+			if($email_type == 'people_invite')
+			{
+				$m= 'Your network admin has invited you to join <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.<br /><br />';
+			}
+			$message .= $m;
 			$message .='</div>'; 
 			$message .='</div>';
-			$message .= 'Here is your registration link'."\n\n<br/>";
+			$message .= 'Please click the following link to proceed with the registration process'."\n\n<br/>";
 			$message .= '<a style="text-decoration:none;" href=';
 			$message .= "http://www.quipmate.com/welcome.php?email=$email&identifier=$identifier";
 			$message .= '>Register Now</a>';
-			$message .= '<br /><br />You can do the following things at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a><br />';
-			$message .='• Say Miss U to your friends in exciting new way<br />• Share Status,Link,Photo,Video and more with your friends<br />• Send Gift,Message and Birhday Bombs to your friends
-			<br />• Define yourself by setting your Tagline<br />• Set your Mood and share it with your friends ';
+			$message .= '<div>or copy & paste this link in your browser address bar'."\n\n<br/>";
+			$message .= "http://www.quipmate.com/welcome.php?email=$email&identifier=$identifier</div>";
 			$additionalHeaders .= 'From:Quipmate<invitation@quipmate.com>\r\n';
-		}
-		else if($email_type == 'people_invite') 
-	    {
-			$email = $param['email'];
-			$identifier = $param['identifier'];
-			/*$myname = $param['myname'];
-			$myphoto = $param['myphoto'];
-			$myprofileid = $param['myprofileid'];	*/ //These params are not needed here.
-			$subject='Invitation to join Quipmate';
-			$message .= 'Hi ';
-			$message .= $email.'</a>,<br /><br />';
-			$message .= 'Admin has invited you to join <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.<br /><br />';
-			$message .='</div>'; 
-			$message .='</div>';
-			$message .= 'Here is your invitation link'."\n\n<br/>";
-			$message .= "http://www.quipmate.com/welcome.php?email=$email&identifier=$identifier";
-			$message .= '<br /><br />You can do the following things at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a><br />';
-			$message .='• Dedicate Song to your friends <br /> • Set a Song as your Status <br /> • Add your Love as Your Crush and Talk anonymously<br />• Say Miss U to your friends in exciting new way<br />• Share Status,Link,Photo,Video and more with your friends<br />• Send Gift,Message and Birhday Bombs to your friends
-			<br />• Define yourself by setting your Tagline<br />• Set your Mood and share it with your friends<br />• Connect with your Alma Mater<br />• Connect with increasing number of colleges across India';
-			$additionalHeaders .= 'From:'.$myname.'<invitation@quipmate.com>\r\n';
 		}
 		else if($email_type == 'friend_invite')
 	    {
@@ -440,24 +424,15 @@ class Email
 			$message .= $myname;
 			$message .= '</a>';
 			$message .= ' invited you to join <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.<br /><br />';
+			$message .= 'Please click the following link to start the registration process'."\n\n<br/>";
+			$message .= '<a style="text-decoration:none;" href=';
+			$message .= "http://www.quipmate.com/welcome.php?email=$email&identifier=$identifier";
+			$message .= '>Register Now</a>';
+			$message .= '<div>or copy & paste this link in your browser address bar'."\n\n<br/>";
+			$message .= "http://www.quipmate.com/welcome.php?email=$email&identifier=$identifier</div>";
 			$message .='</div>'; 
 			$message .='</div>';
-			$message .= 'Here is your invitation link'."\n\n<br/>";
-			$message .= "http://www.quipmate.com/welcome.php?email=$email&identifier=$identifier";
-			$message .= '<br /><br />You can do the following things at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a><br />';
-			$message .='• Dedicate Song to your friends <br /> • Set a Song as your Status <br /> • Add your Love as Your Crush and Talk anonymously<br />• Say Miss U to your friends in exciting new way<br />• Share Status,Link,Photo,Video and more with your friends<br />• Send Gift,Message and Birhday Bombs to your friends
-			<br />• Define yourself by setting your Tagline<br />• Set your Mood and share it with your friends<br />• Connect with your Alma Mater<br />• Connect with increasing number of colleges across India';
 			$additionalHeaders .= 'From:'.$myname.'<invitation@quipmate.com>\r\n';
-		}
-		else if($email_type == 'password_recover')
-	    {
-			$email = $param['email'];
-			$id = $param['uniqueid'];
-			$subject='Recover Your Password';
-			$message = "<a href = 'http://www.quipmate.com'><img src = 'http://www.quipmate.com/png/flogo.png' alt='Quipmate'></a>\n\n\n\r";
-			$message .= 'Please click the following link to recover your password'."\n\n<br/>";
-			$message .= "http://www.quipmate.com/welcome.php?click=recover_password&id=$id&email=$email";
-			$additionalHeaders .= "From: Quipmate<recovery@quipmate.com>\r\n";
 		}
 		else if($email_type == 'friend_confirm')
 	    {
@@ -931,7 +906,7 @@ class Email
 			$profileid = $param['profileid'];
 			$actionby = $param['actionby'];
 			$actionid = $param['actionid'];
-			$post = $param['post'];
+			$post = $param['page'];
 			$subject= $post;
 			$brow = $database->bio_complete_select($profileid);
 			$email = $brow['EMAIL'];
@@ -940,7 +915,7 @@ class Email
 			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
-			$message .= $name.'</a>,<br />';
+			$message .= $name.'</a>,<br /><br />';
 			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
@@ -950,7 +925,6 @@ class Email
 			$message .= ' posted in your diary at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>.<br /><br />';
 			$irow = $database->get_image($actionby);
 			$file = $irow['CDN'].$irow['FILENAME']; 
-			$file = $file;
 			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
@@ -1214,7 +1188,21 @@ class Email
 			$message .= ' has answered your question ';
 			$additionalHeaders .= 'From:'.$irow['NAME'].'<answers@quipmate.com>\r\n';
 		}
-		$mes = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+		else if($email_type == 'password_recover')
+	    {
+			$email = $param['email'];
+			$id = $param['uniqueid'];
+			$subject='Recover Your Password';
+			$message .= 'Hi,<br /><br />';
+			$message .= 'Please click the following link to recover your password'."\n\n<br/>";
+			$message .= '<a style="text-decoration:none;" href=';
+			$message .= "http://www.quipmate.com/welcome.php?click=recover_password&id=$id&email=$email";
+			$message .= '>Recover Password</a>';
+			$message .= '<div>or copy & paste this link in your browser address bar'."\n\n<br/>";
+			$message .= "http://www.quipmate.com/welcome.php?click=recover_password&id=$id&email=$email</div>";
+			$message .= '<br /><div>If you didn\'t initiate the password recovery process, please ignore this email.</div>';
+			$additionalHeaders .= "From: Quipmate<recovery@quipmate.com>\r\n";
+		}
 		$mes .= '<html>';
 		$mes .= '<head>';
 		$mes .= '<title>';
@@ -1222,14 +1210,15 @@ class Email
 		$mes .= '</title>';
 		$mes .= '</head>';
 		$mes .= '<body>';
-		$mes .= '<div style="margin:20px;padding:20px;background:#f4f4f4;text-align:left">';
-		$mes .= '<div style="text-align:right;"><a href="http://www.quipmate.com/"><img style="border:none;" src="http://icon.qmcdn.net/logo.png" alt="Quipmate" /></a></div>';
+		$mes .= '<table width="100%" style="width:100%;padding:15px 15px 5px 40px;background:#f5f5f5;text-align:left" border="0" cellspacing="0" cellpadding="0">';
+		$mes .= '<tbody><tr style="text-align:right;">';
+		$mes .= '<td><a href="http://www.quipmate.com/"><img style="border:none;" src="http://icon.qmcdn.net/quipmate-logo.png" alt="Quipmate" /></a></td></tr><tr><td>';
 		$mes .= $message;
-		$mes .= '<div>';
+		$mes .= '</td></tr><tr><td style="padding:20px 0px 20px 0px;">';
 		$mes .= 'Happy Quipping'.'<br />'.'Thank You'.'<br />'.'<a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>';
-		$mes .= '</div>';
-		$mes .= '</div>';
-		$mes .= '</body>';
+		$mes .= '</td></tr>'; 
+		$mes .= '<tr><td style="height:25px;text-align:right;border-top:1px dashed #cccccc;"><a style="text-decoration:none;font-size:11px;" href="http://www.quipmate.com/settings.php?hl=email_settings">Email Settings</a>&middot;<a style="text-decoration:none;font-size:11px;" href="http://www.quipmate.com/settings.php?hl=notification_settings">Notification Settings</a></td></tr>';
+		$mes .= '</tbody></table></body>';
 		$mes .= '</html>';
 		return mail($email, $subject, $mes, $additionalHeaders);
 	}

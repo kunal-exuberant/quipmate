@@ -54,7 +54,7 @@ var action = (function(){
 						}
 						else
 						{		
-							$('#prev').append('<div style="text-align:center;"><img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRFmAJa2bdiS2NhxFx0rTcfod6D20_YjcY7J9gbGnyuBGG6SGvCsg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
+							$('#prev').append('<div style="text-align:center;"><img src="http://icon.qmcdn.net/feed.jpg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
 						}
 					}
 					});
@@ -120,7 +120,7 @@ var action = (function(){
 							}
 							else
 							{
-								$('#prev').append('<div style="text-align:center;"><img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRFmAJa2bdiS2NhxFx0rTcfod6D20_YjcY7J9gbGnyuBGG6SGvCsg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
+								$('#prev').append('<div style="text-align:center;"><img src="http://icon.qmcdn.net/feed.jpg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
 							}
 						}
 						});
@@ -183,7 +183,7 @@ var action = (function(){
 								}
 								else
 								{
-									$('#prev').append('<div style="text-align:center;"><img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRFmAJa2bdiS2NhxFx0rTcfod6D20_YjcY7J9gbGnyuBGG6SGvCsg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
+									$('#prev').append('<div style="text-align:center;"><img src="http://icon.qmcdn.net/feed.jpg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
 								}
 							}
 						});
@@ -219,6 +219,13 @@ var action = (function(){
 				param.action = 'group_join';
 				param.groupid = $(me).attr('id');
 				ajax.getJSON_ajax(url, param, me, callback.group_join);
+			}
+			
+			function new_version_upload(me)
+			{
+				$('#photo_box').click();
+				$('#pform').show();
+				$('#new_version_upload_button').show();
 			}
 			
 			function user_details(me)
@@ -659,11 +666,11 @@ var action = (function(){
 			
 			function friend_accept(me, flag)
 			{
-				$(me).html('<img src="http://icon.qmcdn.net/loading.gif" />');
 				param.action = 'friend_request_accept';
 				param.flag = flag;
 				param.profileid = $(me).parent().parent().parent().attr('data');
 				var me = $(me).parent().parent().parent();
+				$(me).html('<img src="http://icon.qmcdn.net/loading.gif" />');
 				$(me).attr('class','accepted');
 				ajax.getJSON_ajax(url, param, me, callback.friend_accept);
 			}
@@ -690,11 +697,11 @@ var action = (function(){
 			
 			function member_accept(me, flag)
 			{
-				$(me).html('<img src="http://icon.qmcdn.net/loading.gif" />');
 				param.action = 'member_request_accept';
 				param.flag = flag;
 				param.profileid = $(me).parent().parent().parent().attr('data');
 				var me = $(me).parent().parent().parent();
+				$(me).html('<img src="http://icon.qmcdn.net/loading.gif" />');
 				$(me).attr('class','accepted');
 				ajax.getJSON_ajax(url, param, me, callback.member_accept);
 			}
@@ -1505,8 +1512,16 @@ var action = (function(){
 			return names ;
 			else return names+' and '+count+' more ';
 			}
+			function getanalyticdetails(me,value)
+			{
+			
+			param.action = value;
+			data = ajax.getJSON_ajax(url, param, me,callback.getanalyticdetails);
+			
+			}
 			
 			return {
+			    getanalyticdetails:getanalyticdetails,
 				employee_invite:employee_invite,
 				moderator_remove:moderator_remove,
 				make_moderator:make_moderator,
@@ -1567,6 +1582,7 @@ var action = (function(){
 				missu : missu,
 				missu_fetch : missu_fetch,
 				mood_done : mood_done,
+				new_version_upload : new_version_upload,
 				notification_setting_update : notification_setting_update,
 				photo_upload: photo_upload,
 				bio_item_remove : bio_item_remove,

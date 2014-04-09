@@ -298,6 +298,21 @@ function reply_encode($actionid, $help, $database, $memcache)
 		return $d;
 	}
 	
+	function group_doc_encode($actionid,$database)
+	{
+		$result = $database->group_doc_select($actionid);
+		$j=0;
+		$version = array();
+		while ($row =$result->fetch_array())
+		{
+			$version[$j]['file'] = $row['cdn'].$row['filename'];
+			$version[$j]['caption'] = $row['caption'];
+			$j++;
+		}
+		$d['version'] = $version;
+		return $d;
+	}
+	
 	function video_encode($actionid,$database)
 	{
 		$row = $database->video_select($actionid);

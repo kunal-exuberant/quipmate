@@ -1,5 +1,5 @@
 <?php 
-//require_once($_SERVER['DOCUMENT_ROOT'].'/../common/secret.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/../common/secret.php');
 class Database 
 {
 	public $con = '';
@@ -11,13 +11,13 @@ class Database
 	  global $DB_NAME;
 	  if(isset($_SESSION['database']))
 	  {
-		  $db_name = $_SESSION['database'];
+		  $DB_NAME = $_SESSION['database'];
 	  }
 	  else
 	  {
-		  $db_name = 'mysql';
+		  $DB_NAME = 'mysql';
 	  }
-	  $this->con = new mysqli('localhost', 'root', 'Quip4mate$@@OwesomE', $db_name);
+	  $this->con = new mysqli($DB_IP, $DB_USER, $DB_PASSWORD, $DB_NAME);
 	}
 	
 	function __destruct()
@@ -325,7 +325,7 @@ class Database
 	    $myprofileid = $this->con->real_escape_string($myprofileid);
 		$profileid = $this->con->real_escape_string($profileid);
 		$start = $this->con->real_escape_string($start);
-		return $this->con->query("select * from inbox where (ACTIONBY = '$profileid' AND ACTIONON = '$myprofileid') OR (ACTIONBY = '$myprofileid' AND ACTIONON = '$profileid') AND CASE WHEN ACTIONBY = '$myprofileid' THEN flag_by ELSE flag_on END  ='1' order by ACTIONID desc LIMIT $start,20");
+		return $this->con->query("select * from inbox where (ACTIONBY = '$profileid' AND ACTIONON = '$myprofileid') OR (ACTIONBY = '$myprofileid' AND ACTIONON = '$profileid') AND CASE WHEN ACTIONBY = '$myprofileid' THEN flag_by ELSE flag_on END  ='1' order by ACTIONID desc LIMIT $start,10");
 	}
 	
 	function inbox_select($profileid,$college,$start)
@@ -1134,7 +1134,7 @@ class Database
 	{
 		$email = $this->con->real_escape_string($email);
 		$data = array();
-		$result=$this->con->query("SELECT EMAIL,VIRTUALID FROM virtual WHERE EMAIL='$email'");
+		$result=$this->con->query("SELECT * FROM virtual WHERE EMAIL='$email'");
 		$row = $result->fetch_array();
 		if($row['EMAIL'] == $email)
 		{
@@ -2143,6 +2143,12 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		$result = $this->con->query("SELECT * FROM document WHERE docid = '$actionid' ");
 		return $result->fetch_array();
 	}
+	function group_doc_select($actionid)
+	{
+		$actionid = $this->con->real_escape_string($actionid);
+		$result = $this->con->query("SELECT doc.* FROM document as doc inner join action as act on doc.docid = act.ACTIONID WHERE act.PAGEID = '$actionid' ");
+		return $result;
+	}
 	function image_load($profileid,$limit,$count=4)
 	{	
 		$profileid = $this->con->real_escape_string($profileid);
@@ -2934,5 +2940,47 @@ AND DATE_FORMAT(BIRTHDAY,'%m,%d') >= DATE_FORMAT(NOW(),'%m,%d') ORDER BY DATE_FO
 		$sessionid = $this->con->real_escape_string($sessionid);
 		return $this->con->query("delete from ssssion where sessionid='$sessionid' ");
 	}
+function get_daily_report()
+    {
+    $dataarray = array();
+    $result = $this->con->query("select count(*) as count from action where actiontype= 1 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)) ");
+    $row=$result->fetch_array();
+    $resultjoined = $this->con->query("select count(*) as count from action where actiontype= 99 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)) ");
+    $rowjoined=$resultjoined->fetch_array();
+    $resultcomments = $this->con->query("select count(*) as count from action where actiontype= 2 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)) ");
+    $rowcomments=$resultcomments->fetch_array();
+    $dataarray[0] = $row['count'];
+    $dataarray[1] = $rowjoined['count'];
+    $dataarray[2] = $rowcomments['count'];
+    return $dataarray;     
+    }
+    function get_weekly_report()
+    {
+    $dataarray = array();
+    $result = $this->con->query("select count(*) as count from action where actiontype= 1 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)) ");
+    $row=$result->fetch_array();
+    $resultjoined = $this->con->query("select count(*) as count from action where actiontype= 99 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)) ");
+    $rowjoined=$resultjoined->fetch_array();
+    $resultcomments = $this->con->query("select count(*) as count from action where actiontype= 2 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)) ");
+    $rowcomments=$resultcomments->fetch_array();
+    $dataarray[0] = $row['count'];
+    $dataarray[1] = $rowjoined['count'];
+    $dataarray[2] = $rowcomments['count'];
+    return $dataarray;
+    }
+    function get_monthly_report()
+    {
+    $dataarray = array();
+    $result = $this->con->query("select count(*) as count from action where actiontype= 1 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)) ");
+    $row=$result->fetch_array();
+    $resultjoined = $this->con->query("select count(*) as count from action where actiontype= 99 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)) ");
+    $rowjoined=$resultjoined->fetch_array();
+    $resultcomments = $this->con->query("select count(*) as count from action where actiontype= 2 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)) ");
+    $rowcomments=$resultcomments->fetch_array();
+    $dataarray[0] = $row['count'];
+    $dataarray[1] = $rowjoined['count'];
+    $dataarray[2] = $rowcomments['count'];
+    return $dataarray;
+    }    
 }
 ?>

@@ -12,14 +12,10 @@ if(array_key_exists('login',$_POST))
 		setcookie("quip_e",$email,time()+3600000,'/','.quipmate.com');  
 		$password = trim($_REQUEST['password']);
 		$password = sha1($email.$password); 
-		if(strpos(strtolower($email), '@ballytech.com') > -1)
-		{
-			$_SESSION['database'] =  'ballytech';
-		}
-		else
-		{
-			$_SESSION['database'] =  'profile';
-		}
+		$help = new Help();
+		$database = new Database();
+		$help->assign_database($email,$database);
+		$database = null;
 		$database = new Database();
 		$row = $database->login_user($email,$password);
 	    $pass=$row['PASSWORD'];

@@ -730,9 +730,8 @@ class Feed
 		$action[$k]['groupid'] = $e['groupid'];
 		$action[$k]['group_name'] = $e['name'];
 		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
-		$d = $encode->doc_encode($action[$k]['pageid'],$database);	
-		$action[$k]['file'] = $d['file'];
-		$action[$k]['caption'] = $d['caption'];
+		$d = $encode->group_doc_encode($action[$k]['pageid'],$database);	
+		$action[$k]['version'] = $d['version'];
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
 	}
 	

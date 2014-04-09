@@ -1256,8 +1256,15 @@
 			i++;
 			});
 		}
+		function getanalyticdetails(me,data)
+		{
+		//$('#center right_item').last().remove();
+		$('#ana_left').remove();
+		$('#center').append('<div class="right_item" id="ana_left" ><div id="anasub" style="">'+data.type+'</div><table  border="1px solid #D4D4D4" id="anatable"><tr><th>Total Post</th><th>Total Joined</th><th>Total Comment</th><th>Total Action</th></tr><tr><td>'+data.counts+'</td><td>'+data.joined+'</td><td>'+data.comment+'</td><td>'+data.total+'</td></tr></table></div>');
+		}
 		
 	return {
+			getanalyticdetails:getanalyticdetails,
 			employee_invite:employee_invite,
 			moderator_remove:moderator_remove,
 			make_moderator:make_moderator,

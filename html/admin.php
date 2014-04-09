@@ -26,9 +26,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 					<li class="links"><a class="ajax_nav<?php if($page=='invite') echo ' selected'; ?>" id="news_json" href="?hl=invite" title="Invite fellow assciates to the network"><img class="lfloat" src="http://icon.qmcdn.net/friends_blue.png" height="18" width="18" /><span class="name_20">Invite Employees</span></a></li>
 					<li class="links"><a class="ajax_nav<?php if($page=='admin') echo ' selected'; ?>" id="news_json" href="?hl=admin" title="List of all admins of this network"><img class="lfloat" src="http://icon.qmcdn.net/friends_blue.png" height="18" width="18" /><span class="name_20">Admin List</span></a></li>
 					<li class="links"><a class="ajax_nav<?php if($page=='remove_user') echo ' selected'; ?>" id="news_json" href="?hl=remove_user" title="Updates from your friends"><img class="lfloat" src="http://icon.qmcdn.net/friends_blue.png" height="18" width="18" /><span class="name_20">Remover User</span></a></li>
-					<!--
 			        <li class="links"><a class="ajax_nav<?php if($page=='anlytics') echo ' selected'; ?>" id="news_json" href="?hl=analytics" title="Analytics"><img class="lfloat" src="http://icon.qmcdn.net/friends_blue.png" height="18" width="18" /><span class="name_20">Analytics</span></a></li>
-					-->
 					 <li class="links"><a class="ajax_nav<?php if($page=='feature') echo ' selected'; ?>" id="news_json" href="?hl=feature" title="Feature setting"><img class="lfloat" src="http://icon.qmcdn.net/friends_blue.png" height="18" width="18" /><span class="name_20">Control features</span></a></li>
             </ul> 
 			<div name="page" style="margin-top:1em;">
@@ -158,10 +156,12 @@ $mcount = $database->unread_message_select($profileid,$college);
          <div id="center" >
                 <div class="">
                 <h1 class="page_title">Analytics</h1>
-                    <div style="padding:5em;">
-          <select>
-          <option value="daily">Daily Report</option>
-          <option value="weekely">Weekly Report</option>
+                    <div id="analytics">
+          Select Value:  <br/>
+          <select id="box" onload="action.getanalyticdetails(this,this.value)" onchange="action.getanalyticdetails(this,this.value)" >
+          <option value="daily" selected="selected">Daily Report</option>
+          <option value="weekly" >Weekly Report</option>
+          <option value="monthly">Monthly Report</option>
           </select>
           </div>
                     <div id="fetch_user_details" style="padding:1.5em;"></div>

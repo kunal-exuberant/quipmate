@@ -27,7 +27,7 @@ class Help
 	function assign_database($email,$database)
 	{
 		$flag = 0;
-		$public_email = array("gmail","yahoo","outlook","hotmail","radiffmail","facebook","fb","inbox","mail","shortmail","live","yandex","hushmail","zoho");
+		$public_email = array("gmail","yahoo","outlook","hotmail","rediffmail","facebook","fb","inbox","mail","shortmail","live","yandex","hushmail","zoho");
 		$arr = explode('@',$email);
 		$ar = explode('.',$arr[1]);
 		$dbname = $ar[0];
@@ -57,7 +57,7 @@ class Help
 	}
 	function get_database_from_email($email,$database)
 	{
-		$public_email = array("gmail","yahoo","outlook","hotmail","radiffmail","facebook","fb","inbox","mail","shortmail","live","yandex","hushmail","zoho");
+		$public_email = array("gmail","yahoo","outlook","hotmail","rediffmail","facebook","fb","inbox","mail","shortmail","live","yandex","hushmail","zoho");
 		$arr = explode('@',$email);
 		$ar = explode('.',$arr[1]);
 		$dbname = $ar[0];
@@ -1195,14 +1195,6 @@ class Help
 		$identifier = strtolower($identifier);
 		$name = ucwords(strtolower($name));
 		$password = strtolower($password);
-/*		if(strpos($email, '@ballytech.com') > -1)
-		{
-			$_SESSION['database'] =  'ballytech';
-		}  
-		else
-		{
-			$_SESSION['database'] =  'profile';
-		} */
 		$database = new Database();
 		$row = $database->is_already_user($email);
 		if($row['EMAIL'] != $email)

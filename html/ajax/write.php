@@ -548,6 +548,18 @@ if(isset($_SESSION['auth']))
 			{
 				$api->validate_school();
 			}
+            else if($_GET['action']=='daily')
+            {
+            $api->daily_report();
+            }
+            else if($_GET['action']=='weekly')
+            {
+            $api->weekly_report();
+            }
+            else if($_GET['action']=='monthly')
+            {
+            $api->monthly_report();
+            }
             else
 			{
 				$help->error_description(7);
@@ -573,6 +585,10 @@ if(isset($_SESSION['auth']))
 			else if($_POST['action'] == 'group_photo_upload')
 			{ 
 				$api->group_photo_upload();
+			}
+			else if($_POST['action'] == 'new_version_upload')
+			{
+				$api->new_version_upload();
 			}
 			else if($_POST['action'] == 'event_photo_upload')
 			{ 

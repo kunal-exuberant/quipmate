@@ -41,7 +41,7 @@ class Database(tornado.database.Connection):
 	tornado.database.Connection.__init__(self, secret.DB_IP, self.DB_NAME, user = secret.DB_USER, password= secret.DB_PASSWORD)
 	return self._cursor()
 
-    def query(self,query,cursor):
+    def query(self,query,cursor): 
 		cursor.execute(query)
 		self.close()
 		gc.collect()
@@ -218,7 +218,7 @@ class RealTimeHandler(BaseHandler):
 		else:
 			test = self.new_event_test(profileid, last_poll_time) 
 			if test == 0:
-			   tornado.ioloop.IOLoop.instance().add_timeout(time.time()+20, lambda:callback(response, count, message_count, request_count, database, profileid, action, last_poll_time, callback))
+			   tornado.ioloop.IOLoop.instance().add_timeout(time.time()+60, lambda:callback(response, count, message_count, request_count, database, profileid, action, last_poll_time, callback))
 			else:
 				cursor = self.notice_unread_count(profileid)
 				rows = cursor.fetchall()
@@ -252,7 +252,7 @@ class RealTimeHandler(BaseHandler):
 					mydict['life_is_fun'] =m.hexdigest()
 					action.append(mydict)
 					ack = 1 
-				url = "http://50.57.190.112/ajax/news_json.php?polling=polling&database="+database+"&profileid="+profileid+"&last_poll_time="+last_poll_time
+				url = "http://127.0.0.1/ajax/news_json.php?polling=polling&database="+database+"&profileid="+profileid+"&last_poll_time="+last_poll_time
 				http_client = tornado.httpclient.HTTPClient()
 				try:
 					response = http_client.fetch(url)	
@@ -495,10 +495,10 @@ class OfflineHandler(tornado.web.RequestHandler, Query):
 		self.start_loop()
 
     def start_loop(self):
-        tornado.ioloop.IOLoop.instance().add_timeout(time.time()+60, lambda:self.delete_user())
+        tornado.ioloop.IOLoop.instance().add_timeout(time.time()+120, lambda:self.delete_user())
 
     def delete_user(self):
-        self.offline_replace(time.time()-32.0)
+        self.offline_replace(time.time()-64.0)
         self.start_loop()		   
  
 def main():

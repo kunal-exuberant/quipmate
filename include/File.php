@@ -7,7 +7,7 @@ class File
 	{
 	?>
 		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'pageclass1-1.5.css'; ?>" charset="utf-8"/>
-		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'layout-1.4.css'; ?>" charset="utf-8"/>
+		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'layout-1.5.css'; ?>" charset="utf-8"/>
 		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'chat-1.3.css'; ?>" charset="utf-8"/> 
 		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'action-1.4.css'; ?>" charset="utf-8" media = "screen"/>
 	<?php	
@@ -24,19 +24,19 @@ class File
 	{
 		?>
 		    <script type="text/javascript" src="<?php echo $this->script_cdn.'jquery-1.8.2.min.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'global-1.4.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'action1-1.5.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'callback-1.6.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'global-1.5.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'action-1.6.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'callback-1.7.js'; ?>" charset="utf-8"></script>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'ajax-1.0.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'ui-1.6.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'ui-1.7.js'; ?>" charset="utf-8"></script>
 		<?php	
 	}
 	 
 	function script_footer()
 	{
 		?>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'feed-1.5.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'deploy-1.6.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'feed-1.6.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'deploy-1.7.js'; ?>" charset="utf-8"></script>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'jquery.form.js'; ?>" charset="utf-8"></script>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'eigonFGtEeONACIACqoGtw.js'; ?>" charset="utf-8"></script>			
 		<?php
@@ -46,9 +46,9 @@ class File
 	{		
 		?>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'jquery-1.8.2.min.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'action1-1.5.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'callback-1.6.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'ui-1.6.js'; ?>" charset="utf-8"></script> 
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'action1.6.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'callback-1.7.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'ui-1.7.js'; ?>" charset="utf-8"></script> 
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'ajax-1.0.js'; ?>" charset="utf-8"></script>	
 		<?php
 	}	

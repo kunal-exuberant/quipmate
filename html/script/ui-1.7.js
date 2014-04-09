@@ -9,6 +9,11 @@ var ui = (function(){
 					action.search();
 					action.friend_suggest(this,6);
 				}
+				else if(page=='analytics')
+				{
+				
+				action.getanalyticdetails(this,'daily');
+				}
 				else if(page == 'group_json' || page == 'member' || page == 'group_about' || page == 'group_settings')
 				{
 					action.group_suggest(this,6);
@@ -60,6 +65,7 @@ var ui = (function(){
 				}
 				else if(page=='analytics')
 				{
+					//alert('analytics');
 					action.analytics();
 				}
 				else
@@ -119,7 +125,7 @@ var ui = (function(){
 			
 			function group_question()
 			{
-				$('#uploader').html('<textarea id="question_box" placeholder="Ask your question"/></textarea><input id="question_button" type="submit" value="Ask" onclick="action.group_question_button(this)"><div class="option_container"><input type="text" placeholder="+Add option" value="" class="option_add" onkeydown="action.option(this,event)"><div>'); 
+				$('#uploader').html('<textarea id="question_box" placeholder="Ask your question"/></textarea><input id="question_button" type="submit" value="Ask" onclick="action.group_question_button(this)"><div class="option_container"><input type="text" placeholder="+Add option by pressing enter" value="" class="option_add" onkeydown="action.option(this,event)"><div>'); 
 				$('#question_box').focus();
 			}
 			
@@ -467,13 +473,13 @@ var ui = (function(){
 		
 		function message_leave_shrink()
 		{
-			$('#message_leave').html('<div id="message_leave_title" onclick="ui.message_leave_grow(this)"  style="height:1.5em;cursor:pointer;font-size:1.2em;padding:0.5em;background-color:#336699;color:#ffffff;font-weight:bold;">Leave a message<img src="https://wiki.nci.nih.gov/download/attachments/7475319/downArrow.gif?version=1&amp;modificationDate=1205778301000" style="float:right;" /></div>');
+			$('#message_leave').html('<div id="message_leave_title" onclick="ui.message_leave_grow(this)"  style="height:1.5em;cursor:pointer;font-size:1.2em;padding:0.5em;background-color:#336699;color:#ffffff;font-weight:bold;">Leave a message<img src="http://icon.qmcdn.net/downarrow.gif" style="float:right;" /></div>');
 		}
 		
 		function message_leave_grow()
 		{
 			$('#message_leave').css('width','24em');
-			$('#message_leave').html('<div id="message_leave_title" onclick="ui.message_leave_shrink(this)" style="height:1.5em;cursor:pointer;font-size:1.2em;padding:0.5em;background-color:#336699;color:#ffffff;font-weight:bold;">Leave a message<img src="https://wiki.nci.nih.gov/download/attachments/7475319/downArrow.gif?version=1&amp;modificationDate=1205778301000" style="float:right;" /></div>');
+			$('#message_leave').html('<div id="message_leave_title" onclick="ui.message_leave_shrink(this)" style="height:1.5em;cursor:pointer;font-size:1.2em;padding:0.5em;background-color:#336699;color:#ffffff;font-weight:bold;">Leave a message<img src="http://icon.qmcdn.net/downarrow.gif" style="float:right;" /></div>');
 			$('#message_leave').append('<div style="padding:1em;"><input style="border:0.1em solid #cccccc;height:2em;padding:0.4em;width:20em;" placeholder="Name" type="text" value=""/></div>');
 			$('#message_leave').append('<div style="padding:1em;"><input style="border:0.1em solid #cccccc;height:2em;padding:0.4em;width:20em;"  placeholder="Email"  type="text" value=""/></div>');
 			$('#message_leave').append('<div style="padding:1em;"><input style="border:0.1em solid #cccccc;height:2em;padding:0.4em;width:20em;"  placeholder="Contact No"  type="text" value=""/></div>');
@@ -735,11 +741,6 @@ var ui = (function(){
 				$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
 				$('body').append('<div id="notice_container" data="notice"></div>');
 				$('#notice_container').css('left',$('#search_form').position().left+391+'px');
-				var database = $('#database_hidden').attr('value');
-				if(database == 'ballytech')
-				{
-					$('#notice_container').css('left',$('#search_form').position().left+370+'px');
-				}
 				notice_start = 0;
 				notice_load = true;
 				$('#text').remove();
@@ -766,11 +767,6 @@ var ui = (function(){
 				$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
 				$('body').append('<div id="notice_container" data="message"></div>');
 				$('#notice_container').css('left',$('#search_form').position().left+355+'px');
-				var database = $('#database_hidden').attr('value');
-				if(database == 'ballytech')
-				{
-					$('#notice_container').css('left',$('#search_form').position().left+336+'px');
-				}
 				$('#notice_container').append('<div id="notice_icon_pointer"></div><div id="notice_container_title" style = "background:#f5f5f5;cursor:pointer;font-weight:bold;color:#000000;font-size:1.1em;padding-left:1em;"><span>All Messages</span><span class= "message_seeall" style = "margin-right:0.5em;float:right;">See All</span></div><div id="text"><img id="loading" src="http://icon.qmcdn.net/loading.gif" alt="Loading..."></div><div class = "message_seeall" style = "background:#f5f5f5;color:#000000;cursor:pointer;font-weight:bold;" align ="center">See All Messages</div>');				
 				$.getJSON('ajax/write.php',{action:'message_recent_fetch',start:'0'},function(data){
 					$('#loading').remove();
@@ -791,11 +787,6 @@ var ui = (function(){
 				$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
 				$('body').append('<div id="notice_container" data="fr_missu_ei"></div>');
 				$('#notice_container').css('left',$('#search_form').position().left+318+'px');
-				var database = $('#database_hidden').attr('value');
-				if(database == 'ballytech')
-				{
-					$('#notice_container').css('left',$('#search_form').position().left+300+'px');
-				}
 				$('#notice_container').append('<div id="notice_icon_pointer"></div><div id="notice_container_title" style = "background:#f5f5f5;cursor:pointer;font-weight:bold;color:#000000;font-size:1.1em;padding-left:1em;"><span>All Requests</span></div><div id="text"><img id="loading" src="http://icon.qmcdn.net/loading.gif" alt="Loading..."></div>');	
 				$.getJSON('ajax/write.php',{action:'request_fetch',start:'0'},function(data){
 					$('#loading').remove();

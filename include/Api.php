@@ -286,7 +286,7 @@ class Api
 						  $email = new Email();
 						  $param['type'] = 'friend_request';
 						  $param['profileid'] = $profileid;
-						  $param['myprofileid'] = $myprofileid;
+						  $param['friendid'] = $myprofileid;
 						  $result = $email->email_sample($param);
 					  } 	
 					}
@@ -499,7 +499,7 @@ class Api
 				$param['type'] = 'profile_post';
 				$param['profileid'] = $profileid; 
 				$param['page'] = $moment_name;
-				$param['myprofileid'] = $myprofileid;
+				$param['actionby'] = $myprofileid;
 				$param['actionid'] = $aid;
 				$email->email_sample($param);	
 			}
@@ -1177,9 +1177,10 @@ class Api
 				{
 					if($profileid != $myprofileid)
 					{
-						if($database->check_friendship($myprofileid, $profileid) == 1)
+						$status = $database->check_friendship($myprofileid, $profileid);
+						if($status == 1 || $status == -1)
 						{
-							if($flag == -1)
+							if($flag == 0)
 							{
 								$result =$database->friend_invite_delete($myprofileid, $profileid);
 								if($result)
@@ -1223,7 +1224,7 @@ class Api
 												$param = array();
 												$email = new Email();
 												$param['type'] = 'friend_confirm';
-												$param['myprofileid'] = $myprofileid;
+												$param['friendid'] = $myprofileid;
 												$param['profileid'] = $profileid;
 												$result =  $email->email_sample($param);	
 											}
@@ -1299,7 +1300,7 @@ class Api
 							{								
 								$param = array();
 								$email = new Email();
-								$param['type'] = 'friend_confirm';
+								$param['type'] = 'birthday_bomb';
 								$param['myprofileid'] = $myprofileid;
 								$param['profileid'] = $profileid;
 								$param['actionid'] = $actionid;
@@ -2220,14 +2221,9 @@ class Api
 			if(!empty($_GET['email']))
 			{
 				$email = $_GET['email'];
-				if(strpos($email, '@ballytech.com') > -1)
-				{
-					$_SESSION['database'] =  'ballytech';
-				}  
-				else
-				{
-					$_SESSION['database'] =  'profile';
-				}
+				$database = new Database();
+				$help->assign_database($email,$database);
+				$database = null;
 				$database = new Database();
 				$ret = $database->check_email($email);
 				if($ret == 1)
@@ -2279,7 +2275,6 @@ class Api
 		$existing = array();
 		$invited = array();
 		$invalid = array();
-		$already_invited = array();
 		if(isset($_GET['email']))
 		{
 			if(!empty($_GET['email']))
@@ -2309,14 +2304,17 @@ class Api
 								$row = $database->is_virtual_user($email_value);
 								if($row['ack'])
 								{
-									array_push ($already_invited,$email_value);	
+									array_push ($invited,$email_value);
+									$identifier = $row['uniqueid'];									
 								}
 								else
 								{
 									$virtualid = $database->virtual_create($email_value);
+									$vr = $database->v_select($virtualid);
+									$identifier = $vr['UNIQUEID'];
+									array_push ($invited,$email_value);
 								}
-								$vr = $database->v_select($virtualid);
-								$identifier = $vr['UNIQUEID'];
+								
 								$param = array();
 								$param['type'] = 'people_invite';
 								$param['email'] = $email_value;
@@ -2339,7 +2337,6 @@ class Api
 				
 				}
 					$data['invalid'] = $invalid;
-					$data['already_invited'] = $already_invited;
 					$data['invited'] = $invited;
 					$data['existing'] = $existing;
 					$data['ack'] = 1;
@@ -2370,8 +2367,8 @@ class Api
 				$help = new Help();
 				if($_SESSION['database'] == $help->get_database_from_email($email,$database))
 				{
-					$myname = $_SESSION['name'];
-					$myphoto = $_GET['myphoto'];
+					$myname = $_SESSION['NAME'];
+					$myphoto = $_SESSION['pimage'];
 					$myprofileid = $_SESSION['userid'];
 					if($email == $myemail)
 					{
@@ -3631,7 +3628,6 @@ class Api
 				$data = array();
 				$message = array();
 				$reply = array();
-				$college= $_SESSION['COLLEGE'];
 				$database = new Database();
 				$memcache = new Memcached();
 				$check = $database->is_user($profileid);
@@ -3639,15 +3635,8 @@ class Api
 				{
 					$name[$profileid] = $help->name_fetch($profileid, $memcache, $database);
 					$pimage[$profileid] = $help->pimage_fetch($profileid, $memcache, $database);
-					$database->update_message_readbit($myprofileid,$college); 
-					if($profileid == $myprofileid)
-					{
-						$result = $database->inbox_select($myprofileid,$college,$start);
-					}
-					else
-					{
-						$result=$database->inbox_mutual_select($myprofileid,$profileid,$start);
-					}
+					$database->inbox_update_readbit($myprofileid); 
+					$result=$database->inbox_mutual_select($myprofileid,$profileid,$start);
 					$k=0;
 					while($row = $result->fetch_array())
 					{
@@ -4982,10 +4971,10 @@ class Api
 							if($actiontype == 425)
 							{
 								$filename = $help->photo_name('flv');
-								exec('/root/ffmpeg'.' -i '.$file_to_be_uploaded.' -y -f flv -ar 44100 -ab 64 -ac 1 -acodec mp3 '.'/var/www/video/'.$filename.' &');
+								exec('/var/www/common/ffmpeg'.' -i '.$file_to_be_uploaded.' -y -f flv -ar 44100 -ab 64 -ac 1 -acodec mp3 '.'/var/www/video/'.$filename.' &');
 								$arr = explode('.',$filename);
 								$vthumb = $arr[0].'.jpg';
-								exec('/root/ffmpeg'.' -i '.'/var/www/video/'.$filename.' -ss 00:00:01.000 -f image2 -vframes 1 /var/www/video/'.$vthumb.' &');
+								exec('/var/www/common/ffmpeg'.' -i '.'/var/www/video/'.$filename.' -ss 00:00:01.000 -f image2 -vframes 1 /var/www/video/'.$vthumb.' &');
 								$vthumb = $help->cdn_upload('/var/www/video/'.$vthumb,$container,$vthumb);
 								$file_to_be_uploaded='/var/www/video/'.$filename;
 							}
@@ -5142,10 +5131,10 @@ class Api
 							if($actiontype == 2925)
 							{
 								$filename = $help->photo_name('flv');
-								exec('/root/ffmpeg'.' -i '.$file_to_be_uploaded.' -y -f flv -ar 44100 -ab 64 -ac 1 -acodec mp3 '.'/var/www/video/'.$filename.' &');
+								exec('/var/www/common/ffmpeg'.' -i '.$file_to_be_uploaded.' -y -f flv -ar 44100 -ab 64 -ac 1 -acodec mp3 '.'/var/www/video/'.$filename.' &');
 								$arr = explode('.',$filename);
 								$vthumb = $arr[0].'.jpg';
-								exec('/root/ffmpeg'.' -i '.'/var/www/video/'.$filename.' -ss 00:00:01.000 -f image2 -vframes 1 /var/www/video/'.$vthumb.' &');
+								exec('/var/www/common/ffmpeg'.' -i '.'/var/www/video/'.$filename.' -ss 00:00:01.000 -f image2 -vframes 1 /var/www/video/'.$vthumb.' &');
 								$vthumb = $help->cdn_upload('/var/www/video/'.$vthumb,$container,$vthumb);
 								$file_to_be_uploaded='/var/www/video/'.$filename;
 							} 
@@ -5301,10 +5290,10 @@ class Api
 							if($actiontype == 325)
 							{
 								$filename = $help->photo_name('flv');
-								exec('/root/ffmpeg'.' -i '.$file_to_be_uploaded.' -y -f flv -ar 44100 -ab 64 -ac 1 -acodec mp3 '.'/var/www/video/'.$filename.' &');
+								exec('/var/www/common/ffmpeg'.' -i '.$file_to_be_uploaded.' -y -f flv -ar 44100 -ab 64 -ac 1 -acodec mp3 '.'/var/www/video/'.$filename.' &');
 								$arr = explode('.',$filename);
 								$vthumb = $arr[0].'.jpg';
-								exec('/root/ffmpeg'.' -i '.'/var/www/video/'.$filename.' -ss 00:00:01.000 -f image2 -vframes 1 /var/www/video/'.$vthumb.' &');
+								exec('/var/www/common/ffmpeg'.' -i '.'/var/www/video/'.$filename.' -ss 00:00:01.000 -f image2 -vframes 1 /var/www/video/'.$vthumb.' &');
 								$vthumb = $help->cdn_upload('/var/www/video/'.$vthumb,$container,$vthumb);
 								$file_to_be_uploaded='/var/www/video/'.$filename;
 							} 
@@ -5347,10 +5336,138 @@ class Api
 									$email = new Email();
 									$param = array();
 									$param['type'] = 'group_post';
-									$param['profileid'] = $profileid; 
+									$param['groupid'] = $profileid; 
 									$param['page'] = $description;
-									$param['myprofileid'] = $myprofileid;
+									$param['actionby'] = $myprofileid;
 									$param['actionid'] = $actionid;
+									 while ($res = $result->fetch_array())
+									 {
+										$memberid = $res['profileid'] ;
+										if($memberid != $myprofileid )
+										{
+											$rnotice = $database->setting_notice_select($memberid);
+											if($rnotice['group_post'])
+											{
+												$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
+											}
+											$remail = $database->setting_email_select($memberid);
+											if($remail['group_post'])
+											{
+												$param['memberid'] = $memberid; 
+												$email->email_sample($param);	
+												
+											}	
+										}
+									}
+								}
+								else
+								{
+									$data['ack'] = 0;
+									echo json_encode($data); 
+								}	
+							}
+							else
+							{
+								$data['ack']= 2;						
+								echo json_encode($data);
+							}
+						}
+						else
+						{
+							$help->error_description(12);						
+						}
+					}	
+					else
+					{
+						$help->error_description(16);
+					}
+				}	
+				else
+				{
+						$data['ack']= 3;						
+						echo json_encode($data);
+				}
+		}
+		else
+		{
+				$data['ack']= 5;						
+				echo json_encode($data);
+		}
+	}
+	
+	function new_version_upload()
+	{
+		$valid_formats = array("jpg","png","gif","bmp","jpeg");
+		$doc_formats = array("pdf","pptx","ppt","docx","doc","txt","xls","xlsx","ods","one","pps","ps","rtf","msg","pptm");
+		$video_formats = array("mp4","flv","3gp","mov","mkv","avi","wmv");
+		$name = $_FILES['photo_box']['name'];
+		$size = $_FILES['photo_box']['size'];
+		$description = 'A new version of the file';		
+		$profileid = $_POST['photo_hidden_profileid'];
+		$pageid = $_POST['pageid'];	
+		$myprofileid = $_SESSION['userid'];
+		$help = new Help();
+		if(strlen($name))
+		{
+			$ext = pathinfo($name,PATHINFO_EXTENSION);
+			if(in_array(strtolower($ext),$doc_formats))
+			{
+				$actiontype = 327;
+				$container = 'doc';
+				$cdn = 'http://doc.qmcdn.net/';
+				$limit = 10240*1024;
+			}
+			else
+			{
+				$data['ack']= 4;						
+				echo json_encode($data);
+				exit(1);
+			}
+				if($size < $limit)
+				{		
+					$tmp = $_FILES['photo_box']['tmp_name'];
+					$database = new Database();
+					if($database->group_exists($profileid) == $profileid)
+					{
+						$row = $database->is_member($profileid, $myprofileid);
+						if($row->num_rows)
+						{
+							$file_to_be_uploaded = $_FILES['photo_box']['tmp_name'];
+							$ext = strtolower(pathinfo($_FILES['photo_box']['name'],PATHINFO_EXTENSION));
+							$filename = $help->photo_name($ext);
+							if($actual_image_name = $help->cdn_upload($file_to_be_uploaded,$container,$filename))
+							{
+								if(isset($_SESSION['VISIBLE']))
+									$visible = $_SESSION['VISIBLE'];
+								else
+									$visible = 0;
+								$database = new Database();	
+								$actionid = $database->get_actionid($profileid,$actiontype,$pageid,$visible);
+								if($actionid)
+								{
+									if($container == 'doc')
+									{
+										$result = $database->doc_insert($profileid,$actionid,$actual_image_name,$name,$cdn);	
+									}
+									$data = array();
+									$data['ack']= 1;
+									$data['actiontype'] = $actiontype;	
+									$data['profileid']=$profileid; 
+									$data['actionid']=$actionid;
+									$data['time']= time();
+									$data['life_is_fun']= sha1($actionid.'pass1reset!');
+									$data['file'] = $cdn.$actual_image_name;
+									$data['caption']=$name;
+									echo json_encode($data); 
+									$result = $database->member_select($profileid);		
+									$email = new Email();
+									$param = array();									
+									$param['type'] = 'group_post';
+									$param['groupid'] = $profileid; 
+									$param['page'] = $description;
+									$param['actionby'] = $myprofileid;
+									$param['actionid'] = $actionid;
+									
 									 while ($res = $result->fetch_array())
 									 {
 										$memberid = $res['profileid'] ;
@@ -5462,10 +5579,10 @@ class Api
 							if($actiontype == 2500)
 							{ 
 								$filename = $help->photo_name('flv');
-								exec('/root/ffmpeg'.' -i '.$file_to_be_uploaded.' -y -f flv -ar 44100 -ab 64 -ac 1 -acodec mp3 '.'/var/www/video/'.$filename.' &');
+								exec('/var/www/common/ffmpeg'.' -i '.$file_to_be_uploaded.' -y -f flv -ar 44100 -ab 64 -ac 1 -acodec mp3 '.'/var/www/video/'.$filename.' &');
 								$arr = explode('.',$filename);
 								$vthumb = $arr[0].'.jpg';
-								exec('/root/ffmpeg'.' -i '.'/var/www/video/'.$filename.' -ss 00:00:01.000 -f image2 -vframes 1 /var/www/video/'.$vthumb.' &');
+								exec('/var/www/common/ffmpeg'.' -i '.'/var/www/video/'.$filename.' -ss 00:00:01.000 -f image2 -vframes 1 /var/www/video/'.$vthumb.' &');
 								$vthumb = $help->cdn_upload('/var/www/video/'.$vthumb,$container,$vthumb);
 								$file_to_be_uploaded='/var/www/video/'.$filename;
 							}
@@ -5519,7 +5636,7 @@ class Api
 											$param['type'] = 'profile_post';
 											$param['profileid'] = $profileid; 
 											$param['page'] = $description;
-											$param['myprofileid'] = $myprofileid;
+											$param['actionby'] = $myprofileid;
 											$param['actionid'] = $actionid;
 											$email->email_sample($param);	
 										}
@@ -6116,7 +6233,7 @@ class Api
 											$param['type'] = 'profile_post';
 											$param['profileid'] = $profileid; 
 											$param['page'] = $question;
-											$param['myprofileid'] = $myprofileid;
+											$param['actionby'] = $myprofileid;
 											$param['actionid'] = $actionid;
 											$email->email_sample($param);	
 										} 
@@ -6207,7 +6324,7 @@ class Api
 											$param['type'] = 'profile_post';
 											$param['profileid'] = $profileid; 
 											$param['page'] = $page;
-											$param['myprofileid'] = $myprofileid;
+											$param['actionby'] = $myprofileid;
 											$param['actionid'] = $actionid;
 											$email->email_sample($param);	
 										}
@@ -6373,9 +6490,9 @@ class Api
 									$email = new Email();
 									$param = array();
 									$param['type'] = 'group_post';
-									$param['profileid'] = $profileid; 
+									$param['groupid'] = $profileid; 
 									$param['page'] = $page;
-									$param['myprofileid'] = $myprofileid;
+									$param['actionby'] = $myprofileid;
 									$param['actionid'] = $actionid;
 									while($res = $result->fetch_array())
 									{
@@ -7881,7 +7998,7 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['eventid'];
 						$name[$search[$k]['profileid']] = $frow['name'];
-						$pimage[$search[$k]['profileid']] = 'https://en.opensuse.org/images/0/05/Icon-event.png';
+						$pimage[$search[$k]['profileid']] = 'http://icon.qmcdn.net/event.png';
 						$description[$search[$k]['profileid']] = $frow['description'];
 						$k++;
 					}
@@ -8404,7 +8521,7 @@ class Api
 					{
 						$guess[$k]['profileid'] = $row['eventid'];
 						$name[$guess[$k]['profileid']] = $row['eventname']; 			
-						$pimage[$guess[$k]['profileid']] = 'https://en.opensuse.org/images/0/05/Icon-event.png'; 	
+						$pimage[$guess[$k]['profileid']] = 'http://icon.qmcdn.net/event.png'; 	
 						$k++;
 					}
 					$data['action'] = $guess;	
@@ -9208,14 +9325,9 @@ class Api
 				$email = trim($_REQUEST['email']);
 				$password = trim($_REQUEST['password']);
 				$password = sha1($email.$password); 
-				if(strpos(strtolower($email), '@ballytech.com') > -1)
-				{
-					$_SESSION['database'] =  'ballytech';
-				}
-				else
-				{
-					$_SESSION['database'] =  'profile';
-				}
+				$database_old = new Database();	
+				$help->assign_database($email,$database_old);
+				$database_old =null;
 				$database = new Database();
 				$row = $database->login_user($email,$password);
 				$pass=$row['PASSWORD']; 
@@ -9253,5 +9365,64 @@ class Api
        $database = new Database();
        $row=$database->get_analytics(); 
     }
+    function daily_report()
+    {
+      $help = new Help();
+      $database = new Database();
+      $count = array();
+      $count=$database->get_daily_report();
+      if($count)
+      {
+     $data['counts']=$count[0];
+      $data['joined']=$count[1];
+      $data['comment']=$count[2];
+      $data['type']="Daily";
+      $data['total']=$count[0]+$count[1]+$count[2];
+      echo json_encode($data);
+      }
+      else
+    {
+    $help->error_description(15);
+    } 
+    }
+    function weekly_report()
+    { 
+      $help = new Help();
+      $database = new Database();
+      $count = array();
+      $count=$database->get_weekly_report();
+      if($count)
+      {
+      $data['counts']=$count[0];
+      $data['joined']=$count[1];
+      $data['comment']=$count[2];
+      $data['type']="Weekly";
+      $data['total']=$count[0]+$count[1]+$count[2];
+      echo json_encode($data);
+    }
+    else
+    {
+    $help->error_description(15);
+    }
+    }
+    function monthly_report()
+    { $help = new Help(); 
+      $database = new Database();
+      $count = array();
+      $count=$database->get_monthly_report();
+      if($count)
+      {
+      $data['counts']=$count[0];
+      $data['joined']=$count[1];
+      $data['comment']=$count[2];
+      $data['type']="Monthly";
+      $data['total']=$count[0]+$count[1]+$count[2];
+      echo json_encode($data);
+    }    
+    else
+    {
+    $help->error_description(15);
+    }
+    } 
 }
 ?>

@@ -26,7 +26,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 					<li class="links"><a  class="ajax_nav<?php if($page=='inbox') echo ' selected'; ?>" id="inbox" href="?hl=inbox" title="Messages from your friends"><img class="lfloat" src="http://icon.qmcdn.net/message.png" height="18" width="18" /><span class="name_20"><?php if($mcount) echo 'Messages('.$mcount.')'; else echo 'Messages'; ?></span></a></li>
 					
 					<li class="links"><a class="ajax_nav<?php if($page=='photo') echo ' selected'; ?>" id="photo" href="?hl=image" title="Photo shared by your friends"><img class="lfloat" src="http://icon.qmcdn.net/world.png" height="18" width="18" /><span class="name_20">Photos</span></a></li>  
-					<li class="links"><a class="ajax_nav<?php if($page=='new_user') echo ' selected'; ?>" href="?hl=new_user" title="Find out who joined Quipmate after you"><img class="lfloat" src="http://icon.qmcdn.net/group_small.png" height="18" width="18" /><span class="name_20">New Users</span></a></li>
+					<li class="links"><a class="ajax_nav<?php if($page=='new_user') echo ' selected'; ?>" href="?hl=new_user" title="Find out who joined Quipmate after you"><img class="lfloat" src="http://icon.qmcdn.net/group_small.png" height="18" width="18" /><span class="name_20">People Directory</span></a></li>
 						
 					<?php
 					if($_SESSION['database'] == 'profile')

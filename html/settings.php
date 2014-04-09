@@ -63,7 +63,7 @@ $myprofileid = $_SESSION['userid'];
 				<?php $help->setting_checkbox('event_invite', $row['event_invite']); ?>
 			</div>	
 			<div class="setting_each">
-				<span class="setting_category_name"> Post in a goup you are member of:</span>
+				<span class="setting_category_name"> Post in a group you are member of:</span>
 				<?php $help->setting_checkbox('group_post', $row['group_post']); ?>
 			</div>
 			<div class="setting_each bgcolor">
@@ -140,7 +140,7 @@ $myprofileid = $_SESSION['userid'];
 				<?php $help->setting_checkbox('event_invite', $row['event_invite'],0); ?>
 			</div>	
 			<div class="setting_each">
-				<span class="setting_category_name"> Post in a goup you are member of:</span>
+				<span class="setting_category_name"> Post in a group you are member of:</span>
 				<?php $help->setting_checkbox('group_post', $row['group_post'],0); ?>
 			</div>
 			<div class="setting_each bgcolor">
