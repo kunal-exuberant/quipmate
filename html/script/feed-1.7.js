@@ -206,9 +206,10 @@
 				}
                 else
 				{
-					$('#prev').append('<div style="text-align:center;">No Posts to show</div>');
+					/*$('#prev').append('<div style="text-align:center;">No Posts to show</div>');
 					$('#prev').append('<div style="border-bottom: 0.1em solid #CCCCCC;border-top: 0.1em solid #CCCCCC; height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="height:4em;width:20em;" value="Find friends" onclick="ui.redirect_friend_suggest()"/></div>');
-					$('#prev').append('<div style="border-bottom: 0.1em solid #CCCCCC;border-top: 0.1em solid #CCCCCC; height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="height:4em;width:20em;" value="Join Group" onclick="ui.redirect_group_suggest()"/></div>');
+					$('#prev').append('<div style="border-bottom: 0.1em solid #CCCCCC;border-top: 0.1em solid #CCCCCC; height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="height:4em;width:20em;" value="Join Group" onclick="ui.redirect_group_suggest()"/></div>');*/
+					$('#prev').append('<div style="text-align:center;"><img width="136" height="136" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/noposts.png" alt=""><div style="font-size:2.4em;color:#adb2bb;font-weight:bold;">No posts to show</div><div style="margin-top:1.45em;"><a style="float:left;margin-left:4em;" class="really_group_join" href="/register.php?hl=friend_suggest">Find Friends</a><a style="margin-right:4em;" class="really_group_join" href="/register.php?hl=group_suggest">Join Groups</a></div></div>');
 				}	
 			}
 			

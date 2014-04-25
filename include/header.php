@@ -353,13 +353,11 @@ else if($_SERVER['SCRIPT_NAME'] == '/register.php')
 }
 $database->page_view_insert($myprofileid, $profileid, $_SERVER['HTTP_REFERER'], $_SERVER['REQUEST_URI'], time());
 ?>
-<meta name="Description" content="Your life experiences and activities are put online in your diary.
-Make an entry of your daily activities by filling your diary.Invite your friends to write your diary. Also get updates from your friends diary. Share the special moments of your life with friends. Use letters to send personal messages to your friends.
-"/>
+<meta name="description" content="Quipmate enhances the productivity of your organization by connecting people, conversations, project and ideas in a private network"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
 <meta name= "url" content="http://www.quipmate.com"/>
-<meta name= "keywords" content="quipmate, mate, friend, friends, social, diary, moments, moments of life, life, online, profile"/>
+<meta name= "keywords" content="enterprise social network, social, profile, collaboration, team, files sharing, project, idea sharing, innovation, creativity, conversation, knowledge management, engagement platform, identify hidden experts, breakdown silos, improve transparency, poll, questions, democratic decision making, enterprise 2.0, microblogging, employee engagement, groups, bottom-up communication, human capital"/>
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" charset="utf-8"/>
 <?php 
 	$file = new File();

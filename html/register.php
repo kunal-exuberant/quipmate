@@ -3,8 +3,6 @@
 <head>
 <?php
 	require('../include/header.php');
-	$file = new File();
-	$file->script_register();
 ?>
 <style>
 body{background:#ededed;}

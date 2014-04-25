@@ -94,7 +94,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 	?>
 	<div id="right"> 
 		<?php
-		if($_SESSION['database'] != 'profile')
+		if($_SESSION['database'] == 'ballytech')
 		{
 		?>	
 			<div id="" class="right_item"> <img src="http://icon.qmcdn.net/MD_new.png" style = "cursor:pointer;" height="20" width="20" onclick="ui.direct_to_md(this,event)" /><a style="cursor:pointer;" onclick="ui.direct_to_md(this,event)">Direct to MD</a></div>		

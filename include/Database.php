@@ -266,7 +266,7 @@ class Database
 	function message_order($profileid)
 	{    
 	     $profileid = $this->con->real_escape_string($profileid);
-		 return $this->con->query("select ACTIONBY, ACTIONON from inbox where ACTIONON > '999999999' and (ACTIONBY = '$profileid' OR ACTIONON = '$profileid') order by ACTIONID desc");
+		 return $this->con->query("select DISTINCT ACTIONBY, ACTIONON from inbox where (ACTIONBY = '$profileid' OR ACTIONON = '$profileid') order by ACTIONID desc");
 	}
 	
 	function message_order_inbox($profileid)
@@ -609,10 +609,10 @@ class Database
 		$groupid = $this->con->real_escape_string($groupid);
 		return $this->con->query("SELECT * FROM member WHERE groupid = '$groupid' order by actionid limit $limit, $count");
 	}
-	function follower_select($groupid, $limit=0, $count=50)
+	function follower_select($groupid)
 	{
 		$groupid = $this->con->real_escape_string($groupid);
-		return $this->con->query("SELECT * FROM subscriber WHERE pageid = '$groupid' order by actionid limit $limit, $count");
+		return $this->con->query("SELECT * FROM subscriber WHERE pageid = '$groupid'");
 	}
 	function member_select_profileid($groupid, $profileid)
 	{
@@ -634,6 +634,12 @@ class Database
 		$groupid = $this->con->real_escape_string($groupid);
 		$result = $this->con->query("SELECT * FROM member WHERE actionid = '$groupid'");
 		return $result->fetch_array();
+	}
+	function group_admin_select($groupid)
+	{
+		$groupid = $this->con->real_escape_string($groupid);
+		$result = $this->con->query("SELECT * FROM member WHERE groupid = '$groupid' and priviledge ='1' ");
+		return $result;
 	}
 	
 	function guest_select_actionid($groupid)
@@ -1336,9 +1342,12 @@ class Database
 		return $actionid;
 	} 
 
-	function notice_insert($actionid,$diaryid,$actiontype,$pageid)
+	function notice_insert($actionid,$diaryid,$actiontype,$pageid,$myprofileid=0)
 	{
-		$myprofileid = $_SESSION['USERID'];
+		if($myprofileid ==0)
+		{
+			$myprofileid = $_SESSION['USERID'];
+		}
 		$actionid = strip_tags($this->con->real_escape_string($actionid));
 		$diaryid = strip_tags($this->con->real_escape_string($diaryid));
 		$pageid = $this->con->real_escape_string($pageid);
@@ -1437,7 +1446,7 @@ FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action INNER
 		$limit = $this->con->real_escape_string($limit);
 		$count = $this->con->real_escape_string($count);
 		$result= $this->con->query("SELECT  A.ACTIONID,A.ACTIONBY,A.ACTIONTYPE,A.PAGEID,A.VISIBLE,A.PROFILEID,A.TIMESTAMP 
-FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action INNER JOIN subscribe as sub ON CASE WHEN action.profileid <1000000000 THEN action.PROFILEID ELSE action.ACTIONBY END = sub.FRIENDID INNER JOIN actiontype on actiontype.actiontypeid = action.ACTIONTYPE WHERE sub.PROFILEID='$profileid' AND actiontype.live_feed ='1' group by pageid ORDER BY action.ACTIONID DESC LIMIT $limit,$count) AS B  ON A.ACTIONID = B.ACTIONID");
+FROM (SELECT  MAX(ACTIONID) as ACTIONID FROM action INNER JOIN subscribe as sub ON CASE WHEN action.profileid <1000000000 THEN action.PROFILEID ELSE action.ACTIONBY END = sub.FRIENDID INNER JOIN actiontype on actiontype.actiontypeid = action.ACTIONTYPE WHERE sub.PROFILEID='$profileid' AND actiontype.live_feed ='1' group by pageid ORDER BY action.ACTIONID DESC LIMIT $limit,$count) AS B INNER JOIN action as A  ON B.ACTIONID = A.ACTIONID");
 		return $result; 
 	}
 	function get_profile_post($profileid,$limit,$count=10)
@@ -2805,7 +2814,12 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 	function notice_read($profileid)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
-		return $this->con->query("UPDATE notice SET READBIT = '1' WHERE PROFILEID = '$profileid' AND READBIT = '0'");
+		return $this->con->query("UPDATE notice SET READBIT = '1' WHERE PROFILEID = '$profileid' AND READBIT = '0' AND ACTIONTYPE NOT IN(7,501,408)");
+	}
+	function request_notice_read($profileid)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		return $this->con->query("UPDATE notice SET READBIT = '1' WHERE PROFILEID = '$profileid' AND READBIT = '0' AND ACTIONTYPE  IN(7,501,408)");
 	}
 	
 	function noofallnotices($profileid)

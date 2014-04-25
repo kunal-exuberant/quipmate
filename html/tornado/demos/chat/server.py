@@ -11,6 +11,8 @@ import tornado.web
 import os.path
 import tornado.httpclient
 import gc
+import tornado.escape
+import MySQLdb
 from HTMLParser import HTMLParser
 from tornado.options import define, options
 
@@ -61,9 +63,13 @@ class Query(Database):
 		sql_query = "SELECT LAST_INSERT_ID() as id"
 		return self.query(sql_query,cursor)
 
+	def get_databases(self):
+		cursor = self.connect()
+		sql_query = "show databases where `database` not IN('mysql','information_schema','performance_schema','session','admin')"
+		return self.query(sql_query, cursor)
+
 	def chat_insert(self, actionid, sentby, sentto, message, time):
 		cursor = self.connect()
-		message = message.replace("'","\\'")
 		sql_query = r"insert into inbox(ACTIONID, ACTIONBY, ACTIONON, MESSAGE, TIME) values( '%s', '%s', '%s', '%s', '%s')" %(actionid, sentby, sentto, message, time)
 		return self.query(sql_query, cursor)
 
@@ -124,9 +130,13 @@ class Query(Database):
 		sql_query = "select count(*) from notice where READBIT ='0' and PROFILEID = '%s' and (ACTIONTYPE = '%s' or ACTIONTYPE = '%s' or ACTIONTYPE = '%s') " %(profileid, actiontype1, actiontype2, actiontype3)
 		return self.query(sql_query, cursor)
 
-	def offline_replace(self, time):
+	def offline_replace(self, time,dbname):
 		cursor = self.connect()
-		sql_query = "update online set time = 0 where time < '%s' " %(time)
+		sql_query = "delete from  `%s`.`online` where time < '%s' " %(dbname,time)
+		return self.query(sql_query, cursor)
+	def online_table_select(self, time,dbname):
+		cursor = self.connect()
+		sql_query = "select profileid from `%s`.`online` where time < '%s' "%(dbname,time)
 		return self.query(sql_query, cursor)
 
 	def chat_readbit_update(self, sentby, sentto):
@@ -303,7 +313,6 @@ class ChatMixin(tornado.web.RequestHandler, Query):
    def wait(self,database,user,callback):
 	   cm = ChatMixin	
 	   cm.listener[callback] = database+'_'+user
-	   
    def seen(self,chat,name,photo,database):
 		cm = ChatMixin
 		photo = ""
@@ -352,11 +361,11 @@ class ChatNewHandler(BaseHandler, ChatMixin):
 			cursor = self.get_globalid()
 			rows = cursor.fetchall()
 			for row in rows:
-				self.chat_insert(row[0], self.get_argument("profileid"), self.get_argument("userid"), strip_tags(self.get_argument("message")), time.time())
+				self.chat_insert(row[0], self.get_argument("profileid"), self.get_argument("userid"), MySQLdb.escape_string(self.get_argument("message")), time.time())
 				chat['actionid'] = row[0]
 				chat['sentby'] = self.get_argument("profileid")
 				chat['sentto'] = self.get_argument("userid")
-				chat['message'] = strip_tags(self.get_argument("message"))
+				chat['message'] = self.get_argument("message")
 				chat['time'] = time.time();
 				chat['type'] = 3
 				name[chat['sentby']] = self.get_argument("name")
@@ -387,17 +396,15 @@ class ChatUpdateHandler(BaseHandler, ChatMixin):
 			   chat['sentto'] = row[2]
 			   chat['sentby'] = row[1]
 			   chat['message'] = row[3]
-			   print row[3]
 			   chat['time'] = row[4]
 			   chat['type'] = 3
 			   name[int(row[1])] = self.get_name(row[1])
 			   photo[int(row[1])] = self.get_photo(row[1])
 			   action.append(chat)
 		if ack == 1:		 
-			self.retchat(action,name,photo)
-			pass
+		   self.retchat(action,name,photo)
 		else:		
-			self.wait(self.get_argument("database"), self.get_argument("profileid"), self.retchat)
+		     self.wait(self.get_argument("database"), self.get_argument("profileid"), self.retchat)
 
     def retchat(self,action,name,photo):
         if self.request.connection.stream.closed():
@@ -489,17 +496,28 @@ class OnlineHandler(BaseHandler):
 		except Exception,e:
 		   print e 
 		   
-class OfflineHandler(tornado.web.RequestHandler, Query):
+class OfflineHandler(ChatMixin):
     def get(self):
-		self.DB_NAME = self.get_argument("database")
-		self.start_loop()
+	self.DB_NAME="mysql"
+    	cursor = self.get_databases()
+	rows = cursor.fetchall()
+	for row in rows:
+		dbname=row[0]
+		self.start_loop(dbname)
+    def start_loop(self,dbname):
+        tornado.ioloop.IOLoop.instance().add_timeout(time.time()+120, lambda:self.delete_user(dbname))
 
-    def start_loop(self):
-        tornado.ioloop.IOLoop.instance().add_timeout(time.time()+120, lambda:self.delete_user())
-
-    def delete_user(self):
-        self.offline_replace(time.time()-64.0)
-        self.start_loop()		   
+    def delete_user(self,dbname):
+		cursor=self.online_table_select(time.time()-64.0,dbname)
+		rows = cursor.fetchall()
+		for row in rows:
+			profileid = row[0]
+			cm = ChatMixin
+			for i,v in cm.listener.items(): 
+				if v == str(dbname)+'_'+str(profileid):
+					del cm.listener[i]
+		self.offline_replace(time.time()-64.0,dbname)
+		self.start_loop(dbname)		   
  
 def main():
     tornado.options.parse_command_line()

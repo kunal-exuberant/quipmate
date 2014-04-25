@@ -1,4 +1,5 @@
 <?php
+require_once($_SERVER['DOCUMENT_ROOT'].'/../common/secret.php');
 class Help
 { 
 	function checkPrivacy($item,$profileid)
@@ -85,10 +86,13 @@ class Help
 	}
 	function create_database($db_name)
 	{
-
-		$DB_SRC_HOST='localhost';
-		$DB_SRC_USER='root';
-		$DB_SRC_PASS='Quip4mate$@@OwesomE';
+		global $DB_IP;
+		global $DB_USER;
+		global $DB_PASSWORD;
+		global $DB_NAME;
+		$DB_SRC_HOST=$DB_IP;
+		$DB_SRC_USER=$DB_USER;
+		$DB_SRC_PASS=$DB_PASSWORD;
 		$DB_SRC_NAME='profile';
 		$DB_DST_NAME=$db_name;
 
@@ -581,7 +585,8 @@ class Help
 		}
 		else
 		{
-			$row = $database->get_image($key); 
+			$sex = $database->sex_select($key);
+			$row = $database->get_image($key,$sex); 
 			$memcache->set($_SESSION['database'].'_pimage_'.$key, $row['CDN'].$row['FILENAME']);
 			return $row['CDN'].$row['FILENAME'];
 		}
@@ -1196,6 +1201,7 @@ class Help
 		$name = ucwords(strtolower($name));
 		$password = strtolower($password);
 		$database = new Database();
+		$memcache = new Memcached();
 		$row = $database->is_already_user($email);
 		if($row['EMAIL'] != $email)
 		{
@@ -1240,10 +1246,11 @@ class Help
 							$fid = $frw['ACTIONBY'];
 							$actionid = $database->get_actionid($fid,'8');
 							$r = $database->invited_friend_insert($fid,$profileid);
-							$memcache = new Memcached();
 							$this->friend_memcache_update($fid, $database, $memcache);
 							$this->friend_memcache_update($profileid, $database, $memcache);
 						}
+						$image = $this->pimage_fetch($profileid, $memcache, $database);
+						$_SESSION['pimage'] = $image;
 						$data['ack']=1;
 						echo json_encode($data);
 					}

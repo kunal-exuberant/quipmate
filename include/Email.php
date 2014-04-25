@@ -326,6 +326,39 @@ class Email
 			$message .= ' please click <a style="text-decoration:none;" href="http://www.quipmate.com/group.php?id='.$groupid.'">here</a>.';
 			$additionalHeaders .= 'From:'.$irow['NAME'].'<group-post@quipmate.com>\r\n';
 		}
+		else if($email_type == 'page_post')
+		{
+			$page_name = $param['page_name'] ;
+			$page_pageid = $param['page_pageid'] ;
+			$memberid = $param['followerid'];
+			$actionid = $param['actionid'];
+			$post = $param['page'];
+			$subject= '['.$page_name.'] '.$post;
+			$brow = $database->bio_complete_select($memberid);
+			$email = $brow['EMAIL'];
+			$name = $brow['NAME'];
+			$message .= 'Hi ';
+			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= $memberid; 
+			$message .= '">'; 
+			$message .= $name.'</a>,<br />';
+			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/page.php?id=';
+			$message .= $page_pageid; 
+			$message .= '">'; 
+			$message .= $page_name;
+			$message .= '</a>';
+			$message .= ' has new broadcast at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>.<br /><br />';
+			$file = 'http://icon.qmcdn.net/broadcast.png';
+			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/page.php?id=';
+			$message .= $page_pageid; 
+			$message .= '">'; 
+			$message .='<img style="border:none;" src="';
+			$message .= $file; 
+			$message .= '" width="40" height="40" />'; 
+			$message .= '</a>';
+			$message .= '<span style="margin-left:20px;">'.$post.'</span><br /><br />';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<broadcast-message@quipmate.com>\r\n';
+		}
 		else if($email_type == 'birthday_bomb')
 	    {
 			$profileid =  $param['profileid'];

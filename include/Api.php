@@ -156,6 +156,12 @@ class Api
 					  $data['ack'] = 1;
 					  $data['message'] = 'Requested';
 					  echo json_encode($data);
+					  $result = $database->group_admin_select($groupid);
+					  while ($res = $result->fetch_array())
+					  {
+						$admin_profileid = $res['profileid'];
+						$database->notice_insert($actionid,$admin_profileid,307,$groupid);
+					  }
 					  $remail = $database->setting_email_select($myprofileid);
 					  if($remail['group_join'])
 					  {
@@ -1224,8 +1230,8 @@ class Api
 												$param = array();
 												$email = new Email();
 												$param['type'] = 'friend_confirm';
-												$param['friendid'] = $myprofileid;
-												$param['profileid'] = $profileid;
+												$param['friendid'] = $profileid;
+												$param['profileid'] = $myprofileid; 
 												$result =  $email->email_sample($param);	
 											}
 										}
@@ -3935,7 +3941,7 @@ class Api
 		$myprofileid = $_SESSION['userid'];
 		$database = new Database();
 		$memcache = new Memcached();
-		
+		$res = $database->request_notice_read($myprofileid);
 		if($result = $database->friend_invite_select($myprofileid))
 		{
 			if($result->num_rows)
@@ -6396,13 +6402,14 @@ class Api
 								if($result)
 								{
 									$result = $database->follower_select($profileid);
-								/*	$email = new Email();
+									$email = new Email();
 									$param = array();
-									$param['type'] = 'group_post';
-									$param['profileid'] = $profileid; 
+									$param['type'] = 'page_post';
+									$param['page_name'] =$row['name'];
+									$param['page_pageid'] =$row['pageid'];
 									$param['page'] = $page;
 									$param['myprofileid'] = $myprofileid;
-									$param['actionid'] = $actionid; */
+									$param['actionid'] = $actionid;
 									while($res = $result->fetch_array())
 									{
 										$followerid = $res['profileid'] ;
@@ -6410,13 +6417,13 @@ class Api
 										{
 										//Not providing an option to check notification setting . he must not unsubscribe as this
 										// is broadcast .
-											$database->notice_insert($actionid,$followerid,$actiontype,$actionid);
+											$database->notice_insert($actionid,$followerid,$actiontype,$actionid,$profileid);
 										/*	$remail = $database->setting_email_select($followerid);
-											if($remail['group_post'])
-											{
+											if($remail['page_post'])
+											{*/
 												$param['followerid'] = $followerid; 
 												$email->email_sample($param);												
-											} */	
+										/*	} */	
 										}
 									}
 									$data['ack'] = 1;

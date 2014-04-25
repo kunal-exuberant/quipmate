@@ -55,6 +55,7 @@ var deploy = (function(){
 					case '306': action_desc = ' added a photo ';action_object=' a group'; break;		
 					case '308': action_desc = ' invited to join a group ';action_object=' group'; break;
 					case '302': action_desc = ' commented on '; action_object=' a post in group'; break;
+					case '307': action_desc = ' requested to join a group '; action_object=''; break;
 					case '311': action_desc = ' is excited at '; action_object=' a post in group'; break;
 					case '316': action_desc = ' added a link '; action_object=' a group'; break;
 					case '325': action_desc = ' added a video '; action_object=' a group'; break;
@@ -526,16 +527,23 @@ var deploy = (function(){
 						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'"><input type="hidden" id='+value.actionid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+' in '+action_object+'</div></div>');
 					}	
 				}
+				else if(value.actiontype == 307)
+				{
+					if(feed_type == 'notice_feed')
+					{
+						$(container).append('<div class="notice_drop"  id="'+con+value.actionid+value.actiontype+'" data="group"><input type="hidden" id='+value.pageid+' value="'+value.life_is_fun+'"/><img class="lfloat" src =' +pimage[lastactionby]+ ' height="50" width="50" /><div class="notice_name">' +action.name_split(name,value.actionby)+ ''+action_desc+'</div></div>');	
+					}
+				}
 				else if(value.actiontype == 2901 || value.actiontype == 2906 || value.actiontype == 2916 || value.actiontype == 2925 || value.actiontype == 2926)
 				{	
 					if(feed_type == 'news_feed')
 					{
 						postid.append('<div class="name_50"></div>');			
 					}
-					else if(feed_type == 'live_feed')
+					else if(feed_type == 'live_feed' || feed_type == 'notice_feed')
 					{	
 						var page_image='http://icon.qmcdn.net/broadcast.png';					
-						postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+page_image+'" /><span class="rtm_each_text"><b>'+value.page_name+'</b>'+action_object+'</span>');
+						postid.append('<input type="hidden" value="'+value.pageid+'" /><input type="hidden" value="'+value.life_is_fun+'" /><img class="rtm_each_photo" height="30" width="30" src="'+page_image+'" /><span class="rtm_each_text">New broadcast is available for you .</span>');
 					}	
 				}
 				else if(value.actiontype == 330)
@@ -926,7 +934,7 @@ var deploy = (function(){
 				excited_desc ='';
 				if(value.actiontype != 63)
 				{
-					if (value.excited.length == 1)
+					if (value.hasOwnProperty('value.excited') && value.excited.length == 1)
 						 excited_desc =' is excited at ';
 					else if($.inArray(myprofileid,value.excited) > -1 && value.excited.length == 2) 
 						   excited_desc =' is excited at ';

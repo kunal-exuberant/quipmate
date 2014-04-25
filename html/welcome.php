@@ -9,12 +9,17 @@ if(isset($_SESSION) && isset($_SESSION['auth']))
 {
 	header('Location: /');
 	exit;
-}
+} 
 ob_start();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 <html>
 <head>
+<meta name="description" content="Quipmate enhances the productivity of your organization by connecting people, conversations, project and ideas in a private network"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+<meta name= "url" content="http://www.quipmate.com"/>
+<meta name= "keywords" content="enterprise social network, social, profile, collaboration, team, files sharing, project, idea sharing, innovation, creativity, conversation, knowledge management, engagement platform, identify hidden experts, breakdown silos, improve transparency, poll, questions, democratic decision making, enterprise 2.0, microblogging, employee engagement, groups, bottom-up communication, human capital"/>
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 <?php
 $file= new File();
@@ -27,7 +32,7 @@ $file->google_analytics();
 <div id="header">
 	<div id="header-wrapper">
 	<div id="qm-flogo">
-		<a href="/"><img src="http://icon.qmcdn.net/flogo.png" width="250" alt="Quipmate" /></a>
+		<a href="/"><img src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/trans_shad_logo.png" width="250" alt="Quipmate" /></a>
 	</div>
 	<div id="login_box">
 		<form name="input" method="post" action ="login_submit.php" target="_parent">
@@ -43,16 +48,13 @@ $file->google_analytics();
 	</div>
 </div>
 <div id="wrapper">
-
-<div class="tab">
-	<a class="tab_each" href="http://blog.quipmate.com/" target="_blank">Blog</a>
-	<a class="tab_each" href="http://faq.quipmate.com/" target="_blank">FAQ</a>
-	<a class="tab_each" href="http://help.quipmate.com/" target="_blank">Help</a>
-	<a class="tab_each" href="http://developers.quipmate.com/" target="_blank">Developers</a>
-	<a class="tab_each" href="public/terms.php" target="_blank">Terms of Use</a>	
-</div>
-
 <div id="main_container">
+<div id="qm_description">
+<div>
+	<img src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/ccc.jpg" style="height:12em;"/>
+	<div style="font-size:1em;">Connect &middot; Create &middot; Collaborate</div>
+</div>
+</div>
 <div id="register_box">
 <?php if(isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) != '')
 {
@@ -65,7 +67,7 @@ $help = new Help();
 $session->start();
 $email = $_GET['email'];
 if($help->is_email($email))
-	{
+{
 		$help->assign_database($email,$database);
 		$database = null;
 		$database = new Database();
@@ -151,26 +153,26 @@ if($help->is_email($email))
 			
 		<?php
 		}
-		else 
-		{
-		?>
-			<h1 id="register_title"><?php echo 'The invitation link sent to you seems to be broken. Please try again.' ; ?></h1>
-		<?php	
-		}
-		}
-		else
-		{
-		?>
-			<div id="qm_description">
-			<h1>Welcome To Quipmate.</h1>
-			<h1>You are already a part of Quipmate</h1>
-			<h1>Please Login using your email and password.</h1>
-			<h1>If you forgot your password, please use forgot password link to recover it.</h1>
-			</div>
-		<?php	
-		}
-			$file->script_jquery();
+	else 
+	{
+	?>
+		<h1 id="register_title"><?php echo 'The invitation link sent to you seems to be broken. Please try again.' ; ?></h1>
+	<?php	
 	}
+	}
+else
+{
+?>
+	<div id="qm_description">
+	<h1>Welcome To Quipmate.</h1>
+	<h1>You are already a part of Quipmate</h1>
+	<h1>Please Login using your email and password.</h1>
+	<h1>If you forgot your password, please use forgot password link to recover it.</h1>
+	</div>
+<?php	
+}
+	$file->script_jquery();
+}
     else
     {
   
@@ -185,8 +187,8 @@ else if(isset($_GET['id']) && isset($_GET['email']) && isset($_GET['click']))
 		require_once('../include/Help.php');
 		$flag = 0;
 		$id = $_GET['id'];
+		$email = $_GET['email']; 
 		$help = new Help();
-		$email = $_GET['email'];
 		$help->assign_database($email,$database);
 		$database = null;
 		$database = new Database();
@@ -261,17 +263,176 @@ else
 {
 		setcookie("console","did not get all get values",time()+3600000,'/','.quipmate.com');
 ?>
-	<div style="font-size:2em;color:#336699;">Join Quipmate Today</div>
-	<div style="font-size:1.4em;color:#336699;" id="signup_info">Making Professional Life a bit Personal</div>
-	<div style="">
-		<input type="text" value="" placeholder="Enter your email address" id="signup_email" style="border: 0.1em solid #aaaaaa;font-size:1.6em;height:1.3em;padding:0.5em;width:19em;" />
-		<input type="submit" value="SignUp" id="signup_email_button" style="border:0.1em solid #EEF4DD;color:#ffffff;cursor:pointer;font-size:1.6em;background-color:#336699;height:2.4em;padding:0.5em;width:6em;" onclick="action.self_invite(this)"/>
+	<div style="font-size:2.4em;color:#555555;">Join and Invite your Peers to Quipmate</div>
+	<div style="font-size:1.4em;color:#555555;" id="signup_info">Making Professional Lives a bit Personal</div>
+	<div style="background-color:#eeeeee;padding: 2.4em;">
+		<input type="text" value="" placeholder="Enter your email address" id="signup_email" style="border: 0.1em solid #aaaaaa;font-size:1.6em;height:1.2em;padding:0.5em;width:19em;background-color:#ffffff;" />
+		<input type="submit" value="SignUp" id="signup_email_button" style="border:0.1em solid #EEF4DD;color:#ffffff;cursor:pointer;font-size:1.6em;background-color:#339970;height:2.4em;padding:0.5em;width:6em;font-weight:bold;" onclick="action.self_invite(this)"/>
 	</div>
 	    <?php
 			$file->script_welcome();
 }	
 ?>
 </div>
+			
+			
+			
+			
+					
+		<div class="field field-name-field-text-bottom field-type-text-long field-label-hidden" style="margin:8 em 4em;">
+			<div class="field-items">
+				<div class="field-item even"> 
+					<div style="text-align:center;background-color:#eeeeee;color:#888888;font-size: 2.2em;margin-bottom: 0.2em;padding: 0.2em;">What do we provide?</div>
+						<table class="sc-features-table">
+							<tbody>
+								<tr>
+									<td>
+										<p style="text-align: center; height: 110px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_social_networking.png" style="width: 210px; height: 175px;"></p>
+										<h4 style="margin-top:0;margin-bottom:6px;">Enterprise Social Networking</h4>
+										<ul><li><div>Private Messages</div></li><li><div>Employee Profile</div></li><li><div>Chat</div></li><li><div>Groups</div></li><li><div>Email Updates</div></li><li><div>Notifications</div></li></ul>
+									</td>
+									<td>
+										<p style="text-align: center; height:115px "><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_team_collaboration.png" style="width: 210px; height: 175px;"></p>
+										<h4>Team Collaboration</h4>
+										<ul><li><div>Public/Private Groups</div></li><li><div>File Sharing</div></li><li><div>Praise/Recommend Peers</div></li><li><div>Link Sharing</div></li><li><div>Questions/Polls</div></li><li><div>Ideas</div></li></ul>
+									</td>
+									<td>
+										<p style="text-align:center;height:119px"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_analytics.png" style="width: 210px; height: 175px;"></p>
+										<h4>Analytics</h4><ul><li><div>Periodic Usage</div></li><li><div>Reporting</div></li></ul>
+									</td>
+									<td class="nbr">
+										<p style="text-align: center;height:124px; "><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_mobile_desktop.png" style="width: 210px; height: 175px;"></p><h4>Mobile &amp; Desktop</h4><ul><li><div>Chat/Messenger</div></li><li><div>Android</div></li></ul>
+									</td>
+								</tr>
+								<tr>
+									<td class="nbb">
+										<p style="text-align: center; height: 140px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_deployment_options.png" style="width: 210px; height: 175px;"></p><h4>Deployment Options</h4><ul><li><div>Cloud Hosted</div></li><li><div>On Premise/Intranet</div></li></ul>
+									</td>
+									<td class="nbb">
+										<p style="text-align: center;height: 140px; "><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_enterprise_integration_0.png" style="width: 210px; height: 175px;"></p><h4>External Api Integration</h4><ul><li><div>Linkedin</div></li><li><div>Evernote</div></li><li><div>Google</div></li><li><div>Dropbox</div></li><li><div>Box</div></li></ul>
+									</td>
+									<td class="nbb">
+										<p style="text-align: center; height: 140px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_admin_control.png" style="width: 210px; height: 175px;"></p><h4>Admin Control</h4><ul><li><div>Invite/Remove User</div></li><li><div>Design</div></li><li><div>Broadcast Messages</div></li><li><div>Data Export</div></li></ul>
+									</td>
+									<td class="nbr nbb">
+										<p style="text-align: center; height: 140px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_security_compliance4.png" style="width: 210px; height: 175px;"></p><h4>Security &amp; Compliance</h4><ul><li><div>Keyword Monitoring</div></li><li><div>Delete Any content</div></li><li><div>Admin Notifications</div></li><li><div>Password Policy</div></li></ul>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div> 
+			
+			<div class="field field-name-field-text-bottom field-type-text-long field-label-hidden" style="margin:2em 4em;">
+			<div class="field-items">
+				<div class="field-item even"> 
+					<div style="text-align:center;background-color:#eeeeee;color: #888888;font-size: 2.2em;margin-bottom: 0.2em;padding:0.2em;">What are the features?</div>
+						<table class="sc-features-table">
+							<tbody>
+								<tr>
+									<td>
+										<p style="text-align: center; height: 110px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/direct_to_md_welcome.jpg"></p>
+										<h4 style="margin-top:0;margin-bottom:6px;">Direct to MD</h4>
+										<div class="feature_content">Write open or private letter to the Executive body of the organization</div>
+									</td>
+									<td> 
+										<p style="text-align: center; height:115px "><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/directors_blog_welcome.jpg"></p>
+										<h4>Director’s Blog</h4>
+										<div class="feature_content">Write blogs on daily/weekly basis relating to technical breakthrough, what is the goal of the product and how the contribution of every single person in that project is mapped to the customer’s needs</div>
+									</td>
+									<td>
+										<p style="text-align:center;height:119px"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/group_welcome.jpg" ></p>
+										<h4>Group</h4>
+										<div class="feature_content">Keep essential API, product documents for the whole team. Access everyone’s contribution on daily basis and encourage team to participate in problem solving</div>
+									</td>
+									<td class="nbr">
+										<p style="text-align: center;height:124px; "><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/profile_welcome.jpg"></p><h4>Profile</h4>
+										<div class="feature_content">Brief personal and professional background of that person, the groups he attended, praises he received.</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<p style="text-align: center; height: 140px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/praise_welcome.jpg"/p><h4>Praise/Recommend </h4><div class="feature_content">Whatever gets measured and awarded gets done. So praise your peers for their contributions and recognize their talents</div>
+									</td>
+									<td>
+										<p style="text-align: center;height: 140px; "><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/poll_question_welcome.jpg"></p><h4>Poll/Question</h4><div class="feature_content">Trainees use Questions feature to ask questions to their team to learn about the product and company culture and methodology, procedures quickly</div>
+									</td>
+									<td>
+										<p style="text-align: center; height: 140px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/event_welcome.jpg"></p><h4>Events</h4><div class="feature_content">Organize your company events like annual day or thanks giving day in highly efficient way</div>
+									</td>
+									<td class="nbr">
+										<p style="text-align: center; height: 140px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/moderation_welcome.jpg"></p><h4>Moderation</h4><div class="feature_content">broadcast content. Remove any user. Remove any content. Set On/Off features for whole network. System configurable for any number of moderators.</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<p style="text-align: center; height: 140px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/news_feed_welcome.jpg"></p><h4>News Feed </h4><div class="feature_content">Get updates on latest updates in your company.</div>
+									</td>
+									<td>
+										<p style="text-align: center;height: 140px; "><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/live_feed_welcome.jpg"></p><h4>Live Feed</h4><div class="feature_content">Instant update/visibility on every minor action done in the company</div>
+									</td>
+									<td>
+										<p style="text-align: center; height: 140px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/link_sharing_welcome.jpg"></p><h4>Link Sharing</h4><div class="feature_content">Share any link/website on the internet/intranet with people in your organization</div>
+									</td>
+									<td class="nbr">
+										<p style="text-align: center; height: 140px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/file_sharing_welcome.jpg"></p><h4>File Sharing</h4><div class="feature_content">File/video/photo sharing and version management</div>
+									</td>
+								</tr>
+								<tr>
+									<td class="nbb">
+										<p style="text-align: center; height: 140px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/mood_welcome.jpg" ></p><h4>Mood Meter</h4><div class="feature_content">Analyse the mood of the organization</div>
+									</td>
+									<td class="nbb">
+										<p style="text-align: center;height: 140px; "><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/notification_welcome.jpg"></p><h4>Notification</h4><div class="feature_content">Notification on email and website</div>
+									</td>
+									<td class="nbb">
+										<p style="text-align: center; height: 140px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/birthday_reminder.jpg"></p><h4>Birthday Updates</h4><div class="feature_content">Birthday/anniversary and important events updates from all people in your network</div>
+									</td>
+									<td class="nbb nbr">
+										<p style="text-align: center; height: 140px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/bio_welcome.jpg" </p><h4>Bio/Resume Sharing</h4><div class="feature_content">File/video/photo sharing and version management</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>	
+			
+			
+			<div class="field field-name-field-text-bottom field-type-text-long field-label-hidden" style="margin:2em 4em;">
+			<div class="field-items">
+				<div class="field-item even"> 
+					<div style="text-align:center;background-color:#eeeeee;color: #888888;font-size: 2.2em;margin-bottom: 0.2em;padding:0.2em;">How do we price ourselves?</div>
+						<table class="sc-features-table">
+							<tbody>
+								<tr>
+									<td class="nbb">
+										<p style="text-align: center; height: 110px;"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/free_welcome.jpg"></p>
+										<h4 style="margin-top:0;margin-bottom:6px;">Free</h4>
+										<ul><li><div>First Month for all</div></li><li><div>Always if Employee strength < 50</div></li><li><div>Only for Cloud Hosted</div></li></ul>
+									</td>
+									<td class="nbb"> 
+										<p style="text-align: center; height:115px "><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/basic_welcome.png"></p>
+										<h4>Basic</h4>
+										<ul><li><div>$1 per employee per month</div></li></ul>
+									</td>
+									<td class="nbb">
+										<p style="text-align:center;height:119px"><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/premium_welcome.jpg" ></p>
+										<h4>Premium</h4>
+										<ul><li><div>$2 per employee per month</div></li></ul>
+									</td>
+									<td class="nbb nbr">
+										<p style="text-align: center;height:124px; "><img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/premises_welcome.png"></p><h4>Premises</h4>
+										<ul><li><div>Additional price of $3 per employee per month</div></li></ul>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>	
+			
 </div>
 
 <div id="footer"> 
@@ -280,13 +441,10 @@ else
 	<a href="http://faq.quipmate.com/" target="_blank">FAQ</a><span class="separator">|</span>
 	<a href="http://help.quipmate.com/" target="_blank">Help</a><span class="separator">|</span>
 	<a href="http://developers.quipmate.com/" target="_blank">Developers</a><span class="separator">|</span>
-	<a href="public/terms.php" target="_blank">Terms of Use</a>
-</div>
-<div style="position:fixed;bottom:0em;right:1em;text-align:center;width:16em;border:0.1em solid #cccccc;background-color:#ffffff;text-align:left;" id="message_leave">
-    <div id="message_leave_title" onclick="ui.message_leave_grow(this)" style="height:1.5em;cursor:pointer;font-size:1.2em;padding:0.5em;background-color:#336699;color:#ffffff;font-weight:bold;">Leave a message<img src="https://wiki.nci.nih.gov/download/attachments/7475319/downArrow.gif?version=1&amp;modificationDate=1205778301000" style="float:right;" /></div>
+	<a href="public/terms.php" target="_blank">Terms of Use</a><span class="separator">|</span>
+	<a href="public/security.php" target="_blank">Security &amp; Compliance</a><span class="separator">|</span>
+	<a href="public/privacy.php" target="_blank">Privacy Policy</a>
 </div>
 </div>	  
 </body>
 </html>
-
-

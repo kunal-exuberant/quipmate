@@ -49,8 +49,10 @@ var action = (function(){
 						$('#loading').remove();
 						if(page == 'news_json')	
 						{
-							$('#prev').append('<div style="border-bottom: 0.1em solid #CCCCCC;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Find friends" onclick="ui.redirect_friend_suggest()"/></div>');
-							$('#prev').append('<div style="border-bottom: 0.1em solid #CCCCCC;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Join Groups" onclick="ui.redirect_group_suggest()"/></div>');
+						  /*	$('#prev').append('<div style="border-bottom: 0.1em solid #CCCCCC;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Find friends" onclick="ui.redirect_friend_suggest()"/></div>');
+							$('#prev').append('<div style="border-bottom: 0.1em solid #CCCCCC;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Join Groups" onclick="ui.redirect_group_suggest()"/></div>'); */
+						$('#prev').append('<div style="text-align:center;"><img width="136" height="136" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/noposts.png" alt=""><div style="font-size:2.4em;color:#adb2bb;font-weight:bold;">No posts to show</div><div style="margin-top:1.45em;"><a style="float:left;margin-left:4em;" class="really_group_join" href="/register.php?hl=friend_suggest">Find Friends</a><a style="margin-right:4em;" class="really_group_join" href="/register.php?hl=group_suggest">Join Groups</a></div></div>');
+						
 						}
 						else
 						{		
@@ -113,7 +115,7 @@ var action = (function(){
 						{
 							load = false;    
 							$('#loading').remove();
-							if(page == 'news_json')	
+							/*if(page == 'news_json')	
 							{
 								$('#prev').append('<div style="border-bottom: 0.1em solid #CCCCCC;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Find friends" onclick="ui.redirect_friend_suggest()"/></div>');
 								$('#prev').append('<div style="border-bottom: 0.1em solid #CCCCCC;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Join Groups" onclick="ui.redirect_group_suggest()"/></div>');
@@ -121,7 +123,8 @@ var action = (function(){
 							else
 							{
 								$('#prev').append('<div style="text-align:center;"><img src="http://icon.qmcdn.net/feed.jpg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
-							}
+							}*/
+							$('#prev').append('<div style="text-align:center;"><img src="http://icon.qmcdn.net/feed.jpg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
 						}
 						});
 					}
@@ -176,7 +179,7 @@ var action = (function(){
 							{
 								load = false;
 								$('#loading').remove();
-								if(page == 'news_json')	
+								/*if(page == 'news_json')	
 								{
 									$('#prev').append('<div style="border-bottom:0.1em solid #cccccc;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Find friends" onclick="ui.redirect_friend_suggest()"/></div>');
 									$('#prev').append('<div style="border-bottom: 0.1em solid #cccccc;height: 4em;padding: 4em 0;text-align:center;"><input type="submit" style="background-color:#336699;color:#ffffff;cursor:pointer;font-size:1.6em;font-weight:bold;height:7em;width:30em;" value="Join Groups" onclick="ui.redirect_group_suggest()"/></div>');
@@ -184,7 +187,8 @@ var action = (function(){
 								else
 								{
 									$('#prev').append('<div style="text-align:center;"><img src="http://icon.qmcdn.net/feed.jpg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
-								}
+								}*/
+								$('#prev').append('<div style="text-align:center;"><img src="http://icon.qmcdn.net/feed.jpg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
 							}
 						});
 						}
@@ -1400,7 +1404,7 @@ var action = (function(){
 				
 				param.action = 'group_suggest';
 				param.count = 1;
-				ajax.getJSON_ajax(url, param, me, ui.group_suggest_single_deploy_page);
+				ajax.getJSON_ajax(url, param, me, ui.group_suggest_single_deploy);
 			}
 			
 			function really_group_join_page(me)
