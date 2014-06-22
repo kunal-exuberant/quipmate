@@ -35,4 +35,3 @@ if(isset($_COOKIE['name']))
 header('Location: welcome.php'); 
 exit();
 ?>
-

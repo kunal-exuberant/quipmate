@@ -13,7 +13,7 @@ $designation='';
 while($brow = $res->fetch_array())
 {
 	if($brow['type'] == 205)
-	{ 
+	{  
 		$company[] = $brow['name'];
 		$companyid[] = $brow['actionid'];
 	}
@@ -274,6 +274,7 @@ echo '<div class="items">'.$database->get_age($profileid).' years old'.'</div>';
 <script type="text/javascript" >
 	function item_edit(container,code,key,privacy)
 	{
+		var icon_cdn = $('#icon_cdn').attr('value');
 		$('.item_edit_remove').show();
 		var placeholder ='';
 		switch(code)
@@ -291,15 +292,15 @@ echo '<div class="items">'.$database->get_age($profileid).' years old'.'</div>';
 		$('.profile_edit_each').remove();
 		if(privacy == 1)
 		{
-			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+',event)" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\''+key+'\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="http://icon.qmcdn.net/meeting.png" height="15" width="15" /></span></div>');
+			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+',event)" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\''+key+'\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="'+icon_cdn+'/meeting.png" height="15" width="15" /></span></div>');
 		}
 		else if(privacy == 2)
 		{
-			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+',event)" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\''+key+'\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="http://icon.qmcdn.net/friend.png" height="15" width="15" /></span></div>');
+			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+',event)" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\''+key+'\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="'+icon_cdn+'/friend.png" height="15" width="15" /></span></div>');
 		}
 		else
 		{
-			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+',event)" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\''+key+'\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="http://icon.qmcdn.net/global.png" height="15" width="15" /></span></div>');
+			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+',event)" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\''+key+'\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="'+icon_cdn+'/global.png" height="15" width="15" /></span></div>');
 		}		
 	}
 	

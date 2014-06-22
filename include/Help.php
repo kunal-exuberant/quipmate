@@ -404,7 +404,19 @@ class Help
 			case 41: $error['code'] = 41; 
 					 $error['message'] = 'You cannot invite a person to group event'; 
 				     $error['type'] = 'GroupEventInviteException';
-		             break;						 
+		             break;
+			case 42: $error['code'] = 42; 
+					 $error['message'] = 'This link is invalid or it has expired'; 
+				     $error['type'] = 'InvalidLinkException';
+		             break;					 
+			case 43: $error['code'] = 43; 
+					 $error['message'] = 'Size of useful links cannot be more than 500.'; 
+				     $error['type'] = 'SizeException';
+		             break;		
+			case 44: $error['code'] = 44; 
+					 $error['message'] = 'Size of contribution cannot be more than 500.'; 
+				     $error['type'] = 'SizeException';
+		             break;		
 			default: $error['code'] = -1;
 					 $error['message'] = 'Unknown error Occured'; 
 				     $error['type'] = 'UnknownException';	 
@@ -516,7 +528,7 @@ class Help
 		$memcache->set($_SESSION['database'].'_friend_'.$profileid, $friend);	
 	}
 	
-	function session_init($row,$prow,$imgrow,$email,$pri)
+	function session_init($row,$prow,$imgrow,$email,$pri,$database)
 	{
 		$_SESSION['auth'] = $row['USERID'];
 		$_SESSION['EMAIL'] = $email;
@@ -533,8 +545,14 @@ class Help
 		$_SESSION['SCHOOL'] = $prow['SCHOOL']; 
 		$_SESSION['COLLEGE'] = $prow['COLLEGE']; 
 		$_SESSION['CITY'] = $prow['CITY']; 
-		
-		
+		if($database->moderator_check($row['USERID']))
+		{
+			$_SESSION['admin'] =1;
+		}
+		else
+		{
+			$_SESSION['admin'] =0;
+		}
 		$name  = array();
 		$name[$row['USERID']]= $prow['NAME'];
 		$_SESSION['name_json'] = $name;
@@ -559,6 +577,20 @@ class Help
 			$row = $database->get_name($key); 
 			$memcache->set($_SESSION['database'].'_name_'.$key, $row['NAME']);
 			return $row['NAME'];
+		}
+	}
+	function moderator_status($key, $memcache, $database,$set=0)
+	{
+		$value = $memcache->get($_SESSION['database'].'_admin_'.$key);
+		if($value && $set==0) // Passing 1 to $set when I want to toggle the flag value.
+		{
+			return $value;
+		}
+		else
+		{
+			$result = $database->moderator_check($key);
+			$memcache->set($_SESSION['database'].'_admin_'.$key,$result);
+			return $result;
 		}
 	}
 	function feature_fetch($key, $memcache, $database,$set=0)
@@ -1194,20 +1226,118 @@ class Help
 		return $thumb_image_name;
 	}
 	
+	
+	function register_user_mobile($email,$identifier,$name,$password,$gender,$day,$month,$year)
+	{
+		$email = strtolower($email);
+		$name = ucwords(strtolower($name));
+		$password = strtolower($password);
+		$database = new Database();
+		$memcache = new Memcached();
+		$this->assign_database($email,$database);
+		$database =null;
+		$database = new Database();
+		//$row = $database->user_exists($email);
+		$row = $database->is_already_user($email);
+		if($row['EMAIL']!=$email)
+		{
+
+			$row = $database->virtual_select_mobile($email,$identifier);
+			
+			if($row != 0 && $email == $row['EMAIL'] && $identifier == $row['code'] )
+			{		
+				$virtualid = $row['VIRTUALID'];
+				$password = sha1($email.$password);
+				$sess_quip = rand(1000000000,9999999999);
+				$uniqueid = sha1($email.$password."pass1reset!");
+				$profileid = $database->signup_insert($email,$password,$sess_quip,$uniqueid);
+				if($profileid)
+				{
+					setcookie("quip_i",$sess_quip,time()+3600000,'/','.quipmate.com');
+					setcookie("quip_p",$profileid,time()+3600000,'/','.quipmate.com');
+					setcookie("quip_e",$email,time()+3600000,'/','.quipmate.com');
+					$result = array();
+					$birthday = "$year"."-"."$month"."-"."$day";	
+					$n = $this->name_split($name);
+					$fname = $n[0];
+					$mname = $n[1];
+					$lname = $n[2];
+					$result = $database->bio_insert($profileid,$email,$name,$fname,$mname,$lname,$gender,$birthday);
+					if($result)
+					{ 
+						$_SESSION['EMAIL'] = $email;
+						$_SESSION['auth'] = $profileid;
+						$_SESSION['NAME'] = $name;
+						$_SESSION['FNAME'] = $fname;  
+						$_SESSION['MNAME'] = $mname;
+						$_SESSION['LNAME'] = $lname;
+						$_SESSION['USERID']= $_SESSION['userid'] = $profileid;
+						$_SESSION['SEX']= $gender;
+						$_SESSION['SCHOOL']=0;
+						$_SESSION['COLLEGE']=0;
+						$_SESSION['STEP']=1;
+						$actionid = $database->get_actionid($profileid,99);						
+						$database->virtual_to_real($email,$profileid);
+						$ri = $database->inviter_select($virtualid);
+						while($frw = $ri->fetch_array())
+						{ 
+							$fid = $frw['ACTIONBY'];
+							$actionid = $database->get_actionid($fid,'8');
+							$r = $database->invited_friend_insert($fid,$profileid);
+							$this->friend_memcache_update($fid, $database, $memcache);
+							$this->friend_memcache_update($profileid, $database, $memcache);
+						}
+						$image = $this->pimage_fetch($profileid, $memcache, $database);
+						$_SESSION['pimage'] = $image;
+						$data['ack']=1;
+						echo json_encode($data);
+					}
+					else
+					{
+						$data['ack']=7;
+						echo json_encode($data);
+					}
+				}
+				else
+				{
+					$data['ack']=8;
+					echo json_encode($data);
+				}	
+				
+			}
+			
+			else
+			{
+				$data['ack']=9;
+				echo json_encode($data);
+			}
+		}
+		else
+		{
+			$data['ack']=10;
+			echo json_encode($data);
+		}
+	}
+	
+	
+	
 	function register_user($email,$identifier,$name,$password,$gender,$day,$month,$year)
 	{
 		$email = strtolower($email);
+	
 		$identifier = strtolower($identifier);
 		$name = ucwords(strtolower($name));
 		$password = strtolower($password);
 		$database = new Database();
 		$memcache = new Memcached();
+		//$row = $database->user_exixts($email);
 		$row = $database->is_already_user($email);
-		if($row['EMAIL'] != $email)
+		if($row['EMAIL']!=$email)
 		{
 			$row = $database->virtual_select($email,$identifier);
-			if($row != 0 && $email == $row['EMAIL'] && $identifier == $row['UNIQUEID'])
-			{
+			
+			if($row != 0 && $email == $row['EMAIL'] && $identifier == $row['UNIQUEID'] )
+			{		
 				$virtualid = $row['VIRTUALID'];
 				$password = sha1($email.$password);
 				$sess_quip = rand(1000000000,9999999999);

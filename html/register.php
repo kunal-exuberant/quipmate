@@ -4,13 +4,12 @@
 <?php
 	require('../include/header.php');
 ?>
-<style>
-body{background:#ededed;}
-</style>
 </head>
 <body>
-<div id="wrapper">
-	<div id="center" style="margin:6em 0em 0em 16em;padding:2em 5em 2em 5em;position:relative;min-height:16em;border:none;">
+<div class="container">
+  <div class="row" >
+	<div class="col-xs-6 col-md-2 " id="left"></div>
+	<div id="center" class="col-md-6 center top7">
 	<?php 
 		if($page == 'friend_suggest')
 		{
@@ -35,7 +34,7 @@ body{background:#ededed;}
 			
 					<form id="pform" method="post" enctype="multipart/form-data" action="/ajax/write.php">
 						<div style="">
-							<input type="file" id="photo_box" name="photo_box" />
+							<input type="file" id="photo_box" name="photo_box" class="file_inline"/>
 						<button type="button" id="photo_upload_button">Upload</button>
 						</div>
 						<input type="hidden" name="action" value="profile_picture_upload"/>
@@ -44,14 +43,16 @@ body{background:#ededed;}
 			<?php
 		}
 	?>
-	<a id="next" href="#" style="position:absolute;bottom:1em;right:1em">Next</a>
+	<a id="next" href="/" style="font-weight:bold;position:absolute;top:3em;right:2em">Next</a>
 	</div>
+</div>
 </div>
 <input type="hidden" id="step_hidden" value="<?php echo $_SESSION['STEP']; ?>"/>
 <?php require_once('../include/footer.php'); ?>
 </body>
 <script type="text/javascript">
 	$(function(){
+		var icon_cdn =$('#icon_cdn').attr('value');
 		$("#next").live('click',function(){
 			$.getJSON("ajax/write.php",{action:'stepup',step:'2'},function(data){
 				window.location = '/';
@@ -61,7 +62,7 @@ body{background:#ededed;}
 		$('#pform').ajaxForm(function(){});  
 		$('#photo_upload_button').click(function()
 		{
-			$("#photo_preview").html('<img src="http://icon.qmcdn.net/upload.gif" alt="Uploading...."/>');
+			$("#photo_preview").html('<img src="'+icon_cdn+'/upload.gif" alt="Uploading...."/>');
 			$("#pform").ajaxSubmit(
 			{
 				type:'json',

@@ -1,15 +1,18 @@
 <?php
-require_once('../include/Session.php');
 require_once('../include/Database.php');
 require_once('../include/File.php');
-$session = new Session();
-$database = new Database();
-$session->start();
-if(isset($_SESSION) && isset($_SESSION['auth']))
+if(isset($_SESSION))
 {
-	header('Location: /');
-	exit;
-} 
+require_once('../include/Session.php');
+	$session = new Session();
+	$database = new Database();
+	$session->start();
+	if(isset($_SESSION['auth']))
+	{
+		header('Location: /');
+		exit;
+	} 
+}
 ob_start();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
@@ -26,7 +29,7 @@ $file= new File();
 $file->style_welcome();
 $file->google_analytics();
 ?>
-<title>Welcome To Quipmate</title>
+<title>Welcome To Quipmate | Enterprise Social Network</title>
 </head>
 <body>
 <div id="header">
@@ -58,16 +61,16 @@ $file->google_analytics();
 <div id="register_box">
 <?php if(isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) != '')
 {
-	setcookie("console","got all get values",time()+3600000,'/','.quipmate.com');
 require_once('../include/Session.php');
-require_once('../include/Database.php');
 require_once('../include/Help.php');
 $session = new Session();
-$help = new Help();
+$database = new Database();
 $session->start();
+$help = new Help();
 $email = $_GET['email'];
 if($help->is_email($email))
 {
+		$database = new Database();
 		$help->assign_database($email,$database);
 		$database = null;
 		$database = new Database();
@@ -184,11 +187,16 @@ else if(isset($_GET['id']) && isset($_GET['email']) && isset($_GET['click']))
 	if($click=='recover_password')
 	{
 		require_once('../include/Database.php');
+		require_once('../include/Session.php');
 		require_once('../include/Help.php');
+		$session = new Session();
+		$database = new Database();
+		$session->start(); 
 		$flag = 0;
 		$id = $_GET['id'];
 		$email = $_GET['email']; 
 		$help = new Help();
+		$database = new Database();
 		$help->assign_database($email,$database);
 		$database = null;
 		$database = new Database();
@@ -197,19 +205,21 @@ else if(isset($_GET['id']) && isset($_GET['email']) && isset($_GET['click']))
 		{
 		?>
 			<div id="recover_password_box"> 
-			<span>Change your password</span>
-			<div id="recover_new_password_container">
-			<span style="padding-right:20px;">New Password:</span>
-			<input style="border:1px solid gray;width:200px;height:25px;" type="password" name="pass" id = "pass"/>
-			</div>
-			<input type="hidden" id="recover_password_email" value="<?php echo $email ;?>" />
-			<input type="hidden" id="recover_password_uniqueid" value="<?php echo $id ;?>" />
-			<div id="recover_confirm_password_container">
-			<span>Confirm Password:</span>
-			<input style="border:1px solid gray;width:200px;height:25px;" type="password" name="confirmpass" id = "confirmpass"/>
-			</div>
-			<input style="border:1px solid gray;width:160px;height:30px;" type="submit" name="change" value="Change Password" id = "change" onclick="action.recover_password(this)"/>
-			<span id = "recover_password_info" style='color:#00ccff;margin-left:12;'></span>
+				<h1>Reset your password</h1>
+				<div id="recover_new_password_container">
+					<span style="padding-right:20px;">New Password:</span>
+					<input style="border:0.1em solid gray;width:20em;height:2em;" type="password" name="pass" id = "pass"/>
+				</div>
+				<input type="hidden" id="recover_password_email" value="<?php echo $email ;?>" />
+				<input type="hidden" id="recover_password_uniqueid" value="<?php echo $id ;?>" />
+				<div id="recover_confirm_password_container">
+					<span>Confirm Password:</span>
+					<input style="border:0.1em solid gray;width:20em;height:2em;" type="password" name="confirmpass" id = "confirmpass"/>
+				</div>
+				<div style="margin:2em 0em 0em 2em;">
+					<input style="border:0.1em solid gray;width:14em;height:2.8em;cursor:pointer;" type="submit" name="change" value="Reset Password" id = "change" onclick="action.recover_password(this)"/>
+					<span id = "recover_password_info" style="color:#336699;margin-left:1.2em;"></span>
+				</div>
 			</div>
 		<?php
 		}
@@ -234,19 +244,20 @@ else if(isset($_GET['id']) && isset($_GET['email']) && isset($_GET['click']))
 }
 else if(isset($_GET['click']) && $_GET['click']=='forgot_password')
 {
+		require_once('../include/Session.php');
+		$session = new Session();
+		$session->start();
 ?>
 	<div id="forgot_password_box">
-	<span style="color:#000000">
-	Please enter your email to recover your password
-	</span>
-	<div style="margin:20 0 20 0;">
-	<span>Enter your Email:*</span>
-	<input type="text" style="border:1px solid gray;width:200px;height:25px;" id = "forgot_password_email" /> 
-	</div>
-	<div style="margin:10 0 10 120;">
-	<input style="border:1px solid gray;width:100px;height:25px;" type="submit" name="submit" value="Submit" onclick="action.forgot_password(this)" id = "forgot_password_button" style ="margin-top:3px;" />
-	</div>
-	<span id = "forgot_password_info"></span>
+		<h1 style="color:#000000;margin-bottom:2em;">
+			Forgot your password?
+		</h1>
+		<div>
+			<span>Enter your Email:*</span>
+			<input type="text" style="border:0.1em solid gray;width:18em;height:1.6em;" id = "forgot_password_email" /> 
+			<input style="border:0.1em solid gray;width:6em;height:2.8em;cursor:pointer;" type="submit" name="submit" value="Submit" onclick="action.forgot_password(this)" id = "forgot_password_button"/>
+		</div>
+		<span id = "forgot_password_info"></span>
 	</div>
 <?php
 	$file->script_welcome();
@@ -440,11 +451,14 @@ else
 	<a href="http://blog.quipmate.com/" target="_blank">Blog</a><span class="separator">|</span>
 	<a href="http://faq.quipmate.com/" target="_blank">FAQ</a><span class="separator">|</span>
 	<a href="http://help.quipmate.com/" target="_blank">Help</a><span class="separator">|</span>
-	<a href="http://developers.quipmate.com/" target="_blank">Developers</a><span class="separator">|</span>
+	<a href="http://www.quipmate.com/public/team.php" target="_blank">Team</a><span class="separator">|</span>
 	<a href="public/terms.php" target="_blank">Terms of Use</a><span class="separator">|</span>
 	<a href="public/security.php" target="_blank">Security &amp; Compliance</a><span class="separator">|</span>
 	<a href="public/privacy.php" target="_blank">Privacy Policy</a>
 </div>
 </div>	  
+	<div style="position:fixed;bottom:0em;right:2em;background-color:#dddddd;" id="message_leave">
+		<div id="message_leave_title" onclick="ui.message_leave_grow(this)" style="height:1.5em;cursor:pointer;font-size:1.2em;padding:0.5em;width:14em;background-color:#4c66a4;color:#ffffff;font-weight:bold;">Leave a message<img src="https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/downarrow.gif" style="float:right;" /></div>
+	</div>
 </body>
 </html>

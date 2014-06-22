@@ -66,6 +66,22 @@ class Database
 		$time = $this->con->real_escape_string($time);
 		return $this->con->query("INSERT INTO `page_view`(`actionby`, `profileid`, `referer`, `page`, `time`) VALUES ('$actionby','$profileid','$referer','$page','$time')");
 	}
+	function feedback_insert($email,$title,$description,$company)
+	{
+		$email = $this->con->real_escape_string($email);
+		$title = $this->con->real_escape_string($title);
+		$description = $this->con->real_escape_string($description);
+		$email = $this->con->real_escape_string($email);
+		return $this->con->query("INSERT INTO `admin`.`feedback`(`email`, `company`, `title`, `descripction`) VALUES('$email','$company','$title','$description')");
+	}
+	function contact_insert($name,$email,$contact="",$message="")
+	{
+		$email = $this->con->real_escape_string($email);
+		$name = $this->con->real_escape_string($name);
+		$contact = $this->con->real_escape_string($contact);
+		$message = $this->con->real_escape_string($message);
+		return $this->con->query("INSERT INTO `admin`.`contact`(`name`, `email`, `contact`, `message`) VALUES('$name','$email','$contact','$message')");
+	}
 	
 	function get_event_members($eventid)
 	{ 
@@ -87,7 +103,29 @@ class Database
 		$result= $this->con->query("SELECT DISTINCT IMAGEID,CDN,FILENAME,image.PROFILEID as PROFILEID,ACTIONBY FROM image WHERE PROFILEID='$profileid' ORDER BY IMAGEID DESC LIMIT $limit,$count");
 		return $result; 
 	}
+	function video_json($profileid,$limit,$count)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		$limit = $this->con->real_escape_string($limit);
+		$count = $this->con->real_escape_string($count);
+		$result= $this->con->query("SELECT DISTINCT videoid,cdn,filename,thumbnail,video.profileid as profileid,video.actionby,diary.PAGE FROM video inner join diary ON video.videoid= diary.actionid WHERE video.profileid='$profileid' ORDER BY videoid DESC ");
+		return $result; 
+	}
+function file_json($profileid,$limit,$count)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		$limit = $this->con->real_escape_string($limit);
+		$count = $this->con->real_escape_string($count);
+		$result= $this->con->query("SELECT DISTINCT docid,cdn,filename,caption, profileid,actionby FROM document WHERE actionby='$profileid' ORDER BY docid DESC LIMIT $limit,$count");
+		return $result; 
+	}
 	
+	function set_MD($profileid)
+	{
+	$profileid = $this->con->real_escape_string($profileid);
+	$result=$this->con->query("INSERT INTO `set_MD` (`profileid`) VALUES('$profileid') ");
+			return $result;
+	}
 	function bio_field_match($field,$profileid1, $profileid2)
 	{
 		$profileid1 = $this->con->real_escape_string($profileid1);
@@ -239,8 +277,15 @@ class Database
 	{
 		$email = $this->con->real_escape_string($email);
 		$identifier = $this->con->real_escape_string($identifier);
-		$result = $this->con->query("SELECT * from virtual WHERE EMAIL = '$email' AND UNIQUEID = '$identifier' ");
+		$result = $this->con->query("SELECT * from virtual WHERE EMAIL = '$email' AND UNIQUEID = '$identifier'  ");
 		return $result->fetch_array();
+	}
+		function virtual_select_mobile($email,$identifier)
+	{
+		 $email = $this->con->real_escape_string($email);
+		 $identifier = $this->con->real_escape_string($identifier);
+		 $result = $this->con->query("SELECT * from virtual WHERE EMAIL = '$email' AND code = '$identifier'  ");
+		 return $result->fetch_array();
 	}
 	
 	function v_select($virtualid)
@@ -263,6 +308,19 @@ class Database
 		}	
 	}
 	
+	function virtual_create_mobile($email,$code)
+	{
+		$email = $this->con->real_escape_string($email);
+		$code = $this->con->real_escape_string($code);
+		$uniqueid = sha1($email.'pass1reset!');
+		$result = $this->con->query("INSERT INTO virtual(EMAIL,UNIQUEID,code) VALUES('$email','$uniqueid','$code') ");
+		if($result)
+		{
+			$res = $this->con->query("SELECT VIRTUALID from virtual WHERE EMAIL = '$email' ");
+			$row =  $res->fetch_array();
+			return $row['VIRTUALID']; 
+		}	
+	}
 	function message_order($profileid)
 	{    
 	     $profileid = $this->con->real_escape_string($profileid);
@@ -672,7 +730,7 @@ class Database
 	function mygroup_select($profileid)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
-		return $this->con->query("SELECT groupid FROM member WHERE profileid = '$profileid' order by actionid desc");
+		return $this->con->query("SELECT grp.groupid as groupid ,grp.name as name FROM  `group` as grp inner join member as mem on grp.groupid = mem.groupid WHERE mem.profileid = '$profileid' order by grp.groupid desc");
 	}
 	
 	function is_member($profileid1, $profileid2)
@@ -1049,6 +1107,14 @@ class Database
 		}
 		return $id;
 	}
+	function select_event($profileid)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		$result=$this->con->query("SELECT DISTINCT `event`.name,`event`.date  AS `DATE`,`event`.eventid FROM `event` INNER JOIN `guest` WHERE `guest`.profileid='$profileid'
+AND
+guest.eventid=event.eventid      AND DATE >= NOW() ORDER BY DATE ASC  ");
+		return $result;
+	}
 	
 	function mydiary_create_wo_admin($type,$name)
 	{
@@ -1063,6 +1129,44 @@ class Database
 			return $res['DIARYID'];
 		}
 		return 0;	
+	}
+	function diary_fetch($type)
+	{				$type = $this->con->real_escape_string($type);
+		return $this->con->query("SELECT * FROM `info`  WHERE `TYPE` = '$type' ORDER BY `DIARYID` ASC");
+		
+	}
+	function delete_info($designation_id)
+	{				
+		$designation_id = $this->con->real_escape_string($designation_id); 
+		
+		$result = $this->con->query("DELETE FROM `info` WHERE `DIARYID`='$designation_id' ");
+		
+		return $result;
+	}
+	function star_of_the_week($profileid,$contribution,$date,$actionid)
+	{
+		 $profileid = $this->con->real_escape_string($profileid);
+		 $contribution = $this->con->real_escape_string($contribution);
+		 $date= $this->con->real_escape_string($date);
+		 $actionid= $this->con->real_escape_string($actionid);
+	
+		return $this->con->query("INSERT INTO star_of_the_week(`STAR_ID`,`PROFILEID`,`CONTRIBUTION`,`WEEK_DATE`) VALUES('$actionid','$profileid','$contribution','$date')");
+		
+		
+		
+		
+	}
+	function star_of_the_week_fetch()
+	{			
+		return $this->con->query("SELECT *
+FROM star_of_the_week
+WHERE WEEK_DATE >= date_sub( NOW( ) , INTERVAL 1 week )
+LIMIT 0 , 30");
+				 
+		
+
+	
+		
 	}
 	function diary_exists($profileid)
 	{
@@ -1125,7 +1229,7 @@ class Database
 	function is_already_user($email)
 	{
 		$email = $this->con->real_escape_string($email);
-		$result=$this->con->query("SELECT * FROM signup WHERE EMAIL='$email'");
+		$result = $this->con->query("SELECT * FROM signup WHERE EMAIL='$email'");
 		return $result->fetch_array();
 	}
 	
@@ -1146,6 +1250,7 @@ class Database
 		{
 			$data['virtualid'] = $row['VIRTUALID'];
 			$data['uniqueid'] = $row['UNIQUEID'];
+			$data['code'] = $row['code'];
 			$data['ack'] = 1;
 			return $data;
 		}
@@ -1302,6 +1407,52 @@ class Database
 		 return $result;
 	}
 
+
+	function fetch_actionid($profileid,$type) 
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		$type = $this->con->real_escape_string($type);
+		$result = $this->con->query("SELECT ACTIONID,ACTIONBY,PROFILEID FROM action WHERE PROFILEID='$profileid' AND ACTIONTYPE = '$type' ");
+		
+		return $result;
+	}	
+		function praise_select($actionid) 
+	{
+		$actionid = $this->con->real_escape_string($actionid);
+		
+		$result=$this->con->query("SELECT COMMENT,PAGE from `comment` , `diary`   where `diary`.ACTIONID ='$actionid' AND `comment`.ACTIONID = '$actionid' ");
+		return $result->fetch_array();
+	}
+	function info_fetch($profileid,$type)
+	{
+		$result=$this->con->query("SELECT IF ( EXISTS (SELECT `diaryid` FROM `bio_history` WHERE PROFILEID= '$profileid' AND type= '$type'),1,0 ) as result  ");
+		$ret = $result->fetch_array();
+		return $ret['result'];
+	}
+	
+		function group_fetch()
+	{				
+		return $this->con->query("SELECT * FROM `group`   ORDER BY `groupid` ASC");
+		
+	}
+	function group_add($groupid)
+	{				
+		$groupid = $this->con->real_escape_string($groupid);
+		return $this->con->query(" UPDATE `group` SET `show`='1' WHERE groupid = '$groupid'");
+		
+	}
+	function added_group_fetch()
+	{				
+		
+		return $this->con->query(" SELECT * FROM `group`  WHERE `show` = '1' ");
+		
+	}
+	function group_remove($groupid)
+	{				
+		$groupid = $this->con->real_escape_string($groupid);
+		return $this->con->query(" UPDATE `group` SET `show`='0' WHERE groupid = '$groupid'");
+		
+	}
 /*	function get_actionid($diaryid,$actiontype,$pageid=0,$visible_id=0,$readbit=0)
 	{
 		$myprofileid = $_SESSION['USERID'];
@@ -1368,6 +1519,32 @@ class Database
 		$result=$this->con->query("SELECT * FROM action INNER JOIN action ON action.actionid = action.pageid WHERE action.ACTIONID = '$actionid' AND action.ACTIONTYPE = '$prtype'");
 		return $result->fetch_array();
 	}
+	function star_check($profileid)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		$result = $this->con->query(" (SELECT * FROM `star_of_the_week` WHERE profileid = '$profileid')");
+		
+		return $result;
+	}
+	function star_remove($profileid)
+	{ 
+		$profileid = $this->con->real_escape_string($profileid);
+		return $this->con->query("Delete from star_of_the_week where profileid = '$profileid'");
+	
+	}
+	function MD_select()
+	{
+		
+		$result = $this->con->query(" SELECT * FROM `bio` WHERE IS_MD = '1' ");
+		
+		return $result->fetch_array();
+	}
+	
+	function MD_remove($profileid)
+	{	
+		$res = $this->con->query("UPDATE `bio` SET IS_MD= '0' WHERE PROFILEID = '$profileid'");
+		return $res;
+	}
 	function moderator_select()
 	{
 		return $this->con->query("Select * from moderator");
@@ -1376,6 +1553,13 @@ class Database
 	{
 		$profileid = $this->con->real_escape_string($profileid);
 		$result = $this->con->query("SELECT IF( EXISTS( SELECT * FROM `moderator` WHERE profileid = '$profileid'),1, 0) as result");
+		$ret = $result->fetch_array();
+		return $ret['result'];
+	}
+	function user_exists($email)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		return $result = $this->con->query("SELECT IF( EXISTS( SELECT * FROM `signup` WHERE EMAIL = '$email'),1, 0) as result");
 		$ret = $result->fetch_array();
 		return $ret['result'];
 	}
@@ -1392,6 +1576,12 @@ class Database
 	
 	}
 	
+	function check_MD()
+	{
+	
+	$result=$this->con->query("SELECT * FROM `bio` WHERE IS_MD ='1' ");
+			return $result;
+	}
     function update_extra($actionid, $extra)
 	{	
 		$res = $this->con->query("UPDATE action SET EXTRA= '$extra' WHERE ACTIONID = '$actionid'");
@@ -1696,7 +1886,43 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		$result=$this->con->query("SELECT * FROM entry WHERE PROFILEID = '$profileid' ORDER BY ACTIONID desc LIMIT $limit,$count ");
 		return $result;
 	}
+	function usefullink_insert($new_link,$link_title)
+	{				
+					
+		//$network_name = $this->con->real_escape_string($network_name);
+		$new_link = $this->con->real_escape_string($new_link); 
+		$link_title = $this->con->real_escape_string($link_title);
+		 $check = $this->con->query("SELECT IF( EXISTS( SELECT * FROM `moderator_usefullink` WHERE usefullink = '$new_link' OR title = '$link_title' ),1, 0) as result");
+		$r = $check->fetch_array();
+		$c =  $r['result'];
+		if($c==0)
+		{
+		$result = $this->con->query("INSERT INTO `moderator_usefullink`(`key`,usefullink,title) values('','$new_link','$link_title')");
+		if($result)
+		{
+			$result = $this->con->query("SELECT `key` FROM `moderator_usefullink` WHERE usefullink = '$new_link' AND title='$link_title' ORDER BY `key` DESC LIMIT 1 ");
+			$res = $result->fetch_array();
+			return $res['key'];
+		}	
+		}else
+		{	$data['ack']=2;
+			echo json_encode($data);
+		}
+	}
+	function usefullink_fetch()
+	{				
+		$result = $this->con->query("SELECT * FROM `moderator_usefullink` ORDER BY `key` DESC");
+		return $result;
+	}
 	
+	function delete_usefullink($link_id)
+	{				
+		$link_id = $this->con->real_escape_string($link_id); 
+		
+		$result = $this->con->query("DELETE FROM `moderator_usefullink` WHERE `key`='$link_id' ");
+		
+		return $result;
+	}
 	function comment_insert($actionid,$comment)
 	{
 		$actionid = $this->con->real_escape_string($actionid);
@@ -2036,7 +2262,7 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 	}
 	function user_select_all_at_once()
 	{
-		$result = $this->con->query("SELECT PROFILEID FROM bio" );
+		$result = $this->con->query("SELECT PROFILEID,EMAIL FROM bio" );
 		return $result;
 	}
 	
@@ -2139,6 +2365,41 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		$actionid = $this->con->real_escape_string($actionid);
 		$result = $this->con->query("INSERT INTO `document`(`profileid`, `docid`, `actionby`, `cdn`, `filename`, `caption`) VALUES('$profileid','$docid','$myprofileid','$cdn','$file','$caption')");
 		return $result;
+	}
+	function group_pinned_document_insert($actionid,$groupid)
+	{
+		
+		$actionid = $this->con->real_escape_string($actionid);
+		$groupid = $this->con->real_escape_string($groupid);
+		
+		$result = $this->con->query("INSERT INTO `pinned_documents`(`ACTIONID`,`GROUPID`) VALUES('$actionid','$groupid')");
+		return $result;
+	}
+	
+	function group_pinned_document_fetch($groupid)
+	{
+		//$limit = $this->con->real_escape_string($limit);
+		$groupid = $this->con->real_escape_string($groupid);
+		
+		
+		$result = $this->con->query("SELECT cdn,filename,caption ,docid FROM pinned_documents  inner join document on 
+				pinned_documents.groupid = document.profileid  WHERE pinned_documents.ACTIONID = document.docid and pinned_documents.GROUPID = '$groupid' ");
+		return $result;
+	}
+	function flash_board_insert($file,$cdn,$description)
+	{
+		
+		$cdn = $this->con->real_escape_string($cdn);
+		$description = $this->con->real_escape_string($description);
+		$file = $this->con->real_escape_string($file);
+		$result = $this->con->query("INSERT INTO `flash_board`(`FLASH_ID`,`CDN`, `FILENAME`,`DESCRIPTION`) VALUES('','$cdn','$file','$description')");
+		return $result;
+	}
+	function flash_board_fetch($limit)
+	{			
+		$limit = $this->con->real_escape_string($limit);
+		return $this->con->query("SELECT * FROM `flash_board`   ORDER BY `FLASH_ID` DESC LIMIT $limit");
+		
 	}
 	function video_select($actionid)
 	{
@@ -2684,11 +2945,11 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		{		
 			if($sex)
 			{
-				$result = $this->con->query("SELECT 'http://profile-1.qmcdn.net/' as CDN,'male.png' AS FILENAME"); 		 
+				$result = $this->con->query("SELECT 'https://ebdd192075d95c350eef-28241eefd51f43f0990a7c61585ebde0.ssl.cf2.rackcdn.com/' as CDN,'male.png' AS FILENAME"); 		 
 			}
 			else
 			{
-				$result = $this->con->query("SELECT 'http://profile-1.qmcdn.net/' as CDN,'female.png' AS FILENAME");
+				$result = $this->con->query("SELECT 'https://ebdd192075d95c350eef-28241eefd51f43f0990a7c61585ebde0.ssl.cf2.rackcdn.com/' as CDN,'female.png' AS FILENAME");
 			}	
 		}
 		return $result->fetch_array(); 		
@@ -2954,47 +3215,46 @@ AND DATE_FORMAT(BIRTHDAY,'%m,%d') >= DATE_FORMAT(NOW(),'%m,%d') ORDER BY DATE_FO
 		$sessionid = $this->con->real_escape_string($sessionid);
 		return $this->con->query("delete from ssssion where sessionid='$sessionid' ");
 	}
-function get_daily_report()
-    {
-    $dataarray = array();
-    $result = $this->con->query("select count(*) as count from action where actiontype= 1 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)) ");
-    $row=$result->fetch_array();
-    $resultjoined = $this->con->query("select count(*) as count from action where actiontype= 99 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)) ");
-    $rowjoined=$resultjoined->fetch_array();
-    $resultcomments = $this->con->query("select count(*) as count from action where actiontype= 2 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)) ");
-    $rowcomments=$resultcomments->fetch_array();
-    $dataarray[0] = $row['count'];
-    $dataarray[1] = $rowjoined['count'];
-    $dataarray[2] = $rowcomments['count'];
-    return $dataarray;     
-    }
-    function get_weekly_report()
-    {
-    $dataarray = array();
-    $result = $this->con->query("select count(*) as count from action where actiontype= 1 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)) ");
-    $row=$result->fetch_array();
-    $resultjoined = $this->con->query("select count(*) as count from action where actiontype= 99 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)) ");
-    $rowjoined=$resultjoined->fetch_array();
-    $resultcomments = $this->con->query("select count(*) as count from action where actiontype= 2 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)) ");
-    $rowcomments=$resultcomments->fetch_array();
-    $dataarray[0] = $row['count'];
-    $dataarray[1] = $rowjoined['count'];
-    $dataarray[2] = $rowcomments['count'];
-    return $dataarray;
-    }
-    function get_monthly_report()
-    {
-    $dataarray = array();
-    $result = $this->con->query("select count(*) as count from action where actiontype= 1 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)) ");
-    $row=$result->fetch_array();
-    $resultjoined = $this->con->query("select count(*) as count from action where actiontype= 99 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)) ");
-    $rowjoined=$resultjoined->fetch_array();
-    $resultcomments = $this->con->query("select count(*) as count from action where actiontype= 2 and (timestamp >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)) ");
-    $rowcomments=$resultcomments->fetch_array();
-    $dataarray[0] = $row['count'];
-    $dataarray[1] = $rowjoined['count'];
-    $dataarray[2] = $rowcomments['count'];
-    return $dataarray;
-    }    
+
+function analytics_details_post($startdate,$enddate)
+	{
+	$sdate = strtotime($startdate);
+	$edate = strtotime($enddate);
+    $result = $this->con->query("select day (timestamp) day,count(1) from action where actiontype = '1' and UNIX_TIMESTAMP(timestamp) >='$sdate' and UNIX_TIMESTAMP(timestamp) <='$edate'group by day ");
+	return $result;
+	
+	 }
+	 function analytics_details_joined($startdate,$enddate)
+	{
+	$sdate = strtotime($startdate);
+	$edate = strtotime($enddate);
+    $result = $this->con->query("select day (timestamp) day,count(1) from action where actiontype = '99' and UNIX_TIMESTAMP(timestamp) >='$sdate' and UNIX_TIMESTAMP(timestamp) <='$edate'group by day ");
+	return $result;
+	
+	 }
+	 function analytics_details_comment($startdate,$enddate)
+	{
+	$sdate = strtotime($startdate);
+	$edate = strtotime($enddate);
+    $result = $this->con->query("select day (timestamp) day,count(1) from action where actiontype = '2' and UNIX_TIMESTAMP(timestamp) >='$sdate' and UNIX_TIMESTAMP(timestamp) <='$edate'group by day ");
+	return $result;
+	
+	 }
+	 function analytics_details_view($startdate,$enddate)
+	{
+	$sdate = strtotime($startdate);
+	$edate = strtotime($enddate);
+    $result = $this->con->query("select day (timestamp) day,count(1) from action where UNIX_TIMESTAMP(timestamp) >='$sdate' and UNIX_TIMESTAMP(timestamp) <='$edate'group by day ");
+	return $result;
+	
+	 }
+	 function analytics_details_visit($startdate,$enddate)
+	{
+	$sdate = strtotime($startdate);
+	$edate = strtotime($enddate);
+    $result = $this->con->query("select day (timestamp) day,count(distinct profileid) as count from action where UNIX_TIMESTAMP(timestamp) >='$sdate' and UNIX_TIMESTAMP(timestamp) <='$edate'group by day ");
+	return $result;
+	
+	}    
 }
 ?>

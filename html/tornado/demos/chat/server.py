@@ -113,21 +113,20 @@ class Query(Database):
 			for row in cursor:
 				return row[0]	
 		
-	def notice_unread_count(self, profileid):
+	def notice_unread_count(self, profileid,last_poll_time):
 		cursor = self.connect()
-		sql_query = "select count(*),unix_timestamp(TIMESTAMP) from notice where READBIT ='0' and PROFILEID = '%s' and ACTIONBY <> '%s' and ACTIONTYPE <> '401' order by ACTIONID desc limit 1" %(profileid, profileid)
+		sql_query = "select count(*) from notice where READBIT ='0' and PROFILEID = '%s' and ACTIONBY <> '%s' and ACTIONTYPE <> '401' and unix_timestamp(TIMESTAMP) > '%s' " %(profileid, profileid,last_poll_time)
 		return self.query(sql_query, cursor)	
 
-	def unread_count(self, profileid):
+	def unread_count(self, profileid,last_poll_time):
 		cursor = self.connect()
-		sql_query = "select count(distinct actionby) from inbox where READBIT ='0' and ACTIONON = '%s'" %(profileid)
-		
+		sql_query = "select count(distinct actionby) from inbox where READBIT ='0' and ACTIONON = '%s' and TIME > '%s'" %(profileid,last_poll_time)
 		
 		return self.query(sql_query, cursor)
 
-	def request_unread_count(self, profileid, actiontype1, actiontype2, actiontype3):
+	def request_unread_count(self, profileid, actiontype1, actiontype2, actiontype3,last_poll_time):
 		cursor = self.connect()
-		sql_query = "select count(*) from notice where READBIT ='0' and PROFILEID = '%s' and (ACTIONTYPE = '%s' or ACTIONTYPE = '%s' or ACTIONTYPE = '%s') " %(profileid, actiontype1, actiontype2, actiontype3)
+		sql_query = "select count(*) from notice where READBIT ='0' and PROFILEID = '%s' and (ACTIONTYPE = '%s' or ACTIONTYPE = '%s' or ACTIONTYPE = '%s') and unix_timestamp(TIMESTAMP) > '%s' " %(profileid, actiontype1, actiontype2, actiontype3,last_poll_time)
 		return self.query(sql_query, cursor)
 
 	def offline_replace(self, time,dbname):
@@ -201,19 +200,19 @@ class RealTimeHandler(BaseHandler):
 		ack = 0
 		if last_poll_time == '-1':
 			for callback,u in cls.online.iteritems():
-				cursor = self.notice_unread_count(u)
+				cursor = self.notice_unread_count(u,last_poll_time)
 				rows = cursor.fetchall()
 				for row in rows:
 					count = row[0]
 					ack = 1
 					
-				cursor = self.unread_count(u)
+				cursor = self.unread_count(u,last_poll_time)
 				rows = cursor.fetchall()
 				for row in rows:
 					message_count = row[0]
 					ack = 1
 
-				cursor = self.request_unread_count(u,7,501,408)
+				cursor = self.request_unread_count(u,7,501,408,last_poll_time)
 				rows = cursor.fetchall()
 				for row in rows:
 					request_count = row[0]
@@ -230,19 +229,19 @@ class RealTimeHandler(BaseHandler):
 			if test == 0:
 			   tornado.ioloop.IOLoop.instance().add_timeout(time.time()+60, lambda:callback(response, count, message_count, request_count, database, profileid, action, last_poll_time, callback))
 			else:
-				cursor = self.notice_unread_count(profileid)
+				cursor = self.notice_unread_count(profileid,last_poll_time)
 				rows = cursor.fetchall()
 				for row in rows:
 					count = row[0]
 					ack = 1
 		
-				cursor = self.unread_count(profileid)
+				cursor = self.unread_count(profileid,last_poll_time)
 				rows = cursor.fetchall()
 				for row in rows:
 					message_count = row[0]
 					ack = 1
 
-				cursor = self.request_unread_count(profileid,7,501,408)
+				cursor = self.request_unread_count(profileid,7,501,408,last_poll_time)
 				rows = cursor.fetchall()
 				for row in rows:
 					request_count = row[0]

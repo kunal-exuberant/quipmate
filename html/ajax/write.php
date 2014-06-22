@@ -13,7 +13,30 @@ $session->start();
 $api = new Api();
 $help = new Help();
 $database = new Database();
+$encode = new Encode(); 
+$feed = new Feed();
+$email = new Email();
+$json = new Json();
+$memcached = new Memcached();
+//-----------------CDN urls-----------------------------------------------
+$doc_cdn='https://33b933d2350357486cc1-d29c0c794c48ec4a25d5921c354b372e.ssl.cf2.rackcdn.com';
+$video_cdn='https://d3e2cb1ca268cb3294f9-0fef5c8c1028eda88d7042156742e54b.ssl.cf2.rackcdn.com';
+$image_cdn='https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com';
+$photo_cdn='https://becda623bf8870bb68df-da0c8a7673dba397789e9545fd410b00.ssl.cf2.rackcdn.com';
+$photo1_cdn='https://f4dfddb292f8d39c5f03-2b60e932c1f7626b00bc844829f205ef.ssl.cf2.rackcdn.com';
+$photo2_cdn='https://e78706030ea463f742ec-7f30f58971c4d84451f1b09b50376932.ssl.cf2.rackcdn.com';
+$photo3_cdn='https://78a98406523b98e35ec5-977a0302e2efb5297f8dccd652418b2f.ssl.cf2.rackcdn.com';
+$icon_cdn='https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com';
+$profile_cdn='https://17ba44c6e294ab81f639-55f93745d66bc3cab58e675e4895e5a0.ssl.cf2.rackcdn.com';
+$profile1_cdn='https://ebdd192075d95c350eef-28241eefd51f43f0990a7c61585ebde0.ssl.cf2.rackcdn.com';
+$profile2_cdn='https://9705b7cc157c961ef7ae-4a44337e03ff403fef65c34695d2cabb.ssl.cf2.rackcdn.com';
+$profile3_cdn='https://0a2abf9dcdcced43b8f7-1b4829c2a7a950b17b2dd0e311c873ce.ssl.cf2.rackcdn.com';
+$script_cdn='https://cb1c99c599f84e82bc6c-9f7d7d8a0bec2e21a1a6ea697d537f8d.ssl.cf2.rackcdn.com';
+$style_cdn='https://7f0cf736abbdd4f83d8b-475de27d87a6fd312d1dd9701d87a2a9.ssl.cf2.rackcdn.com';
+//--------------------------------------------------------------------------------------
 $action = array();
+
+
 if(isset($_SESSION['auth']))
 {
 	if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET))
@@ -51,6 +74,10 @@ if(isset($_SESSION['auth']))
 			else if($_GET['action'] == 'group_top_influencer_fetch')
 			{
 				$api->group_top_influencer_fetch();
+			}
+			else if($_GET['action'] == 'feedback')
+			{
+				$api->feedback();
 			}
 			else if($_GET['action'] == 'bio_item_remove')
 			{
@@ -212,6 +239,14 @@ if(isset($_SESSION['auth']))
 			{
 				$api->friend_search();
 			}
+			else if($_GET['action'] == 'md_load')
+			{
+				$api->md_load();
+			}
+			else if($_GET['action'] == 'md_remove')
+			{
+				$api->md_remove();
+			}
 			else if($_GET['action'] == 'gift')
 			{
 				$api->gift();
@@ -220,6 +255,29 @@ if(isset($_SESSION['auth']))
 			{
 				$api->praise();
 			}
+			else if($_GET['action'] == 'praise_fetch')
+			{
+				$api->praise_fetch();
+			}
+			
+			else if($_GET['action'] == 'group_fetch')
+			{
+				$api->group_fetch();
+			}
+			else if($_GET['action'] == 'group_add_fetch')
+			{
+				$api->group_add_fetch();
+			}
+			else if($_GET['action'] == 'group_suggest_add')
+			{
+				$api->group_suggest_add();
+			}
+			else if($_GET['action'] == 'group_remove')
+			{
+				$api->group_remove();
+			}
+			
+			
 			else if($_GET['action'] == 'group_create')
 			{
 				$api->group_create();
@@ -272,6 +330,47 @@ if(isset($_SESSION['auth']))
 			{
 				$api->link_details_fetch();
 			}
+			else if($_GET['action'] == 'usefullinks')
+			{
+				$api->admin_usefullink();
+			}
+			else if($_GET['action'] == 'usefullinks_fetch')
+			{
+				$api->admin_fetch_usefullink();
+			}
+			else if($_GET['action'] == 'usefullink_delete')
+			{
+				$api->usefullink_delete();
+			}
+			else if($_GET['action'] == 'info_update')
+			{
+				$api->info_update();
+			}
+			else if($_GET['action'] == 'info_fetch')
+			{
+				$api->info_fetch();
+			}
+			
+			else if($_GET['action'] == 'info_delete')
+			{
+				$api->info_delete();
+			}
+			else if($_GET['action'] == 'star_of_the_week')
+			{
+				$api->star_of_the_week();
+			}
+			else if($_GET['action'] == 'star_of_the_week_fetch')
+			{
+				$api->star_of_the_week_fetch();
+			}
+			else if($_GET['action'] == 'usefullinks_fetch')
+			{
+				$api->admin_fetch_usefullink();
+			}
+			else if($_GET['action'] == 'group_pinned_doc_fetch')
+			{ 
+				$api->group_pinned_doc_fetch();
+			}
 			else if($_GET['action'] == 'live_feed')
 			{
 				$api->live_feed();
@@ -320,6 +419,14 @@ if(isset($_SESSION['auth']))
 			{
 				$api->user_details_fetch();
 			}
+			else if($_GET['action'] == 'flash_board_fetch')
+			{
+				$api->flash_board_fetch();
+			}
+			else if($_GET['action'] == 'set_MD')
+			{
+				$api->set_MD();
+			}
 			else if($_GET['action'] == 'user_delete')
 			{
 				$api->user_delete();
@@ -328,10 +435,30 @@ if(isset($_SESSION['auth']))
 			{
 				$api->moderator_remove();
 			}
+			else if($_GET['action'] == 'star_remove')
+			{
+				$api->star_remove();
+			}
 			else if($_GET['action'] == 'make_moderator')
 			{
 				$api->make_moderator();
 			}
+			else if($_GET['action'] == 'moderator_fetch')
+			{
+				$api->moderator_fetch();
+			}
+			else if($_GET['action'] == 'setting_feature_select')
+			{
+				$api->setting_feature_select();
+			}
+			else if($_GET['action'] == 'broadcast_pages_select')
+			{
+				$api->broadcast_pages_select();
+			}
+			else if($_GET['action'] == 'page_details_fetch')
+			{
+				$api->page_details_fetch();
+			}			
 			else if($_GET['action'] == 'admin_feed')
 			{
 				$api->admin_feed();
@@ -359,6 +486,14 @@ if(isset($_SESSION['auth']))
 			else if($_GET['action'] == 'photo_fetch')
 			{
 				$api->photo_fetch();
+			}
+			else if($_GET['action'] == 'video_fetch')
+			{
+				$api->video_fetch();
+			}
+			else if($_GET['action'] == 'file_fetch')
+			{
+				$api->file_fetch();
 			}
 			else if($_GET['action'] == 'post_delete')
 			{
@@ -548,6 +683,34 @@ if(isset($_SESSION['auth']))
 			{
 				$api->validate_school();
 			}
+			else if($_GET['action'] == 'actions_load')
+			{
+				$api->actions_load();
+			}
+			else if($_GET['action'] == 'group_and_event_select')
+			{
+				$api->group_and_event_select();
+			}
+			else if($_GET['action'] == 'bio_fetch')
+			{
+				$api->bio_fetch();
+			}
+			else if($_GET['action'] == 'bio_percentage')
+			{
+				$api->bio_percentage();
+			}
+			else if($_GET['action'] == 'group_details_fetch')
+			{
+				$api->group_details_fetch();
+			}
+			else if($_GET['action'] == 'event_details_fetch')
+			{
+				$api->event_details_fetch();
+			}
+			else if($_GET['action'] == 'profile_details_fetch')
+			{
+				$api->profile_details_fetch();
+			}
             else if($_GET['action']=='daily')
             {
             $api->daily_report();
@@ -560,6 +723,30 @@ if(isset($_SESSION['auth']))
             {
             $api->monthly_report();
             }
+			else if($_GET['action']=='analytics')
+			{
+              if($_GET['typedata']=='post')
+            {			  
+			$api->analytics_details_post();
+			}
+			if($_GET['typedata']=='joined')
+			{
+			$api->analytics_details_joined();
+			}
+			if($_GET['typedata']=='comment')
+			{
+			$api->analytics_details_comment();
+			}
+			if($_GET['typedata']=='view')
+			{
+			$api->analytics_details_view();
+			}
+			if($_GET['typedata']=='visit')
+			{
+			$api->analytics_details_visit();
+			}
+			
+			}
             else
 			{
 				$help->error_description(7);
@@ -586,6 +773,11 @@ if(isset($_SESSION['auth']))
 			{ 
 				$api->group_photo_upload();
 			}
+			else if($_POST['action'] == 'employee_invite_file_upload')
+			{
+				$api->employee_invite_file_upload();
+			}
+			
 			else if($_POST['action'] == 'new_version_upload')
 			{
 				$api->new_version_upload();
@@ -610,6 +802,14 @@ if(isset($_SESSION['auth']))
 			{
 				$api->profile_picture_upload();
 			}
+			else if($_POST['action'] == 'flash_board')
+			{
+				$api->flash_board();
+			}
+			else if($_POST['action'] == 'group_pinned_doc_upload')
+			{ 
+				$api->group_pinned_doc_upload();
+			}
 			else
 			{ 
 				$help->error_description(8);
@@ -628,6 +828,10 @@ if(isset($_SESSION['auth']))
 else if($_POST['action'] == 'validate_user')
 {
 	$api->validate_user();
+}
+else if($_POST['action'] == 'validate_user_mobile')
+{
+	$api->validate_user_mobile();
 }
 else if($_GET['action'] == 'forgot_password')
 {
@@ -649,9 +853,20 @@ else if($_GET['action'] == 'self_invite')
 {
 	$api->self_invite();
 }
-else if($_GET['action'] == 'login')
+else if($_GET['action'] == 'self_invite_mobile')
+{
+	$api->self_invite_mobile();
+}
+else if($_GET['action'] == 'contact')
+{
+	$api->contact();
+}else if($_POST['action'] == 'login')
 {
 	$api->login();
+}
+else if($_GET['action'] == 'login_get')
+{
+	$api->login_get();
 }
 else if($_GET['action'] == 'analytics')
 {
@@ -661,4 +876,5 @@ else
 {
 	$help->error_description(4);
 }
+
 ?>

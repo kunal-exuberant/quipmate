@@ -4,26 +4,24 @@
 <?php
 require_once '../include/header.php';
 ?>
-<div id="wrapper">
-	<div id="left">
-			<a href="group.php?id=<?php echo $profileid ?>"><img style="max-width:16em;margin:0em 0em 0em 0em;" src="<?php echo $profile_image; ?>" /></a>
+<div class="container">
+  <div class="row" >
+    <div class="col-md-2 left" id="left">
+			<a class="ajax_nav" href="group.php?id=<?php echo $profileid ?>"><img class="img-thumbnail" src="<?php echo $profile_image; ?>" /></a>
 			
-			<div style="text-align:center;">
-				<a style="font-weight:bold;display:block;color:#ffffff;background:#4C66A4;padding:0.5em;" href="group.php?id=<?php echo $profileid; ?>" class="ellipsis"><?php echo $profile_name; ?></a>
+			<div class="text-center">
+				<a class="ajax_nav" href="group.php?id=<?php echo $profileid; ?>" class="ellipsis"><?php echo $profile_name; ?></a>
 			</div>
 			<?php if($profile_relation == 0) {?>
-			<div style="margin-top:0.5em;text-align:center;">
-				<a style="color:#003399;" href="group.php?hl=settings&id=<?php echo $profileid; ?>">Edit Group Settings</a>
+			<div class="text-center">
+				<a class="ajax_nav"  href="group.php?hl=settings&id=<?php echo $profileid; ?>">Edit Group Settings</a>
 			</div>
 			<?php }?>
-			<ul style="list-style:none;clear:left;margin-top:1em;" id="links"> 
-					<li class="links" <?php if($page == 'group_json') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="group_json" href="group.php?id=<?php echo $profileid.'&hl=post'?>" title="Your activities"><img class="lfloat" src="http://icon.qmcdn.net/feed_blue.png" height="20" width="20" /><span class="name_20">Group Feed</span></a></li>
-					
-					<li class="links" <?php if($page == 'group_about') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="about" href="group.php?id=<?php echo $profileid.'&hl=about'?>" title="Your Bio"><img class="lfloat" src="http://icon.qmcdn.net/about_blue.png" height="20" width="20" /><span class="name_20">About</span></a></li>
-
-					<li class="links" <?php if($page == 'member') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="inbox" href="group.php?id=<?php echo $profileid.'&hl=member'?>" title="Your friends"><img class="lfloat" src="http://icon.qmcdn.net/friends_blue.png" height="20" width="20" /><span class="name_20">Members(<?php echo $database->member_count($profileid); ?>)</span></a></li>
+			<ul class=" nav nav-pills nav-stacked"> 
+					<li class="links" <?php if($page == 'group_json') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="group_json" href="group.php?id=<?php echo $profileid.'&hl=post'?>" title="Your activities"><span class="name_20">Group Feed</span></a></li>
+					<li class="links" <?php if($page == 'group_about') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="about" href="group.php?id=<?php echo $profileid.'&hl=about'?>" title="Your Bio"><span class="name_20">About</span></a></li>
+					<li class="links" <?php if($page == 'member') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="inbox" href="group.php?id=<?php echo $profileid.'&hl=member'?>" title="Your friends"><span class="name_20">Members(<?php echo $database->member_count($profileid); ?>)</span></a></li>
 			</ul>
-		<div id="profile_active_friend_list" class="right_item" style="margin:1em 0em 0em 0em;padding:0em;"></div>			
 		<script>
 		$(function(){
 		var profileid = $('#profileid_hidden').attr('value'); 
@@ -62,7 +60,7 @@ require_once '../include/header.php';
 	<?php
 			if($page == 'group_about')
 			{
-				echo '<div id="center" >';
+				echo '<div id="center" class="col-md-6 center" >';
 				echo '<div style="padding:1em;font-size:1.6em;font-weight:bold">'.$profile_name.'</div>';
 				echo '<div style="padding:1em;font-size:1.4em;">'.$n['description'].'</div>';
 				$row = $database->get_name($n['createdby']);
@@ -72,13 +70,13 @@ require_once '../include/header.php';
 			}
 			else if($page == 'group_json')
 			{
-				echo '<div id="center" >';
+				echo '<div id="center" class="col-md-6 center" >';
 				require('../include/actions.php');
 				echo '</div>';
 			}
 			else if($page == 'group_settings')
 			{
-				echo '<div id="center" style="text-align:center">';
+				echo '<div id="center" style="text-align:center" class="col-md-6 center">';
 				?>
 				<h1 class="page_title">Group Settings</h1>
 					<div id="group_info"></div>
@@ -113,15 +111,18 @@ require_once '../include/header.php';
 					<div class="group_create_button">
 						<input style="margin:0em 1em" type="submit" onclick="action.group_settings_save(this)" value="Save" class="group_create_positive">
 					</div>
+					
+					<h1 class="page_title">Attach Document</h1><form id="flashform" method="post" enctype="multipart/form-data" action="/ajax/write.php"><textarea style="border:1px solid #cccccc;height:2.7em;padding:0.5em;margin:0.5em;width:34.6em;margin-left:3em;" type="text" placeholder="Say something about this file" maxlength="200" id="photo_description" name="photo_description"></textarea><div id="vish_Btn" style="position: relative;top: 10px;font-family: calibri;width: 180px;height:100px;padding-top:35px;-webkit-border-radius: 5px;-moz-border-radius: 5px;border: 1px dashed #BBB; text-align: center;background-color:#DDD;cursor:pointer; margin-left:30em;">Upload Document</div><input type="file" id="html_btn" size="40" style="margin-top:-20px; margin-left:95px; display:none;" name="photo_box"/></br><input type="submit" name="upload" id="flash_upload_button" value="Upload" style="margin-left:3em;"><input type="hidden" name="action" value="employee_invite_file_upload"></form>
+					
 				<?php
 				echo '</div>';
 			}
 			else
 			{
-				echo '<div id="center" ></div>';
+				echo '<div id="center" class="col-md-6 center" ></div>';
 			}
 	?>
-	<div id="right">
+	<div id="right" class="col-md-3 right">
 		<?php
 	if($profile_relation == 0 || $profile_relation == 1)
 	{
@@ -131,25 +132,25 @@ require_once '../include/header.php';
 		if($n['invite'] == 0 || $profile_relation == 0)
 		{
 		?>
-		<div id="friend_match" style="margin-top:1em;"></div>
-		<div id="member_request" class="right_item"></div>
+		<div id="friend_match" style="margin-top:1em;" class="panel panel-default"></div>
+		<div id="member_request" class="panel panel-default"></div>
 		<div id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div>
-		<input type="text" style="border:0.1em solid #999999;width:20em;height:1.2em;padding:0.5em;" id="invite_box" value="" onkeyup="ui.group_friend_invite(this)" placeholder="Add a friend to this group" />
-		<div style="position:relative;" id="group_friend_invite"></div>
+		<input type="text" id="invite_box" value="" onkeyup="ui.group_friend_invite(this)" placeholder="Add a friend to this group" />
+		<div style="position:relative;" id="group_friend_invite" class="panel panel-default"></div>
 		<?php
 		}
 		?>
-		<div class="right_item" id="group_description">
-			<div class="subtitle">Group Description</div>
-			<div><?php echo $n['description'];?></div>
+		<div class="panel panel-default" id="group_description">
+			<div class="panel-heading">Group Description</div>
+			<div class="panel-body"><?php echo $n['description'];?></div>
 		</div>
 		<?php
 		if(!empty($n['link']))
 		{	
 		?>
-		<div class="right_item" id="group_link">
-			<div class="subtitle">Relevant Links</div>
-			<div><?php require_once('../include/Help.php'); $help = new Help(); echo $help->link_highlight($n['link']);?></div>
+		<div class="panel panel-default" id="group_link">
+			<div class="panel-heading">Relevant Links</div>
+			<div class="panel-body"><?php require_once('../include/Help.php'); $help = new Help(); echo $help->link_highlight($n['link']);?></div>
 		</div>
 		<?php
 		}	 
@@ -171,7 +172,8 @@ require_once '../include/header.php';
 	}
 	?>	
 	</div>
-</div>
+</div><!--- Row Closed-->
+</div><!--- Container Closed-->
 <?php require_once('../include/footer.php'); ?>
 </body>
 </html>

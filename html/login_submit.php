@@ -32,7 +32,7 @@ if(array_key_exists('login',$_POST))
 			$prow=$database->bio_select($myprofileid);
 			$help = new Help();
 			$pri = $database->privacy_select($myprofileid);
-			$help->session_init($row,$prow,$imgrow,$email,$pri);
+			$help->session_init($row,$prow,$imgrow,$email,$pri,$database);
 			if(isset($_SESSION['auth'])) 
 			{
 				if(isset($_COOKIE['quip_r']))

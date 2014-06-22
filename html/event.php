@@ -4,28 +4,28 @@
 <?php
 require_once '../include/header.php';
 ?>
-<div id="wrapper">
-	<div id="left">
-			<a href="event.php?id=<?php echo $profileid ?>"><img style="max-width:16em;margin:0em 0em 0em 0em;" src="<?php echo $profile_image; ?>" /></a>
+<div class="container">
+  <div class="row" >
+    <div class="col-md-2 left" id="left">
+			<a href="event.php?id=<?php echo $profileid ?>"><img class="img-thumbnail" src="<?php echo $profile_image; ?>" /></a>
 			
-			<div style="text-align:center;">
-				<a style="font-weight:bold;display:block;color:#ffffff;background:#4C66A4;padding:0.5em;" href="event.php?id=<?php echo $profileid; ?>" class="ellipsis"><?php echo $profile_name; ?></a>
+			<div class="text-center">
+				<a class="ajax_nav" href="event.php?id=<?php echo $profileid; ?>" class="ellipsis"><?php echo $profile_name; ?></a>
 			</div>
 			<?php if($profile_relation == 0) {?>
-			<div style="margin-top:0.5em;text-align:center;">
-				<a style="color:#003399;" href="event.php?hl=settings&id=<?php echo $profileid; ?>">Edit Event Settings</a>
+			<div class="text-center">
+				<a  class="ajax_nav" href="event.php?hl=settings&id=<?php echo $profileid; ?>">Edit Event Settings</a>
 			</div>
 			<?php }?>
-			<ul style="list-style:none;clear:left;margin-top:1em;" id="links"> 
-					<li class="links" <?php if($page == 'event_json') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="group_json" href="event.php?id=<?php echo $profileid.'&hl=post'?>" title="Event posts"><img class="lfloat" src="http://icon.qmcdn.net/feed_blue.png" height="20" width="20" /><span class="name_20">Event Feed</span></a></li>
+			<ul class=" nav nav-pills nav-stacked"> 
+					<li class="links" <?php if($page == 'event_json') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="group_json" href="event.php?id=<?php echo $profileid.'&hl=post'?>" title="Event posts"><span class="name_20">Event Feed</span></a></li>
 					
-					<li class="links" <?php if($page == 'event_about') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="about" href="event.php?id=<?php echo $profileid.'&hl=about'?>" title="About the event"><img class="lfloat" src="http://icon.qmcdn.net/about_blue.png" height="20" width="20" /><span class="name_20">About</span></a></li>
+					<li class="links" <?php if($page == 'event_about') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="about" href="event.php?id=<?php echo $profileid.'&hl=about'?>" title="About the event"><span class="name_20">About</span></a></li>
 
-					<li class="links" <?php if($page == 'guest') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="inbox" href="event.php?id=<?php echo $profileid.'&hl=guest'?>" title="Guest expected"><img class="lfloat" src="http://icon.qmcdn.net/friends_blue.png" height="20" width="20" /><span class="name_20">Guest expected(<?php $guest_count = $database->guest_count($profileid); echo  $guest_count; ?>)</span></a></li>
+					<li class="links" <?php if($page == 'guest') echo 'style="background:#ddd;"'; ?>><a id="inbox" href="event.php?id=<?php echo $profileid.'&hl=guest'?>" title="Guest expected"><span class="name_20">Guest expected(<?php $guest_count = $database->guest_count($profileid); echo  $guest_count; ?>)</span></a></li>
 			</ul>
 	<?php
-		?>
-		<div id="profile_active_friend_list" class="right_item" style="margin:1em 0em 0em 0em;padding:0em;"></div>			
+		?>		
 		<script>
 		$(function(){ 
 		var profileid = $('#profileid_hidden').attr('value'); 
@@ -62,7 +62,7 @@ require_once '../include/header.php';
 	<?php
 			if($page == 'event_about')
 			{
-				echo '<div id="center" >';
+				echo '<div id="center" class="col-md-6 center" >';
 				echo '<div style="padding:1em;font-size:1.6em;font-weight:bold">'.$profile_name.'</div>';
 				echo '<div style="padding:1em;font-size:1.3em;">'.$n['description'].'</div>';
 				echo '<div style="padding:1em;font-size:1.3em;">On '.date('j M,Y',strtotime($n['date'])).' at '.$n['timing'].'</div>';
@@ -76,13 +76,13 @@ require_once '../include/header.php';
 			}
 			else if($page == 'event_json')
 			{
-				echo '<div id="center" >';
+				echo '<div id="center" class="col-md-6 center">';
 				require('../include/actions.php');
 				echo '</div>';
 			}
 			else if($page == 'event_settings')
 			{
-				echo '<div id="center" style="text-align:center">';
+				echo '<div id="center" class="col-md-6 center text-center">';
 				?>
 				<h1 class="page_title">Event Settings</h1>
 					<div id="group_info"></div>
@@ -105,7 +105,7 @@ require_once '../include/header.php';
 						When : <select id="event_day" style="margin:0em 0.2em;height:2.6em;padding:0.5em;"><option value="-1">Day</option><option value="01">1</option><option value="02">2</option><option value="03">3</option><option value="04">4</option><option value="05">5</option><option value="06">6</option><option value="07">7</option><option value="08">8</option><option value="09">9</option><option value="10">10</option> <option value="11">11</option><option value="12">12</option><option value="01">13</option><option value="02">14</option><option value="03">15</option><option value="04">16</option><option value="05">17</option><option value="06">18</option><option value="07">19</option><option value="08">20</option><option value="09">21</option> <option value="10">22</option><option value="11">23</option><option value="12">24</option><option value="01">25</option><option value="02">26</option> <option value="03">27</option><option value="04">28</option> <option value="05">29</option><option value="04">30</option><option value="05">31</option></select><select id="event_month" style="margin:0em 0.2em;height:2.6em;padding:0.5em;"><option value="-1">Month</option> <option value="01">JAN</option><option value="02">FEB</option><option value="03">MAR</option><option value="04">APR</option><option value="05">MAY</option><option value="06">JUN</option> <option value="07">JUL</option><option value="08">AUG</option> <option value="09">SEP</option><option value="10">OCT</option><option value="11">NOV</option> <option value="12">DEC</option></select><select id="event_year" style="margin:0em 0.2em;height:2.6em;padding:0.5em;"><option value="-1">Year</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option></select><select id="event_time" style="margin:0em 0.2em;height:2.6em;padding:0.5em;"><option value="-1">Time</option><option value="09:00:00">09:00 am</option><option value="09:30:00">09:30 am</option><option value="1000">10:00 am</option><option value="10:30:00">10:30 am</option><option value="11:30:00">11:30 am</option><option value="12:00:00">12:00 pm</option><option value="12:30:00">12:30 pm</option><option value="13:00:00">01:00 pm</option><option value="13:30:00">01:30 pm</option><option value="14:00:00">02:00 pm</option><option value="14:30:00">02:30 pm</option><option value="15:00:00">03:00 pm</option><option value="15:30:00">03:30 pm</option><option value="16:00:00">04:00 pm</option><option value="16:30:00">04:30 pm</option><option value="17:00:00">05:00 pm</option><option value="17:30:00">05:30 pm</option><option value="18:00:00">06:00 pm</option><option value="18:30:00">06:30 pm</option><option value="19:00:00">07:00 pm</option><option value="19:30:00">07:30 pm</option><option value="20:00:00">08:00 pm</option><option value="20:30:00">08:30 pm</option><option value="21:00:00">09:00 pm</option><option value="21:30:00">09:30 pm</option><option value="22:00:00">10:00 pm</option><option value="22:30:00">10:30 pm</option><option value="23:00:00">11:00 pm</option><option value="23:30:00">11:30 pm</option><option value="00:00:00">12:00 am</option><option value="00:30:00">12:30 am</option><option value="01:00:00">01:00 am</option><option value="01:30:00">01:30 am</option><option value="02:00:00">02:00 am</option><option value="02:30:00">02:30 am</option><option value="03:00:00">03:00 am</option><option value="03:30:00">03:30 am</option><option value="01:00:00">01:00 am</option><option value="01:30:00">01:30 am</option><option value="02:00:00">02:00 am</option><option value="02:30:00">02:30 am</option><option value="03:00:00">03:00 am</option><option value="03:30:00">03:30 am</option><option value="04:00:00">04:00 am</option><option value="04:30:00">04:30 am</option><option value="05:00:00">05:00 am</option><option value="05:30:00">05:30 am</option><option value="06:00:00">06:00 am</option><option value="06:30:00">06:30 am</option><option value="07:00:00">07:00 am</option><option value="07:30:00">07:30 am</option><option value="08:00:00">08:00 am</option><option value="08:30:00">08:30 am</option></select>
 					</div>
 					<div style="margin:1em 0em;">
-						Where: <input type="text" id="event_where" value="<?php echo $n['venue']; ?>" placeholder="Venue of this event" style="height:1.6em;padding:0.5em;width:22em"/>
+						Where: <input type="text" id="event_where" value="<?php echo $n['venue']; ?>" placeholder="Venue of this event" style="padding:0.5em;width:22em"/>
 					</div>
 					<?php 
 					if($n['invite'] == 1)
@@ -129,10 +129,10 @@ require_once '../include/header.php';
 			}
 			else
 			{
-				echo '<div id="center" ></div>';
+				echo '<div id="center" class="col-md-6 center"></div>';
 			}
 	?>
-	<div id="right">
+	<div id="right" class="col-md-3 right">
 		<?php
 	if($n['cancel'] == 1)
 	{
@@ -149,7 +149,7 @@ require_once '../include/header.php';
 			{
 				?>
 					<div id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div>
-					<input type="text" style="border:0.1em solid #999999;width:20em;height:1.2em;padding:0.5em;" id="invite_box" value="" onkeyup="ui.event_friend_invite(this)" placeholder="Invite a friend to this event" />
+					<input type="text" id="invite_box" value="" onkeyup="ui.event_friend_invite(this)" placeholder="Invite a friend to this event" />
 					<div style="position:relative;" id="group_friend_invite"></div>
 				<?php
 			}  
@@ -161,7 +161,7 @@ require_once '../include/header.php';
 		<div class="subtitle">
 			<div class="friend_request_class">
 				<a href="event.php?id=<?php echo $profileid; ?>">
-					<img class="lfloat" style="margin-right:1em;" src="http://icon.qmcdn.net/event.png" height="50" width="50">
+					<img class="lfloat" style="margin-right:1em;" src="<?php echo $icon_cdn?>/event.png" height="50" width="50">
 				</a>
 				<div>
 					<a class="bold" href="event.php?id=<?php echo $profileid; ?>"><?php echo $profile_name; ?></a><div><input type="submit" class="frequest" data="<?php echo $profileid; ?>" id="1" value="Going" onclick="action.guest_accept(this, 1)" /><input type="submit" class="frequest" data="<?php echo $profileid; ?>" style="margin-left:0.5em;" id="0" value="Decline" onclick="action.guest_accept(this, 0)" /></div>
@@ -189,25 +189,26 @@ require_once '../include/header.php';
 		<?php   
 	}
 	?>
-		<div class="right_item" id="group_link">
-			<div class="subtitle">Event Details</div>
-			<div>
+		<div class="panel panel-default" id="group_link">
+			<div class="panel-heading">Event Details</div>
+			<div class="panel-body">
 				<div>Date: <?php echo date('j M,Y',strtotime($n['date']));?>
 				</div>
 				<div>
 				Time: <?php echo $n['timing'];?>
 				</div>
-			<div>
-			Venue: <?php echo $n['venue'];?>
-			</div>
+				<div>
+				Venue: <?php echo $n['venue'];?>
+				</div>
 			</div>
 		</div>
-		<div class="right_item" id="group_description">
-			<div class="subtitle">Event Description</div>
-			<div><?php echo $n['description'];?></div>
+		<div class="panel panel-default" id="group_description">
+			<div class="panel-heading">Event Description</div>
+			<div class="panel-body"><?php echo $n['description'];?></div>
 		</div>
 	</div>
-</div>
+</div><!-- Row Closed-->
+</div><!-- Container Closed-->
 <?php require_once('../include/footer.php'); ?>
 </body>
 </html>

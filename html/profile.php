@@ -4,32 +4,40 @@
 <?php
 require_once '../include/header.php';
 ?>
-<div id="wrapper">
-	<div id="left">
-			<div style="text-align:center;" class="photo_feed">	
-					<input type="hidden" value="<?php echo $profileid; ?>" />
-					<input type="hidden" value="50" />
-					<img class="viewable" id="<?php echo $profile_imageid; ?>" style="cursor:pointer;max-width:16em;margin:0em 0em 0em 0em;" data="<?php echo $profile_image; ?>" src="<?php echo $profile_image; ?>" />
-			</div>
-			<div style="text-align:center;">
-				<a style="font-weight:bold;display:block;color:#ffffff;padding:0.5em;background:#4C66A4"; href="profile.php?id=<?php echo $profileid; ?>" style=""><?php echo $profile_name; ?></a>
-			</div>
+<div class="container">
+  <div class="row" >
+   <div class="col-md-2 left" id="left">
+		<div class="text-center">	
+			<input type="hidden" value="<?php echo $profileid; ?>" />
+			<input type="hidden" value="50" />
+			<img id="<?php echo $profile_imageid; ?>" data="<?php echo $profile_image; ?>" class="img-thumbnail" src="<?php echo $profile_image; ?>" onclick="action.image_viewer(this)" />
+		</div>
+		<div class="text-center">
+			<a  href="profile.php?id=<?php echo $profileid; ?>" style=""><?php echo $profile_name; ?></a>
+		</div>
+		<?php if($myprofileid == $profileid) 
+		{ 
+		?>
+		<div class="text-center" >
+			<a href="register.php?hl=profile_picture">Change Profile Picture</a>
+		</div>
+		<?php
+		}
+		?>
+		<ul  class=" nav nav-pills nav-stacked"> 
+			<li class="links" <?php if($page == 'profile_json') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="profile_json" href="profile.php?id=<?php echo $profileid.'&hl=diary'?>" title="Your activities"><span class="name_20">Diary</span></a></li>
 			
+			<li class="links" <?php if($page == 'bio') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="bio" href="profile.php?id=<?php echo $profileid.'&hl=bio'?>" title="Your Bio"><span class="name_20">Bio</span></a></li>
 			
-			<?php if($myprofileid == $profileid) {?>
-			<div style="margin-top:0.5em;text-align:center;">
-				<a style="color:#003399;" href="register.php?hl=profile_picture">Change Profile Picture</a>
-			</div>
-			<?php }?>
-			<ul style="list-style:none;clear:left;margin-top:1em;" id="links"> 
-					<li class="links" <?php if($page == 'profile_json') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="news_json" href="profile.php?id=<?php echo $profileid.'&hl=diary'?>" title="Your activities"><img class="lfloat" src="http://icon.qmcdn.net/diary_blue.png" height="20" width="20" /><span class="name_20">Diary</span></a></li>
-					
-					<li class="links" <?php if($page == 'bio') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="inbox" href="profile.php?id=<?php echo $profileid.'&hl=bio'?>" title="Your Bio"><img class="lfloat" src="http://icon.qmcdn.net/bio_new_blue.png" height="20" width="20" /><span class="name_20">Bio</span></a></li>
 					 
-					<li class="links" <?php if($page == 'pphoto') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="photo" href="profile.php?id=<?php echo $profileid.'&hl=image'?>" title="Your Photos"><img class="lfloat" src="http://icon.qmcdn.net/world.png" height="20" width="20" /><span class="name_20">Photos</span></a></li>
+			 <li class="links" <?php if($page == 'praise') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="pphoto" href="profile.php?id=<?php echo $profileid.'&hl=praise'?>" title="Your Praises"><span class="name_20">Praises</span></a></li>
+			 
+			<li class="links" <?php if($page == 'pphoto') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="pphoto" href="profile.php?id=<?php echo $profileid.'&hl=image'?>" title="Your Photos"><span class="name_20">Photos</span></a></li>
+			<li class="links" <?php if($page == 'file') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="pphoto" href="profile.php?id=<?php echo $profileid.'&hl=file'?>" title="Your Files"><span class="name_20">Files</span></a></li>
+			<li class="links" <?php if($page == 'video') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="pphoto" href="profile.php?id=<?php echo $profileid.'&hl=video'?>" title="Your Videos"><span class="name_20">Videos</span></a></li>
 
-					<li class="links" <?php if($page == 'friend') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="inbox" href="profile.php?id=<?php echo $profileid.'&hl=friend'?>" title="Your friends"><img class="lfloat" src="http://icon.qmcdn.net/friends_blue.png" height="20" width="20" /><span class="name_20">Friends(<?php echo $database->friend_count($profileid); ?>)</span></a></li>
-			</ul>
+			<li class="links" <?php if($page == 'friend') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="friend" href="profile.php?id=<?php echo $profileid.'&hl=friend'?>" title="Your friends"><span class="name_20">Friends(<?php echo $database->friend_count($profileid); ?>)</span></a></li>
+		</ul>
 	<?php
 	if($profile_relation == 0)
 	{
@@ -75,27 +83,28 @@ require_once '../include/header.php';
 		</div>
 	<?php
 	}
+	
 	?>	
-	</div>
+</div>
 	<?php
 			if($page == 'bio')
 			{
-				echo '<div id="center" >';
+				echo '<div id="center" class="col-md-6 center" >';
 				require('../include/biocenter.php');
 				echo '</div>';
 			}
 			else if($page == 'profile_json')
 			{
-				echo '<div id="center" >';
+				echo '<div id="center" class="col-md-6 center" >';
 				require('../include/actions.php');
 				echo '</div>';
 			}
 			else
 			{
-				echo '<div id="center" ></div>';
+				echo '<div id="center" class="col-md-6 center" ></div>';
 			}
 	?>
-	<div id="right">
+	<div id="right" class="col-md-3 right">
 		<script type="text/javascript">
 		/*$(function(){
 			var profileid=$('#profileid_hidden').attr('value');
@@ -163,12 +172,9 @@ require_once '../include/header.php';
 	{
     	 $data = $database->missu_status($myprofileid,$profileid);
 		 $status = $data['status'];
-		if($_SESSION['database'] != 'profile')
-		{
 		?>
 			<div id="" class="right_item" style="margin-bottom:1em;"><a style="cursor:pointer;" onclick="ui.praise(this,event)">Praise/Recommend</a></div>
 		<?php
-		}
 		?> 
 		 <input type="hidden" id ="missu_status" value="<?php echo $status; ?>"/>
 		 <?php
@@ -207,14 +213,14 @@ require_once '../include/header.php';
 		<span class="profile_actions_container" >
 			<input style="width:7.3em;" class="profile_actions_button" id="message_button" type="submit" value="+Message" onclick="ui.message(this)" />
 		</span>		
-		<div id="friend_match" style="margin-top:1em;"></div>
-		<div id="bio_match" style="margin-top:1em;"></div>
-		<div id="friend_non_match" style="margin-top:1em;"></div>		
+		<div id="friend_match" class="panel panel-default" ></div>
+		<div id="friend_non_match" class="panel panel-default" ></div>		
 	<?php
 	}
 	?>	
-	</div>
-</div>
+	</div> <!--- Closing right -->
+  </div> <!---row closed -->	
+</div> <!---Container closed -->
 <?php require_once('../include/footer.php'); ?>
 </body>
 </html>

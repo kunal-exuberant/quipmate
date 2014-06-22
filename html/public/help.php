@@ -15,7 +15,7 @@ li a{text-decoration:none;font-size:1.4em;color:#336699;}
 </head>
 <body>
 <div id="header">
-<a href="http://www.quipmate.com/?click=quip-logo" target="_parent" style="position:relative;left:6em;top:-1;border:none;" title="Your Online Identity"><img width="169" height="35"  src="http://icon.qmcdn.net/logo.png" /></a>
+<a href="http://www.quipmate.com/?click=quip-logo" target="_parent" style="position:relative;left:6em;top:-1;border:none;" title="Your Online Identity"><img width="169" height="35"  src="<?php echo $icon_cdn?>/logo.png" /></a>
 <span style="font-size:1.8em;font-weight:bold;padding:.5em;margin-left:5em;">Quipmate help and support center</span>
 </div>
 <div id="left">

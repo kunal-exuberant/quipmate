@@ -30,8 +30,8 @@ body{font-family:verdana;}
 		<div id="main_content">
 			<div id="developer">
 				<div style="background-color:#336699;text-align:center;padding:0.5em;color:#ffffff;font-size:1.3em;">Quipmate Developer Team</div>
-				<div class="developer_each" id="kunal"><a class="name" href="http://www.quipmate.com/profile.php?id=1000000122">Kunal Singh </a><span style="margin-left:4.2em;" class="mobile"> +91-9535880638</span> <span class="email"> kunal.exuberant@gmail.com</span></div>
-				<div class="developer_each" id="brijesh"><a class="name" href="http://www.quipmate.com/profile.php?id=1000000002">Brijesh Kushwaha</a><span class="mobile"> +91-9604195036</span> <span class="email"> bkushwaha89@gmail.com </span><span></div>
+				<div class="developer_each" id="kunal"><a class="name" href="http://www.quipmate.com/profile.php?id=1000000122">Kunal Singh </a><span style="margin-left:4.2em;" class="mobile"> +91-9535880638</span> <span class="email"> kunal@quipmate.com</span></div>
+				<div class="developer_each" id="brijesh"><a class="name" href="http://www.quipmate.com/profile.php?id=1000000002">Brijesh Kushwaha</a><span class="mobile"> +91-9604195036</span> <span class="email"> brijesh@quipmate.com </span><span></div>
 			</div>
 			<div id="technologies">
 				<div style="background-color:#336699;text-align:center;padding:0.5em;color:#ffffff;font-size:1.3em;">Technologies that empower Quipmate</div>

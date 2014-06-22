@@ -3,16 +3,16 @@ class Api
 {	
 	function actiontype_preview()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['actiontype']))
 		{
 			if(!empty($_GET['actiontype']))
 			{
-				$feed = new Feed();
-				$database = new Database();
-				$memcache = new Memcached();
-				$json = new Json();
-				$encode = new Encode();
+				global $feed;
+				global $database;
+				global $memcached;
+				global $json;
+				global $encode;
 				$actiontype = $_GET['actiontype'];
 				$myprofileid = $_SESSION['userid'];
 				global $action,$name,$pimage;
@@ -20,12 +20,12 @@ class Api
 				$k = 0;
 				while($NROW =$res->fetch_array())
 				{
-					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 					$k++;
 				}
 				$data['action'] = $action;
 				$data['myprofileid'] = $_SESSION['USERID']; 
-			    $name[$data['myprofileid']] = $help->name_fetch($data['myprofileid'], $memcache, $database);
+			    $name[$data['myprofileid']] = $help->name_fetch($data['myprofileid'], $memcached, $database);
 				$data['name'] = $name; 
 				$data['pimage'] = $pimage;
 				$data['tag'] = $_SESSION['tag_json'];
@@ -44,30 +44,30 @@ class Api
 	
 	function action_fetch_life_is_not_always_fun()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['actionid']) && isset($_GET['life_is_fun']))
 		{
 			if(!empty($_GET['actionid']) && !empty($_GET['life_is_fun']))
 			{
 				global $action,$name,$pimage;
-				$feed = new Feed();
+				global $feed;
 				$actionid =$_GET['actionid']; 
 				$life_is_fun =$_GET['life_is_fun']; 
 				$data=array();
-				$database = new Database();
-				$memcache = new Memcached();
-				$json = new Json(); 
-				$encode = new Encode();
+				global $database;
+				global $memcached;
+				global $json; 
+				global $encode;
 				$r = $database->actionid_select($actionid);
 				$k=0;
 				while($NROW = $r->fetch_array())
 				{
-					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 					$k++;
 				}
 			   $data['action'] = $action;
 			   $data['myprofileid'] = $_SESSION['USERID']; 
-			   $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+			   $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached, $database);
 			   
 			   $data['name'] = 	$name; 
 			   $data['pimage'] = $pimage;
@@ -87,33 +87,33 @@ class Api
 		
 	function action_fetch()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['actionid']) && isset($_GET['life_is_fun']))
 		{
 			if(!empty($_GET['actionid']) && !empty($_GET['life_is_fun']))
 			{
 				global $action,$name,$pimage;
-				$feed = new Feed();
+				global $feed;
 				$actionid =$_GET['actionid']; 
 				$life_is_fun =$_GET['life_is_fun']; 
 				$validator = sha1($actionid.'pass1reset!');
 				if($validator == $life_is_fun)
 				{
 					$data=array();
-					$database = new Database();
-					$memcache = new Memcached();
-					$json = new Json(); 
-					$encode = new Encode();
+					global $database;
+					global $memcached;
+					global $json; 
+					global $encode;
 					$r = $database->actionid_select($actionid);
 					$k=0;
 					while($NROW = $r->fetch_array())
 					{
-						$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+						$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 						$k++;
 					}
 				   $data['action'] = $action;
 				   $data['myprofileid'] = $_SESSION['USERID']; 
-				   $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+				   $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached, $database);
 				   
 				   $data['name'] = 	$name; 
 				   $data['pimage'] = $pimage;
@@ -138,12 +138,12 @@ class Api
 	
 	function group_join()
 	{
-	    $help = new Help();
+	    global $help;
 		if(isset($_GET['groupid']))
 		{
 			$myprofileid = $_SESSION['userid'];
 			$groupid = $_GET['groupid'];
-			$database = new Database();
+			global $database;
 			if($database->group_exists($groupid) == $groupid)
 			{
 				$status = $database->membership_status($groupid, $myprofileid);
@@ -165,7 +165,7 @@ class Api
 					  $remail = $database->setting_email_select($myprofileid);
 					  if($remail['group_join'])
 					  {
-						 $email = new Email();
+						 global $email;
 						 $param['type'] = 'group_join';
 						// $param[''] = 
 						 //$result = $email->email_sample($profileid,$myprofileid);
@@ -202,12 +202,12 @@ class Api
 		
 	function event_join()
 	{
-	    $help = new Help();
+	    global $help;
 		if(isset($_GET['eventid']))
 		{
 			$myprofileid = $_SESSION['userid'];
 			$eventid = $_GET['eventid'];
-			$database = new Database();
+			global $database;
 			if($database->event_exists($eventid) == $eventid)
 			{
 				$status = $database->guest_status($eventid, $myprofileid);
@@ -260,12 +260,12 @@ class Api
 	
 	function add_friend()
 	{
-	    $help = new Help();
+	    global $help;
 		if(isset($_GET['profileid']))
 		{
 			$myprofileid = $_SESSION['USERID'];
 			$profileid = $_GET['profileid'];
-			$database = new Database();
+			global $database;
 			$msg = $_GET['msg'];
 			$check = $database->is_user($profileid);
 			if($check['USERID'] == $profileid)
@@ -289,7 +289,7 @@ class Api
 					  $remail = $database->setting_email_select($profileid);
 					  if($remail['friend_request'])
 					  {
-						  $email = new Email();
+						  global $email;
 						  $param['type'] = 'friend_request';
 						  $param['profileid'] = $profileid;
 						  $param['friendid'] = $myprofileid;
@@ -343,7 +343,7 @@ class Api
 	
 	function album_fetch()
 	{
-	    $help = new Help();
+	    global $help;
 		if(isset($_GET['start']))
 		{
 			if($_GET['start'] != '')
@@ -354,7 +354,7 @@ class Api
 				{
 					$data = array();
 					$photo = array();
-					$database = new Database();
+					global $database;
 					$r = $database->photo_friend_select($myprofileid,$start,'5');
 					$k=0;
 					while($row = $r->fetch_array())
@@ -364,15 +364,15 @@ class Api
 						$photo[$k]['actionby'] = $row['ACTIONBY'];
 						$photo[$k]['actionid'] = $row['ACTIONID'];
 						
-						$memcache = new Memcached();
+						global $memcached;
 						
-					    $name[$photo[$k]['actionby']] = $help->name_fetch($photo[$k]['actionby'], $memcache, $database);
-					    $pimage[$photo[$k]['actionby']] = $help->pimage_fetch($photo[$k]['actionby'], $memcache, $database);
+					    $name[$photo[$k]['actionby']] = $help->name_fetch($photo[$k]['actionby'], $memcached, $database);
+					    $pimage[$photo[$k]['actionby']] = $help->pimage_fetch($photo[$k]['actionby'], $memcached, $database);
 						
 						if($photo[$k]['actionby'] != $photo[$k]['profileid'])
 						{
-							$name[$photo[$k]['actionby']] = $help->name_fetch($photo[$k]['profileid'], $memcache, $database);
-							$pimage[$photo[$k]['actionby']] = $help->pimage_fetch($photo[$k]['profileid'], $memcache, $database);
+							$name[$photo[$k]['actionby']] = $help->name_fetch($photo[$k]['profileid'], $memcached, $database);
+							$pimage[$photo[$k]['actionby']] = $help->pimage_fetch($photo[$k]['profileid'], $memcached, $database);
 						}
 						$k++;
 					}
@@ -399,7 +399,9 @@ class Api
 	
 	function album_upload()
 	{
-	    $help = new Help();
+	    global $help;
+		global $photo_cdn;
+		global $video_cdn;
 		$profileid = $_POST['moment_hidden_profileid'];
 		$moment_name = $_POST['moment_name'];
 		$count = $_POST['moment_photo_count'];
@@ -449,7 +451,7 @@ class Api
 			$count--;
 		}	
 		
-		$database = new Database();
+		global $database;
 		$aid = $database->get_actionid($profileid, $actiontype, 0,$visible_id);
 		$count = $_POST['moment_photo_count'];
 		$c = $count + 1;
@@ -475,8 +477,8 @@ class Api
 				$actionid[$count] = $database->get_actionid($profileid,51,-1,$visible_id);
 				if($actionid[$count])
 				{
-					$result = $database->image_insert($profileid,$actionid[$count],$actual_image_name[$count],$momentid,'http://photo.qmcdn.net/');	
-					$photo[$k]['file'] = 'http://photo.qmcdn.net/'.$actual_image_name[$count];
+					$result = $database->image_insert($profileid,$actionid[$count],$actual_image_name[$count],$momentid,$photo_cdn);	
+					$photo[$k]['file'] = $photo_cdn.'/'.$actual_image_name[$count];
 					$photo[$k]['actionid'] = $actionid[$count];
 					$data['ack']= 1;
 					$k++;	
@@ -500,7 +502,7 @@ class Api
 			$remail = $database->setting_email_select($profileid);
 			if($remail['profile_post'])
 			{
-				$email = new Email();
+				global $email;
 				$param = array();
 				$param['type'] = 'profile_post';
 				$param['profileid'] = $profileid; 
@@ -520,12 +522,12 @@ class Api
 		$k=0;
 		$i=0;
 		$flag = 0;
-		$help = new Help();
+		global $help;
 		$myprofileid = $_SESSION['userid'];
-		$database = new Database();
+		global $database;
 		if($bday = $database->birthday_select_next($myprofileid))
 		{
-		    $memcache = new Memcached();
+		    global $memcached;
 			while($res=$bday->fetch_array())
 			{
 				$birthday = $res['BIRTHDAY'];
@@ -535,8 +537,8 @@ class Api
 				}
 				$event[$k]['profileid'] = $res['PROFILEID'];
 				$event[$k]['birthday'] = $birthday;
-				$name[$event[$k]['profileid']] = $help->name_fetch($event[$k]['profileid'], $memcache, $database);
-				$pimage[$event[$k]['profileid']] = $help->pimage_fetch($event[$k]['profileid'], $memcache, $database);
+				$name[$event[$k]['profileid']] = $help->name_fetch($event[$k]['profileid'], $memcached, $database);
+				$pimage[$event[$k]['profileid']] = $help->pimage_fetch($event[$k]['profileid'], $memcached, $database);
 				if($i>=30) 
 				{
 					$flag = 1;
@@ -556,8 +558,8 @@ class Api
 					}
 					$event[$k]['profileid'] = $res['PROFILEID'];
 					$event[$k]['birthday'] = $birthday;
-					$name[$event[$k]['profileid']] = $help->name_fetch($event[$k]['profileid'], $memcache, $database);
-					$pimage[$event[$k]['profileid']] = $help->pimage_fetch($event[$k]['profileid'], $memcache, $database);
+					$name[$event[$k]['profileid']] = $help->name_fetch($event[$k]['profileid'], $memcached, $database);
+					$pimage[$event[$k]['profileid']] = $help->pimage_fetch($event[$k]['profileid'], $memcached, $database);
 					if($i>=90) 
 					{
 						break;
@@ -578,7 +580,7 @@ class Api
 		
 	function member_load()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['groupid']) && isset($_GET['start']))
 		{
 			if(!empty($_GET['groupid']) && $_GET['start'] != '')
@@ -587,8 +589,8 @@ class Api
 				$member = array();
 				$groupid = $_GET['groupid'];
 				$start = $_GET['start'];
-				$database = new Database();
-				$memcache = new Memcached();
+				global $database;
+				global $memcached;
 				$result = $database->member_select($groupid, $start);
 				if($result->num_rows)
 				{
@@ -597,8 +599,8 @@ class Api
 					{
 					   $member[$k]['profileid'] = $row['profileid'];
 					   $member[$k]['priviledge'] = $row['priviledge'];				
-					   $name[$member[$k]['profileid']] = $help->name_fetch($member[$k]['profileid'], $memcache, $database);
-					   $pimage[$member[$k]['profileid']] = $help->pimage_fetch($member[$k]['profileid'], $memcache, $database);
+					   $name[$member[$k]['profileid']] = $help->name_fetch($member[$k]['profileid'], $memcached, $database);
+					   $pimage[$member[$k]['profileid']] = $help->pimage_fetch($member[$k]['profileid'], $memcached, $database);
 					   $k++;
 					}
 					$data['count'] = $result->num_rows;
@@ -621,20 +623,19 @@ class Api
 	
 	function guest_load()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['eventid']) && isset($_GET['start']))
 		{
 			if(!empty($_GET['eventid']) && $_GET['start'] !='')
 			{
 				$data = array();
-				$action = array();
 				$going = array();
 				$declined = array();
 				$no_response = array();
 				$eventid = $_GET['eventid'];
 				$start = $_GET['start'];
-				$database = new Database();
-				$memcache = new Memcached();
+				global $database;
+				global $memcached;
 				$result = $database->guest_select($eventid, $start);
 				if($result->num_rows)
 				{
@@ -653,11 +654,11 @@ class Api
 					   {
 							$declined[]['profileid'] = $row['profileid'];
 					   }
-					   $name[$row['profileid']] = $help->name_fetch($row['profileid'], $memcache, $database);
-					   $pimage[$row['profileid']] = $help->pimage_fetch($row['profileid'], $memcache, $database);
+					   $name[$row['profileid']] = $help->name_fetch($row['profileid'], $memcached, $database);
+					   $pimage[$row['profileid']] = $help->pimage_fetch($row['profileid'], $memcached, $database);
 					   $k++;
 					}
-					$data['count'] = $result->num_rows;
+					//$data['count'] = $result->num_rows;
 					$action['going'] = $going;
 					$action['declined'] = $declined;
 					$action['no_response'] = $no_response;
@@ -680,7 +681,7 @@ class Api
 		
 	function friend_load()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['profileid']) && isset($_GET['start']))
 		{
 			if(!empty($_GET['profileid']) && $_GET['start'] != '')
@@ -688,8 +689,8 @@ class Api
 				$profileid = $_GET['profileid'];
 				$myprofileid = $_SESSION['userid'];
 				$start = $_GET['start'];
-				$database = new Database();
-				$memcache = new Memcached();
+				global $database;
+				global $memcached;
 				$result = $database->friend_select_incremental($profileid,$start,'50');
 				$data = array();
 				$friend = array();
@@ -706,8 +707,8 @@ class Api
 						$status = 3;
 					}
 					
-					$name[$friendid] = $help->name_fetch($friendid, $memcache, $database);
-					$pimage[$friendid] = $help->pimage_fetch($friendid, $memcache, $database);
+					$name[$friendid] = $help->name_fetch($friendid, $memcached, $database);
+					$pimage[$friendid] = $help->pimage_fetch($friendid, $memcached, $database);
 					
 					$friend[$k]['profileid'] = $friendid;
 					$friend[$k]['status'] = $status;
@@ -731,7 +732,7 @@ class Api
 	
 	function friend_fetch()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['profileid']))
 		{
 			$profileid = $_GET['profileid'];
@@ -740,21 +741,21 @@ class Api
 		{
 			$profileid = $_SESSION['userid'];
 		}
-		$database = new Database();
-		$memcache = new Memcached();
+		global $database;
+		global $memcached;
 		$res = $database->message_order($profileid);
 		$k = 0;
 		$friend = array();
 		$name = array();
 		$pimage = array();
-		$value = $memcache->get($_SESSION['database'].'_friend_'.$profileid);
+		$value = $memcached->get($_SESSION['database'].'_friend_'.$profileid);
 		if($value)
 		{
 			$friend = $value;
 			foreach($friend as $f)
 			{
-				$name[$f] = $help->name_fetch($f, $memcache, $database);
-				$pimage[$f] = $help->pimage_fetch($f, $memcache, $database);
+				$name[$f] = $help->name_fetch($f, $memcached, $database);
+				$pimage[$f] = $help->pimage_fetch($f, $memcached, $database);
 			}
 		}
 		else
@@ -768,8 +769,8 @@ class Api
 						if($database->check_friendship($profileid,$NROW['ACTIONON']) == 2)
 						{
 							$friend[] = $NROW['ACTIONON'];
-							$name[$friend[$k]] = $help->name_fetch($friend[$k], $memcache, $database);
-							$pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcache, $database);
+							$name[$friend[$k]] = $help->name_fetch($friend[$k], $memcached, $database);
+							$pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcached, $database);
 							$k++;
 						}
 					}	
@@ -781,8 +782,8 @@ class Api
 						if($database->check_friendship($profileid,$NROW['ACTIONBY']) == 2)
 						{
 							$friend[] = $NROW['ACTIONBY'];
-							$name[$friend[$k]] = $help->name_fetch($friend[$k], $memcache, $database);
-							$pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcache, $database);
+							$name[$friend[$k]] = $help->name_fetch($friend[$k], $memcached, $database);
+							$pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcached, $database);
 							$k++;
 						}
 					}	
@@ -794,13 +795,13 @@ class Api
 				if(!in_array($NROW['FRIENDID'], $friend))
 				{
 					$friend[] = $NROW['FRIENDID'];
-					$name[$friend[$k]] = $help->name_fetch($friend[$k], $memcache, $database);
-					$pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcache, $database);
+					$name[$friend[$k]] = $help->name_fetch($friend[$k], $memcached, $database);
+					$pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcached, $database);
 					$k++;
 				}
 			}
 		}
-		$memcache->set($_SESSION['database'].'_friend_'.$profileid, $friend);
+		$memcached->set($_SESSION['database'].'_friend_'.$profileid, $friend);
 		$data['ack'] = 1;
 		$data['action'] = $friend;
 		$data['friend_count'] = count($friend);
@@ -811,28 +812,29 @@ class Api
 		
 	function friend_fetch_incremental()
 	{
-		$help = new Help();
-		if(isset($_GET['profileid']))
+		global $help;
+		if(isset($_GET['profileid']) && isset($_GET['start']))
 		{
-			if(!empty($_GET['profileid']))
+			if(!empty($_GET['profileid']) && $_GET['start'] != "")
 			{
 				$data = array();
 				$friend = array();
 				$profileid = $_GET['profileid'];
-				$database = new Database();
-				$memcache = new Memcached();
-				$result = $database->friend_select($profileid);
+				$start = $_GET['start'];
+				global $database;
+				global $memcached;
+				$result = $database->friend_select_incremental($profileid,$start,20);
 				if($result->num_rows)
 				{
 					$k = 0;
 					while($row=$result->fetch_array())
 					{
-					   $friend[$k]['profileid'] = $row['FRIENDID'];
-					   $name[$friend[$k]['profileid']] = $help->name_fetch($friend[$k]['profileid'], $memcache, $database);
-					   $pimage[$friend[$k]['profileid']] = $help->pimage_fetch($friend[$k]['profileid'], $memcache, $database);
+					   $friend[$k] = $row['FRIENDID'];
+					   $name[$friend[$k]] = $help->name_fetch($friend[$k], $memcached, $database);
+					   $pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcached, $database);
 					   $k++;
 					}
-					$data['count'] = $result->num_rows;
+					$data['count'] = $database->friend_count($profileid);
 					$data['action'] = $friend;
 					$data['name'] = $name;
 					$data['pimage'] = $pimage;
@@ -852,12 +854,12 @@ class Api
 			
 	function event_invite()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['eventid']) && isset($_GET['profileid']))
 		{
 			if(!empty($_GET['eventid']) && !empty($_GET['profileid']))
 			{
-				$database = new Database();
+				global $database;
 				$data = array();
 				$myprofileid = $_SESSION['userid'];
 				$eventid = $_GET['eventid'];
@@ -885,9 +887,9 @@ class Api
 								if($remail['event_invite'])
 								{
 									$param = array();
-									$email = new Email();
+									global $email;
 									$param['type'] = 'event_invite';
-									$param['myprofileid'] = $myprofileid;
+									$param['actionby'] = $myprofileid;
 									$param['profileid'] = $profileid;
 									$param['eventid'] = $eventid;
 									$result =  $email->email_sample($param);
@@ -930,12 +932,12 @@ class Api
 	
 	function group_invite()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['groupid']) && isset($_GET['profileid']))
 		{
 			if(!empty($_GET['groupid']) && !empty($_GET['profileid']))
 			{
-				$database = new Database();
+				global $database;
 				$data = array();
 				$myprofileid = $_SESSION['userid'];
 				$groupid = $_GET['groupid'];
@@ -961,9 +963,9 @@ class Api
 						    if($remail['group_invite'])
 						    {	
 								$param = array();
-								$email = new Email();
+								global $email;
 								$param['type'] = 'event_invite';
-								$param['myprofileid'] = $myprofileid;
+								$param['actionby'] = $myprofileid;
 								$param['profileid'] = $profileid;
 								$param['groupid'] = $groupid;
 								$result =  $email->email_sample($param);
@@ -1001,12 +1003,12 @@ class Api
 	
 	function guest_accept()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['eventid']) && isset($_GET['flag']))
 		{
 			if(!empty($_GET['eventid']) && $_GET['flag'] != '')
 			{
-				$database = new Database();
+				global $database;
 				$data = array();
 				$myprofileid = $_SESSION['userid'];
 				$eventid = $_GET['eventid'];
@@ -1066,12 +1068,12 @@ class Api
 	
 	function member_request_accept()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['groupid']) && isset($_GET['profileid']) && isset($_GET['flag']))
 		{
 			if(!empty($_GET['groupid']) && !empty($_GET['profileid']) && $_GET['flag'] != '')
 			{
-				$database = new Database();
+				global $database;
 				$data = array();
 				$myprofileid = $_SESSION['userid'];
 				$groupid = $_GET['groupid'];
@@ -1123,9 +1125,9 @@ class Api
 									if($remail['group_invite'])
 									{
 										$param = array();
-										$email = new Email();
+										global $email;
 										$param['type'] = 'friend_confirm';
-										$param['myprofileid'] = $myprofileid;
+										$param['actionby'] = $myprofileid;
 										$param['profileid'] = $profileid;
 										$result =  $email->email_sample($param);	
 									}
@@ -1168,12 +1170,12 @@ class Api
 
 	function friend_request_accept()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['profileid']) && isset($_GET['flag']))
 		{
 			if(!empty($_GET['profileid']) && $_GET['flag'] != '')
 			{
-				$database = new Database();
+				global $database;
 				$data = array();
 				$myprofileid = $_SESSION['userid'];
 				$profileid = $_GET['profileid'];
@@ -1207,9 +1209,9 @@ class Api
 								$result = $database->friend_insert($myprofileid, $profileid);
 								if($result)
 								{
-									$memcache = new Memcached();
-									$help->friend_memcache_update($myprofileid, $database, $memcache);
-									$help->friend_memcache_update($profileid, $database, $memcache);
+									global $memcached;
+									$help->friend_memcache_update($myprofileid, $database, $memcached);
+									$help->friend_memcache_update($profileid, $database, $memcached);
 									$res=0;
 									$res =$database->friend_invite_delete($myprofileid, $profileid);
 									if($res == 1)
@@ -1228,7 +1230,7 @@ class Api
 											if($remail['friend_confirm'])
 											{
 												$param = array();
-												$email = new Email();
+												global $email;
 												$param['type'] = 'friend_confirm';
 												$param['friendid'] = $profileid;
 												$param['profileid'] = $myprofileid; 
@@ -1279,7 +1281,7 @@ class Api
 	
 	function birthday_bomb()
 	{ 
-		$help = new Help();
+		global $help;
 		if(isset($_GET['profileid']) && isset($_GET['wish']) && isset($_GET['date']))
 		{
 			if(!empty($_GET['profileid']) && !empty($_GET['wish']) && !empty($_GET['date']))
@@ -1288,7 +1290,7 @@ class Api
 				$profileid = $_GET['profileid'];
 				$wish = $_GET['wish'];
 				$date = $_GET['date'];
-				$database = new Database();
+				global $database;
 				$check = $database->is_user($profileid);
 				if($check['USERID'] == $profileid)
 				{
@@ -1305,9 +1307,9 @@ class Api
 							if($result)
 							{								
 								$param = array();
-								$email = new Email();
+								global $email;
 								$param['type'] = 'birthday_bomb';
-								$param['myprofileid'] = $myprofileid;
+								$param['actionby'] = $myprofileid;
 								$param['profileid'] = $profileid;
 								$param['actionid'] = $actionid;
 								$param['wish'] = $wish;
@@ -1345,9 +1347,259 @@ class Api
 		}
 	}
 	
-	function birthday_bomb_fetch()
+	
+	/*
+	function employee_invite_file_upload()
+{	
+		global $photo_cdn;	
+		$valid_formats = array("csv");
+		$name = $_FILES['photo_box']['name'];
+		$size = $_FILES['photo_box']['size'];
+		$description = $_POST['photo_description'];		
+		$existing = array();
+		$invited = array();
+		$invalid = array();
+		$profileid = $_SESSION['userid'];
+		global $help;
+		if(strlen($name))
+		{
+			$ext = pathinfo($name,PATHINFO_EXTENSION);
+			
+			if(in_array(strtolower($ext),$valid_formats))
+			{
+				$actiontype = 3000;
+				$container = 'photo';
+				$cdn = $photo_cdn.'/';
+				$limit = 10240*1024;
+			}
+			else
+			{
+				$data['ack']= 4;						
+				echo json_encode($data);
+				exit(1);
+			}
+				if($size < $limit)
+				{		
+					$tmp = $_FILES['photo_box']['tmp_name'];
+					global $database;
+							$file_to_be_uploaded = $_FILES['photo_box']['tmp_name'];
+							$ext = strtolower($ext);
+							$filename = $help->photo_name($ext);
+							
+							$emails=array();	
+							while (($data = fgetcsv($file_to_be_uploaded, 1000, ",")) !== FALSE) 
+							{
+   								 $emails[] = $data[5];
+							}								
+								foreach($emails as $email_value)
+								{
+									if($help->is_email($email_value))
+									{
+									 
+									if($_SESSION['database'] == $help->get_database_from_email($email_value,$database))
+									{
+										$myname = $_SESSION['name'];
+										$myphoto = $_GET['myphoto'];
+										$myprofileid = $_SESSION['userid'];
+										if($email_value == $myemail)
+										{
+											array_push ($existing,$email_value);
+										}
+										else if($help->is_email($email_value))
+										{
+											$row = $database->is_already_user($email_value);
+											if($row['EMAIL'] == $email_value)
+											{
+											 array_push ($existing,$email_value);								
+											}
+											else
+											{
+												$row = $database->is_virtual_user($email_value);
+												if($row['ack'])
+												{
+													array_push ($invited,$email_value);
+													$identifier = $row['uniqueid'];									
+												}
+												else
+												{
+													$virtualid = $database->virtual_create($email_value);
+													$vr = $database->v_select($virtualid);
+													$identifier = $vr['UNIQUEID'];
+													array_push ($invited,$email_value);
+												}
+												
+												$param = array();
+												$param['type'] = 'people_invite';
+												$param['email'] = $email_value;
+												$param['identifier'] = $identifier;
+												$param['myname'] = $myname;
+												$param['myphoto'] = $myphoto;
+												$param['actionby'] = $myprofileid;
+												$er = $email_object->email_sample($param);
+											}
+										}	
+										else
+										{
+											array_push ($invalid,$email_value);
+										}
+									}
+									else
+									{
+										array_push ($invalid,$email_value);
+									}
+								
+									
+								
+								}	
+							}		
+										$data['invalid'] = $invalid;
+										$data['invited'] = $invited;
+										$data['existing'] = $existing;
+										$data['ack'] = 1;
+										echo json_encode($data);
+						}
+						else
+						{
+							$help->error_description(12);
+						}	
+					}	
+					else
+					{
+						$data['ack']= 5;						
+						echo json_encode($data);
+					}
+	}
+	*/
+	
+	function set_MD()
+{
+global $help;
+if(isset($_GET['id']) && isset($_GET['value']))
+		{
+				if(!empty($_GET['id']))
+				{
+					global $database;
+					
+					$id= $_GET['id'];
+					if($database->is_user($id))
+					{	
+						if(!$result = $database->check_MD())
+						
+						{
+						
+							if($database->set_MD($id))
+							{ 	
+								$data[ack] = 1;
+								echo json_encode($data);
+							}
+						
+							else
+							{
+								$help->error_description(15);
+							}
+						}
+						else
+						{
+							$data[ack]=2;
+							echo json_encode($data);
+						}
+					}	
+					else
+					{
+						$help->error_description(16);
+					}
+					
+					
+				}
+				else
+					{
+						$help->error_description(18);
+					}	
+		}else if(!isset($_GET['id']) && isset($_GET['value']))
+				{ 
+					if(!empty($_GET['value']) )
+					{
+						$email = strtolower($_GET['value']);
+						if($help->is_email($email))
+						{	
+							
+							$e = explode('@',$email);
+							$db= explode('.',$e[1]);
+							
+							if($_SESSION['database'] == $db[0])
+							{ 	 $myname = $_SESSION['NAME'];
+								 $myphoto = $_SESSION['pimage'];
+								 $myprofileid = $_SESSION['userid'];
+								 $param = array();
+								 $param['type'] = 'MD_invite';
+								 $param['email'] = $email;
+								 $param['subject'] = 'REQUEST TO JOIN COMPANY NETWORK';
+								 $param['myname'] = $myname;
+								 $param['myphoto'] = $myphoto;
+								 $param['actionby'] = $myprofileid;
+								 $email_object = new email();
+								 $er = $email_object->email_sample($param);
+							if($er)
+							{
+								$data['ack'] = 2;
+								echo json_encode($data);
+							}
+							
+							}
+						}
+						else
+						{
+							$help->error_description(23);
+						}
+						
+					}	
+					else
+					{
+						$help->error_description(18);
+					}
+				}
+				else
+				{
+					$help->error_description(9);
+				}
+				
+	}
+	
+	
+	function md_load()
 	{
-		$help = new Help();
+				global $help,$database,$memcached;
+				$action =array();
+				$myprofileid = $_SESSION['userid'];
+				$result = array();
+				if($database->moderator_check($myprofileid))
+				{	
+						if($result = $database->MD_select())
+						{
+							$action['profileid'] = $result['PROFILEID'];
+							$action['name'] = $help->name_fetch($result['PROFILEID'],$memcached,$database);
+							$action['image'] = $help->pimage_fetch($result['PROFILEID'],$memcached,$database);
+						
+						
+						$data['action'] = $action;
+						echo json_encode($data);
+						}
+						else
+						{	
+							$help->error_description(15);
+						}
+				}	
+				else
+				{
+					$help->error_description(12);					
+				}
+	}
+	
+	
+	
+function birthday_bomb_fetch()
+	{
+		global $help;
 		$data = array();
 		$event = array();
 		$name = array();
@@ -1355,7 +1607,19 @@ class Api
 		$k=0;
 		$i=0;
 		$myprofileid = $_SESSION['userid'];
-		$database = new Database();
+		global $database;
+		 $e = $database->select_event($myprofileid);
+		$m=0;
+		while($res= $e->fetch_array())
+		{		
+			$a[$m]['name'] = $res['name'];
+			$a[$m]['eventid'] = $res['eventid'];
+			$a[$m]['date']= $res['DATE'];
+			$a[$m]['display_image'] = 'https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/event.png';
+			$m++;
+		}
+		$data['aevent'] = $a;
+		
 		$bday = $database->birthday_select($myprofileid);
 		while($res=$bday->fetch_array())
 		{
@@ -1377,10 +1641,10 @@ class Api
 			$event[$k]['b'] = $birthday;
 			$event[$k]['birthday'] = strtotime($birthday);
 			$i++;
-			$memcache = new Memcached();
-			$database = new Database();
-			$name[$res['PROFILEID']] = $help->name_fetch($res['PROFILEID'], $memcache, $database);
-			$pimage[$res['PROFILEID']] = $help->pimage_fetch($res['PROFILEID'], $memcache, $database);
+			global $memcached;
+			global $database;
+			$name[$res['PROFILEID']] = $help->name_fetch($res['PROFILEID'], $memcached, $database);
+			$pimage[$res['PROFILEID']] = $help->pimage_fetch($res['PROFILEID'], $memcached, $database);
 			
 			if($i>=3)  
 			{
@@ -1394,16 +1658,18 @@ class Api
 		echo json_encode($data);
 	}
 	
+	
+	
 	function callback()
 	{	 
-		$help = new Help();
+		global $help;
 		$type = $_GET['type'];
 		$k = $_GET['k'];
 		if(isset($_GET['type']) && isset($_GET['k']))
 		{
 			if(!empty($_GET['type']) && !empty($_GET['k']))
 			{
-				$database = new Database();
+				global $database;
 				$result = $database->data_select($type,$k);
 				$n = 0;
 				$data = array();
@@ -1431,7 +1697,7 @@ class Api
 		
 	function callback_not_found()
 	{	 
-		$help = new Help();
+		global $help;
 		$myprofileid = $_SESSION['USERID'];
 		if(isset($_GET['type']) && isset($_GET['name']))
 		{
@@ -1439,7 +1705,7 @@ class Api
 			{
 				$type = $_GET['type'];
 				$name = ucwords(strtolower($_GET['name']));
-				$database = new Database();
+				global $database;
 				$back = $database->mydiary_create(0,$type,$name,'');
 				if($back != 0)
 				{
@@ -1460,12 +1726,12 @@ class Api
 		
 	function change_password()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_POST['old_password']) && isset($_POST['new_password']) && isset($_POST['confirm_password']))
 		{		
 			if(!empty($_POST['old_password']) && !empty($_POST['new_password']) && !empty($_POST['confirm_password']))
 			{
-				$database = new Database();
+				global $database;
 				$myprofileid = $_SESSION['userid'];
 				$email = $_SESSION['EMAIL'];
 				if($password = $database->password_select($myprofileid))
@@ -1529,12 +1795,12 @@ class Api
 		
 	function recover_password()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_POST['email']) && isset($_POST['id']) && isset($_POST['new_password']) && isset($_POST['confirm_password']))
 		{		
 			if(!empty($_POST['email']) && !empty($_POST['id']) && !empty($_POST['new_password']) && !empty($_POST['confirm_password']))
 			{
-				$database = new Database();
+				global $database;
 				$email = $_POST['email'];
 				if($uniqueid = $database->select_uniqueid($email))
 				{
@@ -1571,7 +1837,7 @@ class Api
 					}
 					else
 					{
-						$help->error_description(16);
+						$help->error_description(42);
 					}
 				}
 				else
@@ -1592,12 +1858,12 @@ class Api
 	
 	function chat_email()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['message']) && isset($_GET['profileid'])) 
 		{
 			if(!empty($_GET['message']) && !empty($_GET['profileid'])) 
 			{
-				$database = new Database();
+				global $database;
 				$profileid = $_GET['profileid'];
 				$check = $database->is_user($profileid);
 				if($check['USERID'] == $profileid)
@@ -1607,7 +1873,7 @@ class Api
 					$actionby = $_SESSION['userid'];
 					$name = $_SESSION['NAME'];
 					$param = array();
-					$email = new Email();
+					global $email;
 					$param['type'] = 'message';
 					$param['message'] = $message;
 					$param['profileid'] = $profileid;
@@ -1642,13 +1908,13 @@ class Api
 	
 	function college_select()
 	{	   
-	   $help = new Help();
+	   global $help;
 	   if(isset($_GET['alphabet']))
 	   { 	
 		   if(!empty($_GET['alphabet']))
 		   {
 			   $data = array();
-			   $database = new Database();
+			   global $database;
 			   $alphabet = $_GET['alphabet'];
 			   if($result = $database->college_select_alphabet($alphabet))
 			   {
@@ -1678,12 +1944,12 @@ class Api
 	
 	function college_student_select()
 	{	
-		$help = new Help();
+		global $help;
 		if(isset($_GET['college']))
 		{
 			if(!empty($_GET['college']))
 			{
-				$database = new Database();
+				global $database;
 				$college = $_GET['college'];
 				if($res = $database->college_mate_select($college))
 				{
@@ -1726,7 +1992,7 @@ class Api
 	
 	function comment()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['pageid']) && isset($_GET['comment']))
 		{
 		    if(!empty($_GET['pageid']) && !empty($_GET['comment']))
@@ -1736,8 +2002,8 @@ class Api
 				$comment=$_GET['comment'];
 				if(strlen($comment) <= 6072)
 				{
-					$database = new Database();
-					$memcache = new Memcached();
+					global $database;
+					global $memcached;
 					$name = array();
 					$tag_index = array();
 					$result = $database->actionid_select($pageid);
@@ -1745,7 +2011,7 @@ class Api
 					{
 						$row = $result->fetch_array();
 						$profileid = $row['PROFILEID'];
-						$help = new Help();
+						global $help;
 						if($help->permission_check($myprofileid, $profileid, $row['VISIBLE']))
 						{		
 							$ctype = $help->comment_type_fetch($row['ACTIONTYPE']);
@@ -1766,7 +2032,7 @@ class Api
 								$tag_index= array(); 
 							foreach($tag_index as $t)
 							{
-								$name[$t] = $help->name_fetch($t, $memcache, $database);
+								$name[$t] = $help->name_fetch($t, $memcached, $database);
 								array_push($ti,'@['.$t.'] ');
 							}
 							if($actionid)
@@ -1796,7 +2062,7 @@ class Api
 											if($ctype == '2' || $ctype == '4' || $ctype == '26' || $ctype == '23' || $ctype == '24' || $ctype == '25' || $ctype == '503' || $ctype == '802' ||  $ctype == '1103' || $ctype == '1104' || $ctype == '1202' || $ctype == '1402' || $ctype == '1602' || $ctype == '2002' || $ctype == '2102')
 											{	
 												$param = array();
-												$email = new Email();
+												global $email;
 												$param['type'] = 'comment';
 												$param['actionby'] = $myprofileid;
 												$param['profileid'] = $profileid;
@@ -1850,7 +2116,7 @@ class Api
 	
 	function show_all_comments()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['pageid']))
 		{
 			if(!empty($_GET['pageid']))
@@ -1858,7 +2124,7 @@ class Api
 				$pageid = $_GET['pageid'];
 				$page = $_GET['page'];
 				$life_is_fun = sha1($pageid.'pass1reset!');
-				$database = new Database();
+				global $database;
 				if($result = $database->actionid_select($pageid))
 				{
 					if($result->num_rows)
@@ -1866,12 +2132,12 @@ class Api
 						$crow = $result->fetch_array();
 						$actiontype = $crow['ACTIONTYPE'];
 						$ctype = $help->comment_type_fetch($actiontype);
-						$encode = new Encode();
+						global $encode;
 						$actionid_third = $database->comment_select_actionid_of_third($pageid, $ctype);
 						$comresult = $database->comment_select_all($pageid, $actionid_third);
 						$com = array();
 						$j=0;
-						$memcache = new Memcached();
+						global $memcached;
 						$myprofileid = $_SESSION['userid'];
 						while($comrow = $comresult->fetch_array())
 						{
@@ -1889,7 +2155,7 @@ class Api
 							 $com[$j]['comment'] = stripslashes($comrow['COMMENT']);
 							 $arr = explode('@[',$com[$j]['comment']);
 			                 $arr = explode(']',$arr[1]);
-							 $name[$arr[0]] = $help->name_fetch($arr[0], $memcache, $database);
+							 $name[$arr[0]] = $help->name_fetch($arr[0], $memcached, $database);
 							 $excited_action = $database->get_excited_action($com_actionid, 63);
 							 $com[$j]['com_excited_mine'] = 0;
 							 while($erow = $excited_action->fetch_array())
@@ -1900,8 +2166,8 @@ class Api
 								}
 							 }
 							 $com[$j]['com_excited'] = $excited_action->num_rows;
-							 $name[$com[$j]['commentby']] = $help->name_fetch($com[$j]['commentby'], $memcache, $database);
-							 $pimage[$com[$j]['commentby']] = $help->pimage_fetch($com[$j]['commentby'], $memcache, $database);
+							 $name[$com[$j]['commentby']] = $help->name_fetch($com[$j]['commentby'], $memcached, $database);
+							 $pimage[$com[$j]['commentby']] = $help->pimage_fetch($com[$j]['commentby'], $memcached, $database);
 							 $j++;
 						}
 					   $data['life_is_fun'] = $life_is_fun;
@@ -1933,7 +2199,7 @@ class Api
 
 	function crush()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['email']))
 		{
 			if(!empty($_GET['email']))
@@ -1945,7 +2211,7 @@ class Api
 					 echo json_encode($data);
 					 exit;
 				} 
-				$database = new Database();
+				global $database;
 				if($help->is_valid_email($email))
 				{
 					$myemail = $_SESSION['email'];
@@ -2065,7 +2331,7 @@ class Api
 	
 	function diary_create()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['type']) && isset($_GET['name']) && isset($_GET['desc']))
 		{
 			if(!empty($_GET['type']) && !empty($_GET['name']) && !empty($_GET['desc']))
@@ -2078,7 +2344,7 @@ class Api
 				{	
 					if(strlen($desc <= 1000))
 					{
-						$database = new Database();
+						global $database;
 						if($res = $database->mydiary_create($myprofileid,$type,$name,$desc))
 						{
 							if($res != 0)
@@ -2121,23 +2387,23 @@ class Api
 	
 	function answer_people_fetch()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['optionid']))
 		{
 			if(!empty($_GET['optionid']))
 			{
 				$optionid = $_GET['optionid'];
-				$database = new Database();
+				global $database;
 				$rtype = 2801;
 				$excited_action = $database->answer_select($optionid);
 				if($excited_action->num_rows != 0)
 				{
-					$memcache = new Memcached();
+					global $memcached;
 					while($row = $excited_action->fetch_array())
 					{
 						$actionby[]['profileid'] = $row['profileid'];
-						$name[$row['profileid']] = $help->name_fetch($row['profileid'], $memcache, $database);
-						$pimage[$row['profileid']] = $help->pimage_fetch($row['profileid'], $memcache, $database);
+						$name[$row['profileid']] = $help->name_fetch($row['profileid'], $memcached, $database);
+						$pimage[$row['profileid']] = $help->pimage_fetch($row['profileid'], $memcached, $database);
 					}
 					$data['excited'] = $actionby;
 					$data['name'] = $name;
@@ -2162,13 +2428,13 @@ class Api
 	
 	function response_fetch()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['pageid']))
 		{
 			if(!empty($_GET['pageid']))
 			{
 				$pageid = $_GET['pageid'];
-				$database = new Database();
+				global $database;
 				if($result = $database->actionid_select($pageid))
 				{
 					if($result->num_rows)
@@ -2181,12 +2447,12 @@ class Api
 						$num_excite = $excited_action->num_rows;
 						if($num_excite != 0) 
 						{
-							$memcache = new Memcached();
+							global $memcached;
 							while($row = $excited_action->fetch_array())
 							{
 								$actionby[]['profileid'] = $row['ACTIONBY'];
-								$name[$row['ACTIONBY']] = $help->name_fetch($row['ACTIONBY'], $memcache, $database);
-								$pimage[$row['ACTIONBY']] = $help->pimage_fetch($row['ACTIONBY'], $memcache, $database);
+								$name[$row['ACTIONBY']] = $help->name_fetch($row['ACTIONBY'], $memcached, $database);
+								$pimage[$row['ACTIONBY']] = $help->pimage_fetch($row['ACTIONBY'], $memcached, $database);
 							}
 							$data['excited'] = $actionby;
 							$data['name'] = $name;
@@ -2221,46 +2487,53 @@ class Api
 	
 	function forgot_password()
 	{
-	    $help = new Help();
+	    global $help;
 		if(isset($_GET['email']))
 		{
 			if(!empty($_GET['email']))
 			{
 				$email = $_GET['email'];
-				$database = new Database();
-				$help->assign_database($email,$database);
-				$database = null;
-				$database = new Database();
-				$ret = $database->check_email($email);
-				if($ret == 1)
+				if($help->is_email($email))
 				{
-					$uniqueid = sha1(uniqid(rand(),1));
-					if($database->update_uniqueid($email,$uniqueid))
+					global $database;
+					$help->assign_database($email,$database);
+					$database = null;
+					$database = new Database();
+					$ret = $database->check_email($email);
+					if($ret == 1)
 					{
-						$param = array();
-						$email_object = new Email();
-						$param['type'] = 'password_recover';
-						$param['email'] = $email;
-						$param['uniqueid'] = $uniqueid;
-						if($email_object->email_sample($param))
+						$uniqueid = sha1(uniqid(rand(),1));
+						if($database->update_uniqueid($email,$uniqueid))
 						{
-							$data['ack'] = 1; 
-							$data['message'] = 'A link has been sent to this email address. Please click at the link or paste the link in the browser to recover your password.';
-							echo json_encode($data);
+							$param = array();
+							$email_object = new Email();
+							$param['type'] = 'password_recover';
+							$param['email'] = $email;
+							$param['uniqueid'] = $uniqueid;
+							if($email_object->email_sample($param))
+							{
+								$data['ack'] = 1; 
+								$data['message'] = 'A link has been sent to this email address. Please click at the link or paste the link in the browser to recover your password.';
+								echo json_encode($data);
+							}
+							else 
+							{
+								$help->error_description(17);
+							}
 						}
-						else 
+						else
 						{
-							$help->error_description(17);
+							$help->error_description(15);	
 						}
 					}
 					else
 					{
-						$help->error_description(15);	
+						$help->error_description(16);
 					}
 				}
 				else
 				{
-					$help->error_description(16);
+					$help->error_description(23);
 				}
 			}
 			else
@@ -2275,9 +2548,9 @@ class Api
 	}	
 	function employee_invite()
 	{
-		$database = new Database();
+		global $database;
 		$email_object = new Email();
-		$help = new Help();
+		global $help;
 		$existing = array();
 		$invited = array();
 		$invalid = array();
@@ -2327,7 +2600,7 @@ class Api
 								$param['identifier'] = $identifier;
 								$param['myname'] = $myname;
 								$param['myphoto'] = $myphoto;
-								$param['myprofileid'] = $myprofileid;
+								$param['actionby'] = $myprofileid;
 								$er = $email_object->email_sample($param);
 							}
 						}	
@@ -2361,16 +2634,16 @@ class Api
 	}
 	function friend_invite()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['email']))
 		{
 			if(!empty($_GET['email']))
 			{
 				$email = strtolower($_GET['email']);
 				$myemail = $_SESSION['EMAIL'];
-				$database = new Database();
+				global $database;
 				$email_object = new Email();
-				$help = new Help();
+				global $help;
 				if($_SESSION['database'] == $help->get_database_from_email($email,$database))
 				{
 					$myname = $_SESSION['NAME'];
@@ -2410,7 +2683,7 @@ class Api
 							$param['identifier'] = $identifier;
 							$param['myname'] = $myname;
 							$param['myphoto'] = $myphoto;
-							$param['myprofileid'] = $myprofileid;
+							$param['actionby'] = $myprofileid;
 							$er = $email_object->email_sample($param);
 							if($er)
 							{
@@ -2443,7 +2716,7 @@ class Api
 	
 	function self_invite()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['email']))
 		{
 			if(!empty($_GET['email']))
@@ -2451,10 +2724,10 @@ class Api
 				$email = strtolower($_GET['email']);
 				if($help->is_email($email))
 				{
-					$database_old = new Database();
+					global $database;
 					$email_object = new Email();		
-					$help->assign_database($email,$database_old);
-					$database_old =null;
+					$help->assign_database($email,$database);
+					$database = null;
 					$database = new Database();
 					$row = $database->is_already_user($email);
 					if($row['EMAIL'] == $email)
@@ -2506,17 +2779,88 @@ class Api
 		}	
 	}
 	
+	function self_invite_mobile()
+	{
+		global $help;
+		if(isset($_GET['email']))
+		{
+			if(!empty($_GET['email']))
+			{
+				$email = strtolower($_GET['email']);
+				if($help->is_email($email))
+				{
+					global $database;
+					$email_object = new Email();		
+					$help->assign_database($email,$database);
+					$database = null;
+					$database = new Database();
+					$row = $database->is_already_user($email);
+					if($row['EMAIL'] == $email)
+					{	
+							$data['ack'] = 1;
+							$data['message'] = "This email is already registered with Quipmate. Please login to continue.";
+							$data['profileid'] = $row['USERID'];
+							echo json_encode($data);
+					}
+					else
+					{
+						$row = $database->is_virtual_user($email);
+						if($row['ack'])
+						{
+							$virtualid =$row['virtualid'];
+							$code = $row['code'];
+						}
+						else
+						{	 $code = rand(1000,9999);
+							$virtualid = $database->virtual_create_mobile($email,$code);
+							
+						}
+						$vr = $database->v_select($virtualid);
+						
+						
+						$param = array();
+						$param['type'] = 'self_invite';
+						$param['email'] = $email;
+						$param['identifier'] = $code;
+						$email_object = new EMAIL();
+						$er = $email_object->email_sample($param);
+						if($er)
+						{
+							$data['ack'] = 2;
+							$data['message'] = "A 4 digitcode has been sent to your email.";
+							$data['code'] = $code;
+							echo json_encode($data);
+						}
+					}
+				}	
+				else
+				{
+					$help->error_description(23);
+				}
+			}
+			else
+			{
+				$help->error_description(18);				
+			}
+		}
+		else
+		{
+			$help->error_description(9);
+		}	
+	}
+	
+	
 	function member_request_fetch()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['groupid']))
 		{
 			if(!empty($_GET['groupid']))
 			{
 				$data = array();
 				$member = array();
-				$memcache = new Memcached();
-				$database = new Database();
+				global $memcached;
+				global $database;
 				$groupid = $_GET['groupid'];
 				if($result = $database->member_request_select($groupid))
 				{
@@ -2526,8 +2870,8 @@ class Api
 						while($row=$result->fetch_array())
 						{
 						   $member[$k]['profileid'] = $row['profileid'];
-							$name[$member[$k]['profileid']] = $help->name_fetch($member[$k]['profileid'], $memcache, $database);
-							$pimage[$member[$k]['profileid']] = $help->pimage_fetch($member[$k]['profileid'], $memcache, $database);
+							$name[$member[$k]['profileid']] = $help->name_fetch($member[$k]['profileid'], $memcached, $database);
+							$pimage[$member[$k]['profileid']] = $help->pimage_fetch($member[$k]['profileid'], $memcached, $database);
 						   $k++;
 						}
 						$data['count'] = $result->num_rows;
@@ -2561,12 +2905,12 @@ class Api
 		
 	function friend_request_fetch()
 	{
-		$help = new Help();
+		global $help;
 		$data = array();
 		$friend = array();
 		$myprofileid = $_SESSION['userid'];
-		$memcache = new Memcached();
-		$database = new Database();
+		global $memcached;
+		global $database;
 		if($result = $database->friend_invite_select($myprofileid))
 		{
 			if($result->num_rows)
@@ -2575,8 +2919,8 @@ class Api
 				while($row=$result->fetch_array())
 				{
 				   $friend[$k]['profileid'] = $row['FRIENDID'];
-					$name[$friend[$k]['profileid']] = $help->name_fetch($friend[$k]['profileid'], $memcache, $database);
-					$pimage[$friend[$k]['profileid']] = $help->pimage_fetch($friend[$k]['profileid'], $memcache, $database);
+					$name[$friend[$k]['profileid']] = $help->name_fetch($friend[$k]['profileid'], $memcached, $database);
+					$pimage[$friend[$k]['profileid']] = $help->pimage_fetch($friend[$k]['profileid'], $memcached, $database);
 				   $k++;
 				}
 				$data['count'] = $result->num_rows;
@@ -2600,8 +2944,8 @@ class Api
 					
 	function friend_details_fetch()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		$profileid = $_GET['profileid'];
 		if($bio = $database->bio_complete_select($profileid))
 		{
@@ -2643,7 +2987,7 @@ class Api
 	
 	function friend_search()
 	{
-	    $help = new Help();
+	    global $help;
 		if(isset($_GET['q']))
 		{ 
 			if(!empty($_GET['q']))
@@ -2659,8 +3003,8 @@ class Api
 				{
 					$profileid = $_SESSION['userid'];
 				}
-				$memcache = new Memcached();
-				$database = new Database();
+				global $memcached;
+				global $database;
 				$check = $database->is_user($profileid);		
 				if($check['USERID'] == $profileid)
 				{
@@ -2671,8 +3015,8 @@ class Api
 						while($frow = $fres->fetch_array())
 						{
 							$friend[$k]['profileid'] = $frow['PROFILEID'];
-							$name[$friend[$k]['profileid']] = $help->name_fetch($friend[$k]['profileid'], $memcache, $database);
-					        $pimage[$friend[$k]['profileid']] = $help->pimage_fetch($friend[$k]['profileid'], $memcache, $database);
+							$name[$friend[$k]['profileid']] = $help->name_fetch($friend[$k]['profileid'], $memcached, $database);
+					        $pimage[$friend[$k]['profileid']] = $help->pimage_fetch($friend[$k]['profileid'], $memcached, $database);
 							$k++;
 						}
 							$data['friend'] = $friend;
@@ -2703,17 +3047,17 @@ class Api
 	
 	function gift()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['profileid']) && isset($_GET['gift']) && isset($_GET['gift_desc']))
 		{ 
 			if(!empty($_GET['profileid']) && !empty($_GET['gift']))
 			{ 
-				$email = new Email();
+				global $email;
 				$profileid = $_GET['profileid']; 
 				$myprofileid = $_SESSION['userid']; 
 				$gift = $_GET['gift']; 
 				$gift_desc = $_GET['gift_desc'];
-				$database = new Database();
+				global $database;
 				$check = $database->is_user($profileid);
 				if($check['USERID'] == $profileid)
 				{
@@ -2749,7 +3093,7 @@ class Api
 													$param = array();
 													$param['type'] = 'gift';
 													$param['profileid'] = $profileid;
-													$param['myprofileid'] = $myprofileid;
+													$param['actionby'] = $myprofileid;
 													$param['gift_desc'] = $gift_desc;
 													$email->email_sample($profileid,$myprofileid,$actionid,$gift_desc);
 												}	
@@ -2808,8 +3152,8 @@ class Api
 	
 	function group_member_remove()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		if(isset($_GET['groupid']) && isset($_GET['profileid']))
 		{
 			if(!empty($_GET['groupid']) && !empty($_GET['profileid']))
@@ -2865,8 +3209,8 @@ class Api
 	
 	function group_admin_make()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		if(isset($_GET['groupid']) && isset($_GET['profileid']))
 		{
 			if(!empty($_GET['groupid']) && !empty($_GET['profileid']))
@@ -2894,11 +3238,11 @@ class Api
 								$remail = $database->setting_email_select($profileid);
 								if($remail['group_admin'])
 								{
-									$email = new Email();
+									global $email;
 									$param = array();
 									$param['type'] = 'group_admin';
 									$param['profileid'] = $profileid;
-									$param['myprofileid'] = $myprofileid;
+									$param['actionby'] = $myprofileid;
 									$param['groupid'] = $groupid;
 									$email->email_sample($param);
 								}
@@ -2939,8 +3283,8 @@ class Api
 	
 	function group_admin_remove()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		if(isset($_GET['groupid']) && isset($_GET['profileid']))
 		{
 			if(!empty($_GET['groupid']) && !empty($_GET['profileid']))
@@ -2988,8 +3332,8 @@ class Api
 		
 	function group_settings_save()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		if(isset($_GET['groupid']) && isset($_GET['invite']) && isset($_GET['description'])  && isset($_GET['privacy'])  && isset($_GET['link']))
 		{
 			if(!empty($_GET['groupid']) && $_GET['invite'] != '' && $_GET['privacy'] != '')
@@ -3061,8 +3405,8 @@ class Api
 	
 	function group_create()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		if(isset($_GET['name']) && isset($_GET['description'])  && isset($_GET['privacy'])  && isset($_GET['technical']))
 		{
 			if(!empty($_GET['name']) && !empty($_GET['description'])  && $_GET['privacy'] !=''  && $_GET['technical'] != '')
@@ -3126,8 +3470,8 @@ class Api
 	}
 	function page_create()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		if(isset($_GET['name']) && isset($_GET['description']))
 		{
 			if(!empty($_GET['name']) && !empty($_GET['description']) )
@@ -3177,8 +3521,8 @@ class Api
 	
 	function event_settings_save()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		if(isset($_GET['eventid'])  && isset($_GET['description'])  && isset($_GET['privacy'])  && isset($_GET['invite']) && isset($_GET['day']) && isset($_GET['month']) && isset($_GET['year']) && isset($_GET['time']) && isset($_GET['venue']))
 		{
 			if(!empty($_GET['eventid'])  && !empty($_GET['description'])  && $_GET['privacy'] !=''  && $_GET['invite'] != '' && !empty($_GET['day']) && !empty($_GET['month']) && !empty($_GET['year']) && !empty($_GET['time']) && !empty($_GET['venue']))
@@ -3261,8 +3605,8 @@ class Api
 	
 	function group_event_create()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		if(isset($_GET['groupid']) && isset($_GET['name']) && isset($_GET['description'])  && isset($_GET['day']) && isset($_GET['month']) && isset($_GET['year']) && isset($_GET['time']) && isset($_GET['venue']))
 		{
 			if(!empty($_GET['groupid']) && !empty($_GET['name']) && !empty($_GET['description'])  && !empty($_GET['day']) && !empty($_GET['month']) && !empty($_GET['year']) && !empty($_GET['time']) && !empty($_GET['venue']))
@@ -3342,8 +3686,8 @@ class Api
 	
 	function event_create()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		if(isset($_GET['name']) && isset($_GET['description'])  && isset($_GET['privacy'])  && isset($_GET['invite']) && isset($_GET['day']) && isset($_GET['month']) && isset($_GET['year']) && isset($_GET['time']) && isset($_GET['venue']))
 		{
 			if(!empty($_GET['name']) && !empty($_GET['description'])  && $_GET['privacy'] !=''  && $_GET['invite'] != '' && !empty($_GET['day']) && !empty($_GET['month']) && !empty($_GET['year']) && !empty($_GET['time']) && !empty($_GET['venue']))
@@ -3429,7 +3773,7 @@ class Api
 	function link_details_fetch()
 	{
 		$data = array();
-		$help = new Help();
+		global $help;
 		if(isset($_GET['link']))
 		{
 		    if(!empty($_GET['link']))
@@ -3497,16 +3841,18 @@ class Api
 							$data['src'] = $src;
 							$data['link'] = $link;
                         }						
-						else if($host == 'http://youtu.be/')
+						else if($host == 'http://youtu.be/' || $host == 'https://youtu.be/')
 						{
+							$host = 'https://youtu.be/';
 							$data['actiontype'] = 1600; 
 							$data['video'] = 1;
 							$path = explode($host,$link);
 							$data['link'] = $link;
 							$data['path'] = $path[1];
 						}
-						else if($host == 'http://www.youtube.com/')
+						else if($host == 'http://www.youtube.com/' || $host == 'https://www.youtube.com/')
 						{
+							$host == 'https://www.youtube.com/';
 							$data['actiontype'] = 1600; 
 							$data['video'] = 1;
 							$path = explode('v=',$link);
@@ -3526,7 +3872,7 @@ class Api
 								$ext = pathinfo($img,PATHINFO_EXTENSION);
 								if(in_array($ext,$valid_formats))
 								{
-									if(strpos($img,'http://') === false)
+									if(strpos($img,'http://') === false && strpos($img,'https://') === false)
 									{
 										$img = $host.$img;
 									}
@@ -3557,7 +3903,7 @@ class Api
 	
 	function live_feed()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['start']))
 		{
 			if($_GET['start'] != '')
@@ -3566,8 +3912,8 @@ class Api
 				$start = $_GET['start'];	
 				if(is_numeric($start))
 				{	
-					$database = new Database();
-					$memcache = new Memcached();
+					global $database;
+					global $memcached;
 					if($res = $database->friend_action_select($myprofileid, $start,20))
 					{
 						$action = array();
@@ -3583,13 +3929,13 @@ class Api
 							$action[$k]['actiontype'] = $NROW['ACTIONTYPE'];
 							$action[$k]['actionby'] = $NROW['ACTIONBY'];
 							$action[$k]['actionon'] = $NROW['PROFILEID'];
-							$name[$action[$k]['actionby']] = $help->name_fetch($action[$k]['actionby'], $memcache, $database);
-							$pimage[$action[$k]['actionby']] = $help->pimage_fetch($action[$k]['actionby'], $memcache, $database); 
+							$name[$action[$k]['actionby']] = $help->name_fetch($action[$k]['actionby'], $memcached, $database);
+							$pimage[$action[$k]['actionby']] = $help->pimage_fetch($action[$k]['actionby'], $memcached, $database); 
 										
 							if($action[$k]['actionby'] != $action[$k]['actionon'])
 							{
-								$name[$action[$k]['actionon']] = $help->name_fetch($action[$k]['actionon'], $memcache, $database);
-								$pimage[$action[$k]['actionon']] = $help->pimage_fetch($action[$k]['actionon'], $memcache, $database); 
+								$name[$action[$k]['actionon']] = $help->name_fetch($action[$k]['actionon'], $memcached, $database);
+								$pimage[$action[$k]['actionon']] = $help->pimage_fetch($action[$k]['actionon'], $memcached, $database); 
 							}			
 							$k++;
 						}
@@ -3622,7 +3968,7 @@ class Api
 		
 	function message_fetch()
 	{
-		$help = new Help();
+		global $help;
 		ini_set('default_charset', 'utf-8');
 		if(isset($_GET['start'])&& isset($_GET['profileid']))
 		{
@@ -3634,13 +3980,13 @@ class Api
 				$data = array();
 				$message = array();
 				$reply = array();
-				$database = new Database();
-				$memcache = new Memcached();
+				global $database;
+				global $memcached;
 				$check = $database->is_user($profileid);
 				if($check['USERID'] == $profileid)
 				{
-					$name[$profileid] = $help->name_fetch($profileid, $memcache, $database);
-					$pimage[$profileid] = $help->pimage_fetch($profileid, $memcache, $database);
+					$name[$profileid] = $help->name_fetch($profileid, $memcached, $database);
+					$pimage[$profileid] = $help->pimage_fetch($profileid, $memcached, $database);
 					$database->inbox_update_readbit($myprofileid); 
 					$result=$database->inbox_mutual_select($myprofileid,$profileid,$start);
 					$k=0;
@@ -3656,14 +4002,14 @@ class Api
 						$message[$k]['message']= utf8_encode($row['MESSAGE']);
 						if($message[$k]['profileid'] < 1000000000)
 						{
-							$name[$message[$k]['actionon']] = $help->diary_name_fetch($message[$k]['actionon'], $memcache, $database);
+							$name[$message[$k]['actionon']] = $help->diary_name_fetch($message[$k]['actionon'], $memcached, $database);
 						}
 						else
 						{
-							$name[$message[$k]['actionon']] = $help->name_fetch($message[$k]['actionon'], $memcache, $database);
+							$name[$message[$k]['actionon']] = $help->name_fetch($message[$k]['actionon'], $memcached, $database);
 						}
-						$name[$message[$k]['actionby']] = $help->name_fetch($message[$k]['actionby'], $memcache, $database);
-						$pimage[$message[$k]['actionby']] = $help->pimage_fetch($message[$k]['actionby'], $memcache, $database);
+						$name[$message[$k]['actionby']] = $help->name_fetch($message[$k]['actionby'], $memcached, $database);
+						$pimage[$message[$k]['actionby']] = $help->pimage_fetch($message[$k]['actionby'], $memcached, $database);
 						$k++;
 					}
 					$data['myprofileid']=$_SESSION['USERID'];
@@ -3690,10 +4036,10 @@ class Api
 
 	function message_recent_fetch()
 	{
-		$help = new Help();
+		global $help;
 		$myprofileid = $_SESSION['userid'];
-		$database = new Database();
-		$memcache = new Memcached();
+		global $database;
+		global $memcached;
 		$database->inbox_update_readbit($myprofileid);
 		$res = $database->get_last_message_exchanged($myprofileid);
 		$k = 0;
@@ -3711,8 +4057,8 @@ class Api
 					$message_sent_recieve[$k]['actionby']=$NROW['ACTIONBY'];
 					$message_sent_recieve[$k]['message']=$NROW['MESSAGE'];					
 					$message_sent_recieve[$k]['time']=$NROW['TIME'];	
-					$name[$friend[$k]] = $help->name_fetch($friend[$k], $memcache, $database);
-					$pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcache, $database);
+					$name[$friend[$k]] = $help->name_fetch($friend[$k], $memcached, $database);
+					$pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcached, $database);
 				   	$data['ack'] = 1;
 				}	
 			}
@@ -3725,8 +4071,8 @@ class Api
 					$message_sent_recieve[$k]['actionby']=$NROW['ACTIONBY'];
 					$message_sent_recieve[$k]['message']=$NROW['MESSAGE'];
 					$message_sent_recieve[$k]['time']=$NROW['TIME'];
-					$name[$friend[$k]] = $help->name_fetch($friend[$k], $memcache, $database);
-				    $pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcache, $database);
+					$name[$friend[$k]] = $help->name_fetch($friend[$k], $memcached, $database);
+				    $pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcached, $database);
 					$data['ack'] = 1;
 				}	
 			}
@@ -3740,7 +4086,7 @@ class Api
 	
 	function message()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['message']) && isset($_GET['profileid']))
 		{
 			if(!empty($_GET['message']) && !empty($_GET['profileid']))
@@ -3748,7 +4094,7 @@ class Api
 				$message =$_GET['message'];
 				$profileid =$_GET['profileid'];
 				$actionby = $_SESSION['USERID'];
-				$database = new Database();
+				global $database;
 				$check = $database->is_user($profileid);
 				if($check['USERID'] == $profileid)
 				{
@@ -3764,7 +4110,7 @@ class Api
 								$remail = $database->setting_email_select($profileid);
 								if($remail['message'])
 								{	
-									$email = new Email();
+									global $email;
 									$param = array();
 									$param['type'] = 'message';
 									$param['profileid'] = $profileid;
@@ -3812,7 +4158,7 @@ class Api
 	
 	function message_college()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['message']) && isset($_GET['college']))
 		{
 			if(!empty($_GET['message']) && !empty($_GET['college']))
@@ -3820,7 +4166,7 @@ class Api
 				$message = $_GET['message'];
 				$college = $_GET['college'];
 				$actionby = $_SESSION['USERID'];
-				$database = new Database();
+				global $database;
 				$drow = $database->diary_type_exists($college, 9);
 				if($drow['DIARYID'] == $college)
 				{
@@ -3832,7 +4178,7 @@ class Api
 						if($res)
 						{
 							$result=$database->college_mate_select($college);
-							$email = new Email();
+							global $email;
 							$param = array();
 							$param['type'] = 'message';
 							$param['profileid'] = $row['PROFILEID']; 
@@ -3877,7 +4223,7 @@ class Api
 	
 	function mood()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['mood']) && isset($_GET['mood_desc']))
 		{ 
 			if(!empty($_GET['mood']))
@@ -3885,7 +4231,7 @@ class Api
 				$myprofileid = $_SESSION['userid']; 
 				$mood = $_GET['mood']; 
 				$mood_desc = $_GET['mood_desc'];
-				$database = new Database();
+				global $database;
 				$mrow = $database->mood_exists($mood);
 				if($mrow['MOODID'] == $mood)
 				{
@@ -3934,13 +4280,13 @@ class Api
 
 	function request_fetch()
 	{
-		$help = new Help();
+		global $help;
 		$data = array();
 		$missu = array();
 		$friend = array();
 		$myprofileid = $_SESSION['userid'];
-		$database = new Database();
-		$memcache = new Memcached();
+		global $database;
+		global $memcached;
 		$res = $database->request_notice_read($myprofileid);
 		if($result = $database->friend_invite_select($myprofileid))
 		{
@@ -3950,8 +4296,8 @@ class Api
 				while($row=$result->fetch_array())
 				{
 				   $friend[$k]['profileid'] = $row['FRIENDID'];
-					$name[$friend[$k]['profileid']] = $help->name_fetch($friend[$k]['profileid'], $memcache, $database);
-					$pimage[$friend[$k]['profileid']] = $help->pimage_fetch($friend[$k]['profileid'], $memcache, $database);
+					$name[$friend[$k]['profileid']] = $help->name_fetch($friend[$k]['profileid'], $memcached, $database);
+					$pimage[$friend[$k]['profileid']] = $help->pimage_fetch($friend[$k]['profileid'], $memcached, $database);
 				   $k++;
 				}
 				$data['friend_request_count'] = $result->num_rows;
@@ -3974,8 +4320,8 @@ class Api
 				{
 				   $missu[$k]['profileid'] = $row['ACTIONBY'];
 				   $missu[$k]['pageid'] = $row['ACTIONID'];
-				   $name[$missu[$k]['profileid']] = $help->name_fetch($missu[$k]['profileid'], $memcache, $database);
-				   $pimage[$missu[$k]['profileid']] = $help->pimage_fetch($missu[$k]['profileid'], $memcache, $database);
+				   $name[$missu[$k]['profileid']] = $help->name_fetch($missu[$k]['profileid'], $memcached, $database);
+				   $pimage[$missu[$k]['profileid']] = $help->pimage_fetch($missu[$k]['profileid'], $memcached, $database);
 				   $k++;
 				}
 				$data['missu_count'] = $result->num_rows;
@@ -4016,12 +4362,12 @@ class Api
 	
 	function missu_fetch()
 	{
-		$help = new Help();
+		global $help;
 		$data = array();
 		$missu = array();
 		$myprofileid = $_SESSION['userid'];
-		$database = new Database();
-		$memcache = new Memcached();
+		global $database;
+		global $memcached;
 		if($result = $database->missu_select($myprofileid))
 		{
 			if($result->num_rows)
@@ -4031,8 +4377,8 @@ class Api
 				{
 				   $missu[$k]['profileid'] = $row['ACTIONBY'];
 				   $missu[$k]['pageid'] = $row['ACTIONID'];
-				   $name[$missu[$k]['profileid']] = $help->name_fetch($missu[$k]['profileid'], $memcache, $database);
-				   $pimage[$missu[$k]['profileid']] = $help->pimage_fetch($missu[$k]['profileid'], $memcache, $database);
+				   $name[$missu[$k]['profileid']] = $help->name_fetch($missu[$k]['profileid'], $memcached, $database);
+				   $pimage[$missu[$k]['profileid']] = $help->pimage_fetch($missu[$k]['profileid'], $memcached, $database);
 				   $k++;
 				}
 				$data['count'] = $result->num_rows;
@@ -4056,14 +4402,14 @@ class Api
 	
 	function missu()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['profileid']))
 		{
 			if(!empty($_GET['profileid']))
 			{
 				$myprofileid = $_SESSION['userid'];
 				$profileid = $_GET['profileid'];
-				$database = new Database();
+				global $database;
 				$check = $database->is_user($profileid);
 				if($check['USERID'] == $profileid)
 				{
@@ -4071,7 +4417,7 @@ class Api
 					{
 						if($database->check_friendship($myprofileid, $profileid) == 2)
 						{
-							$email = new Email();
+							global $email;
 							$row = $database->missu_status($myprofileid, $profileid);
 							if($row['status'] == 0)
 							{
@@ -4093,11 +4439,11 @@ class Api
 										$remail = $database->setting_email_select($profileid);
 										if($remail['missu'])
 										{
-											$email = new Email();
+											global $email;
 											$param = array();
 											$param['type'] = 'missu';
 											$param['profileid'] = $profileid; 
-											$param['myprofileid'] = $myprofileid;
+											$param['actionby'] = $myprofileid;
 											$email->email_sample($param);
 										}	
 										echo json_encode($data);
@@ -4130,11 +4476,11 @@ class Api
 										$remail = $database->setting_email_select($profileid);
 										if($remail['missu'])
 										{			
-											$email = new Email();
+											global $email;
 											$param = array();
-											$param['type'] = 'missu';
+											$param['type'] = 'missu_return';
 											$param['profileid'] = $profileid; 
-											$param['myprofileid'] = $myprofileid;
+											$param['actionby'] = $myprofileid;
 											$email->email_sample($param);
 										}
 									 }
@@ -4179,18 +4525,18 @@ class Api
 	
 	function group_top_influencer_fetch()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['profileid']))
 		{
-			$help = new Help();
+			global $help;
 		    if(!empty($_GET['profileid']))
 		    {
 				$data = array();
 				$match = array();
 				$myprofileid = $_SESSION['userid'];
 				$profileid = $_GET['profileid'];
-				$database = new Database();
-				$memcache = new Memcached();
+				global $database;
+				global $memcached;
 				$check = $database->is_member($profileid,$myprofileid);
 				if($check->num_rows)
 				{
@@ -4200,8 +4546,8 @@ class Api
 						while($row=$result->fetch_array())
 						{
 						   $match[$k]['profileid'] = $row['profileid'];
-						   $name[$match[$k]['profileid']] = $help->name_fetch($match[$k]['profileid'], $memcache, $database);
-						   $pimage[$match[$k]['profileid']] = $help->pimage_fetch($match[$k]['profileid'], $memcache, $database);   
+						   $name[$match[$k]['profileid']] = $help->name_fetch($match[$k]['profileid'], $memcached, $database);
+						   $pimage[$match[$k]['profileid']] = $help->pimage_fetch($match[$k]['profileid'], $memcached, $database);   
 						   $k++;
 						}
 					}
@@ -4229,10 +4575,10 @@ class Api
 	
 	function mutual_friend()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['profileid']))
 		{
-			$help = new Help();
+			global $help;
 		    if(!empty($_GET['profileid']))
 		    {
 				$data = array();
@@ -4240,8 +4586,8 @@ class Api
 				$non_match = array();
 				$myprofileid = $_SESSION['userid'];
 				$profileid = $_GET['profileid'];
-				$database = new Database();
-				$memcache = new Memcached();
+				global $database;
+				global $memcached;
 				$check = $database->is_user($profileid);
 				if($check['USERID'] == $profileid)
 				{
@@ -4253,8 +4599,8 @@ class Api
 						while($row=$result->fetch_array())
 						{
 						   $match[$k]['profileid'] = $row['FRIENDID'];
-						   $name[$match[$k]['profileid']] = $help->name_fetch($match[$k]['profileid'], $memcache, $database);
-						   $pimage[$match[$k]['profileid']] = $help->pimage_fetch($match[$k]['profileid'], $memcache, $database);   
+						   $name[$match[$k]['profileid']] = $help->name_fetch($match[$k]['profileid'], $memcached, $database);
+						   $pimage[$match[$k]['profileid']] = $help->pimage_fetch($match[$k]['profileid'], $memcached, $database);   
 						   $k++;
 						}
 					}
@@ -4267,8 +4613,8 @@ class Api
 						while($row=$result->fetch_array())
 						{
 						   $non_match[$k]['profileid'] = $row['FRIENDID'];
-						   $name[$non_match[$k]['profileid']] = $help->name_fetch($non_match[$k]['profileid'], $memcache, $database);
-						   $pimage[$non_match[$k]['profileid']] = $help->pimage_fetch($non_match[$k]['profileid'], $memcache, $database);   
+						   $name[$non_match[$k]['profileid']] = $help->name_fetch($non_match[$k]['profileid'], $memcached, $database);
+						   $pimage[$non_match[$k]['profileid']] = $help->pimage_fetch($non_match[$k]['profileid'], $memcached, $database);   
 						   $k++;
 						}
 					}
@@ -4297,12 +4643,11 @@ class Api
 	
 	function make_moderator()
 	{
-		$help = new Help();
+		global $help,$memcached,$database;
 		if(isset($_GET['profileid']))
 		{
 			if(isset($_GET['profileid']))
 			{
-				$database = new Database();
 				$myprofileid = $_SESSION['userid'];
 				if($database->moderator_check($myprofileid))
 				{
@@ -4311,6 +4656,7 @@ class Api
 					if($row['USERID'] == $profileid)
 					{
 						$database->make_moderator($profileid);
+						$value = $help->moderator_status($profileid,$memcached,$database,1);
 						$data['ack']  = 1;
 						echo json_encode($data);
 					}
@@ -4334,14 +4680,764 @@ class Api
 			$help->error_description(9);
 		}
 	}
-	function moderator_remove()
+	/*function md_load()
 	{
-		$help = new Help();
+				global $help,$database,$memcached;
+				$action =array();
+				$myprofileid = $_SESSION['userid'];
+				$result = array();
+				if($database->moderator_check($myprofileid))
+				{	
+						if($result = $database->MD_select())
+						{
+							$action['profileid'] = $result['PROFILEID'];
+							$action['name'] = $help->name_fetch($result['PROFILEID'],$memcached,$database);
+							$action['image'] = $help->pimage_fetch($result['PROFILEID'],$memcached,$database);
+						
+						
+						$data['action'] = $action;
+						echo json_encode($data);
+						}
+						else
+						{	
+							$help->error_description(15);
+						}
+				}	
+				else
+				{
+					$help->error_description(12);					
+				}
+	}*/
+	function md_remove()
+	{		
+				global $help,$database,$memcached;
+				if(isset($_GET['profileid']))
+				{
+				if(!empty($_GET['profileid']))
+				{
+				$action =array();
+				$myprofileid = $_SESSION['userid'];
+				$result = array();
+				if($database->moderator_check($myprofileid))
+				{	
+						if($result = $database->MD_remove($profileid))
+						{	
+							$data['ack'] ='1';
+							echo json_encode($data);
+						}
+						else
+						{	
+							$help->error_description(15);
+						}
+				}	
+				else
+				{
+					$help->error_description(12);					
+				}
+				}
+				else
+				{
+					$help->error_description(18);					
+				}
+				}
+				else
+				{
+					$help->error_description(9);					
+				}
+	}
+	
+	function moderator_fetch()
+	{
+				global $help,$database,$memcached;
+				$action =array();
+				$myprofileid = $_SESSION['userid'];
+				$i=0;
+				if($database->moderator_check($myprofileid))
+				{
+						$result = $database->moderator_select();
+						While ($row = $result->fetch_array())
+						{
+							$action[$i]['profileid'] = $row['profileid'];
+							$action[$i]['name'] = $help->name_fetch($row['profileid'],$memcached,$database);
+							$action[$i]['image'] = $help->pimage_fetch($row['profileid'],$memcached,$database);
+							$i++;
+						}
+						$data['action'] = $action;
+						echo json_encode($data);
+				}	
+				else
+				{
+					$help->error_description(12);					
+				}
+	}
+	function broadcast_pages_select()
+	{
+		global $help,$database,$memcached;
+		$info =array();
+		$myprofileid = $_SESSION['userid'];
+		$i=0;
+		if($database->moderator_check($myprofileid))
+		{
+			$result = $database->page_select_all();
+			While($row = $result->fetch_array())
+			{
+				$info[$i]['pageid'] = $row['pageid'];
+				$info[$i]['pagename'] = $row['name'];
+				$i++;
+			}
+			$data['info'] = $info;
+			echo json_encode($data);
+		}
+		else
+		{
+			$help->error_description(12);
+		}
+			
+	}
+	function admin_usefullink()
+{
+global $help;
+if(isset($_GET['links']) && isset($_GET['title']))
+		{
+				if(!empty($_GET['links']) && !empty($_GET['title']))
+				{
+					global $database;
+					
+					$new_link=$_GET['links'];
+					$link_title = $_GET['title'];
+					$size=strlen($new_link);
+					if($size < 500)
+					{
+					
+					if($data['link_id'] = $database->usefullink_insert($new_link,$link_title))
+					{
+					     $data['ack'] =1;
+						 echo json_encode($data);
+					}
+					
+				}
+				else
+					{
+					$help->error_description(43);
+					
+				}
+					}
+					
+				else
+				{
+					$help->error_description(18);
+				}
+				
+		}
+else
+		{
+			$help->error_description(9);
+		}
+
+}
+
+function admin_fetch_usefullink()
+{
+					global $help;
+					global $database;
+					$k=0;
+					$data = array();
+					
+					$result = $database->usefullink_fetch();
+					
+						while( $res = $result->fetch_array())
+					{ 	$data[$k]['link_id'] = $res['key'];
+					    $data[$k]['link'] = $res['usefullink'];
+						 $data[$k]['title'] = $res['title'];
+						 $k++;
+					}
+						
+						 echo json_encode($data);											 
+					
+				
+				
+			
+}
+
+	function usefullink_delete()
+{
+global $help;
+if(isset($_GET['link_id']))
+		{
+				if(!empty($_GET['link_id']))
+				{
+					global $database;
+					
+					 $link_id=$_GET['link_id'];
+					
+					if($result = $database->delete_usefullink($link_id))
+					{	
+					    $data['ack']=1;
+					$data['id']=$link_id;
+				echo json_encode($data);
+						
+					}
+					else
+					{
+					$help->error_description(15);
+				}
+				}
+				else
+				{
+					$help->error_description(18);
+				}
+				
+		}
+else
+		{
+			$help->error_description(9);
+		}
+
+}
+
+function info_update()
+{
+global $help;
+if(isset($_GET['infoadd']) && isset($_GET['infotype']))
+		{
+				if(!empty($_GET['infoadd']) && !empty($_GET['infotype']))
+				{
+					global $database;
+					
+					 $info_name=$_GET['infoadd'];
+					$type = $_GET['infotype'];
+				
+					if($data['infoid'] = $database->mydiary_create_wo_admin($type,$info_name))
+					{		
+					     $data['ack'] =1;
+						 $data['infoadd'] = $info_name;
+						 echo json_encode($data);
+						
+					}
+					else
+					{
+						$help->error_description(15);
+					}
+				}
+				else
+				{
+					$help->error_description(18);
+				}
+				
+		}
+else
+		{
+			$help->error_description(9);
+		}
+
+}
+
+function info_fetch()
+{
+					global $help;
+					global $database;
+		if(isset($_GET['infotype']))
+		{
+				if(!empty($_GET['infotype']))
+				{
+					$info = array();
+						$k=0;
+						 $type =$_GET['infotype'] ;
+						$result = $database->diary_fetch($type);
+					while($res= $result->fetch_array())
+					{		
+						 $info[$k]['id'] =$res['DIARYID'];
+					     $info[$k]['name']  = $res['NAME'];
+						 $k++;
+						 
+					}
+					$data['info'] = $info;
+					
+				echo json_encode($data);
+					}
+		else
+				{
+					$help->error_description(18);
+				}
+		}
+		else
+				{
+					$help->error_description(9);
+				}
+}		
+
+	function info_delete()
+{
+global $help;
+if(isset($_GET['info_id']))
+		{
+				if(!empty($_GET['info_id']))
+				{
+					global $database;
+					
+					 $info_id=$_GET['info_id'];
+					
+					if($result = $database->delete_info($info_id))
+					{	
+					    $data['ack']=1;
+					$data['id']=$info_id;
+				echo json_encode($data);
+						
+					}
+					else
+					{
+					$help->error_description(15);
+				}
+				}
+				else
+				{
+					$help->error_description(18);
+				}
+				
+		}
+else
+		{
+			$help->error_description(9);
+		}
+
+}
+
+function star_of_the_week()
+{
+global $help;
+if(isset($_GET['profileid']) &&  isset($_GET['contribution']))
+		{
+				if(!empty($_GET['profileid']) && !empty($_GET['contribution']))
+				{
+					global $database;
+					
+					 $profileid=$_GET['profileid'];
+					 $contribution=$_GET['contribution'];
+				
+					$size=strlen($contribution);
+					if($size < 500)
+					{			
+						 $current_date = gmDate("Y-m-d");
+						 $actiontype = 2450;
+						 $actionid = $database->get_actionid($profileid, $actiontype);
+						 if($actionid)
+						 {
+						if($result = $database->star_of_the_week($profileid,$contribution,$current_date,$actionid))
+						{
+							$data['ack'] =1;
+							echo json_encode($data);
+							global $email;
+							$param = array();
+							
+							$res=$database->user_select_all_at_once();
+							while($r = $res->fetch_array())
+							{	
+							$profileid = $r['PROFILEID'];
+							
+							$param['type'] = 'star_of_the_week_broadcast';
+							 $param['email'] = $r['EMAIL'];
+							 $param['profileid'] =  $profileid;
+							$param['contribution'] = $contribution;
+							$param['date'] = $current_date; 
+							$email->email_sample($param);
+							}
+							
+						}
+						else
+						{
+							$help->error_description(15);
+						}
+						}
+					}
+					else
+					{
+						$help->error_description(44);
+						
+					}
+				}
+					
+				else
+				{
+					$help->error_description(18);
+				}
+				
+		}
+else
+		{
+			$help->error_description(9);
+		}
+
+}
+function star_of_the_week_fetch()
+{
+	global $help;	global $memcached;
+					global $database;
+					
+					$star = array();
+					if($result = $database->star_of_the_week_fetch())
+					{	
+						 $k = 0;
+					     while($res=$result->fetch_array())
+						 {
+							 $name[$res['PROFILEID']] = $help->name_fetch($res['PROFILEID'], $memcached, $database);
+							 $pimage[$res['PROFILEID']] = $help->pimage_fetch($res['PROFILEID'], $memcached, $database);
+							 $star[$k]['profileid'] = $res['PROFILEID'];
+							 $star[$k]['contribution'] = $res['CONTRIBUTION'];
+							 $k++;
+						}	 
+							$data['pimage'] = $pimage;
+							 $data['name'] = $name;
+							 $data['star'] = $star;
+							 echo json_encode($data);
+					}
+					else
+					{
+						$help->error_description(15);
+					}
+				
+
+}
+function group_pinned_doc_upload()
+	{
+	
+				$doc_formats = array("pdf","pptx","ppt","docx","doc","txt","xls","xlsx","ods","one","pps","ps","rtf","msg","pptm");
+		
+					$name = $_FILES['doc']['name'];
+					$size = $_FILES['doc']['size'];
+					$description = $_POST['doc_description'];		
+					$profileid = $_POST['doc_hidden_profileid'];
+					$groupid = $profileid;
+					$myprofileid = $_SESSION['userid'];
+					global $help;
+					global $doc_cdn;
+					if(strlen($name))
+					{
+						$ext = pathinfo($name,PATHINFO_EXTENSION);
+						
+						 if(in_array(strtolower($ext),$doc_formats))
+						{
+							$actiontype = 326;
+							$container = 'doc';
+							$cdn = $doc_cdn.'/';
+							$limit = 10240*1024;
+						}
+						else
+						{
+							$data['ack']= 4;						
+							echo json_encode($data);
+							exit(1);
+						}
+							if($size < $limit)
+							{		
+								$tmp = $_FILES['doc']['tmp_name'];
+								global $database;
+								if($database->group_exists($profileid) == $profileid)
+								{
+									$row = $database->is_member($profileid, $myprofileid);
+									if($row->num_rows)
+									{
+										$file_to_be_uploaded = $_FILES['doc']['tmp_name'];
+										$ext = strtolower(pathinfo($_FILES['doc']['name'],PATHINFO_EXTENSION));
+										$filename = $help->photo_name($ext);
+									/*	echo $file_to_be_uploaded;
+										echo $container;
+										echo $filename;*/
+										if($actual_doc_name = $help->cdn_upload($file_to_be_uploaded,$container,$filename))
+										{
+											if(isset($_SESSION['VISIBLE']))
+												$visible = $_SESSION['VISIBLE'];
+											else
+												$visible = 0;
+											global $database;	
+											$actionid = $database->get_actionid($profileid,$actiontype,'0',$visible);
+											if($actionid)
+											{
+												$result = $database->diary_insert($actionid,$description);
+												if($container == 'doc')
+												{
+													$result = $database->doc_insert($profileid,$actionid,$actual_doc_name,$name,$cdn);	
+													$res = $database->group_pinned_document_insert($actionid,$groupid);
+												}
+												
+												$data = array();
+												$data['ack']= 1;
+												$data['actiontype'] = $actiontype;	
+												$data['profileid']=$profileid; 
+												$data['actionid']=$actionid;
+												$data['time']= time();
+												$data['page']= $description; 
+												$data['life_is_fun']= sha1($actionid.'pass1reset!');
+												$data['file'] = $cdn.$actual_image_name;
+												$data['caption']=$name;
+												echo json_encode($data); 
+												$result = $database->member_select($profileid);		
+												global $email;
+												$param = array();
+												$param['type'] = 'group_post';
+												$param['groupid'] = $profileid; 
+												$param['page'] = $description;
+												$param['actionby'] = $myprofileid;
+												$param['actionid'] = $actionid;
+												while ($res = $result->fetch_array())
+												 {
+													$memberid = $res['profileid'] ;
+													if($memberid != $myprofileid )
+													{
+														$rnotice = $database->setting_notice_select($memberid);
+														if($rnotice['group_post'])
+														{
+															$database->notice_insert($actionid,$memberid,$actiontype,$actionid);
+														}
+														$remail = $database->setting_email_select($memberid);
+														if($remail['group_post'])
+														{
+															$param['memberid'] = $memberid; 
+															$email->email_sample($param);	
+												
+														}	
+													 }
+												}
+										}
+										else
+										{
+											$data['ack'] = 0;
+											echo json_encode($data); 
+										}	
+									}
+									else
+									{
+										$data['ack']= 2;						
+										echo json_encode($data);
+									}
+								}
+								else
+								{
+									$help->error_description(12);						
+								}
+							}	
+							else
+							{
+								$help->error_description(16);
+							}
+						}	
+						else
+						{
+								$data['ack']= 3;						
+								echo json_encode($data);
+						}
+				}
+				else
+				{
+						$data['ack']= 5;						
+						echo json_encode($data);
+				}
+	}
+		
+		
+	function group_pinned_doc_fetch()
+	{
+		global $help;global $database;
+		if( isset($_GET['groupid']))
+		{
+			if( !empty($_GET['groupid']))
+			{
+				$groupid = $_GET['groupid'];
+				$type=331;
+				$res = $database->group_pinned_document_fetch($groupid);
+				$k = 0;
+				while($NROW =$res->fetch_array())
+				{	
+					
+					 $a[$k]['filename'] = $NROW['cdn'].$NROW['filename'];
+					 $a[$k]['caption'] = $NROW['caption'];
+					 $dr = $database->diary_select($NROW['docid']);
+					 $a[$k]['description'] = $dr['PAGE'];
+					$k++;
+			   } //$data['myprofileid'] = $_SESSION['USERID']; 
+			   
+			   $data['pinned_doc']=$a;
+			   echo json_encode($data);
+			}
+			else
+			{
+				$help->error_desscription(18);
+			}	
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
+	
+	
+	
+	function flash_board()
+{	
+		global $photo_cdn;	
+		$valid_formats = array("jpg","png","gif","bmp","jpeg");
+		$name = $_FILES['photo_box']['name'];
+		$size = $_FILES['photo_box']['size'];
+		$description = $_POST['photo_description'];		
+		
+		$profileid = $_SESSION['userid'];
+		global $help;
+		if(strlen($name))
+		{
+			$ext = pathinfo($name,PATHINFO_EXTENSION);
+			
+			if(in_array(strtolower($ext),$valid_formats))
+			{
+				$actiontype = 3000;
+				$container = 'photo';
+				$cdn = $photo_cdn.'/';
+				$limit = 10240*1024;
+			}
+			else
+			{
+				$data['ack']= 4;						
+				echo json_encode($data);
+				exit(1);
+			}
+				if($size < $limit)
+				{		
+					$tmp = $_FILES['photo_box']['tmp_name'];
+					global $database;
+							$file_to_be_uploaded = $_FILES['photo_box']['tmp_name'];
+							$ext = strtolower($ext);
+							$filename = $help->photo_name($ext);
+							
+							if($actual_image_name = $help->cdn_upload($file_to_be_uploaded,$container,$filename))
+							{		
+								if(isset($_SESSION['VISIBLE']))
+									$visible = $_SESSION['VISIBLE'];
+								else
+									$visible = 0;
+								global $database;	
+								$actionid = $database->get_actionid($profileid,$actiontype,'0',$visible);
+								if($actionid)
+								{
+									
+									if($container == 'photo')
+									{
+										$result = $database->flash_board_insert($actual_image_name,$cdn,$description);
+									}
+									$data = array();
+									$data['ack']= 1;
+									$data['actiontype'] = $actiontype;	
+									//$data['profileid']=$profileid; 
+									$data['actionid']=$actionid;
+									$data['time']= time();
+									$data['description']= $description; 
+									//$data['life_is_fun']= sha1($actionid.'pass1reset!');
+									$data['file'] = $cdn.$actual_image_name;
+									$data['caption']= $name;
+									echo json_encode($data); 
+								}
+								else
+								{
+									$data['ack'] = 0;
+									echo json_encode($data); 
+								}	
+							}
+							else
+							{
+								$data['ack']= 2;						
+								echo json_encode($data);
+							}
+						}
+						else
+						{
+							$help->error_description(12);
+						}	
+					}	
+					else
+					{
+						$data['ack']= 5;						
+						echo json_encode($data);
+					}
+	}
+	
+	
+	function flash_board_fetch()
+{
+	global $help;	global $memcached;
+					global $database;
+					
+					$star = array();
+					if($result = $database->flash_board_fetch(1))
+					{	
+						
+					   
+							
+						
+						 $k = 0;
+					     while($res=$result->fetch_array())
+						 {
+							
+							 $flash[$k]['image'] = $res['CDN'].$res['FILENAME'];
+							 $flash[$k]['description'] = $res['DESCRIPTION'];
+							 $k++;
+						}	 
+							
+							 $data['flash'] = $flash;
+							 echo json_encode($data);
+					}
+					else
+					{
+						$help->error_description(15);
+					}
+				
+				
+}
+
+
+function star_remove()
+	{
+		global $help;
 		if(isset($_GET['profileid']))
 		{
 			if(isset($_GET['profileid']))
 			{
-				$database = new Database();
+				global $database;
+				$myprofileid = $_SESSION['userid'];
+				if($database->star_check($myprofileid))
+				{
+					$profileid = $_GET['profileid'];
+					$row = $database->is_user($profileid);
+					if($row['USERID'] == $profileid)
+					{
+						$database->star_remove($profileid);
+						$data['ack']  = 1;
+						echo json_encode($data);
+					}
+					else
+					{
+						$help->error_description(16);						
+					}
+				}
+				else
+				{
+					$help->error_description(12);					
+				}
+			}
+			else
+			{
+				$help->error_description(18);			
+			}	
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+}
+	function moderator_remove()
+	{
+		global $help,$memcached;
+		if(isset($_GET['profileid']))
+		{
+			if(isset($_GET['profileid']))
+			{
+				global $database;
 				$myprofileid = $_SESSION['userid'];
 				if($database->moderator_check($myprofileid))
 				{
@@ -4350,6 +5446,7 @@ class Api
 					if($row['USERID'] == $profileid)
 					{
 						$database->moderator_remove($profileid);
+						$value = $help->moderator_status($profileid,$memcached,$database,1);
 						$data['ack']  = 1;
 						echo json_encode($data);
 					}
@@ -4375,12 +5472,12 @@ class Api
 	}
 	function user_delete()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['profileid']))
 		{
 			if(isset($_GET['profileid']))
 			{
-				$database = new Database();
+				global $database;
 				$myprofileid = $_SESSION['userid'];
 				if($database->moderator_check($myprofileid))
 				{
@@ -4415,16 +5512,16 @@ class Api
 	
 	function user_details_fetch()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['email']))
 		{
 			if(isset($_GET['email']))
 			{
-				$database = new Database();
+				global $database;
 				$myprofileid = $_SESSION['userid'];
 				if($database->moderator_check($myprofileid))
 				{
-					$memcache = new Memcached();
+					global $memcached;
 					$email = $_GET['email'];
 					if($help->is_email($email))
 					{
@@ -4434,8 +5531,8 @@ class Api
 							$profileid = $row['USERID'];
 							$data['ack']  = 1;
 							$data['profileid']  = $profileid;
-							$data['name'] = $help->name_fetch($profileid, $memcache, $database);
-							$data['pimage'] = $help->pimage_fetch($profileid, $memcache, $database);
+							$data['name'] = $help->name_fetch($profileid, $memcached, $database);
+							$data['pimage'] = $help->pimage_fetch($profileid, $memcached, $database);
 							echo json_encode($data);
 						}
 						else
@@ -4467,33 +5564,33 @@ class Api
 	
 	function admin_feed()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['start']))
 		{ 
 			if(isset($_GET['start']))
 			{
 				global $action,$name,$pimage;
-				$feed = new Feed();
-				$database = new Database();
+				global $feed;
+				global $database;
 				$myprofileid = $_SESSION['userid'];
 				if($database->moderator_check($myprofileid))
 				{
-					$memcache = new Memcached();
-					$json = new Json();
-					$encode = new Encode();
+					global $memcached;
+					global $json;
+					global $encode;
 					$start = $_GET['start'];
 					$res = $database->everything_select($start,10);
 					$k = 0;
 					while($NROW =$res->fetch_array())
 					{
-						$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+						$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 						$action[$k]['admin_feed'] = 1;
 						$k++;
 						
 					}
 					$data['action'] = $action;
 					$data['myprofileid'] = $_SESSION['USERID']; 
-					$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+					$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached, $database);
 					$data['name'] = $name; 
 					$data['pimage'] = $pimage;
 					$data['tag'] = $_SESSION['tag_json'];
@@ -4518,29 +5615,29 @@ class Api
 	
 	function technical_feed_fetch()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['start']))
 		{ 
 			if(isset($_GET['start']))
 			{
 				global $action,$name,$pimage;
-				$feed = new Feed();
-				$database = new Database();
-				$memcache = new Memcached();
-				$json = new Json();
-				$encode = new Encode();
+				global $feed;
+				global $database;
+				global $memcached;
+				global $json;
+				global $encode;
 				$myprofileid = $_SESSION['userid'];
 				$start = $_GET['start'];
 				$res = $database->tech_feed_select($myprofileid,$start,10);
 				$k = 0;
 				while($NROW =$res->fetch_array())
 				{
-					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 					$k++;
 				}
 				$data['action'] = $action;
 				$data['myprofileid'] = $_SESSION['USERID']; 
-				$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+				$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached, $database);
 				$data['name'] = $name; 
 				$data['pimage'] = $pimage;
 				$data['tag'] = $_SESSION['tag_json'];
@@ -4559,29 +5656,29 @@ class Api
 	
 	function news_feed()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['start']))
 		{ 
 			if(isset($_GET['start']))
 			{
 				global $action,$name,$pimage;
-				$feed = new Feed();
-				$database = new Database();
-				$memcache = new Memcached();
-				$json = new Json();
-				$encode = new Encode();
+				global $feed;
+				global $database;
+				global $memcached;
+				global $json;
+				global $encode;
 				$myprofileid = $_SESSION['userid'];
 				$start = $_GET['start'];
 				$res = $database->new_friend_action_select($myprofileid,$start,10);
 				$k = 0;
 				while($NROW =$res->fetch_array())
 				{
-					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 					$k++;
 				}
 				$data['action'] = $help->feed_privacy_filter($action, $myprofileid, $database);
 				$data['myprofileid'] = $_SESSION['USERID']; 
-				$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+				$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached, $database);
 				$data['name'] = $name; 
 				$data['pimage'] = $pimage;
 				$data['tag'] = $_SESSION['tag_json'];
@@ -4600,8 +5697,8 @@ class Api
 	
 	function notice_count()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		$myprofileid = $_SESSION['userid'];
 		$res = $database->notice_unread_count($myprofileid);
 		$data['count'] = $res;
@@ -4610,32 +5707,32 @@ class Api
 	
 	function notice_fetch()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['start'])) 
 		{
 			if($_GET['start'] !='') 
 			{
 				global $action,$name,$pimage;
-				$feed = new Feed();
+				global $feed;
 				$myprofileid = $_SESSION['userid'];
 				$start = $_GET['start'];
-				$database = new Database();
-				$memcache = new Memcached();
-				$json = new Json();
-				$encode = new Encode();
+				global $database;
+				global $memcached;
+				global $json;
+				global $encode;
 				$result = $database->notice_select($myprofileid,$start);
 				$res = $database->notice_read($myprofileid);
 				$k=0;
 				while($NROW = $result->fetch_array())
 				{
-					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 					$action[$k]['time'] =$help->get_utc($NROW['TIMESTAMP']);// Take the time of latest action
 					$k++;
 					$arr = explode(',',$NROW['ACTIONBY']);
 					foreach($arr as $value)
 					{
-						$name[$value] = $help->name_fetch($value, $memcache, $database);
-						$pimage[$value] = $help->pimage_fetch($value, $memcache, $database); 
+						$name[$value] = $help->name_fetch($value, $memcached, $database);
+						$pimage[$value] = $help->pimage_fetch($value, $memcached, $database); 
 					}
 				}
 				$data['action'] = $action; 
@@ -4656,15 +5753,15 @@ class Api
 		
 	function people_fetch()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['start']) && ( isset($_GET['college']) || isset($_GET['new_user'])))
 		{
 			if($_GET['start']!= '' && ( !empty($_GET['college']) || !empty($_GET['new_user'])))
 			{
 				$myprofileid=$_SESSION['USERID'];
 				$start = $_GET['start'];
-				$database = new Database();
-				$memcache = new Memcached();
+				global $database;
+				global $memcached;
 				if(isset($_GET['college']))
 				{
 					$res = $database->mate_select($start);
@@ -4677,8 +5774,8 @@ class Api
 				while($row =$res->fetch_array())
 				{ 
 					$people[$i]['profileid'] = $row['PROFILEID'];
-				    $name[$people[$i]['profileid']] = $help->name_fetch($people[$i]['profileid'], $memcache, $database);
-			    	$pimage[$people[$i]['profileid']] = $help->pimage_fetch($people[$i]['profileid'], $memcache, $database);  
+				    $name[$people[$i]['profileid']] = $help->name_fetch($people[$i]['profileid'], $memcached, $database);
+			    	$pimage[$people[$i]['profileid']] = $help->pimage_fetch($people[$i]['profileid'], $memcached, $database);  
 					if(isset($_GET['college']))
 					{
 						$people[$i]['cyear'] = $row['CYEAR'];
@@ -4708,8 +5805,8 @@ class Api
 
 	function pin_fetch()
 	{
-	    $help = new Help();
-		$feed = new Feed();
+	    global $help;
+		global $feed;
 		global $action,$name,$pimage;
 		if(isset($_GET['start']))
 		{
@@ -4719,19 +5816,19 @@ class Api
 				$start =$_GET['start']; 
 				$data=array();
 				$photo =array();
-				$database = new Database();
-				$memcache = new Memcached();
-				$json = new Json(); 
+				global $database;
+				global $memcached;
+				global $json; 
 				$r = $database->pin_select($myprofileid,$start,'10');
 				$k=0;
 				while($NROW = $r->fetch_array())
 				{
-					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 					$k++;
 				}
 				$data['action'] = $action;
 				$data['myprofileid'] = $myprofileid;
-				$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+				$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached, $database);
 				$data['name'] = $name; 
 				$data['pimage'] = $pimage;
 				$data['tag'] = $_SESSION['tag_json'];
@@ -4758,7 +5855,10 @@ class Api
 		$blog_title = $_POST['blog_title'];		
 		$blog_content = $_POST['blog_content'];		
 		$profileid = $_POST['photo_hidden_profileid'];
-		$help = new Help();
+		global $help;
+		global $photo_cdn;
+		global $video_cdn;
+		global $doc_cdn;
 		if(strlen($name))
 		{
 			$ext = pathinfo($name,PATHINFO_EXTENSION);
@@ -4768,7 +5868,7 @@ class Api
 				{
 					$actual_image_name = time().".".$ext;
 					$tmp = $_FILES['photo_box']['tmp_name'];
-					$database = new Database();
+					global $database;
 					$myprofileid = $_SESSION['userid'];
 					$check = $database->is_user($profileid);
 					if($check['USERID'] == $profileid)
@@ -4785,13 +5885,13 @@ class Api
 									$visible = $_SESSION['VISIBLE'];
 								else
 									$visible = 0;
-								$database = new Database();	
+								global $database;	
 								$actionid = $database->get_actionid($profileid, 600, 0 ,$visible);
 								if($actionid)
 								{
 									$result = $database->diary_insert($actionid,$blog_title);
 									$result = $database->comment_insert($actionid,$blog_content);
-									$result = $database->image_insert($profileid,$actionid,$actual_image_name,'0','http://photo.qmcdn.net/');
+									$result = $database->image_insert($profileid,$actionid,$actual_image_name,'0',$photo_cdn.'/');
 									$data = array();
 									$data['ack']= 1;						
 									$data['profileid']=$profileid; 
@@ -4799,7 +5899,7 @@ class Api
 									$data['time']= time();
 									$data['page']= $description; 
 									$data['life_is_fun']= sha1($actionid.'pass1reset!');
-									$data['file'] = 'http://photo.qmcdn.net/'.$actual_image_name;
+									$data['file'] = $photo_cdn.'/'.$actual_image_name;
 									echo json_encode($data); 
 								}
 								else
@@ -4845,7 +5945,11 @@ class Api
 		$name = $_FILES['photo_box']['name'];
 		$size = $_FILES['photo_box']['size'];	
 		$myprofileid = $_SESSION['userid'];
-		$help = new Help();
+		global $help;
+		global $photo_cdn;
+		global $video_cdn;
+		global $doc_cdn;
+		global $profile1_cdn;
 		if(strlen($name))
 		{
 			$ext = pathinfo($name,PATHINFO_EXTENSION);
@@ -4854,7 +5958,7 @@ class Api
 				if($size<(10240*1024)) // Image size max 10 MB
 				{
 					$tmp = $_FILES['photo_box']['tmp_name'];
-					$database = new Database();
+					global $database;
 					$file_to_be_uploaded = $_FILES['photo_box']['tmp_name'];
 					$ext = pathinfo($_FILES['photo_box']['name'],PATHINFO_EXTENSION);
 					$filename = $help->photo_name($ext);
@@ -4870,18 +5974,18 @@ class Api
 							$actionid = $database->get_actionid($myprofileid,50,0,$visible);
 							if($actionid)
 							{
-								$result = $database->image_insert($myprofileid,$actionid,$actual_image_name,'0','http://profile.qmcdn.net/');
-								$result = $database->profile_image_insert($actionid,1,$actual_image_name,'http://profile-1.qmcdn.net/');
-								$_SESSION['pimage'] = 'http://profile-1.qmcdn.net/'.$actual_image_name;
+								$result = $database->image_insert($myprofileid,$actionid,$actual_image_name,'0',$profile1_cdn.'/');
+								$result = $database->profile_image_insert($actionid,1,$actual_image_name,$profile1_cdn.'/');
+								$_SESSION['pimage'] = $profile1_cdn.'/'.$actual_image_name;
 								$_SESSION['profile_imageid'] = $actionid;
-								$memcache = new Memcached();
-								$help->pimage_memcache_update($myprofileid,'http://profile-1.qmcdn.net/'.$actual_image_name, $memcache);
+								global $memcached;
+								$help->pimage_memcache_update($myprofileid,$profile1_cdn.'/'.$actual_image_name, $memcached);
 								$data = array();
 								$data['ack']= 1;						
 								$data['profileid']=$myprofileid; 
 								$data['actionid']=$actionid;
-								$data['photo'] = 'http://profile.qmcdn.net/'.$filename;
-								$data['thumb'] = 'http://profile-1.qmcdn.net/'.$filename;
+								$data['photo'] = $profile1_cdn.'/'.$filename;
+								$data['thumb'] = $profile1_cdn.'/'.$filename;
 								echo json_encode($data); 
 							}
 							else
@@ -4931,7 +6035,10 @@ class Api
 		$description = $_POST['photo_description'];		
 		$profileid = $_POST['photo_hidden_profileid'];
 		$myprofileid = $_SESSION['userid'];
-		$help = new Help();
+		global $help;
+		global $photo_cdn;
+		global $video_cdn;
+		global $doc_cdn;
 		if(strlen($name))
 		{
 			$ext = strtolower(pathinfo($name,PATHINFO_EXTENSION));
@@ -4939,21 +6046,21 @@ class Api
 			{
 				$actiontype = 406;
 				$container = 'photo';
-				$cdn = 'http://photo.qmcdn.net/';
+				$cdn = $photo_cdn.'/';
 				$limit = 10240*1024;
 			}
 			else if(in_array(strtolower($ext),$video_formats))
 			{
 				$actiontype = 425;
 				$container = 'video';
-				$cdn = 'http://video.qmcdn.net/';
+				$cdn = $video_cdn.'/';
 				$limit = 100960*1024;
 			}
 			else if(in_array(strtolower($ext),$doc_formats))
 			{
 				$actiontype = 426;
 				$container = 'doc';
-				$cdn = 'http://doc.qmcdn.net/';
+				$cdn = $doc_cdn.'/';
 				$limit = 10240*1024;
 			}
 			else
@@ -4965,7 +6072,7 @@ class Api
 				if($size < $limit)
 				{		
 					$tmp = $_FILES['photo_box']['tmp_name'];
-					$database = new Database();
+					global $database;
 					if($database->event_exists($profileid) == $profileid)
 					{
 						$row = $database->is_guest($profileid, $myprofileid);
@@ -4990,7 +6097,7 @@ class Api
 									$visible = $_SESSION['VISIBLE'];
 								else
 									$visible = 0;
-								$database = new Database();	
+								global $database;	
 								$actionid = $database->get_actionid($profileid,$actiontype,0,$visible);
 								if($actionid)
 								{
@@ -5020,12 +6127,12 @@ class Api
 									$data['caption']=$name;
 									echo json_encode($data); 
 									$result = $database->guest_select($profileid);
-									$email = new Email();
+									global $email;
 									$param = array();
 									$param['type'] = 'event_post';
-									$param['profileid'] = $profileid; 
+									$param['eventid'] = $profileid; 
 									$param['page'] = $description;
-									$param['myprofileid'] = $myprofileid;
+									$param['actionby'] = $myprofileid;
 									$param['actionid'] = $actionid;
 									while ($res = $result->fetch_array())
 									{
@@ -5090,7 +6197,10 @@ class Api
 		$description = $_POST['photo_description'];		
 		$profileid = $_POST['photo_hidden_profileid'];
 		$myprofileid = $_SESSION['userid'];
-		$help = new Help();
+		global $help;
+		global $photo_cdn;
+		global $video_cdn;
+		global $doc_cdn;
 		if(strlen($name))
 		{
 			$ext = pathinfo($name,PATHINFO_EXTENSION);
@@ -5098,21 +6208,21 @@ class Api
 			{
 				$actiontype = 2906;
 				$container = 'photo';
-				$cdn = 'http://photo.qmcdn.net/';
+				$cdn = $photo_cdn.'/';
 				$limit = 10240*1024;
 			}
 			else if(in_array(strtolower($ext),$video_formats))
 			{
 				$actiontype = 2925;
 				$container = 'video';
-				$cdn = 'http://video.qmcdn.net/';
+				$cdn = $video_cdn.'/';
 				$limit = 100960*1024;
 			}
 			else if(in_array(strtolower($ext),$doc_formats))
 			{
 				$actiontype = 2926;
 				$container = 'doc';
-				$cdn = 'http://doc.qmcdn.net/';
+				$cdn = $doc_cdn.'/';
 				$limit = 10240*1024;
 			}
 			else
@@ -5124,7 +6234,7 @@ class Api
 				if($size < $limit)
 				{		
 					$tmp = $_FILES['photo_box']['tmp_name'];
-					$database = new Database();
+					global $database;
 					$row = $database->page_exists($profileid);
 					if($row['pageid'] == $profileid)
 					{
@@ -5147,7 +6257,7 @@ class Api
 							if($actual_image_name = $help->cdn_upload($file_to_be_uploaded,$container,$filename))
 							{
 									$visible = 0;
-								$database = new Database();	
+								global $database;	
 								$actionid = $database->get_actionid($profileid,$actiontype,'0',$visible);
 								if($actionid)
 								{
@@ -5179,12 +6289,12 @@ class Api
 									$data['caption']=$name;
 									echo json_encode($data); 
 									$result = $database->member_select($profileid);		
-									$email = new Email();
+									global $email;
 									$param = array();
 									$param['type'] = 'page_post';
 									$param['profileid'] = $profileid; 
 									$param['page'] = $description;
-									$param['myprofileid'] = $myprofileid;
+									$param['actionby'] = $myprofileid;
 									$param['actionid'] = $actionid;
 									 while ($res = $result->fetch_array())
 									 {
@@ -5242,6 +6352,7 @@ class Api
 	}
 	function group_photo_upload()
 	{
+	
 		$valid_formats = array("jpg","png","gif","bmp","jpeg");
 		$doc_formats = array("pdf","pptx","ppt","docx","doc","txt","xls","xlsx","ods","one","pps","ps","rtf","msg","pptm");
 		$video_formats = array("mp4","flv","3gp","mov","mkv","avi","wmv");
@@ -5250,7 +6361,10 @@ class Api
 		$description = $_POST['photo_description'];		
 		$profileid = $_POST['photo_hidden_profileid'];
 		$myprofileid = $_SESSION['userid'];
-		$help = new Help();
+		global $help;
+		global $photo_cdn;
+		global $video_cdn;
+		global $doc_cdn;
 		if(strlen($name))
 		{
 			$ext = pathinfo($name,PATHINFO_EXTENSION);
@@ -5258,21 +6372,21 @@ class Api
 			{
 				$actiontype = 306;
 				$container = 'photo';
-				$cdn = 'http://photo.qmcdn.net/';
+				$cdn = $photo_cdn.'/';
 				$limit = 10240*1024;
 			}
 			else if(in_array(strtolower($ext),$video_formats))
 			{
 				$actiontype = 325;
 				$container = 'video';
-				$cdn = 'http://video.qmcdn.net/';
+				$cdn = $video_cdn.'/';
 				$limit = 100960*1024;
 			}
 			else if(in_array(strtolower($ext),$doc_formats))
 			{
 				$actiontype = 326;
 				$container = 'doc';
-				$cdn = 'http://doc.qmcdn.net/';
+				$cdn = $doc_cdn.'/';
 				$limit = 10240*1024;
 			}
 			else
@@ -5284,7 +6398,7 @@ class Api
 				if($size < $limit)
 				{		
 					$tmp = $_FILES['photo_box']['tmp_name'];
-					$database = new Database();
+					global $database;
 					if($database->group_exists($profileid) == $profileid)
 					{
 						$row = $database->is_member($profileid, $myprofileid);
@@ -5309,7 +6423,7 @@ class Api
 									$visible = $_SESSION['VISIBLE'];
 								else
 									$visible = 0;
-								$database = new Database();	
+								global $database;	
 								$actionid = $database->get_actionid($profileid,$actiontype,'0',$visible);
 								if($actionid)
 								{
@@ -5339,7 +6453,7 @@ class Api
 									$data['caption']=$name;
 									echo json_encode($data); 
 									$result = $database->member_select($profileid);		
-									$email = new Email();
+									global $email;
 									$param = array();
 									$param['type'] = 'group_post';
 									$param['groupid'] = $profileid; 
@@ -5412,7 +6526,10 @@ class Api
 		$profileid = $_POST['photo_hidden_profileid'];
 		$pageid = $_POST['pageid'];	
 		$myprofileid = $_SESSION['userid'];
-		$help = new Help();
+		global $help;
+		global $photo_cdn;
+		global $video_cdn;
+		global $doc_cdn;
 		if(strlen($name))
 		{
 			$ext = pathinfo($name,PATHINFO_EXTENSION);
@@ -5420,7 +6537,7 @@ class Api
 			{
 				$actiontype = 327;
 				$container = 'doc';
-				$cdn = 'http://doc.qmcdn.net/';
+				$cdn = $doc_cdn.'/';
 				$limit = 10240*1024;
 			}
 			else
@@ -5432,7 +6549,7 @@ class Api
 				if($size < $limit)
 				{		
 					$tmp = $_FILES['photo_box']['tmp_name'];
-					$database = new Database();
+					global $database;
 					if($database->group_exists($profileid) == $profileid)
 					{
 						$row = $database->is_member($profileid, $myprofileid);
@@ -5447,7 +6564,7 @@ class Api
 									$visible = $_SESSION['VISIBLE'];
 								else
 									$visible = 0;
-								$database = new Database();	
+								global $database;	
 								$actionid = $database->get_actionid($profileid,$actiontype,$pageid,$visible);
 								if($actionid)
 								{
@@ -5466,7 +6583,7 @@ class Api
 									$data['caption']=$name;
 									echo json_encode($data); 
 									$result = $database->member_select($profileid);		
-									$email = new Email();
+									global $email;
 									$param = array();									
 									$param['type'] = 'group_post';
 									$param['groupid'] = $profileid; 
@@ -5531,6 +6648,9 @@ class Api
 	
 	function photo_upload()
 	{
+		global $photo_cdn;
+		global $video_cdn;
+		global $doc_cdn;
 		$valid_formats = array("jpg","png","gif","bmp","jpeg");
 		$doc_formats = array("pdf","pptx","ppt","docx","doc","txt","xls","xlsx","ods","one","pps","ps","rtf","msg","pptm");
 		$video_formats = array("mp4","flv","3gp","mov","mkv","avi","wmv");
@@ -5539,7 +6659,7 @@ class Api
 		$description = $_POST['photo_description'];		
 		$profileid = $_POST['photo_hidden_profileid'];
 		$myprofileid = $_SESSION['userid'];
-		$help = new Help();
+		global $help;
 		if(strlen($name))
 		{
 			$ext = pathinfo($name,PATHINFO_EXTENSION);
@@ -5547,21 +6667,21 @@ class Api
 			{
 				$actiontype = 6;
 				$container = 'photo';
-				$cdn = 'http://photo.qmcdn.net/';
+				$cdn = $photo_cdn.'/';
 				$limit = 10240*1024;
 			}
 			else if(in_array(strtolower($ext),$video_formats))
 			{
 				$actiontype = 2500;
 				$container = 'video';
-				$cdn = 'http://video.qmcdn.net/';
+				$cdn = $video_cdn.'/';
 				$limit = 100960*1024;
 			}
 			else if(in_array(strtolower($ext),$doc_formats))
 			{
 				$actiontype = 2600;
 				$container = 'doc';
-				$cdn = 'http://doc.qmcdn.net/';
+				$cdn = $doc_cdn.'/';
 				$limit = 10240*1024;
 			}
 			else
@@ -5573,7 +6693,7 @@ class Api
 				if($size < $limit)
 				{		
 					$tmp = $_FILES['photo_box']['tmp_name'];
-					$database = new Database();
+					global $database;
 					$check = $database->is_user($profileid);
 					if($check['USERID'] == $profileid)
 					{
@@ -5598,7 +6718,7 @@ class Api
 									$visible = $_SESSION['VISIBLE'];
 								else
 									$visible = 0;
-								$database = new Database();	
+								global $database;	
 								$actionid = $database->get_actionid($profileid,$actiontype,'0',$visible);
 								if($actionid)
 								{
@@ -5637,7 +6757,7 @@ class Api
 										$remail = $database->setting_email_select($profileid);
 										if($remail['profile_post'])
 										{
-											$email = new Email();
+											global $email;
 											$param = array();
 											$param['type'] = 'profile_post';
 											$param['profileid'] = $profileid; 
@@ -5685,7 +6805,7 @@ class Api
 	
 	function poll()
 	{
-		$help = new Help();
+		global $help;
 		global $action,$name,$pimage;
 		if(isset($_GET['last_poll_time']))
 		{	
@@ -5693,20 +6813,20 @@ class Api
 			{
 				$last_poll_time = $_GET['last_poll_time'];
 				$myprofileid = $_SESSION['userid'];
-				$database = new Database();
-				$memcache = new Memcached();
-				$encode = new Encode();
-				$json = new Json();
-				$feed = new Feed(); 	
+				global $database;
+				global $memcached;
+				global $encode;
+				global $json;
+				global $feed; 	
 				$res = $database->news_poll($myprofileid,$last_poll_time);
 				$k = 0;
 				while($NROW =$res->fetch_array())
 				{ 
-					$feed->actiontype_encode($NROW,'0',$json,$help,$encode,$database,$memcache);
+					$feed->actiontype_encode($NROW,'0',$json,$help,$encode,$database,$memcached);
 				}
 				$data['action'] = $action;
 				$data['myprofileid'] = $_SESSION['USERID']; 
-			    $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+			    $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached, $database);
 				$data['name'] = 	$name; 
 				$data['pimage'] = $pimage;
 				$data['tag'] = $_SESSION['tag_json'];
@@ -5726,14 +6846,14 @@ class Api
 		
 	function praise()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['letter_title']) && isset($_GET['letter_content']) && isset($_GET['profileid']))
 		{ 
 		    if(!empty($_GET['letter_title']) && !empty($_GET['letter_content']) && $_GET['profileid'] != '')
 		    {
 			    $myprofileid = $_SESSION['userid'];
 				$letter_title = $_GET['letter_title'];
-				$database = new Database();
+				global $database;
 				$letter_content = $_GET['letter_content'];
 				$profileid = $_GET['profileid'];
 				if(strlen($letter_title) <= 6072 && strlen($letter_content) <= 6072)
@@ -5755,7 +6875,7 @@ class Api
 							$remail = $database->setting_email_select($profileid);
 							if($remail['praise'])
 							{
-								$email = new Email();
+								global $email;
 								$param = array();
 								$param['type'] = 'praise';
 								$param['profileid'] = $profileid; 
@@ -5793,9 +6913,344 @@ class Api
 	}
 	
 		
+		
+		function group_fetch()
+	{
+	    global $help;
+	
+			
+				$myprofileid = $_SESSION['userid'];
+				global $database;
+				global $help;
+				global $json;
+				global $memcached;
+				$group = array();
+				if($result = $database->group_fetch())
+				{
+					$k=0;
+					while($row=$result->fetch_array())
+					{
+						$group[$k]['groupid'] = $row['groupid'];
+						$group[$k]['description'] = $row['description'];
+						$group[$k]['show'] = $row['show'];	
+						$group[$k]['name'] = $row['name']; 	
+						$group[$k]['pimage'] = 'http://findicons.com/files/icons/1254/flurry_system/128/group.png'; 	
+						$k++;
+					}
+					$data['action'] = $group;
+					echo json_encode($data);
+				}
+				else
+				{
+					$help->error_description(15);					
+				}
+			
+			
+	}
+	
+	
+	function group_add_fetch()
+	{
+	    global $help;
+	
+			
+				$myprofileid = $_SESSION['userid'];
+				global $database;
+				global $help;
+				global $json;
+				global $memcached;
+				$guess = array();
+				$name = array();
+				$pimage = array();
+				if($result = $database->added_group_fetch())
+				{
+					$k=0;
+					while($row=$result->fetch_array())
+					{
+						$group[$k]['groupid'] = $row['groupid'];
+						$group[$k]['description'] = $row['description'];
+						$group[$k]['name'] = $row['name']; 	
+						$group[$k]['pimage'] = 'http://findicons.com/files/icons/1254/flurry_system/128/group.png'; 	
+						$k++;
+						
+					}
+					
+					$data['action'] = $group;
+					echo json_encode($data);
+				}
+				else
+				{
+					$help->error_description(15);					
+				}
+			
+			
+	}
+	
+	
+	
+	function group_suggest_add()
+	{
+	    global $help;
+	if(isset($_GET['groupid']))
+	{	
+		if(!empty($_GET['groupid']))
+		{
+		
+				$groupid = $_GET['groupid'];
+				$myprofileid = $_SESSION['userid'];
+				global $database;
+				global $help;
+				global $json;
+				global $memcached;
+				$guess = array();
+				$name = array();
+				$pimage = array();
+				if($result = $database->group_add($groupid))
+				{
+					
+					
+					$data['ack'] = '1';
+					echo json_encode($data);
+				}
+				else
+				{
+					$help->error_description(15);					
+				}
+			}
+			else
+			{
+				$help->error_description(18);					
+			}
+		}
+		else
+		{
+			$help->error_description(9);				
+		}
+	}
+
+function group_remove()
+	{
+	    global $help;
+	if(isset($_GET['groupid']))
+	{	
+		if(!empty($_GET['groupid']))
+		{
+		
+				$groupid = $_GET['groupid'];
+				$myprofileid = $_SESSION['userid'];
+				global $database;
+				global $help;
+				global $json;
+				global $memcached;
+				$guess = array();
+				$name = array();
+				$pimage = array();
+				if($result = $database->group_remove($groupid))
+				{
+					
+					
+					$data['ack'] = '1';
+					echo json_encode($data);
+				}
+				else
+				{
+					$help->error_description(15);					
+				}
+			}
+			else
+			{
+				$help->error_description(18);					
+			}
+		}
+		else
+		{
+			$help->error_description(9);				
+		}
+	}
+		
+		
+		function bio_percentage()
+{
+	
+	global $help,$database;
+	
+	$myprofileid  = $_SESSION['userid'];
+	
+			 $x = 0;$total = 19;
+	
+		if($r =$database->info_fetch($myprofileid,'234'))
+		{	
+			
+			$x++;
+		
+		}
+		
+		if($r = $database->info_fetch($myprofileid,'202'))
+		{
+			$x++;
+		}
+	
+		if($r = $database->info_fetch($myprofileid,'239'))
+		{
+			$x++;
+		}
+	
+		if($r = $database->info_fetch($myprofileid,'235'))
+		{
+		$x++;
+		}
+		
+		if($r = $database->info_fetch($myprofileid,'230'))
+		{
+		$x++;
+		}
+			if($r = $database->info_fetch($myprofileid,'236'))
+		{
+		$x++;
+		}
+		
+		if($r = $database->info_fetch($myprofileid,'231'))
+		{
+		$x++;
+		}
+		
+		if($r = $database->info_fetch($myprofileid,'232'))
+		{
+		$x++;
+		}
+		
+		if($r = $database->info_fetch($myprofileid,'233'))
+		{
+		$x++;
+		}
+		
+		
+		if($r = $database->info_fetch($myprofileid,'205'))
+		{		$x++;
+		}
+		
+		if($r = $database->info_fetch($myprofileid,'204'))
+		{
+		$x++;
+		}
+		
+
+		if($r = $database->info_fetch($myprofileid,'203'))
+		{
+		$x++;
+		}
+		
+		if($r = $database->info_fetch($myprofileid,'201'))
+		{
+		$x++;
+		}
+		
+		
+		if($r = $database->info_fetch($myprofileid,'211'))
+		{
+		$x++;
+		}
+		
+		if($r = $database->info_fetch($myprofileid,'206'))
+		{
+		$x++;
+		}
+	
+		if($r = $database->info_fetch($myprofileid,'207'))
+		{
+		$x++;
+		}
+		
+		if($r = $database->info_fetch($myprofileid,'208'))
+		{
+		$x++;
+		}
+		
+		if($r = $database->info_fetch($myprofileid,'209'))
+		{
+		$x++;
+		}
+		
+		
+	
+	
+			$bio_perc = ($x/$total)*100;
+			$perc = floor($bio_perc);
+			$data['bio_perc'] = $perc;
+			$data['profileid'] = $myprofileid;
+			echo json_encode($data);
+}
+
+		
+		function praise_fetch()
+	{
+		global $help;
+			if(isset($_GET['profileid']))
+			{
+				if(!empty($_GET['profileid']))
+				{
+				
+				$profileid = $_GET['profileid']; 
+				
+				$data = array();
+			
+				
+					global $database, $memcached;
+					$actiontype = 2400;
+					if($result = $database->bio_select($profileid))
+					{
+						$name = $result['NAME'];
+					}
+					if($r = $database->fetch_actionid($profileid,$actiontype))
+					{
+						$k = 0;
+						while($row = $r->fetch_array())
+						{	
+							$actionid = $row['ACTIONID'];
+							$praise[$k]['actionby_profileid'] = $row['ACTIONBY'];
+							
+							if($result = $database->bio_select($row['ACTIONBY']))
+							{	$praise[$k]['actionon'] = $name;
+								$praise[$k]['actionby'] = $result['NAME'];
+								$pimage[$praise[$k]['actionby_profileid']] = $help->pimage_fetch($praise[$k]['actionby_profileid'], $memcached, $database);
+							}
+							if($m = $database->praise_select($actionid))
+							{
+							
+							$praise[$k]['title'] = $m['PAGE'];
+							
+							$praise[$k]['comment'] = $m['COMMENT'];
+							
+							$k++;
+							}
+						}
+						
+						$data['action']=$praise;
+						$data['pimage']=$pimage;
+						echo json_encode($data);
+						
+					}
+					else
+					{
+						$help->error_description(15);					
+					}
+					}
+					else
+					{
+						$help->error_description(18);					
+					}
+					}
+					else
+					{
+						$help->error_description(9);					
+					}
+				
+	}
+	
+
 	function direct_letter()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['letter_title']) && isset($_GET['letter_content']) && isset($_GET['letter_open']))
 		{ 
 		    if(!empty($_GET['letter_title']) && !empty($_GET['letter_content']) && $_GET['letter_open'] != '')
@@ -5803,7 +7258,7 @@ class Api
 				$md_profileid = 1000000122;
 			    $myprofileid = $_SESSION['userid'];
 				$letter_title = $_GET['letter_title'];
-				$database = new Database();
+				global $database;
 				$letter_content = $_GET['letter_content'];
 				$letter_open = $_GET['letter_open'];
 				if(strlen($letter_title) <= 6072 && strlen($letter_content) <= 6072)
@@ -5829,12 +7284,12 @@ class Api
 							$remail = $database->setting_email_select($profileid);
 							if($remail['direct_letter'])
 							{
-								$email = new Email();
+								global $email;
 								$param = array();
 								$param['type'] = 'direct_letter';
 								$param['profileid'] = $profileid; 
 								$param['page'] = $letter_title;
-								$param['myprofileid'] = $myprofileid;
+								$param['actionby'] = $myprofileid;
 								$param['actionid'] = $actionid;
 								$email->email_sample($param);	
 							}		
@@ -5869,7 +7324,7 @@ class Api
 	
 	function answer()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['pageid']) && isset($_GET['optionid']))
 		{
 		    if(!empty($_GET['pageid']) && !empty($_GET['optionid']))
@@ -5877,13 +7332,13 @@ class Api
 				$myprofileid=$_SESSION['userid'];
 				$pageid=$_GET['pageid'];
 				$optionid=$_GET['optionid'];
-					$database = new Database();
+					global $database;
 					$result = $database->actionid_select($pageid);
 					if($result->num_rows)
 					{
 						$row = $result->fetch_array();
 						$profileid = $row['PROFILEID'];
-						$help = new Help();
+						global $help;
 						if($help->permission_check($myprofileid, $profileid, $row['VISIBLE']))
 						{		
 							$ctype = 2801;
@@ -5897,19 +7352,19 @@ class Api
 									{
 										$data = array();
 										global $action,$name,$pimage;
-										$feed = new Feed();
-										$database = new Database();
-										$memcache = new Memcached();
-										$json = new Json();
-										$encode = new Encode();
+										global $feed;
+										global $database;
+										global $memcached;
+										global $json;
+										global $encode;
 										$k = 0;
 										$myprofileid = $_SESSION['userid'];
 										$NROW = $database->action_select($actionid);
-										$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+										$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 										//echo json_encode($data);
 										$data['action'] = $help->feed_privacy_filter($action, $myprofileid, $database);
 										$data['myprofileid'] = $_SESSION['USERID']; 
-										$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+										$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached, $database);
 										$data['name'] = $name; 
 										$data['pimage'] = $pimage;
 										$data['tag'] = $_SESSION['tag_json'];
@@ -5922,12 +7377,12 @@ class Api
 										$remail = $database->setting_email_select($profileid);
 										if($remail['answer'])
 										{
-											$email = new Email();
+											global $email;
 											$param = array();
 											$param['type'] = 'answer';
 											$param['profileid'] = $profileid; 
 											$param['page'] = $optionid;
-											$param['myprofileid'] = $myprofileid;
+											$param['actionby'] = $myprofileid;
 											$param['actionid'] = $actionid;
 											$email->email_sample($param);	
 										}
@@ -5952,18 +7407,18 @@ class Api
 									{
 										$data = array();
 										global $action,$name,$pimage;
-										$feed = new Feed();
-										$database = new Database();
-										$memcache = new Memcached();
-										$json = new Json();
-										$encode = new Encode();
+										global $feed;
+										global $database;
+										global $memcached;
+										global $json;
+										global $encode;
 										$k = 0;
 										$myprofileid = $_SESSION['userid'];
 										$NROW = $database->max_action_select($questionid);
-										$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+										$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 										$data['action'] = $help->feed_privacy_filter($action, $myprofileid, $database);
 										$data['myprofileid'] = $_SESSION['USERID']; 
-										$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+										$pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached, $database);
 										$data['name'] = $name; 
 										$data['pimage'] = $pimage;
 										$data['tag'] = $_SESSION['tag_json'];
@@ -6007,14 +7462,14 @@ class Api
 	
 	function group_post_question()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['question']) && isset($_GET['profileid']))
 		{ 
 		    if(!empty($_GET['question']) && !empty($_GET['profileid']))
 		    {
 			    $myprofileid = $_SESSION['userid'];
 				$profileid = $_GET['profileid'];
-				$database = new Database();
+				global $database;
 				$question = $_GET['question'];
 				$option = array();
 				if(isset($_GET['option']) && !empty($_GET['option']))
@@ -6044,12 +7499,12 @@ class Api
 								if($result)
 								{
 									$result = $database->member_select($profileid);
-									$email = new Email();
+									global $email;
 									$param = array();
 									$param['type'] = 'event_post';
 									$param['profileid'] = $profileid; 
 									$param['page'] = $page;
-									$param['myprofileid'] = $myprofileid;
+									$param['actionby'] = $myprofileid;
 									$param['actionid'] = $actionid;
 									while ($res = $result->fetch_array())
 									{
@@ -6121,13 +7576,13 @@ class Api
 	
 	function option_add()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['pageid']) && isset($_GET['option']))
 		{ 
 		    if(!empty($_GET['pageid']) && !empty($_GET['option']))
 		    {
 			    $myprofileid = $_SESSION['userid'];
-				$database = new Database();
+				global $database;
 				$pageid = $_GET['pageid'];
 				$option = $_GET['option'];
 				$result = $database->actionid_select($pageid);
@@ -6136,7 +7591,7 @@ class Api
 					$row = $result->fetch_array();
 					$profileid = $row['PROFILEID'];
 					$ctype = 2801;
-					$help = new Help();
+					global $help;
 					if($help->permission_check($myprofileid, $profileid, $row['VISIBLE']))
 					{
 						if($result = $database->option_insert($pageid,$option))
@@ -6194,14 +7649,14 @@ class Api
 	
 	function post_question()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['question']) && isset($_GET['profileid']))
 		{ 
 		    if(!empty($_GET['question']) && !empty($_GET['profileid']))
 		    {
 			    $myprofileid = $_SESSION['userid'];
 				$profileid = $_GET['profileid'];
-				$database = new Database();
+				global $database;
 				$question = $_GET['question'];
 				$option = array();
 				if(isset($_GET['option']) && !empty($_GET['option']))
@@ -6234,7 +7689,7 @@ class Api
 										$remail = $database->setting_email_select($profileid);
 										if($remail['profile_post'])
 										{
-											$email = new Email();
+											global $email;
 											$param = array();
 											$param['type'] = 'profile_post';
 											$param['profileid'] = $profileid; 
@@ -6297,14 +7752,14 @@ class Api
 	
 	function post_status()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['page']) && isset($_GET['profileid']))
 		{ 
 		    if(!empty($_GET['page']) && !empty($_GET['profileid']))
 		    {
 			    $myprofileid = $_SESSION['userid'];
 				$profileid = $_GET['profileid'];
-				$database = new Database();
+				global $database;
 				$page = $_GET['page'];
 				$check = $database->is_user($profileid);
 				if($check['USERID'] == $profileid)
@@ -6325,7 +7780,7 @@ class Api
 										$remail = $database->setting_email_select($profileid);
 										if($remail['profile_post'])
 										{
-											$email = new Email();
+											global $email;
 											$param = array();
 											$param['type'] = 'profile_post';
 											$param['profileid'] = $profileid; 
@@ -6375,14 +7830,14 @@ class Api
 	}
 	function page_status()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['page']) && isset($_GET['profileid']))
 		{ 
 		    if(!empty($_GET['page']) && !empty($_GET['profileid']))
 		    {
 			    $myprofileid = $_SESSION['userid'];
 				$profileid = $_GET['profileid'];
-				$database = new Database();
+				global $database;
 				$page = $_GET['page'];
 				$row= $database->page_exists($profileid);
 				$profileid = $row['pageid'];
@@ -6402,13 +7857,13 @@ class Api
 								if($result)
 								{
 									$result = $database->follower_select($profileid);
-									$email = new Email();
+									global $email;
 									$param = array();
 									$param['type'] = 'page_post';
 									$param['page_name'] =$row['name'];
 									$param['page_pageid'] =$row['pageid'];
 									$param['page'] = $page;
-									$param['myprofileid'] = $myprofileid;
+									$param['actionby'] = $myprofileid;
 									$param['actionid'] = $actionid;
 									while($res = $result->fetch_array())
 									{
@@ -6469,14 +7924,14 @@ class Api
 	}
 	function group_status()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['page']) && isset($_GET['profileid']))
 		{ 
 		    if(!empty($_GET['page']) && !empty($_GET['profileid']))
 		    {
 			    $myprofileid = $_SESSION['userid'];
 				$profileid = $_GET['profileid'];
-				$database = new Database();
+				global $database;
 				$page = $_GET['page'];
 				if($profileid = $database->group_exists($profileid))
 				{
@@ -6494,7 +7949,7 @@ class Api
 								if($result)
 								{
 									$result = $database->member_select($profileid);
-									$email = new Email();
+									global $email;
 									$param = array();
 									$param['type'] = 'group_post';
 									$param['groupid'] = $profileid; 
@@ -6560,14 +8015,14 @@ class Api
 	
 	function event_status()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['page']) && isset($_GET['profileid']))
 		{ 
 		    if(!empty($_GET['page']) && !empty($_GET['profileid']))
 		    {
 			    $myprofileid = $_SESSION['userid'];
 				$eventid = $_GET['profileid'];
-				$database = new Database();
+				global $database;
 				$page = $_GET['page'];
 				if($eventid = $database->event_exists($eventid))
 				{
@@ -6581,12 +8036,12 @@ class Api
 							if($result)
 							{
 								$result = $database->guest_select($eventid);
-								$email = new Email();
+								global $email;
 								$param = array();
 								$param['type'] = 'event_post';
 								$param['eventid'] = $eventid; 
 								$param['page'] = $page;
-								$param['myprofileid'] = $myprofileid;
+								$param['actionby'] = $myprofileid;
 								$param['actionid'] = $actionid;
 								while ($res = $result->fetch_array())
 								 {
@@ -6642,13 +8097,13 @@ class Api
 	
 	function event_post_link()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['profileid']) && isset($_GET['title']) && isset($_GET['link']) && isset($_GET['meta']) && isset($_GET['page']) && isset($_GET['file']))
 		{
 			if(!empty($_GET['profileid']) && !empty($_GET['link']) && !empty($_GET['page']))
 			{
 			 	$myprofileid = $_SESSION['userid'];
-				$database = new Database();
+				global $database;
 				$profileid = $_GET['profileid'];
 				if($database->event_exists($profileid) == $profileid)
 				{
@@ -6678,12 +8133,12 @@ class Api
 									$data['page'] = $page; 
 									echo json_encode($data);
 									$result = $database->guest_select($profileid);
-									$email = new Email();
+									global $email;
 									$param = array();
-									$param['type'] = 'group_post';
-									$param['eventid'] = $eventid; 
+									$param['type'] = 'event_post';
+									$param['eventid'] = $profileid; 
 									$param['page'] = $page;
-									$param['myprofileid'] = $myprofileid;
+									$param['actionby'] = $myprofileid;
 									$param['actionid'] = $actionid;
 									while ($res = $result->fetch_array())
 									{
@@ -6742,13 +8197,13 @@ class Api
 	
 	function group_post_link()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['profileid']) && isset($_GET['title']) && isset($_GET['link']) && isset($_GET['meta']) && isset($_GET['page']) && isset($_GET['file']))
 		{
 			if(!empty($_GET['profileid']) && !empty($_GET['link']) && !empty($_GET['page']))
 			{
 			 	$myprofileid = $_SESSION['userid'];
-				$database = new Database();
+				global $database;
 				$profileid = $_GET['profileid'];
 				if($database->group_exists($profileid) == $profileid)
 				{
@@ -6778,12 +8233,12 @@ class Api
 									$data['page'] = $page; 
 									echo json_encode($data);
 									$result = $database->member_select($profileid);
-									$email = new Email();
+									global $email;
 									$param = array();
 									$param['type'] = 'group_post';
-									$param['profileid'] = $profileid; 
+									$param['groupid'] = $profileid; 
 									$param['page'] = $page;
-									$param['myprofileid'] = $myprofileid;
+									$param['actionby'] = $myprofileid;
 									$param['actionid'] = $actionid;
 									 while ($res = $result->fetch_array())
 									 {
@@ -6842,13 +8297,13 @@ class Api
 	}
 	function page_post_link()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['profileid']) && isset($_GET['title']) && isset($_GET['link']) && isset($_GET['meta']) && isset($_GET['page']) && isset($_GET['file']))
 		{
 			if(!empty($_GET['profileid']) && !empty($_GET['link']) && !empty($_GET['page']))
 			{
 			 	$myprofileid = $_SESSION['userid'];
-				$database = new Database();
+				global $database;
 				$profileid = $_GET['profileid'];
 				$row = $database->page_exists($profileid);
 				if($row['pageid'] == $profileid)
@@ -6883,12 +8338,12 @@ class Api
 									$data['page'] = $page; 
 									echo json_encode($data);
 									$result = $database->follower_select($profileid);
-									$email = new Email();
+									global $email;
 									$param = array();
 									$param['type'] = 'page_post';
 									$param['profileid'] = $profileid; 
 									$param['page'] = $page;
-									$param['myprofileid'] = $myprofileid;
+									$param['actionby'] = $myprofileid;
 									$param['actionid'] = $actionid;
 									 while ($res = $result->fetch_array())
 									 {
@@ -6949,13 +8404,13 @@ class Api
 	
 	function post_link()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['profileid']) && isset($_GET['title']) && isset($_GET['link']) && isset($_GET['meta']) && isset($_GET['page']) && isset($_GET['file']))
 		{
 			 if(!empty($_GET['profileid']) && !empty($_GET['link']) && !empty($_GET['page']))
 			 {
 			 	$myprofileid = $_SESSION['userid'];
-				$database = new Database();
+				global $database;
 				$profileid = $_GET['profileid'];
 				$check = $database->is_user($profileid);
 				if($check['USERID'] == $profileid)
@@ -7019,7 +8474,7 @@ class Api
 	
 	function photo_friend_fetch()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['start']))
 		{	
 			if($_GET['start'] != '')
@@ -7030,7 +8485,7 @@ class Api
 				$photo = array();
 				if(is_numeric($start))
 				{
-					$database = new Database();
+					global $database;
 					if($r = $database->photo_friend_select($myprofileid, $start, 20))
 					{
 						$k = 0;
@@ -7041,12 +8496,12 @@ class Api
 							$photo[$k]['actionby'] = $row['ACTIONBY'];
 							$photo[$k]['actionid'] = $row['IMAGEID'];
 							$photo[$k]['life_is_fun'] = sha1($row['IMAGEID'].'pass1reset!');
-							$memcache = new Memcached();
-							$name[$photo[$k]['actionby']] = $help->name_fetch($photo[$k]['actionby'], $memcache, $database);
+							global $memcached;
+							$name[$photo[$k]['actionby']] = $help->name_fetch($photo[$k]['actionby'], $memcached, $database);
 							
 							if($photo[$k]['actionby'] != $photo[$k]['profileid'])
 							{ 
-								$name[$photo[$k]['actionby']] = $help->name_fetch($photo[$k]['actionby'], $memcache, $database);
+								$name[$photo[$k]['actionby']] = $help->name_fetch($photo[$k]['actionby'], $memcached, $database);
 							}
 							$k++;
 						}
@@ -7077,7 +8532,7 @@ class Api
 	
 	function photo_fetch()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['start']))
 		{	
 			if($_GET['start'] != '')
@@ -7088,7 +8543,7 @@ class Api
 				$photo = array();
 				if(is_numeric($start))
 				{
-					$database = new Database();
+					global $database;
 					if($r = $database->photo_json($profileid, $start, 20))
 					{
 						$k = 0;
@@ -7099,12 +8554,12 @@ class Api
 							$photo[$k]['actionby'] = $row['ACTIONBY'];
 							$photo[$k]['actionid'] = $row['IMAGEID'];
 							$photo[$k]['life_is_fun'] = sha1($row['IMAGEID'].'pass1reset!');
-							$memcache = new Memcached();
-							$name[$photo[$k]['actionby']] = $help->name_fetch($photo[$k]['actionby'], $memcache, $database);
+							global $memcached;
+							$name[$photo[$k]['actionby']] = $help->name_fetch($photo[$k]['actionby'], $memcached, $database);
 							
 							if($photo[$k]['actionby'] != $photo[$k]['profileid'])
 							{ 
-								$name[$photo[$k]['actionby']] = $help->name_fetch($photo[$k]['actionby'], $memcache, $database);
+								$name[$photo[$k]['actionby']] = $help->name_fetch($photo[$k]['actionby'], $memcached, $database);
 							}
 							$k++;
 						}
@@ -7132,16 +8587,135 @@ class Api
 			$help->error_description(9);
 		}
 	}
+	function video_fetch()
+	{
+		global $help;
+		if(isset($_GET['start']))
+		{	
+			if($_GET['start'] != '')
+			{
+			 	$profileid = $_GET['profileid']; 
+				$start = $_GET['start'];
+				$data = array();
+				$video = array();
+				if(is_numeric($start))
+				{
+					global $database;
+					if($r = $database->video_json($profileid, $start, 20))
+					{		
+						$k = 0;
+						while($row = $r->fetch_array())
+						{
+						 	$video[$k]['file'] = $row['cdn'].$row['filename'];
+							$video[$k]['profileid'] = $row['profileid'];
+							$video[$k]['actionby'] = $row['actionby'];
+							$video[$k]['actionid'] = $row['videoid'];
+							$video[$k]['caption'] = $row['PAGE'];
+							$video[$k]['thumbnail'] = $row['cdn'].$row['thumbnail'];
+							$video[$k]['life_is_fun'] = sha1($row['videoid'].'pass1reset!');
+							global $memcached;
+							$name[$video[$k]['actionby']] = $help->name_fetch($video[$k]['actionby'], $memcached, $database);
+							
+							
+								$name[$video[$k]['actionby']] = $help->name_fetch($video[$k]['actionby'], $memcached, $database);
+								$pimage[$video[$k]['actionby']] = $help->pimage_fetch($video[$k]['actionby'], $memcached, $database);
+					
+							$k++;
+						}
+						$data['name']= $name;
+						$data['pimage'] = $pimage;
+						$data['action']=$video;
+						echo json_encode($data);
+					}
+					else
+					{
+						$help->error_description(15);					
+					}
+				}
+				else
+				{
+					$help->error_description(20);						
+				}
+			}
+			else
+			{
+				$help->error_description(18);
+            } 			
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
+	function file_fetch()
+	{
+		global $help;
+		if(isset($_GET['start']))
+		{	
+			if($_GET['start'] != '')
+			{
+			 	$profileid = $_GET['profileid']; 
+				$start = $_GET['start'];
+				$data = array();
+				$file = array();
+				if(is_numeric($start))
+				{
+					global $database;
+					if($r = $database->file_json($profileid , $start , 20))
+					{		
+						$k = 0;
+						while($row = $r->fetch_array())
+						{
+						 	$file[$k]['file'] = $row['cdn'].$row['filename'];
+							$file[$k]['profileid'] = $row['profileid'];
+							$file[$k]['actionby'] = $row['actionby'];
+							$file[$k]['actionid'] = $row['docid'];
+							$file[$k]['caption'] = $row['caption'];
+							$file[$k]['life_is_fun'] = sha1($row['docid'].'pass1reset!');
+							global $memcached;
+							$name[$file[$k]['actionby']] = $help->name_fetch($file[$k]['actionby'], $memcached, $database);
+							
+							
+								$name[$file[$k]['actionby']] = $help->name_fetch($file[$k]['actionby'], $memcached, $database);
+								$pimage[$file[$k]['actionby']] = $help->pimage_fetch($file[$k]['actionby'], $memcached, $database);
+					
+							$k++;
+						}
+						$data['name']= $name;
+						$data['pimage'] = $pimage;
+						$data['action']=$file;
+						echo json_encode($data);
+					}
+					else
+					{
+						$help->error_description(15);					
+					}
+				}
+				else
+				{
+					$help->error_description(20);						
+				}
+			}
+			else
+			{
+				$help->error_description(18);
+            } 			
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
 	function message_delete()
 	{
-	    $help = new Help();
+	    global $help;
 		if(isset($_GET['del_actionid']))
 		{ 
 		    if(!empty($_GET['del_actionid']))
 		    {
 				$myprofileid=$_SESSION['userid'];
 				$actionid=$_GET['del_actionid'];
-				$database = new Database();
+				global $database;
 				if($database->action_ownership_check_inbox($actionid, $myprofileid))
 				{
 					$result = $database->message_delete($actionid,$myprofileid);
@@ -7173,14 +8747,14 @@ class Api
 	}
 	function post_delete()
 	{
-	    $help = new Help();
+	    global $help;
 		if(isset($_GET['del_actionid']))
 		{ 
 		    if(!empty($_GET['del_actionid']))
 		    {
 				$myprofileid=$_SESSION['userid'];
 				$actionid=$_GET['del_actionid'];
-				$database = new Database();
+				global $database;
 				$result = $database->actionid_select($actionid);
 				if($result->num_rows)
 				{
@@ -7223,16 +8797,16 @@ class Api
 	}
 	function page_feed()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['start']) && isset($_GET['pageid']))
 		{
 			if($_GET['start'] !='' && !empty($_GET['pageid']))
 			{
-				$feed = new Feed();
-				$database = new Database();
-				$memcache = new Memcached();
-				$json = new Json();
-				$encode = new Encode();
+				global $feed;
+				global $database;
+				global $memcached;
+				global $json;
+				global $encode;
 				global $action,$name,$pimage;
 				$start = $_GET['start'];
 				$pageid = $_GET['pageid'];
@@ -7240,12 +8814,12 @@ class Api
 				$k = 0;
 				while($NROW =$res->fetch_array())
 				{
-					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 					$k++;
 				}
 			   $data['action'] = $action;
 			   $data['myprofileid'] = $_SESSION['USERID']; 
-			   $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+			   $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached, $database);
 			   $data['name'] = 	$name; 
 			   $data['pimage'] = $pimage;
 			   $data['tag'] = $_SESSION['tag_json'];
@@ -7263,16 +8837,16 @@ class Api
 	}
 	function group_feed()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['start']) && isset($_GET['groupid']))
 		{
 			if($_GET['start'] !='' && !empty($_GET['groupid']))
 			{
-				$feed = new Feed();
-				$database = new Database();
-				$memcache = new Memcached();
-				$json = new Json();
-				$encode = new Encode();
+				global $feed;
+				global $database;
+				global $memcached;
+				global $json;
+				global $encode;
 				global $action,$name,$pimage;
 				$start = $_GET['start'];
 				$groupid = $_GET['groupid'];
@@ -7280,12 +8854,12 @@ class Api
 				$k = 0;
 				while($NROW =$res->fetch_array())
 				{
-					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 					$k++;
 				}
 			   $data['action'] = $action;
 			   $data['myprofileid'] = $_SESSION['USERID']; 
-			   $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+			   $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached, $database);
 			   $data['name'] = 	$name; 
 			   $data['pimage'] = $pimage;
 			   $data['tag'] = $_SESSION['tag_json'];
@@ -7304,16 +8878,16 @@ class Api
 	
 	function event_feed()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['start']) && isset($_GET['eventid']))
 		{
 			if($_GET['start'] !='' && !empty($_GET['eventid']))
 			{
-				$feed = new Feed();
-				$database = new Database();
-				$memcache = new Memcached();
-				$json = new Json();
-				$encode = new Encode();
+				global $feed;
+				global $database;
+				global $memcached;
+				global $json;
+				global $encode;
 				global $action,$name,$pimage;
 				$start = $_GET['start'];
 				$eventid = $_GET['eventid'];
@@ -7321,12 +8895,12 @@ class Api
 				$k = 0;
 				while($NROW =$res->fetch_array())
 				{
-					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 					$k++;
 				}
 			   $data['action'] = $action;
 			   $data['myprofileid'] = $_SESSION['USERID']; 
-			   $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+			   $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached, $database);
 			   $data['name'] = 	$name; 
 			   $data['pimage'] = $pimage;
 			   $data['tag'] = $_SESSION['tag_json'];
@@ -7345,16 +8919,16 @@ class Api
 	
 	function profile_feed()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['start']) && isset($_GET['profileid']))
 		{
 			if($_GET['start'] !='' && !empty($_GET['profileid']))
 			{
-				$feed = new Feed();
-				$database = new Database();
-				$memcache = new Memcached();
-				$json = new Json();
-				$encode = new Encode();
+				global $feed;
+				global $database;
+				global $memcached;
+				global $json;
+				global $encode;
 				global $action,$name,$pimage;
 				$start = $_GET['start'];
 				$profileid = $_GET['profileid'];
@@ -7363,12 +8937,12 @@ class Api
 				$k = 0;
 				while($NROW =$res->fetch_array())
 				{
-					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+					$feed->actiontype_encode($NROW,$k,$json,$help,$encode,$database,$memcached);
 					$k++;
 				}
 			   $data['action'] = $help->feed_privacy_filter($action, $myprofileid, $database);
 			   $data['myprofileid'] = $myprofileid; 
-			   $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcache, $database);
+			   $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached, $database);
 			   $data['name'] = 	$name; 
 			   $data['pimage'] = $pimage;
 			   $data['tag'] = $_SESSION['tag_json'];
@@ -7386,8 +8960,8 @@ class Api
 	}
 	function feature_setting_update()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		$memcached = new Memcached();
 		if(isset($_GET['field']))
 		{
@@ -7433,8 +9007,8 @@ class Api
 	}	
 	function notification_setting_update()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		if(isset($_GET['field']))
 		{
 			if(!empty($_GET['field']))
@@ -7473,8 +9047,8 @@ class Api
 
 	function email_setting_update()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		if(isset($_GET['field']))
 		{
 			if(!empty($_GET['field']))
@@ -7512,8 +9086,8 @@ class Api
 	
 	function profile_privacy_update()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		if(isset($_GET['field']) && isset($_GET['privacy']))
 		{
 			if(!empty($_GET['field']) && $_GET['privacy'] !='')
@@ -7545,14 +9119,14 @@ class Api
 	
 	function bio_item_remove()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['diaryid']))
 		{
 			if(!empty($_GET['diaryid']))
 			{
 				$diaryid = $_GET['diaryid'];
 				$myprofileid = $_SESSION['userid'];
-				$database = new Database();
+				global $database;
 				if($database->action_delete($diaryid))
 				{
 					$data['ack'] = 1;
@@ -7575,15 +9149,85 @@ class Api
 		}  
 	}
 	
+	function contact()
+	{
+		global $help;
+		if(isset($_GET['email']))
+		{
+			if(!empty($_GET['email'])) 
+			{
+				global $database;
+				$name = $_GET['name'];
+				$message = $_GET['message'];
+				$email = $_GET['email'];
+				$contact = $_GET['contact'];
+				if($actionid = $database->contact_insert($name, $email, $contact, $message))
+				{
+					$data['ack'] = 1;
+					$data['message'] = 'Message Dropped'; 
+					echo json_encode($data);
+				}
+				else
+				{
+					$help->error_description(15);
+				}
+			}
+			else
+			{
+				$help->error_description(18);				
+			}
+		}
+		else
+		{
+			$help->error_description(9);		
+		}
+	}
+	
+	
+	function feedback()
+	{
+		global $help;
+		if(isset($_GET['name']) && isset($_GET['description']))
+		{
+			if(!empty($_GET['name']) !='' && !empty($_GET['description'])) 
+			{
+				global $database;
+				$name = $_GET['name'];
+				$description = $_GET['description'];
+				$email = $_SESSION['EMAIL'];
+				$company = $_SESSION['database'];
+				if($actionid = $database->feedback_insert($email, $name, $description, $company))
+				{
+					$data['ack'] = 1;
+					$data['message'] = 'Feedback sent'; 
+					echo json_encode($data);
+				}
+				else
+				{
+					$help->error_description(15);
+				}
+			}
+			else
+			{
+				$help->error_description(18);				
+			}
+		}
+		else
+		{
+			$help->error_description(9);		
+		}
+	}
+	
+	
 	function bio_item_add()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['item']) && isset($_GET['name']))
 		{
 			if($_GET['item'] !='' && !empty($_GET['name'])) 
 			{
 				$item = $_GET['item'];
-				$database = new Database();
+				global $database;
 				$value = $_GET['name'];
 				if(!isset($_GET['diaryid']) || empty($_GET['diaryid']))
 				{
@@ -7636,7 +9280,7 @@ class Api
 	
 	function recently_talked_people()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['start']))
 		{	
 			if($_GET['start'] != '')
@@ -7645,9 +9289,10 @@ class Api
 				$start = $_GET['start'];
 				$inbox = array();
 				$friend = array();
-				$database = new Database();
-				$json = new Json(); 
-				$help = new Help(); 
+				global $database;
+				global $json; 
+				global $help; 
+				global $memcached;
 				$res = $database->message_order_inbox($myprofileid);
 				$k = 0;
 				while($NROW =$res->fetch_array())
@@ -7663,8 +9308,8 @@ class Api
 						$inbox[$k]['friend'] = $NROW['ACTIONBY'];					
 					}
 					$inbox[$k]['message'] = $NROW['MESSAGE'];
-					$name[$inbox[$k]['friend']] = $help->name_fetch($inbox[$k]['friend'], $memcache, $database);
-					$pimage[$inbox[$k]['friend']] = $help->pimage_fetch($inbox[$k]['friend'], $memcache, $database);
+					$name[$inbox[$k]['friend']] = $help->name_fetch($inbox[$k]['friend'], $memcached, $database);
+					$pimage[$inbox[$k]['friend']] = $help->pimage_fetch($inbox[$k]['friend'], $memcached, $database);
 					$k++;
 				}
 				$data['ack'] = 1;
@@ -7683,10 +9328,117 @@ class Api
 			$help->error_description(9);
 		}
 	}
+	function validate_user_mobile()
+	{
+		global $help;
+		if(isset($_POST['email']) && isset($_POST['identifier']) && isset($_POST['name']) && isset($_POST['password']) && isset($_POST['gender']) && isset($_POST['day']) && isset($_POST['month']) && isset($_POST['year']))
+		{
+			if(!empty($_POST['email']) && !empty($_POST['identifier']) && !empty($_POST['name']) && !empty($_POST['password']) && $_POST['gender'] != '' && !empty($_POST['day']) && !empty($_POST['month']) && !empty($_POST['year']))
+			{
+				$email = $_POST['email'];
+				$identifier = $_POST['identifier'];
+				$name = trim($_POST['name']);
+				$password = trim($_POST['password']);
+				$gender = trim($_POST['gender']);
+				$day = trim($_POST['day']);
+				$month = trim($_POST['month']);
+				$year = trim($_POST['year']);
+				if($name != '' && $password != '' && $gender != -1 && $day != -1 && $month != -1 && $year != -1)
+				{
+					if(preg_match("/^[[:space:]]*[a-zA-Z]+[[:space:]]*[a-zA-Z]*[[:space:]]*[a-zA-Z]*$/", $name))
+					{
+						if(strlen($password)>5) 
+						{ 
+							if($gender == 0 || $gender == 1)
+							{
+								if($day==31)
+								{
+									switch($month)
+									{
+										case 2:  $data['ack']=4; echo json_encode($data); exit;
+										case 1:
+										case 3:
+										case 5:
+										case 7:
+										case 8:
+										case 10:
+										case 12: $help->register_user_mobile($email,$identifier,$name,$password,$gender,$day,$month,$year); exit;
+										default: $help->error_description(28);
+									}
+								}
+								else if($day==30)  
+								{
+									switch($month)
+									{
+										case 2: $help->error_description(28);
+										default: $help->register_user_mobile($email,$identifier,$name,$password,$gender,$day,$month,$year); exit;
+									}
+										
+								}
+								else if($day==29)
+								{
+									switch($month)
+									{
+										case 2: 
+										if($year%400==0)
+										{
+											$help->register_user_mobile($email,$identifier,$name,$password,$gender,$day,$month,$year); exit;
+										}
+										else if($year%100 == 0)
+										{
+											$help->error_description(28);
+										}	
+										else if($year%4 == 0)
+										{
+											$help->register_user_moblile($email,$identifier,$name,$password,$gender,$day,$month,$year); exit;
+										}
+										else
+										{	
+											$help->register_user_mobile($email,$identifier,$name,$password,$gender,$day,$month,$year); exit;
+										}	
+										default: $help->register_user_mobile($email,$identifier,$name,$password,$gender,$day,$month,$year); exit;
+									}
+								}
+								else
+								{
+									$help->register_user_mobile($email,$identifier,$name,$password,$gender,$day,$month,$year);
+								}	
+							}
+							else
+							{
+								$help->error_description(18);
+							}
+						}
+						else
+						{
+							$help->error_description(26);
+						}
+					} 
+					else
+					{
+						$help->error_description(35);
+					}
+				}
+				else
+				{
+					$help->error_description(18);
+				}
+			}
+			else
+			{
+				$help->error_description(18);
+			}
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	
+	}
 	
 	function validate_user()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_POST['email']) && isset($_POST['identifier']) && isset($_POST['name']) && isset($_POST['password']) && isset($_POST['gender']) && isset($_POST['day']) && isset($_POST['month']) && isset($_POST['year']))
 		{
 			if(!empty($_POST['email']) && !empty($_POST['identifier']) && !empty($_POST['name']) && !empty($_POST['password']) && $_POST['gender'] != '' && !empty($_POST['day']) && !empty($_POST['month']) && !empty($_POST['year']))
@@ -7794,14 +9546,14 @@ class Api
 	
 	function response()
 	{
-		$help = new Help();
+		global $help;
 	    if(isset($_GET['pageid']))
 		{
 			if(!empty($_GET['pageid']))
 			{			
 				$myprofileid=$_SESSION['userid'];
 				$pageid=$_GET['pageid'];
-				$database = new Database();
+				global $database;
 				$result = $database->actionid_select($pageid);
 				if($result->num_rows)
 				{
@@ -7815,7 +9567,7 @@ class Api
 						{
 							$profileid = $row['ACTIONBY'];
 						}
-						$help = new Help();
+						global $help;
 						if($help->permission_check($myprofileid, $profileid, $row['VISIBLE']))
 						{		
 								$actionid=$database->get_actionid($profileid,$rtype,$pageid);
@@ -7833,12 +9585,12 @@ class Api
 										{
 											if($rtype == 11 || $rtype == 12 ||$rtype == 13 ||$rtype == 14 || $rtype == 15 || $rtype == 16 || $rtype == 17 || $rtype == 18 || $rtype== 511 || $rtype== 512 || $rtype == 811 || $rtype == 812 || $rtype== 1111 || $rtype== 1112 || $rtype== 1211 || $rtype== 1212 || $rtype== 1411 || $rtype== 1412 || $rtype== 1611 || $rtype== 1612  || $rtype== 2011 || $rtype== 2012 || $rtype== 2111 || $rtype== 2112)
 											{	
-												$email = new Email();
+												global $email;
 												$param = array();
 												$param['type'] = 'event_cancel';
 												$param['profileid'] = $profileid; 
 												$param['rtype'] = $rtype;
-												$param['myprofileid'] = $myprofileid;
+												$param['actionby'] = $myprofileid;
 												$param['actionid'] = $actionid;
 												$email->email_sample($param);	
 											}
@@ -7883,12 +9635,12 @@ class Api
 	
 	function response_delete()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['pageid']))
 		{
 			if(!empty($_GET['pageid']))
 			{
-				$database = new Database();
+				global $database;
 				$pageid=$_GET['pageid'];
 				$myprofileid=$_SESSION['userid'];
 				$result = $database->actionid_select($pageid);
@@ -7927,15 +9679,15 @@ class Api
 	
 	function search()
 	{
-	    $help = new Help();
+	    global $help;
 		if(isset($_GET['q']))
 		{
 		    if(!empty($_GET['q']))
 			{
 				$q = $_GET['q'];
 				$data['key'] = $q;
-				$database = new Database();
-				$memcache = new Memcached();
+				global $database;
+				global $memcached;
 				if(isset($_GET['filter']) && !empty($_GET['filter']))
 				{
 					$filter = $_GET['filter'];
@@ -7966,8 +9718,8 @@ class Api
 					while($frow=$fres->fetch_array())
 					{
 						$search[$k]['profileid'] = $frow['PROFILEID'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}
 						$data['count'] = $k;
@@ -8005,7 +9757,7 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['eventid'];
 						$name[$search[$k]['profileid']] = $frow['name'];
-						$pimage[$search[$k]['profileid']] = 'http://icon.qmcdn.net/event.png';
+						$pimage[$search[$k]['profileid']] = $icon_cdn.'/event.png';
 						$description[$search[$k]['profileid']] = $frow['description'];
 						$k++;
 					}
@@ -8025,8 +9777,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['ACTIONBY'];
 						$search[$k]['page'] = $frow['PAGE'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8045,8 +9797,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['ACTIONBY'];
 						$search[$k]['page'] = $frow['COMMENT'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8065,8 +9817,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8085,8 +9837,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8105,8 +9857,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8125,8 +9877,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8145,8 +9897,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8165,8 +9917,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8185,8 +9937,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8205,8 +9957,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8225,8 +9977,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8245,8 +9997,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8265,8 +10017,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8285,8 +10037,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8305,8 +10057,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8325,8 +10077,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8345,8 +10097,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8365,8 +10117,8 @@ class Api
 					{
 						$search[$k]['profileid'] = $frow['profileid'];
 						$search[$k]['page'] = $frow['skill'];
-						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+						$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcached, $database);
+						$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcached, $database);
 						$k++;
 					}				
 						$data['count'] = $k;
@@ -8391,14 +10143,14 @@ class Api
 	
 	function search_people()
 	{
-	    $help = new Help();
+	    global $help;
 		if(isset($_GET['q']))
 		{
 		    if(!empty($_GET['q']))
 			{
 				$q = $_GET['q'];
-				$database = new Database();
-				$memcache = new Memcached();
+				global $database;
+				global $memcached;
 				
 				if($help->is_email($q))
 				{
@@ -8411,9 +10163,9 @@ class Api
 				$k = 0;
 				while($frow=$fres->fetch_array())
 				{
-					$search[$k]['profileid'] = $frow['PROFILEID'];
-					$name[$search[$k]['profileid']] = $help->name_fetch($search[$k]['profileid'], $memcache, $database);
-					$pimage[$search[$k]['profileid']] = $help->pimage_fetch($search[$k]['profileid'], $memcache, $database);
+					$search[$k] = $frow['PROFILEID'];
+					$name[$search[$k]] = $help->name_fetch($search[$k], $memcached, $database);
+					$pimage[$search[$k]] = $help->pimage_fetch($search[$k], $memcached, $database);
 					$k++;
 				}
 					$data['action'] = $search;
@@ -8459,16 +10211,16 @@ class Api
 	
 	function friend_suggest()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['count']))
 		{
 			if(!empty($_GET['count']))
 			{
 				$limit = $_GET['count'];
 				$myprofileid = $_SESSION['userid'];
-				$database = new Database();
-				$json = new Json();
-				$memcache = new Memcached();
+				global $database;
+				global $json;
+				global $memcached;
 				$guess = array();
 				$name = array();
 				$pimage = array();
@@ -8478,8 +10230,8 @@ class Api
 					while($row=$result->fetch_array())
 					{
 						$guess[$k]['profileid'] = $row['PROFILEID'];
-						$name[$guess[$k]['profileid']] = $help->name_fetch($guess[$k]['profileid'], $memcache, $database); 			
-						$pimage[$guess[$k]['profileid']] = $help->pimage_fetch($guess[$k]['profileid'], $memcache, $database); 	
+						$name[$guess[$k]['profileid']] = $help->name_fetch($guess[$k]['profileid'], $memcached, $database); 			
+						$pimage[$guess[$k]['profileid']] = $help->pimage_fetch($guess[$k]['profileid'], $memcached, $database); 	
 						$k++;
 					}
 					$data['action'] = $guess;	
@@ -8514,10 +10266,10 @@ class Api
 			{
 				$limit = $_GET['count'];
 				$myprofileid = $_SESSION['userid'];
-				$database = new Database();
-				$help = new Help();
-				$json = new Json();
-				$memcache = new Memcached();
+				global $database;
+				global $help;
+				global $json;
+				global $memcached;
 				$guess = array();
 				$name = array();
 				$pimage = array();
@@ -8528,7 +10280,7 @@ class Api
 					{
 						$guess[$k]['profileid'] = $row['eventid'];
 						$name[$guess[$k]['profileid']] = $row['eventname']; 			
-						$pimage[$guess[$k]['profileid']] = 'http://icon.qmcdn.net/event.png'; 	
+						$pimage[$guess[$k]['profileid']] = $icon_cdn.'/event.png'; 	
 						$k++;
 					}
 					$data['action'] = $guess;	
@@ -8555,17 +10307,17 @@ class Api
 	
 	function group_suggest()
 	{
-	    $help = new Help();
+	    global $help;
 		if(isset($_GET['count']))
 		{
 			if(!empty($_GET['count']))
 			{
 				$limit = $_GET['count'];
 				$myprofileid = $_SESSION['userid'];
-				$database = new Database();
-				$help = new Help();
-				$json = new Json();
-				$memcache = new Memcached();
+				global $database;
+				global $help;
+				global $json;
+				global $memcached;
 				$guess = array();
 				$name = array();
 				$pimage = array();
@@ -8601,14 +10353,14 @@ class Api
 	
 	function song_search()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['q']) && isset($_GET['song_limit']))
 		{
 			if(!empty($_GET['q']) && $_GET['song_limit'] != '')
 			{
 				$q = $_GET['q'];
 				$song_limit = $_GET['song_limit'];
-				$database = new Database();
+				global $database;
 				if($fres=$database->song_search($q,$song_limit,'6'))
 				{
 					$k = 0;
@@ -8640,7 +10392,7 @@ class Api
 	
 	function status_song()
 	{ 
-	    $help = new Help();
+	    global $help;
 		if(isset($_GET['songid']) && isset($_GET['song_status']))
 		{ 
 			if(!empty($_GET['songid']) && !empty($_GET['song_status']))
@@ -8649,7 +10401,7 @@ class Api
 				if(strlen($song_line) <= 6072)
 				{
 					$songid = $_GET['songid'];
-					$database = new Database();
+					global $database;
 					$srow = $database->songid_exists($songid);
 					if($srow['SONGID'] == $songid)
 					{
@@ -8703,12 +10455,12 @@ class Api
 	
 	function song_dedicate()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['profileid']) && isset($_GET['songid']) && isset($_GET['song_line']))
 		{	
 			if(!empty($_GET['profileid']) && !empty($_GET['songid']) && !empty($_GET['song_line']))
 			{
-				$database = new Database();
+				global $database;
 				$myprofileid = $_SESSION['userid']; 
 				$profileid = $_GET['profileid']; 
 				$songid = $_GET['songid']; 
@@ -8788,8 +10540,8 @@ class Api
 
 	function stepup()
 	{
-		$help = new Help();
-		$database = new Database();
+		global $help;
+		global $database;
 		$myprofileid = $_SESSION['userid'];
 		$step = $_SESSION['STEP'];
 		if($step == 1 || $step == 2)
@@ -8839,7 +10591,7 @@ class Api
 	
 	function tagline_set()
 	{
-	    $help = new Help();
+	    global $help;
 		if(isset($_GET['tagline']))
 		{
 		    if(!empty($_GET['tagline']))
@@ -8848,7 +10600,7 @@ class Api
 				$myprofileid = $_SESSION['userid'];
 				if(strlen($tagline) <= 50)
 				{
-				    $database = new Database();
+				    global $database;
 					$visible_id = $_SESSION['visible'];
 					$actionid = $database->get_actionid($myprofileid,800,0,$visible_id,1);
 					if($actionid)
@@ -8880,14 +10632,14 @@ class Api
 	
 	function event_cancel()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['eventid']))
 		{
 		    if(!empty($_GET['eventid']))
 		    {
 			    $myprofileid = $_SESSION['userid'];
 				$eventid = $_GET['eventid'];
-				$database = new Database();
+				global $database;
 				if($database->event_exists($eventid) == $eventid)
 				{
 					$row = $database->event_select($eventid);
@@ -8901,11 +10653,11 @@ class Api
 							if($database->event_cancel($eventid))
 							{
 								$guests = $database->guest_select($eventid);
-								$email = new Email();
+								global $email;
 								$param = array();
 								$param['type'] = 'event_cancel';
 								$param['eventname'] = $eventname; 
-								$param['myprofileid'] = $myprofileid;
+								$param['actionby'] = $myprofileid;
 								$param['actionid'] = $actionid;
 								while ($res = $guests->fetch_array())
 								{
@@ -8961,14 +10713,14 @@ class Api
 	
 	function event_leave()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['eventid']))
 		{
 		    if(!empty($_GET['eventid']))
 		    {
 			    $myprofileid = $_SESSION['userid'];
 				$eventid = $_GET['eventid'];
-				$database = new Database();
+				global $database;
 				$check = $database->event_exists($eventid);
 				if($check == $eventid)
 				{
@@ -9018,14 +10770,14 @@ class Api
 		
 	function group_leave()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['groupid']))
 		{
 		    if(!empty($_GET['groupid']))
 		    {
 			    $myprofileid = $_SESSION['userid'];
 				$groupid = $_GET['groupid'];
-				$database = new Database();
+				global $database;
 				$check = $database->group_exists($groupid);
 				if($check == $groupid)
 				{
@@ -9067,15 +10819,15 @@ class Api
 	
 	function unfriend()
 	{
-	    $help = new Help();
+	    global $help;
 	    if(isset($_GET['profileid']))
 		{
 		    if(!empty($_GET['profileid']))
 		    {
 			    $myprofileid = $_SESSION['userid'];
 				$profileid = $_GET['profileid'];
-				$database = new Database();
-				$memcache = new Memcached();
+				global $database;
+				global $memcached;
 				$check = $database->is_user($profileid);
 				if($check['USERID'] == $profileid)
 				{
@@ -9086,8 +10838,8 @@ class Api
 						if($actionid)
 						{
 							$result = $database->friend_delete($profileid);
-							$help->friend_memcache_update($myprofileid, $database, $memcache);
-							$help->friend_memcache_update($profileid, $database, $memcache);
+							$help->friend_memcache_update($myprofileid, $database, $memcached);
+							$help->friend_memcache_update($profileid, $database, $memcached);
 							$data['ack'] = 1;
 							echo json_encode($data);
 						}
@@ -9119,7 +10871,7 @@ class Api
 	
 	function validate()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['name']) && isset($_GET['password']) && isset($_GET['gender']) && isset($_GET['day']) && isset($_GET['month']) && isset($_GET['year']))
 		{
 			if(!empty($_GET['name']) && !empty($_GET['password']) && $_GET['gender'] !='' && !empty($_GET['day']) && !empty($_GET['month']) && !empty($_GET['year']))
@@ -9224,7 +10976,7 @@ class Api
 	
 	function validate_email()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['email']))
 		{
 			if(!empty($_GET['email']))
@@ -9244,7 +10996,7 @@ class Api
 	
 	function validate_name()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['name']))
 		{
 			if(!empty($_GET['name']))
@@ -9264,7 +11016,7 @@ class Api
 	
 	function validate_password()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_POST['password']))
 		{
 			if(!empty($_POST['password']))
@@ -9284,7 +11036,7 @@ class Api
 	
 	function validate_school()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['school']))
 		{
 			if(!empty($_GET['school']))
@@ -9304,7 +11056,7 @@ class Api
 	
 	function validate_year()
 	{
-		$help = new Help();
+		global $help;
 		if(isset($_GET['year']))
 		{
 			if(!empty($_GET['year']))
@@ -9322,9 +11074,9 @@ class Api
 		}
 	}
 	
-	function login()
+	function login_get()
 	{
-	   $help = new Help();
+	   $help = new Help();global $memcached;
 	   if(isset($_GET['email']) && isset($_GET['password']))
 	   {
 			if(!empty($_GET['email']) && !empty($_GET['password']))
@@ -9349,6 +11101,55 @@ class Api
 					$data['message'] = 'Login Successful';
 					$data['myprofileid'] = $row['USERID'];
 					$data['sessionid'] = $sid;
+					$data['name'] =	 $help->name_fetch($row['USERID'], $memcached, $database); 			
+					$data['photo']=	 $help->pimage_fetch($row['USERID'], $memcached, $database);
+					$data['session_name'] = session_name();
+                    echo json_encode($data);					
+				}	
+				else
+				{
+					$help->error_description(37);
+				}
+			}
+			else
+			{
+				$help->error_description(18);
+			}
+		}
+		else
+		{
+			$help->error_description(9);
+		}	
+	}
+	function login()
+	{
+	   global $help,$memcached ;
+	   if(isset($_POST['email']) && isset($_POST['password']))
+	   {
+			if(!empty($_POST['email']) && !empty($_POST['password']))
+	        {
+				$email = trim($_REQUEST['email']);
+				$password = trim($_REQUEST['password']);
+				$password = sha1($email.$password); 
+				$database_old = new Database();	
+				$help->assign_database($email,$database_old);
+				$database_old =null;
+				$database = new Database();
+				$row = $database->login_user($email,$password);
+				$pass=$row['PASSWORD']; 
+				if($password==$pass)
+				{	
+					$myprofileid=$row['USERID'];
+					$_SESSION['auth'] = $row['USERID'];
+					$_SESSION['userid'] = $_SESSION['USERID']=$row['USERID'];
+					$sid = session_id();
+					setcookie(session_name(),$sid,time()+3600000,'/');
+					$data['ack'] = 1;
+					$data['message'] = 'Login Successful';
+					$data['myprofileid'] = $row['USERID'];
+					$data['sessionid'] = $sid;
+					$data['name'] =	 $help->name_fetch($row['USERID'], $memcached, $database); 			
+					$data['photo']=	 $help->pimage_fetch($row['USERID'], $memcached, $database);
 					$data['session_name'] = session_name();
                     echo json_encode($data);					
 				}	
@@ -9369,13 +11170,13 @@ class Api
 	}
     function analytics()
     {
-       $database = new Database();
+       global $database;
        $row=$database->get_analytics(); 
     }
     function daily_report()
     {
-      $help = new Help();
-      $database = new Database();
+      global $help;
+      global $database;
       $count = array();
       $count=$database->get_daily_report();
       if($count)
@@ -9394,8 +11195,8 @@ class Api
     }
     function weekly_report()
     { 
-      $help = new Help();
-      $database = new Database();
+      global $help;
+      global $database;
       $count = array();
       $count=$database->get_weekly_report();
       if($count)
@@ -9413,8 +11214,8 @@ class Api
     }
     }
     function monthly_report()
-    { $help = new Help(); 
-      $database = new Database();
+    { global $help; 
+      global $database;
       $count = array();
       $count=$database->get_monthly_report();
       if($count)
@@ -9430,6 +11231,762 @@ class Api
     {
     $help->error_description(15);
     }
-    } 
+    }
+	
+	//We need to free below functions from using html code and convert into pure JSON , only we need to encode the feature glag which are set.
+	function actions_load() 
+	{ 
+		global $help,$memcached,$database,$icon_cdn;
+			$page = $_GET['page'];
+			$profile_relation = $_GET['profile_relation'];
+			if($page == 'group_json' && ($profile_relation == 0 || $profile_relation == 1))
+			{
+			?>
+			<div id="upload_box"> 
+				<ol class="breadcrumb">
+				  <li id="status_link" ><a href="#">Discussion</a></li>
+				  <li id="photo_link" ><a href="#">File</a></li>
+				  <li id="question_link" onclick="ui.group_question(this)"  ><a href="#">Question</a></li>
+				  <li id="event_link" onclick="ui.group_event_create(this,1)" ><a href="#">Event</a></li>	
+				</ol>
+				<div  id="uploader">  
+				<!--	<input type="text" id="status_box" value="" placeholder="Post in <?php //echo $profile_name;?> group"/>
+					<input id="link_button" type="submit" value="Post">     -->
+				</div>
+			</div>
+			<?php
+			}
+			else if($page == 'event_json' || $page == 'page_json')
+			{ 
+			?>
+			<div id="upload_box"> 
+				<ol class="breadcrumb">
+				  <li id="status_link" ><a href="#">Post</a></li>
+				  <li id="photo_link" ><a href="#">File</a></li>
+				</ol>
+				<div  id="uploader">  
+				<!--	<input type="text" id="status_box" value="" placeholder="Post in <?php //echo $profile_name;?> event"/>
+					<input id="link_button" type="submit" value="Post">     -->
+				</div>
+			</div>
+			<?php
+			}
+			else if($profile_relation == 0 )
+			{
+			$myprofileid = $_SESSION['userid'];
+			$flag = $database->privacy_item_select('profile_post_next',$myprofileid);
+			SWITCH($flag)
+			{
+				CASE 0: $icon_image=$icon_cdn.'/global.png';
+					break;
+				CASE 1: $icon_image=$icon_cdn.'/meeting.png';
+					break;
+				CASE 2: $icon_image=$icon_cdn.'/friend.png';
+					break;
+				default:$icon_image=$icon_cdn.'/global.png';
+					break;
+			}
+			?>
+				<div id="upload_box"> 
+					<ol class="breadcrumb">
+					  <li id="status_link" ><a href="#">Status</a></li>
+					  <li id="photo_link" ><a href="#">File</a></li>
+					  <li id="moment_link" ><a href="#">Album</a></li>
+					  <li id="question_link" ><a href="#">Question</a></li>
+					  <?php 
+						if ($help->feature_fetch('mood', $memcached, $database))
+						{ 
+					  ?>
+						  <li onclick="ui.mood(this)" ><a href="#">Mood</a></li>
+					  <?php
+						 }
+					  ?>
+						<span id="profile_post_privacy_link" onclick="ui.profile_post_privacy(this,event)" style="margin-left:0.5em;cursor:pointer;"><img title="Set the privacy of your next post" src="<?php echo $icon_image;?>" height="14" width="14" /></span>
+										
+					</ol> 
+					<div id="uploader">
+					<!--	<input type="text" id="status_box" value="" placeholder="What are you working on today?"/>
+						<input id="link_button" type="submit" value="Share"> -->
+					</div> 
+				</div>
+			<?php
+			}
+			else if($profile_relation == 1)
+			{
+			?>
+				<div id="upload_box"> 
+					<ol class="breadcrumb">
+					  <li id="status_link" ><a href="#">Post</a></li>
+					  <li id="photo_link" ><a href="#">File</a></li>
+					  <li id="moment_link" ><a href="#">Album</a></li>
+					  <?php 
+						if ($help->feature_fetch('gift', $memcached, $database))
+						{ 
+					  ?>
+						  <li onclick="ui.gift_ui_create(this)" ><a href="#">Send-Gift</a></li>
+					  <?php
+						 }
+					  ?>				
+					</ol>
+					<div  id="uploader">  
+					<!--	<input type="text" id="status_box" value="" placeholder="Post in <?php //echo $profile_name;?>'s diary"/>
+						<input id="link_button" type="submit" value="Post">   -->  
+					</div>
+				</div>
+			<?php
+			}
+		}	
+	function page_details_fetch()
+	{
+		global $database,$memcached,$help;
+		if (isset($_GET['pageid']))
+		{
+			if(!empty($_GET['pageid']))
+			{
+				$myprofileid = $_SESSION['userid'];
+				$pageid = $_GET['pageid'];
+				$info = array();
+				if($result = $database->page_select($pageid))
+				{
+					$info['pagename'] = $result['name'];
+					$info['page_description'] = $result['description'];
+					$data['info'] = $info;
+					echo json_encode($data);
+				}
+				else
+				{	
+					$help->error_description(15);		
+				}
+				
+			}
+			else
+			{	
+				$help->error_description(18);		
+			}
+		}
+		else
+		{
+			$help->error_description(9);
+		}	
+			
+	}
+	function setting_feature_select()
+	{
+		global $database,$memcached,$help;
+			$info = array();
+			/*$missu['status'] = $help->feature_fetch('missu',$memcached, $database);
+			$gift['status'] = $help->feature_fetch('gift',$memcached, $database);
+			$mood['status'] = $help->feature_fetch('mood',$memcached, $database);
+			$birthday['status'] = $help->feature_fetch('birthday',$memcached, $database);
+			$actiontype_preview['status'] = $help->feature_fetch('actiontype_preview',$memcached, $database);
+			$invite_friend['status'] = $help->feature_fetch('invite_friend',$memcached, $database);*/
+			if ($help->feature_fetch('missu',$memcached, $database))
+			$info['missu'] = 'checked';
+			else 
+			$info['missu'] = 'unchecked';
+			if ($help->feature_fetch('gift',$memcached, $database))
+			$info['gift'] = 'checked';
+			else
+			$info['gift'] = 'unchecked';
+			if ($help->feature_fetch('mood',$memcached, $database))
+			$info['mood'] = 'checked';
+			else
+			$info['mood'] = 'unchecked';
+			if($help->feature_fetch('birthday',$memcached, $database))
+			$info['birthday'] = 'checked';
+			else
+			$info['birthday'] = 'unchecked';
+			if($help->feature_fetch('actiontype_preview',$memcached, $database))
+			$info['actiontype_preview'] = 'checked';
+			else
+			$info['actiontype_preview'] = 'unchecked';
+			if($help->feature_fetch('invite_friend',$memcached, $database))
+			$info['invite_friend'] = 'checked';
+			else
+			$info['invite_friend'] = 'unchecked';
+			
+			$data['info'] = $info;
+			echo json_encode($data);
+	}
+	function profile_details_fetch()
+	{
+		global $help,$profile_cdn;
+		if (isset($_GET['profileid']))
+		{
+			if(!empty($_GET['profileid']))
+			{
+				global $database,$memcached;
+				$info = array();
+				$profileid = $_GET['profileid'];
+				$profile_relation =-99;
+				$myprofileid = $_SESSION['userid'];
+					if($result = $database->bio_select($profileid))
+					{
+						$info['name'] = $result['NAME'];
+						$info['fname'] = $result['FNAME'];
+						$info['mname'] = $result['MNAME'];
+						$info['lname'] = $result['LNAME'];
+						$info['sex'] = $result['SEX'];
+						$info['birthday'] = $result['BIRTHDAY'];
+					
+						$friendship_status = $database->check_friendship($profileid,$myprofileid);
+						$info['friendship_status'] = $friendship_status;
+						$info['friend_count'] = $database->friend_count($profileid);
+						if($profileid == $myprofileid )
+						{
+							$profile_relation = 0;
+						}
+						if ($friendship_status == 2)
+						{
+							$profile_relation =1;
+						}
+						$info['profile_relation'] = $profile_relation;
+						if($profileid == $myprofileid)
+						{
+							$info['profile_image'] = $_SESSION['pimage'];
+							$info['profile_imageid']= $_SESSION['profile_imageid'];
+						}
+						else
+						{
+							$pirow = $database->get_image($profileid);
+							$info['profile_image'] 	= $pirow['CDN'].$pirow['FILENAME'];
+							$info['profile_imageid']= $pirow['IMAGEID'];
+						}
+						$ext = pathinfo($info['profile_image'],PATHINFO_EXTENSION);
+						if(strpos($info['profile_image'],'_t') > -1)
+						{
+							$arr = explode('_',$info['profile_image']);
+							$info['profile_image'] = $arr[0].'.'.$ext;
+						}
+						else
+						{
+							$arr = explode('/',$info['profile_image']);
+							$info['profile_image'] = $profile_cdn.'/'.$arr[3];
+						}
+						$info['missu'] = $help->feature_fetch('missu',$memcached, $database);
+						$info['gift'] = $help->feature_fetch('gift',$memcached, $database);
+						$info['mood'] = $help->feature_fetch('mood',$memcached, $database);
+						//mutual_friend can be called to fectch friend_match and friend_non_match .
+						$data['info'] = $info;
+					    echo json_encode($data);
+					}
+					else
+					{
+						$help->error_description(16);					
+					}					
+			}
+			else
+			{	
+				$help->error_description(18);		
+			}
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
+  function event_details_fetch()
+	{
+		global $help,$icon_cdn;
+		if (isset($_GET['eventid']))
+		{
+			if(!empty($_GET['eventid']))
+			{
+				global $database,$memcached;
+				$info = array();
+				$action = array();
+				$eventid = $_GET['eventid'];
+				$myprofileid = $_SESSION['userid'];
+					if($result = $database->event_select($eventid))
+					{
+						$info['eventid'] = $result['eventid'];
+						$info['eventname'] = $result['name'];
+						$info['description'] = $result['description'];
+						$info['invite'] = $result['invite'];  
+						$info['privacy'] = $result['privacy'];
+						$info['date'] = date('j M,Y',strtotime($result['date']));
+						$info['time'] = $result['timing'];
+						$info['venue'] = $result['venue'];
+						$info['cancel'] = $result['cancel'];
+						$info['priviledge'] = $database->guest_status($eventid,$myprofileid);
+						$info['guest_count'] = $database->guest_count($eventid);
+						$info['groupid'] = $result['groupid'];
+						$info['event_photo'] = $icon_cdn.'/event.png';
+						
+						$host = $result['host'];
+						$name[$host] = $help->name_fetch($host, $memcached, $database);
+					    $pimage[$host] = $help->pimage_fetch($host, $memcached, $database);  
+						
+						$data['info'] = $info;
+						$data['host'] = $host;
+						$data['name'] = $name;
+						$data['pimage'] = $pimage;
+						echo json_encode($data);
+					
+					}
+					else
+					{
+						$help->error_description(16);					
+					}					
+			}
+			else
+			{	
+				$help->error_description(18);		
+			}
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
+	function group_details_fetch()
+	{
+		global $help,$icon_cdn;
+		if (isset($_GET['groupid']))
+		{
+			if(!empty($_GET['groupid']))
+			{
+				global $database,$memcached;
+				$action = array();
+				$info = array();
+				$member = array();
+				$groupid = $_GET['groupid'];
+				$myprofileid = $_SESSION['userid'];
+				if ($result = $database->group_select($groupid))
+				{
+					$info['groupname'] = $result['name'];
+					$info['groupid'] = $result['groupid'];
+					$info['priviledge'] = $database->membership_status($groupid,$myprofileid);
+					$info['description'] = $result['description'];
+					$info['link'] = $result['link'];
+					$info['createdby'] = $result['createdby'];
+				    $name[$info['createdby']] = $help->name_fetch($info['createdby'], $memcached, $database);
+					$pimage[$info['createdby']] = $help->pimage_fetch($info['createdby'], $memcached, $database);
+					$info['type'] = $result['type'];
+					$info['invite'] = $result['invite'];
+					$info['technical'] = $result['type'];
+					$info['member_count'] = $database->member_count($groupid);
+					$info['group_photo'] = $icon_cdn.'/group.png';
+
+						if($res = $database->top_influencer_select($groupid))
+						{
+							$k = 0;
+							while($row=$res->fetch_array())
+							{
+							   $checkk = $database->is_member($groupid,$row['profileid']);
+							   if($checkk->num_rows)
+							   {
+								   $top_influencer[$k]= $row['profileid'];
+								   $name[$top_influencer[$k]] = $help->name_fetch($top_influencer[$k], $memcached, $database);
+								   $pimage[$top_influencer[$k]] = $help->pimage_fetch($top_influencer[$k], $memcached, $database);  
+								   $k++;
+							   }
+							   else 
+							   {
+									$k++;
+							   }
+							}
+						}
+						$data['info'] = $info;
+						$data['top_influencer'] = $top_influencer;
+						$data['count'] = count($match);
+						$data['name'] = $name;
+						$data['pimage'] = $pimage;
+						echo json_encode($data);
+					}
+					else
+					{
+						$help->error_description(16);					
+					}		
+				
+			}
+			else
+			{	
+				$help->error_description(18);		
+			}
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
+	function group_and_event_select()
+ 	{ 
+		$data = array();
+		$group = array();
+		$event = array();
+		global $database;
+		$myprofileid = $_SESSION['USERID'];
+		$i = 0;
+		$k=0;
+		$result = $database->mygroup_select($myprofileid);
+		while($row = $result->fetch_array())
+		{
+		$group[$i]['groupid'] = $row['groupid'];
+		$group[$i]['groupname'] = $row['name'];
+		$i++;
+		}
+		 
+		$result_event = $database->myevent_select($myprofileid,time());
+		 
+		while($rowev = $result_event->fetch_array())
+		{
+		$event[$k]['eventid'] = $rowev['eventid'];
+		$event[$k]['eventname'] = $rowev['name'];
+		$k++;
+		}
+
+		$data['group'] = $group ;
+		$data['event'] = $event ;
+		echo json_encode($data);
+	}
+  
+  function bio_fetch()
+  {
+		global $help;
+		if(isset($_GET['profileid']))
+		{
+			if(!empty($_GET['profileid']))
+			{
+				$database = new Database();
+				$profileid = $_GET['profileid'];
+				$newrow = $database->bio_complete_select($profileid);
+				$res = $database->bio_select_new($profileid);
+				$company = array(); $team = array();$major = array(); $skill = array(); $tool = array(); $mobile = array();  $extension = array(); $certificate = array(); $project = array(); $award = array(); $college = array(); $school = array(); $music = array(); $movie = array(); $sports = array(); $book = array(); $city = array(); $hobby = array();
+				$flag_des = 0;
+				$flag = 0;
+				$profession='';  
+				$designation='';
+				$a=0; $b=0; $c=0; $d=0; $e=0; $f=0; $g=0; $h=0; $i=0; $j=0; $k=0; $l=0; $m=0; $n=0; $o=0; $p=0; $q=0; $r=0; $s=0; $t=0;
+				while($brow = $res->fetch_array())
+				{
+					if($brow['type'] == 205)
+					{  
+						$company[$a]['name'] = $brow['name'];
+						$company[$a]['id'] = $brow['actionid'];
+						$a++;
+					}
+					else if($brow['type'] == 202)
+					{
+						if($flag == 0)
+						{
+							$profession[$b]['name'] = $brow['name'];
+							$profession[$b]['id'] = $brow['actionid'];	
+							$flag = 1;
+							$b++;
+						}	
+					}
+					else if($brow['type'] == 239)
+					{
+						if($flag_des == 0)
+						{
+							$designation[$c]['name'] = $brow['name'];
+							$designation[$c]['id'] = $brow['actionid'];	
+							$flag_des = 1;
+							$c++;
+						}	
+					}
+					else if($brow['type'] == 204)
+					{
+						$college[$d]['name'] = $brow['name'];
+						$college[$d]['id'] = $brow['actionid'];	
+						$d++;	
+					}
+					else if($brow['type'] == 203)
+					{
+						$school[$e]['name'] = $brow['name'];
+						$school[$e]['id'] = $brow['actionid'];
+						$e++;	
+					}
+					else if($brow['type'] == 206)
+					{
+						$music[$f]['name'] = $brow['name'];
+						$music[$f]['id'] = $brow['actionid'];
+						$f++;
+					}
+					else if($brow['type'] == 209)
+					{
+						$sports[$g]['name'] = $brow['name'];
+						$sports[$g]['id'] = $brow['actionid'];
+						$g++;
+					}
+					else if($brow['type'] == 208)
+					{
+						$book[$h]['name'] = $brow['name'];
+						$book[$h]['id'] = $brow['actionid'];
+						$h++;
+					}
+					else if($brow['type'] == 201)
+					{
+						$city[$i]['name'] = $brow['name'];
+						$city[$i]['id'] = $brow['actionid'];
+						$i++;
+					}
+					else if($brow['type'] == 207)
+					{
+						$movie[$j]['name'] = $brow['name'];
+						$movie[$j]['id'] = $brow['actionid'];
+						$j++;
+					}
+					else if($brow['type'] == 211)
+					{
+						$hobby[$k]['name'] = $brow['name'];
+						$hobby[$k]['id'] = $brow['actionid']; 
+                        $k++;  						
+					}
+					else if($brow['type'] == 215)
+					{
+						$mobile[$l]['name'] = $brow['name'];
+						$mobile[$l]['id'] = $brow['actionid'];     
+						$l++;
+					}
+					else if($brow['type'] == 230)
+					{
+						$skill[$m]['name'] = $brow['name'];
+						$skill[$m]['id'] = $brow['actionid'];
+						$m++;
+					}
+					else if($brow['type'] == 231)
+					{
+						$project[$n]['name'] = $brow['name'];
+						$project[$n]['id'] = $brow['actionid'];  
+                        $n++;						
+					}
+					else if($brow['type'] == 232)
+					{
+						$certificate[$o]['name'] = $brow['name'];
+						$certificate[$o]['id'] = $brow['actionid'];
+						$o++;
+					}
+					else if($brow['type'] == 233)
+					{
+						$award[$p]['name'] = $brow['name'];
+						$award[$p]['id'] = $brow['actionid'];  
+                        $p++;						
+					}
+					else if($brow['type'] == 234)
+					{
+						$team[$q]['name'] = $brow['name'];
+						$team[$q]['id'] = $brow['actionid'];
+                        $q++;						
+					}
+					else if($brow['type'] == 235)
+					{
+						$major[$r]['name'] = $brow['name'];
+						$major[$r]['id'] = $brow['actionid'];
+                        $r++;						
+					}
+					else if($brow['type'] == 236)
+					{
+						$tool[$s]['name'] = $brow['name'];
+						$tool[$s]['id'] = $brow['actionid'];
+                        $s++;						
+					}
+					else if($brow['type'] == 237)
+					{
+						$extension[$t]['name'] = $brow['name'];
+						$extension[$t]['id'] = $brow['actionid'];
+                        $t++;						
+					}
+				}
+				$data['company'] = $company;
+				$data['profession'] = $profession;
+				$data['designation'] = $designation;
+				$data['college'] = $college;
+				$data['school'] = $school;
+				$data['music'] = $music;
+				$data['sports'] = $sports;
+				$data['book'] = $book;
+				$data['city'] = $city;
+				$data['movie'] = $movie;
+				$data['hobby'] = $hobby;
+				$data['mobile'] = $mobile;
+				$data['skill'] = $skill;
+				$data['project'] = $project;
+				$data['certificate'] = $certificate;
+				$data['award'] = $award;
+				$data['team'] = $team;
+				$data['major'] = $major;
+				$data['tool'] = $tool;
+				$data['extesnion'] = $extension;
+	
+				$row=$database->privacy_select($profileid);
+				
+				$privacy['company'] = $row['company'];
+				$privacy['designation'] = $row['designation'];
+				$privacy['college'] = $row['college'];
+				$privacy['school'] = $row['school'];
+				$privacy['music'] = $row['music'];
+				$privacy['sports'] = $row['sports'];
+				$privacy['book'] = $row['book'];
+				$privacy['city'] = $row['city'];
+				$privacy['movie'] = $row['movie'];
+				$privacy['hobby'] = $row['hobby'];
+				$privacy['mobile'] = $row['mobile'];
+				$privacy['skill'] = $row['skill'];
+				$privacy['project'] = $row['project'];
+				$privacy['certificate'] = $row['certificate'];
+				$privacy['award'] = $row['award'];
+				$privacy['team'] = $row['team'];
+				$privacy['major'] = $row['major'];
+				$privacy['tool'] = $row['tool'];
+				$privacy['extesnion'] = $row['extension'];
+				
+				$data['privacy'] = $privacy;
+				
+				$data['sex'] = $newrow['SEX'];
+				$email = $newrow['EMAIL'];
+				$bday = $newrow['BIRTHDAY'];
+				$nickname = $newrow['NICKNAME'];
+				$relation = $newrow['RELATION'];
+				$data['name'] = $newrow['NAME'];
+				$data['tagline'] = stripslashes($newrow['TAGLINE']);
+				if(isset($nickname))
+				{
+					if($help->checkPrivacy('NICKNAME',$profileid) == 1 && $nickname != "")
+					{
+						$data['nickname'] = $nickname; 
+					}
+				}
+				$data['age'] = $database->get_age($profileid).' years old';	
+				if($help->checkPrivacy('EMAIL',$profileid) == 1)
+				{
+					$data['email'] = $email;
+				}	
+				if(isset($bday))
+				{
+					if($help->checkPrivacy('BIRTHDAY',$profileid) == 1 && $bday !="")
+					{
+						$data['birthday'] = date('j M,Y',strtotime($bday)); 		
+					}	
+				}
+				$data['edit'] = 0;
+				if($profileid == $_SESSION['userid'])
+				{
+					$data['edit'] = 1;
+				}
+				$data['action'] = 'brijesh';
+				echo json_encode($data);
+			}
+			else
+			{
+				$help->error_description(18);
+			}
+		}
+		else
+		{
+			$help->error_description(9);
+		}
+	}
+function analytics_details_post()
+{
+$database = new Database();
+$data = array();
+$actionday = array();
+$actioncount = array();
+$i = 0;
+$startdate = $_GET['startdate'];
+$enddate = $_GET['enddate'];
+$count=$database->analytics_details_post($startdate,$enddate);
+while($row=$count->fetch_array())
+{
+ $actionday[$i]= $row["day"];
+ $actioncount[$i] = $row["count(1)"];
+ ++$i;
+}
+
+$data["day"]=$actionday;
+$data["count"]=$actioncount;
+$data["type"]="Post";
+echo json_encode($data);
+}
+function analytics_details_joined()
+{
+$database = new Database();
+$data = array();
+$actionday = array();
+$actioncount = array();
+$i = 0;
+$startdate = $_GET['startdate'];
+$enddate = $_GET['enddate'];
+$count=$database->analytics_details_joined($startdate,$enddate);
+while($row=$count->fetch_array())
+{
+ $actionday[$i]= $row["day"];
+ $actioncount[$i] = $row["count(1)"];
+ ++$i;
+}
+
+$data["day"]=$actionday;
+$data["count"]=$actioncount;
+$data["type"]="Joined";
+echo json_encode($data);
+}
+function analytics_details_comment()
+{
+$database = new Database();
+$data = array();
+$actionday = array();
+$actioncount = array();
+$i = 0;
+$startdate = $_GET['startdate'];
+$enddate = $_GET['enddate'];
+$count=$database->analytics_details_comment($startdate,$enddate);
+while($row=$count->fetch_array())
+{
+ $actionday[$i]= $row["day"];
+ $actioncount[$i] = $row["count(1)"];
+ ++$i;
+}
+
+$data["day"]=$actionday;
+$data["count"]=$actioncount;
+$data["type"]="Comments";
+echo json_encode($data);
+}
+function analytics_details_view()
+{
+$database = new Database();
+$data = array();
+$actionday = array();
+$actioncount = array();
+$i = 0;
+$startdate = $_GET['startdate'];
+$enddate = $_GET['enddate'];
+$count=$database->analytics_details_view($startdate,$enddate);
+while($row=$count->fetch_array())
+{
+ $actionday[$i]= $row["day"];
+ $actioncount[$i] = $row["count(1)"];
+ ++$i;
+}
+
+$data["day"]=$actionday;
+$data["count"]=$actioncount;
+$data["type"]="View";
+echo json_encode($data);
+}
+function analytics_details_visit()
+{
+$database = new Database();
+$data = array();
+$actionday = array();
+$actioncount = array();
+$i = 0;
+$startdate = $_GET['startdate'];
+$enddate = $_GET['enddate'];
+$count=$database->analytics_details_visit($startdate,$enddate);
+while($row=$count->fetch_array())
+{
+ $actionday[$i]= $row["day"];
+ $actioncount[$i] = $row["count"];
+ ++$i;
+}
+
+$data["day"]=$actionday;
+$data["count"]=$actioncount;
+$data["type"]="Visit";
+echo json_encode($data);
+}	
 }
 ?>

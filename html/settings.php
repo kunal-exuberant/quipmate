@@ -8,22 +8,25 @@ $help = new Help();
 $database = new Database();
 $myprofileid = $_SESSION['userid'];
 ?>
-<div id="wrapper">
-	<div id="left" style="margin-top:4em;">
-		<div class="links">
-			<a <?php if($page == 'notification') echo 'class="selected"'; ?> href="?hl=notification_settings" title="Notification Settings">Notification Settings</a>
-		</div>
-		<div class="links">
-			<a <?php if($page == 'email_settings') echo 'class="selected"'; ?> href="?hl=email_settings" title="Email Settings">Email Settings</a>
-		</div>
-		<div class="links">
-			<a <?php if($page == 'account') echo 'class="selected"'; ?> href="?hl=account_settings" title="Account Settings">Account Settings</a>
-		</div>
-		<div class="links">
-			<a <?php if($page == 'privacy') echo 'class="selected"'; ?> href="?hl=privacy_settings" title="Account Settings">Privacy Settings</a>
-		</div>
+<div class="container">
+  <div class="row" >
+    <div class="col-md-2 left" id="left">
+	<ul  class="nav nav-pills nav-stacked"> 
+		<li>
+			<a class="links" <?php if($page == 'notification') echo 'class="selected"'; ?> href="?hl=notification_settings" title="Notification Settings">Notification Settings</a>
+		</li>
+		<li>
+			<a class="links"  <?php if($page == 'email_settings') echo 'class="selected"'; ?> href="?hl=email_settings" title="Email Settings">Email Settings</a>
+		</li>
+		<li>
+			<a class="links" <?php if($page == 'account') echo 'class="selected"'; ?> href="?hl=account_settings" title="Account Settings">Account Settings</a>
+		</li>
+		<li>
+			<a class="links" <?php if($page == 'privacy') echo 'class="selected"'; ?> href="?hl=privacy_settings" title="Account Settings">Privacy Settings</a>
+		</li>
+	</ul>
 	</div>
-	<div id="center" style="height:auto;margin-top:4em;">
+	<div id="center"  class="col-md-6 center">
 	<?php if($page == 'notification')
 		{
 			$row = $database->setting_notice_select($myprofileid);
@@ -189,11 +192,11 @@ $myprofileid = $_SESSION['userid'];
 					<?php $help->privacy_level('profile_post_next', $row['profile_post_next']); ?>
 				</div>
 				<div class="setting_each bgcolor">
-					<span class="setting_category_name"> Who can post in your profile:</span> Only your Friends
+					<span class="setting_category_name"> Who can post in your profile:</span><span class="rfloat">Only your Friends</span>
 					<?php //$help->privacy_level('profile_post', $row['profile_post']); ?>
 				</div>
 				<div class="setting_each">
-					<span class="setting_category_name"> Who sees when someone posts in your profile:</span> Depends on the privacy of your next post
+					<span class="setting_category_name"> Who sees when someone posts in your profile:</span><span class="rfloat">Depends on the privacy of your next post</span>
 					<?php //$help->privacy_level('profile_post_see', $row['profile_post_see']); ?>
 				</div>
 				<!--
@@ -231,6 +234,7 @@ $myprofileid = $_SESSION['userid'];
 	?>
 	</div>
 </div>	
+</div>
 <?php require_once('../include/footer.php'); ?>	
 </body>
 </html>

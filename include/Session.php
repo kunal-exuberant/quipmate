@@ -48,19 +48,15 @@ class Session
 
         //insert data to DB, take note of serialize
 		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-		if(isset($_SESSION) && isset($_SESSION['USERID']))
+		if(isset($_SESSION))
 		{
 			$myprofileid = $_SESSION['USERID'];
+			$time = time();
+			$user_agent = $_SERVER['HTTP_USER_AGENT'];
+			$con = new mysqli($DB_IP, $DB_USER, $DB_PASSWORD,'session');
+			$sessionid = $con->real_escape_string($sessionid);
+			return $con->query("replace into session(sessionid, profileid, time, ip, user_agent, data) values('$sessionid', '$myprofileid', '$time', '$ip', '$user_agent', '$data') ");
 		}
-		else
-		{
-			$myprofileid = 0;
-		}	
-		$time = time();
-		$user_agent = $_SERVER['HTTP_USER_AGENT'];
-		$con = new mysqli($DB_IP, $DB_USER, $DB_PASSWORD,'session');
-		$sessionid = $con->real_escape_string($sessionid);
-		return $con->query("replace into session(sessionid, profileid, time, ip, user_agent, data) values('$sessionid', '$myprofileid', '$time', '$ip', '$user_agent', '$data') ");
     }
 
     public static function destroy($sessionid)

@@ -163,7 +163,7 @@ li{margin-left:2em;}
 						1.	Direct to MD
 					</div>
 					<div class="feature_detail" style="display:block;">
-						<img class="lfloat" src="http://icon.qmcdn.net/direct-to-md-1.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/direct-to-md-1.png" />
 						<div class="text_500">
 							Write an open/close letter to the managing director of the company. The associate writing the letter can chose if the letter is open/close. In case of an open letter it goes to the feed of all associates, who can put their opinions regarding the content of the letter. In case of a close letter the letter is received only by the managing director in their inbox and the rest of the person do not come to know about the letter.
 						</div>
@@ -174,7 +174,7 @@ li{margin-left:2em;}
 						2.	Director’s Blog
 					</div>
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/blog-2.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/blog-2.png" />
 						<div class="text_500">
 							Directors/senior management of the organization can write blogs on significant issues concerning the organization. This blog is viewed by all the associates of the organization and they can pitch they views on them.
 						</div>	
@@ -185,7 +185,7 @@ li{margin-left:2em;}
 						3.	Group for each team/technical/non-technical groups
 					</div>
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/group-3.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/group-3.png" />
 						<div class="text_500">
 							Each team in the organization has a group associated with it. Each member of the team joins this group by default as soon as he/she signs up for Quipmate.
 							Two kinds of group can be created for interest based sharing technical and non-technical. Groups provide features for sharing like discussion/doc/photo/video/question.
@@ -197,7 +197,7 @@ li{margin-left:2em;}
 						4.	Profile
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/profile-21.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/profile-21.png" />
 						<div class="text_500">
 						Contains history of everything shared by you on Quipmate.
 						</div>
@@ -208,7 +208,7 @@ li{margin-left:2em;}
 						5.	Praise a fellow associate publicly
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/praise-4.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/praise-4.png" />
 						<div class="text_500">
 						Managers/ any associate can praise their fellow employee for any good work they have done in any area.
 						</div>
@@ -219,7 +219,7 @@ li{margin-left:2em;}
 						6.	Poll/ Question
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/question-5.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/question-5.png" />
 						<div class="text_500">
 							Poll/Question can be used take opinion as technical queries. They provide percentage-wise list of people who voted for a particular answer.
 						</div>
@@ -230,7 +230,7 @@ li{margin-left:2em;}
 						7.	Events
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/event-6.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/event-6.png" />
 						<div class="text_500">
 							Events are useful for gathing and inviting people to any organizational gathering.
 						</div>
@@ -241,7 +241,7 @@ li{margin-left:2em;}
 						8.	Moderation
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/moderation-7.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/moderation-7.png" />
 						<div class="text_500">
 							Quipmate provides moderation to people from the organization. Moderators will be chosen by the organization. 
 							Moderators get the ability to remove any content/post posted by any user which they find non-legitimate or in conflict with the interest of the organization.
@@ -254,7 +254,7 @@ li{margin-left:2em;}
 						9.	News Feed
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/news-feed-8.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/news-feed-8.png" />
 						<div class="text_500">
 							News feed comes on the landing page once the user logs in. News feed brings any happening in the organization directly to the home page of associates. 
 							They get updates about the groups they have joined, from people they have subscribed to, any broadcast content to all associates.
@@ -266,7 +266,7 @@ li{margin-left:2em;}
 						10.	Live Feed
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/live-feed-9.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/live-feed-9.png" />
 						<div class="text_500">
 							Live feed provides live update on all the activity done on any subscribed content.
 						</div>	
@@ -277,7 +277,7 @@ li{margin-left:2em;}
 						11.	Bio/Resume Sharing
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/bio-10.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/bio-10.png" />
 						<div class="text_500">
 							Every associate can share thier skills, projects, tools, certificates, awards etc.
 						</div>	
@@ -288,7 +288,7 @@ li{margin-left:2em;}
 						12.	Event/Birthday reminders
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/event-reminder-11.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/event-reminder-11.png" />
 						<div class="text_500">
 							You get update on all events on your home page.
 						</div>
@@ -299,7 +299,7 @@ li{margin-left:2em;}
 						13.	Link sharing 
 					</div>	
 						<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/link-sharing-12.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/link-sharing-12.png" />
 						<div class="text_500">
 							Any link on web can be shared using link sharing which brings a short description of the shared content including title, meta, description.
 						</div>	
@@ -310,7 +310,7 @@ li{margin-left:2em;}
 						14.	Photo/album/doc/video sharing
 					</div>	
 						<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/photo-13.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/photo-13.png" />
 						<div class="text_500">
 							Photos of company event, get togethers can be shared with associates in the organization. Doc like pdf, ppt, doc, txt can be shared with associates. Share video with associates
 						</div>	
@@ -321,7 +321,7 @@ li{margin-left:2em;}
 						15.	Broadcast news to all employees
 					</div>	
 						<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/news-feed-8.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/news-feed-8.png" />
 						<div class="text_500">
 						Moderators can broadcast content to all associates in the company.
 						</div>
@@ -332,7 +332,7 @@ li{margin-left:2em;}
 						16.	Personal messaging/chat
 					</div>	
 						<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/chat-14.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/chat-14.png" />
 						<div class="text_500">
 						Talk with any associate in the company using messaging/chat.
 						</div>
@@ -343,7 +343,7 @@ li{margin-left:2em;}
 						17.	Miss U
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/missu-15.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/missu-15.png" />
 						<div class="text_500">
 						This is personal networking feature using which any associate can miss any other associate in the company.
 						</div>
@@ -354,7 +354,7 @@ li{margin-left:2em;}
 						18.	Mood sharing
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/mood-16.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/mood-16.png" />
 						<div class="text_500">
 						Associate can share their mood using a smiley icon describing how they feel on any particular day.
 						</div>
@@ -365,7 +365,7 @@ li{margin-left:2em;}
 						19.	Notification on mail/website (configurable by user)
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/notification-17.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/notification-17.png" />
 						<div class="text_500">
 						One can chose which notification they want any which they don't want can opt out from them.
 						One can chose to subscribe/unsubscribe for emails from any updates.
@@ -377,7 +377,7 @@ li{margin-left:2em;}
 						20.	Exciting/ comment on all features
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/comment-response-23.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/comment-response-23.png" />
 						<div class="text_500">
 						Using comments any post can be turned into a discussion and people can chose to say exciting on any post.
 						</div>
@@ -388,7 +388,7 @@ li{margin-left:2em;}
 						21.	Sending virtual gifts
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/gift-22.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/gift-22.png" />
 						<div class="text_500">
 						One can send gifts to other associate.
 						</div>
@@ -399,7 +399,7 @@ li{margin-left:2em;}
 						22.	Search(skill, projects, tools including complete bio etc)
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/search-19.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/search-19.png" />
 						<div class="text_500">
 						Search for people with specific skill sets, tools they have worked, ant project they have worked on.
 						</div>
@@ -410,7 +410,7 @@ li{margin-left:2em;}
 						23.	Privacy
 					</div>	
 					<div class="feature_detail">
-						<img class="lfloat" src="http://icon.qmcdn.net/privacy-20.png" />
+						<img class="lfloat" src="<?php echo $icon_cdn?>/privacy-20.png" />
 						<div class="text_500">
 						Privacy control on everything that is shared including status, photo, link, items on bio.
 						</div>
@@ -419,40 +419,40 @@ li{margin-left:2em;}
 			
 				<div style="background-color:#336699;padding:0.5em 0.5em 0.5em 3.5em;color:#ffffff;font-size:2em;">How Quipmate helps in employee engagement?</div>
 				<div class="technology_each">
-					<img src="http://icon.qmcdn.net/title-1.png" />
+					<img src="<?php echo $icon_cdn?>/title-1.png" />
 				</div>				
 				<div class="technology_each">
-					<img src="http://icon.qmcdn.net/goal-2.png" />
+					<img src="<?php echo $icon_cdn?>/goal-2.png" />
 				</div>
 				<div class="technology_each">
-					<img src="http://icon.qmcdn.net/why-3.png" />
+					<img src="<?php echo $icon_cdn?>/why-3.png" />
 				</div>
 				<div class="technology_each">
-					<img src="http://icon.qmcdn.net/ee-feature-4.png" />
+					<img src="<?php echo $icon_cdn?>/ee-feature-4.png" />
 				</div>
 				<div class="technology_each">
-					<img src="http://icon.qmcdn.net/model-5.png" />
+					<img src="<?php echo $icon_cdn?>/model-5.png" />
 				</div><div class="technology_each">
-					<img src="http://icon.qmcdn.net/one-one--6.png" />
+					<img src="<?php echo $icon_cdn?>/one-one--6.png" />
 				</div><div class="technology_each">
-					<img src="http://icon.qmcdn.net/one-group-7.png" />
+					<img src="<?php echo $icon_cdn?>/one-group-7.png" />
 				</div>
 				<div class="technology_each">
-					<img src="http://icon.qmcdn.net/group-one-8.png" />
+					<img src="<?php echo $icon_cdn?>/group-one-8.png" />
 				</div>
 				<div class="technology_each">
-					<img src="http://icon.qmcdn.net/group-group-9.png" />
+					<img src="<?php echo $icon_cdn?>/group-group-9.png" />
 				</div>
 				<div class="technology_each">
-					<img src="http://icon.qmcdn.net/benefits-10.png" />
+					<img src="<?php echo $icon_cdn?>/benefits-10.png" />
 				</div>
 				<div class="technology_each">
-					<img src="http://icon.qmcdn.net/outcome-11.png" />
+					<img src="<?php echo $icon_cdn?>/outcome-11.png" />
 				</div>
 				<div class="technology_each">
-					<img src="http://icon.qmcdn.net/sales-12.png" />
+					<img src="<?php echo $icon_cdn?>/sales-12.png" />
 				</div>
-				<div style="background-color:#336699;text-align:center;padding:0.5em;"><a target="_blank" style="text-decoration:none;color:#ffffff;" href="http://doc.qmcdn.net/How%20Quipmate%20helps%20in%20employee%20engagement.pdf">Download a copy</a></div>				
+				<div style="background-color:#336699;text-align:center;padding:0.5em;"><a target="_blank" style="text-decoration:none;color:#ffffff;" href="<?php echo $doc_cdn;?>/How%20Quipmate%20helps%20in%20employee%20engagement.pdf">Download a copy</a></div>				
 			</div>
 		</div>
 	</div>

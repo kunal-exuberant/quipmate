@@ -1,6 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 <html>
 <head>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
 <?php
 require_once '../include/header.php';
 require_once('../include/Help.php');
@@ -10,28 +12,44 @@ $database= new Database();
 $help = new Help();
 $mcount = $database->unread_message_select($profileid,$college);
 ?>
-<div id="wrapper">
-	<div id="left">
-			<a href="profile.php?id=<?php echo $myprofileid ?>"><img style="float:left;border:.2em solid #f9f9f9;margin:0em 0.5em 0em 0em;" src="<?php echo $_SESSION['pimage']; ?>" width="45" height="45" /></a>
-			<div style="display:block;">
-				<div>
-					<a style="font-weight:bold;" href="profile.php?id=<?php echo $myprofileid ?>"><?php echo $_SESSION['NAME']; ?></a>
-				</div>
-				<div style="margin-top:0.5em;">
-					<a style="color:#003399;" href="#">I am Admin</a>
-				</div>
-			</div>  
-			<ul style="list-style:none;clear:left;margin-top:3em;" id="links"> 
-					<li class="links"><a class="ajax_nav<?php if($page=='admin_json') echo ' selected'; ?>" id="news_json" href="?hl=update" title="Updates from your friends"><img class="lfloat" src="http://icon.qmcdn.net/news_rss.png" height="18" width="18" /><span class="name_20">Admin Feed</span></a></li>
-					<li class="links"><a class="ajax_nav<?php if($page=='invite') echo ' selected'; ?>" id="news_json" href="?hl=invite" title="Invite fellow assciates to the network"><img class="lfloat" src="http://icon.qmcdn.net/friends_blue.png" height="18" width="18" /><span class="name_20">Invite Employees</span></a></li>
-					<li class="links"><a class="ajax_nav<?php if($page=='admin') echo ' selected'; ?>" id="news_json" href="?hl=admin" title="List of all admins of this network"><img class="lfloat" src="http://icon.qmcdn.net/friends_blue.png" height="18" width="18" /><span class="name_20">Admin List</span></a></li>
-					<li class="links"><a class="ajax_nav<?php if($page=='remove_user') echo ' selected'; ?>" id="news_json" href="?hl=remove_user" title="Updates from your friends"><img class="lfloat" src="http://icon.qmcdn.net/friends_blue.png" height="18" width="18" /><span class="name_20">Remover User</span></a></li>
-			        <li class="links"><a class="ajax_nav<?php if($page=='anlytics') echo ' selected'; ?>" id="news_json" href="?hl=analytics" title="Analytics"><img class="lfloat" src="http://icon.qmcdn.net/friends_blue.png" height="18" width="18" /><span class="name_20">Analytics</span></a></li>
-					 <li class="links"><a class="ajax_nav<?php if($page=='feature') echo ' selected'; ?>" id="news_json" href="?hl=feature" title="Feature setting"><img class="lfloat" src="http://icon.qmcdn.net/friends_blue.png" height="18" width="18" /><span class="name_20">Control features</span></a></li>
+<!--
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+-->
+<script>
+ /*$(function() {
+$( "#startdate" ).datepicker();
+$( "#enddate" ).datepicker();
+});*/
+</script> 
+<div class="container">
+  <div class="row" >
+    <div class="col-md-2 left" id="left">
+			<ul class="nav nav-pills nav-stacked"> 
+					<li class="links"><a class="ajax_nav<?php if($page=='admin_json') echo ' selected'; ?>" id="news_json" href="admin.php?hl=update" title="Updates from your friends"><span class="name_20">Admin Feed</span></a></li>
+					<li class="links"><a class="ajax_nav<?php if($page=='invite') echo ' selected'; ?>" id="news_json" href="admin.php?hl=invite" title="Invite fellow assciates to the network"><span class="name_20">Invite Employees</span></a></li>
+					<li class="links"><a class="ajax_nav<?php if($page=='admin') echo ' selected'; ?>" id="news_json" href="admin.php?hl=admin" title="List of all admins of this network"><span class="name_20">Admin List</span></a></li>
+					
+					<li class="links"><a class="ajax_nav<?php if($page=='usefullinks') echo ' selected'; ?>" id="news_json" href="admin.php?hl=usefullinks" title="Post Useful Links"><span class="name_20">Useful Links</span></a></li>
+				  <li class="links"><a class="ajax_nav<?php if($page=='designation') echo ' selected'; ?>" id="news_json" href="admin.php?hl=designation" title="Designation"><span class="name_20">Designation</span></a></li>
+				   <li class="links"><a class="ajax_nav<?php if($page=='team') echo ' selected'; ?>" id="news_json" href="admin.php?hl=team" title="Team"><span class="name_20">Team</span></a></li>
+				   <li class="links"><a class="ajax_nav<?php if($page=='sotw') echo ' selected'; ?>" id="news_json" href="admin.php?hl=sotw" title="Star Of The Week"><span class="name_20">Star Of The Week</span></a></li>
+				   <!--<li class="links"><a class="ajax_nav" id="flashboard" href="admin.php?hl=flashboard" title="Flashboard"><span class="name_20">Flashboard</span></a></li> -->
+				   
+				    <li class="links"><a class="ajax_nav<?php if($page=='group_byadmin') echo ' selected'; ?>" id="news_json" href="admin.php?hl=group_byadmin" title="Groups To Suggest"><span class="name_20">Groups To Suggest</span></a></li>
+				   
+					 <li class="links"><a class="ajax_nav<?php if($page=='group_suggest_admin') echo ' selected'; ?>" id="news_json" href="admin.php?hl=group_suggest_admin" title="Groups To Suggest"><span class="name_20">Groups To Suggest</span></a></li>
+					<li class="links"><a class="ajax_nav<?php if($page=='remove_user') echo ' selected'; ?>" id="news_json" href="admin.php?hl=remove_user" title="Updates from your friends"><span class="name_20">Remover User</span></a></li>
+			       <!-- <li class="links"><a class="ajax_nav<?php// if($page=='anlytics') echo ' selected'; ?>" id="news_json" href="admin.php?hl=analytics" title="Analytics"><span class="name_20">Analytics</span></a></li> -->
+					 <li class="links"><a class="ajax_nav<?php if($page=='feature') echo ' selected'; ?>" id="news_json" href="admin.php?hl=feature" title="Feature setting"><span class="name_20">Control features</span></a></li>
             </ul> 
 			<div name="page" style="margin-top:1em;">
 			<span style="font-weight:bold;font-size:1em;color:gray">Pages</span>
-			<ul>
+			<ul class="nav nav-pills nav-stacked">
 					<?php						
 						$result = $database->page_select_all();
 						while($row = $result->fetch_array())
@@ -39,11 +57,11 @@ $mcount = $database->unread_message_select($profileid,$college);
 							$pageid = $row['pageid'];
 							$nrow = $database->page_select($pageid);
 							?>
-							<li class="links"><a href="page.php?id=<?php echo $pageid;?>" title="Groups"><img class="lfloat" src="http://icon.qmcdn.net/broadcast.png" height="18" width="18" /><span class="name_20 ellipsis"><?php echo $nrow['name'];?></span></a></li>
+							<li class="links"><a class="ajax_nav" href="page.php?id=<?php echo $pageid;?>" title="Pages"><span class="name_20 ellipsis"><?php echo $nrow['name'];?></span></a></li>
 							<?php
 						}
 					?>
-				<li class="links"><a href="#" onclick="ui.page_create(this)" title="Create a group for people with a specific interest"><img class="lfloat" src="http://icon.qmcdn.net/plus.png" height="13" width="13" /><span class="name_20">Create Page</span></a></li>
+				<li ><a href="#" onclick="ui.page_create(this)" title="Create a page to broadcast news to all the employees"><span class="name_20">Create Page</span></a></li>
 			</ul>
 			</div>
 			<div id="friend_event" class="right_item" style="margin:1em 0em 0em 0em;padding:0em;"></div>
@@ -57,15 +75,94 @@ $mcount = $database->unread_message_select($profileid,$college);
 		if($page == 'invite')
 		{
 		?>
-			<div id="center">
+			<div id="center" class="col-md-6 center">
 				<h1 class="page_title">Invite Employees</h1>
 					<div style="margin:3em;">
 						<textarea placeholder="Paste a list of email address separated by comma" id="employee_invite_box" style="border:0.1em solid #aaaaaa;width:34.6em;height:20.2em;padding:0.5em;margin-right:0.2em;"></textarea>
-						<input type="submit" onclick="action.employee_invite(this)" value="Invite" id="employee_invite_button" title="Invite A Friend" />
+						<input type="submit" class="button" onclick="action.employee_invite(this)" value="Invite" id="employee_invite_button" title="Invite A Friend" />
 					</div>
+				<!--	<h1 class="page_title">Attach CSV</h1><form id="flashform" method="post" enctype="multipart/form-data" action="/ajax/write.php"><textarea style="border:1px solid #cccccc;height:2.7em;padding:0.5em;width:34.6em;margin-left:3em;" type="text" placeholder="Say something about this file" maxlength="200" id="photo_description" name="photo_description"></textarea><div id="vish_Btn" style="position: relative;top: 10px;font-family: calibri;width: 180px;height:100px;padding-top:35px;-webkit-border-radius: 5px;-moz-border-radius: 5px;border: 1px dashed #BBB; text-align: center;background-color:#DDD;cursor:pointer; margin-left:3em;">Upload CSV File</div><input type="file" id="html_btn" size="40" style="margin-top:-20px; margin-left:95px; display:none;" name="photo_box"/></br><input type="submit" name="upload" id="flash_upload_button" value="Upload" style="margin-left:3em;"><input type="hidden" name="action" value="employee_invite_file_upload"></form> -->
 			</div>
 		<?php
 		}
+		
+		
+		else if($page == 'usefullinks')
+		{
+		?>
+			<div id="center" class="col-md-6 center">
+				<h1 class="page_title">Post Useful Links</h1>
+					<div style="margin:3em;border:0.1em solid #aaaaaa;width:34.6em;height:20.2em;padding:0.5em;margin-right:0.2em; overflow-y:scroll; overflow-x:hidden;" id="usefullinks_box">
+						
+						
+					</div>
+					<input type="submit"  value="Got Link"  id="ullink_box" title="Paste Link" /><div id="uluploader"></div>
+			</div>
+			</div>
+		<?php
+		}
+		
+		else if($page == 'designation')
+		{
+		?>
+			<div id="center" class="col-md-6 center">
+				<h1 class="page_title">Designations</h1>
+				<div style="margin:3em;border:0.1em solid #aaaaaa;width:34.6em;height:20.2em;padding:0.5em;margin-right:0.2em; overflow-y:scroll; overflow-x:hidden;" id="designation_show_box" ></div>
+				<input type="text" class="form-control"  placeholder="Add a designation" style="margin-left:2.80em; width:50%;display:inline" id="designation_box"/> 	<input type="submit" onclick="action.designation(this)" value="Add" id="designation_button" title="Add" />
+				
+				
+				<h1 class="page_title">Managing Director</h1><input type="text" id="mdadd" autocomplete="off" style="width:20em; margin-left:2.80em; margin-top:20px;" class="form-control" placeholder="Who is the managing director"> <div id="md_container" width="200px" style="margin-left:20px;" ></div><div id="md_co" style="width:30em; margin-left:20px;"><input type="submit" style="margin-top:-34px;" onclick="action.addmd(this)" value="Add MD" id="add_md_button" title="Add MD" /></div>
+			</div>
+			
+				
+			
+		<?php
+		}
+		
+		else if($page == 'team')
+		{
+		?>
+			<div id="center" class="col-md-6 center">
+				<h1 class="page_title">Teams</h1>
+				<div style="margin:3em;border:0.1em solid #aaaaaa;width:34.6em;height:20.2em;padding:0.5em;margin-right:0.2em; overflow-y:scroll; overflow-x:hidden;" id="team_show_box" ></div>
+				<input type="text" class="form-control"  placeholder="Add a team" style="margin-left:2.80em; width:50%;display:inline" id="team_box"/> 	<input type="submit" onclick="action.team(this)" value="Add" id="team_button" title="Add" />
+			</div>
+		<?php
+		}
+		
+		else if($page == 'sotw')
+		{
+		?>
+			<div id="center" class="col-md-6 center">
+				<h1 class="page_title">Star Of The Week</h1>
+		
+				<input type="text" id="hso" autocomplete="off" style="width:20em;"   class="form-control" placeholder="Search people"> <div id="star_container" width="200px" style="margin-left:20px;" ></div><div id="sotw2" style="width:30em; margin-left:20px;"></div>
+			</div>
+		<?php
+		}
+		
+	else if($page == 'group_byadmin')
+		{
+		?>
+			<div id="center" class="col-md-6 center">
+				<h1 class="page_title">Groups To Suggest</h1>
+		
+				
+			</div>
+			
+		<?php
+		}
+		
+		else if($page == 'flashboard')
+		{
+		?>
+			<div id="center" class="col-md-6 center">
+				<h1 class="page_title">Flashboard</h1><form id="pform" method="post" enctype="multipart/form-data" action="/ajax/write.php"><textarea style="border:1px solid #cccccc;height:2.7em;padding:0.5em;margin:0.5em;" type="text" placeholder="Say something about this file" maxlength="200" id="photo_description" name="photo_description"></textarea><input size="30" type="file" name="photo_box" id="photo_box"></br><input type="submit" name="upload" id="photo_upload_button" value="Upload"><input type="hidden" id="photo_hidden_profileid" name="photo_hidden_profileid" value="1000000122"><input type="hidden" name="action" value="photo_upload"></form>
+			</div>
+		<?php
+		}
+		
+		
 		else if($page == 'feature')
 		{
 			$row = array();
@@ -76,7 +173,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 				//echo $result['name'];
 			}
 	?>
-<div id="center" style="height:auto;margin-top:1.2em;">
+<div id="center" style="height:auto; " class="col-md-6 center">
 		<h1 class="profile_edit_title" id="basic">Set feature On/Off</h1>
 		<div class="profile_edit_container"> 
 			<div class="setting_each bgcolor">
@@ -110,12 +207,12 @@ $mcount = $database->unread_message_select($profileid,$college);
 		else if($page == 'admin')
 		{
 			?>
-			<div id="center" >
+			<div id="center" class="col-md-6 center">
 				<div class="">
 				<h1 class="page_title">Manage Admins</h1>
 					<div style="padding:4em;">
-						<input id="remove_user_email" type="text" placeholder="Enter the email address" value="" style="height:2.4em;padding:0.4em;width: 22em;" />
-						<input id="invite_button" type="submit" onclick="action.user_details(this)" value="Add Admin" data="Add Admin" title="Add as admin" style=" background: none repeat scroll 0 0 #336699;color:#FFFFFF;cursor:pointer;font-weight:bold;height: 3.4em; padding: 0.2em;width: 7.6em;" />
+						<input id="remove_user_email" type="text" placeholder="Enter the email address" value="" style="height:2.4em;padding:0.4em;width:22em;"/>
+						<input id="invite_button" type="submit" class="button" onclick="action.user_details(this)" value="Add Admin" data="Add Admin" title="Add as admin" style="height:3.4em;padding:0.2em;width:7.6em;" />
 					</div>
 				</div> 
 				<div id="fetch_user_details" style="padding:1.5em;"></div> 
@@ -128,7 +225,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 				$profileid = $result['profileid'];
 				?>
 				<div style="height:8em;clear:both;padding:1.5em;">
-					<a style="font-weight:bold;" href="profile.php?id=<?php echo $profileid ?>"><img class="lfloat" height="80" width="80" src="<?php echo $help->pimage_fetch($profileid, $memcache,$database); ?>" /></a><div class="name_80"><a style="font-weight:bold;" href="profile.php?id=<?php echo $profileid ?>"><?php echo $help->name_fetch($profileid, $memcache, $database); ?></a><div style="float:right;"><input id="invite_button" type="submit" onclick="action.moderator_remove(this,<?php echo $profileid ?>)" value="Remove Admin" title="Remove Admin" style=" cursor:pointer;font-weight:bold;height: 3.1em;width:9.3em;margin-top:3em;" /></div></div>
+					<a style="font-weight:bold;" class="ajax_nav" href="profile.php?id=<?php echo $profileid ?>"><img class="lfloat" height="80" width="80" src="<?php echo $help->pimage_fetch($profileid, $memcache,$database); ?>" /></a><div class="name_80"><a style="font-weight:bold;" class="ajax_nav" href="profile.php?id=<?php echo $profileid ?>"><?php echo $help->name_fetch($profileid, $memcache, $database); ?></a><div style="float:right;"><input id="invite_button" type="submit" onclick="action.moderator_remove(this,<?php echo $profileid ?>)" value="Remove Admin" title="Remove Admin" style=" cursor:pointer;font-weight:bold;height: 3.1em;width:9.3em;margin-top:3em;" /></div></div>
 				</div>
 				<?php
 			}
@@ -139,12 +236,12 @@ $mcount = $database->unread_message_select($profileid,$college);
 		else if($page == 'remove_user')
 		{
 			?>
-			<div id="center" >
+			<div id="center" class="col-md-6 center">
 				<div class="">
 				<h1 class="page_title">Remove User From Network</h1>
 					<div style="padding:5em;">
 						<input id="remove_user_email" type="text" placeholder="Enter the email address" value="" style="height:2.4em;padding:0.4em;width: 22em;" />
-						<input id="invite_button" type="submit" onclick="action.user_details(this)" value="Remove User" data="Remove User" title="Remove User" style=" background: none repeat scroll 0 0 #336699;color:#FFFFFF;cursor:pointer;font-weight:bold;height: 3.4em; padding: 0.2em;width: 10.6em;" />
+						<input class="theme_button" type="submit" class="button" onclick="action.user_details(this)" value="Remove User" data="Remove User" title="Remove User"  />
 					</div>
 					<div id="fetch_user_details" style="padding:1.5em;"></div>
 				</div>
@@ -153,29 +250,46 @@ $mcount = $database->unread_message_select($profileid,$college);
 		}
          else if($page=="analytics")
          {     ?>
-         <div id="center" >
-                <div class="">
+         <div id="center" class="col-md-6 center">
+				<div class="">
                 <h1 class="page_title">Analytics</h1>
                     <div id="analytics">
-          Select Value:  <br/>
-          <select id="box" onload="action.getanalyticdetails(this,this.value)" onchange="action.getanalyticdetails(this,this.value)" >
-          <option value="daily" selected="selected">Daily Report</option>
-          <option value="weekly" >Weekly Report</option>
-          <option value="monthly">Monthly Report</option>
-          </select>
-          </div>
-                    <div id="fetch_user_details" style="padding:1.5em;"></div>
-                </div>
-            </div>   
+					
+					<p >Start Date: <input type="text" name="startdate" id="startdate">   End Date: <input type="text" name="enddate" id="enddate">
+					</p>
+					<p>Select Value: 
+		  <select id="typedata" >
+          <option value="post" selected="selected">Post</option>
+          <option value="joined" >Joined</option>
+          <option value="comment">Comment</option>
+		  <option value="visit">Visit</option>
+		  <option value="view">View</option>
+		  </select></p>
+					
+					<span id="error" style="display:none; color:#0C0">Enter end date</span>
+					
+                    <input type="button" value="OK" id= "button" onclick="action.getanalyticdetails(this,document.getElementById
+
+('startdate').value,document.getElementById('enddate').value,document.getElementById('typedata').value)
+">
+<span id="rangeError" style="display:none; color:#0C0">Range should be less than 15 days </span>
+				<p id="chart"> </p>
+				</div>
+				<div id="fetch_user_details" style="padding:1.5em;"></div>
+				<!--<input type="button" value="ok" id= "button" onclick="analytics()">-->
+				</div>
+		 <!--<div id="chart_div" style="width:48em; height: 500px;"></div>-->
+		</div>   
          <?php }
 		else
 		{
-			echo '<div id="center" ></div>';
+			echo '<div id="center" class="col-md-6 center" ></div>';
 		}
 	?>
-	<div id="right">
+	<div id="right" class="col-md-3 right">
 	</div>
-</div>      <!-- wrapper closed(started in this page only)-->
+</div><!--- Row Closed-->
+</div><!--- Container Closed-->
 	<?php require_once('../include/footer.php'); ?>
 </body> 
 </html>

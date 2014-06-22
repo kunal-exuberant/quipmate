@@ -7,9 +7,9 @@ body{background-color:#eeeeee}
 #wrapper{width: 111em;margin: 0 auto;position:relative;}
 .tab_each{background-color:#888888;border-bottom:0.5em solid #4c66a4;color:#ffffff;font-size: 1.1em;padding:1em 3em;text-decoration: none;}
 .tab{text-align:center;padding:1.6em;margin:0.5em;}
-#recover_password_box{}
+#recover_password_box{text-align:left;padding:1em 6em;}
 #recover_password_box input{padding:.5em;}
-#forgot_password_box{}
+#forgot_password_box{text-align:left;margin:0em 8em;}
 #forgot_password_box input{padding:.5em;}
 #qm-flogo{float:left;margin-right:4em;}
 #login_box{display:table;text-align:left;padding:1.6em 0em 0em 0em;}
