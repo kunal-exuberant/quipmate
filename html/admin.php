@@ -38,13 +38,13 @@ $( "#enddate" ).datepicker();
 				  <li class="links"><a class="ajax_nav<?php if($page=='designation') echo ' selected'; ?>" id="news_json" href="admin.php?hl=designation" title="Designation"><span class="name_20">Designation</span></a></li>
 				   <li class="links"><a class="ajax_nav<?php if($page=='team') echo ' selected'; ?>" id="news_json" href="admin.php?hl=team" title="Team"><span class="name_20">Team</span></a></li>
 				   <li class="links"><a class="ajax_nav<?php if($page=='sotw') echo ' selected'; ?>" id="news_json" href="admin.php?hl=sotw" title="Star Of The Week"><span class="name_20">Star Of The Week</span></a></li>
-				   <!--<li class="links"><a class="ajax_nav" id="flashboard" href="admin.php?hl=flashboard" title="Flashboard"><span class="name_20">Flashboard</span></a></li> -->
+				   <li class="links"><a class="ajax_nav" id="flashboard" href="admin.php?hl=flashboard" title="Flashboard"><span class="name_20">Flashboard</span></a></li> 
 				   
 				    <li class="links"><a class="ajax_nav<?php if($page=='group_byadmin') echo ' selected'; ?>" id="news_json" href="admin.php?hl=group_byadmin" title="Groups To Suggest"><span class="name_20">Groups To Suggest</span></a></li>
 				   
 					 <li class="links"><a class="ajax_nav<?php if($page=='group_suggest_admin') echo ' selected'; ?>" id="news_json" href="admin.php?hl=group_suggest_admin" title="Groups To Suggest"><span class="name_20">Groups To Suggest</span></a></li>
 					<li class="links"><a class="ajax_nav<?php if($page=='remove_user') echo ' selected'; ?>" id="news_json" href="admin.php?hl=remove_user" title="Updates from your friends"><span class="name_20">Remover User</span></a></li>
-			       <!-- <li class="links"><a class="ajax_nav<?php// if($page=='anlytics') echo ' selected'; ?>" id="news_json" href="admin.php?hl=analytics" title="Analytics"><span class="name_20">Analytics</span></a></li> -->
+			        <li class="links"><a class="ajax_nav<?php if($page=='anlytics') echo ' selected'; ?>" id="news_json" href="admin.php?hl=analytics" title="Analytics"><span class="name_20">Analytics</span></a></li>
 					 <li class="links"><a class="ajax_nav<?php if($page=='feature') echo ' selected'; ?>" id="news_json" href="admin.php?hl=feature" title="Feature setting"><span class="name_20">Control features</span></a></li>
             </ul> 
 			<div name="page" style="margin-top:1em;">

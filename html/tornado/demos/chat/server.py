@@ -70,6 +70,7 @@ class Query(Database):
 
 	def chat_insert(self, actionid, sentby, sentto, message, time):
 		cursor = self.connect()
+		message = unicode(message,"utf-8")
 		sql_query = r"insert into inbox(ACTIONID, ACTIONBY, ACTIONON, MESSAGE, TIME) values( '%s', '%s', '%s', '%s', '%s')" %(actionid, sentby, sentto, message, time)
 		return self.query(sql_query, cursor)
 
@@ -84,7 +85,7 @@ class Query(Database):
 		cur = self.query(sql_query, cursor)
 		if cur.rowcount == 0:
 			cursor = self.connect()
-			sql_query = "SELECT 'http://profile-1.qmcdn.net/' as CDN,'male.png' AS FILENAME"
+			sql_query = "SELECT 'https://ebdd192075d95c350eef-28241eefd51f43f0990a7c61585ebde0.ssl.cf2.rackcdn.com/' as CDN,'male.png' AS FILENAME"
 			return self.query(sql_query, cursor)
 		return cur
 
@@ -357,14 +358,16 @@ class ChatNewHandler(BaseHandler, ChatMixin):
 			action = []
 			self.DB_NAME = self.get_argument("database")
 			database = self.get_argument("database")
+			message = self.get_argument("message").encode("utf-8")
 			cursor = self.get_globalid()
 			rows = cursor.fetchall()
 			for row in rows:
-				self.chat_insert(row[0], self.get_argument("profileid"), self.get_argument("userid"), MySQLdb.escape_string(self.get_argument("message")), time.time())
+				self.chat_insert(row[0], self.get_argument("profileid"), self.get_argument("userid"), MySQLdb.escape_string(message), time.time())
 				chat['actionid'] = row[0]
 				chat['sentby'] = self.get_argument("profileid")
 				chat['sentto'] = self.get_argument("userid")
-				chat['message'] = self.get_argument("message")
+				chat['message'] = unicode(message,"utf-8")
+				chat['chat_sent_time'] = self.get_argument("chat_sent_time")
 				chat['time'] = time.time();
 				chat['type'] = 3
 				name[chat['sentby']] = self.get_argument("name")

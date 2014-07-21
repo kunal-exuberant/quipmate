@@ -105,6 +105,17 @@
 				//
 			}
 		}
+		function doc_remove(me, data)
+		{
+			if(data.ack ==1)
+			{
+				$('div#'+data.docid+'').remove();
+			}
+			else
+			{
+				//
+			}
+		}
 		
 		function event_join(me, data)
 		{
@@ -133,23 +144,26 @@
 				{
 					$('table').append('<tr></tr>');
 				}
-				$('tr:last').append('<td style="color:blue;padding:2em;"><a class="ajax_nav" style="color:#336699;" href="profile.php?id='+value.profileid+'&pl=diary"><img class="lfloat" src="'+data.pimage[value.profileid]+'" height="60" width="60" /></a><br /><a class="ajax_nav" style="color:#336699;" href="profile.php?id='+value.profileid+'&pl=diary">'+data.name[value.profileid]+'<br />'+value.birthday+' </a></td>');
+				$('tr:last').append('<td style="color:blue;padding:2em;"><a class="ajax_nav " style="color:#336699;" href="profile.php?id='+value.profileid+'&pl=diary"><img src="'+data.pimage[value.profileid]+'" height="60" width="60" /></a><br /><a class="ajax_nav" style="color:#336699;" href="profile.php?id='+value.profileid+'&pl=diary">'+data.name[value.profileid]+'<br />'+value.birthday+' </a></td>');
 				i++;
 			});
 		}
 		
 		function comment(me, data)
 		{
-				var icon_cdn = $('#icon_cdn').attr('value');
+			var icon_cdn = $('#icon_cdn').attr('value');
 			var myprofileid = $('#myprofileid_hidden').attr('value');
 			var myname = $('#myprofilename_hidden').attr('value');
 			var myphoto = $('#myprofileimage_hidden').attr('value');
 			var pageid = $(me).parent().parent().parent().attr('data');
 			if(data.ack)
 			{
-				var userid = data.comment.substring(data.comment.indexOf('@[')+2,data.comment.indexOf(']'));
-				data.comment = data.comment.replace('@['+userid+']','<a class="ajax_nav" href="profile.php?id='+userid+'">'+data.name[userid]+'</a>');
-				$(me).append('<div class="cclass_json" data="'+ data.actionid +'" id="nf_post_'+data.actionid+'"><a class="ajax_nav" href="profile.php?id=' +myprofileid+ '"><img class="lfloat" src =' +myphoto+ ' height="32" width="32" /></a><div class="name_35"><div><a class="bold ajax_nav" style="margin-right:0.4em;" href="profile.php?id=' +myprofileid+ '" >' +myname+ '</a><pre>'+ui.get_smiley(ui.link_highlight(data.comment))+'</pre></div><div><a class="comment_time_json" href="action.php?actionid='+pageid+'&life_is_fun='+data.life_is_fun+'"><img src="'+icon_cdn+'/clock.png" width="6" /><span class="time" data="'+Math.floor((new Date()).getTime()/1000)+'">'+ui.time_difference(Math.floor((new Date()).getTime()/1000))+'</span></a><span data=' +myprofileid+ ' class = "comment_excite_json" onclick="action.response(this)">Exciting</span><span class="more_excite_json" onclick="action.response_fetch(this)" data="0"></span></div></div><span class="comment_setting" onclick="ui.post_delete(this)" >x</span></div>');
+				/*var userid = data.comment.substring(data.comment.indexOf('@[')+2,data.comment.indexOf(']'));
+				data.comment = data.comment.replace('@['+userid+']','<a class="ajax_nav" href="profile.php?id='+userid+'">'+data.name[userid]+'</a>'); */
+				$('#nf_post_'+data.comment_time).attr('data',data.actionid);
+				$('#nf_post_'+data.comment_time).attr('id',"nf_post_"+data.actionid);
+				$('#'+data.comment_time).removeClass('glyphicon-time');
+				$('#'+data.comment_time).addClass('glyphicon-ok');
 			}		
 		}
 		
@@ -169,6 +183,7 @@
 			$.each(data.option,function(i,v){
 			$('#nf_post_'+data.actionid).children().eq(1).children().eq(3).children().eq(1).append('<div class="option"><input type="checkbox" style="margin-right:0.5em" onchange="action.answer(this, '+data.actionid+', '+v.optid+')"/>'+v.opt+'<span class="rfloat tcolor"></span></div>');
 			});	
+			
 			$('#nf_post_'+data.actionid).children().eq(1).children().eq(3).children().eq(1).append('<div><input type="text" placeholder="+Add answer" value="" class="option" onkeydown="action.option_add(this,event)"><div>');
 			$('#uploader').html('<input type="text" id="status_box" value="" placeholder="What \'s going in your life?"/><input id="link_button theme_button" type="submit" value="Share">');
 		}
@@ -335,7 +350,7 @@
 		{
 			if(data.count > 0 )
 			{
-				$('#friend_match').html('<div class="panel-heading" >Friend match('+data.count+')</div><div class="panel-body" id="friend_match_body"></div>');
+				$('#friend_match').html('<div class="panel-heading" >Follower match('+data.count+')</div><div class="panel-body" id="friend_match_body"></div>');
 				$.each(data.match,function(index,value){
 				$('#friend_match_body').append('<span class="friend_match_class"><a class="ajax_nav" href="profile.php?id='+value.profileid+'"><img src="'+data.pimage[value.profileid]+'" height="30" width="30" title="'+data.name[value.profileid]+'"></a></span>');
 				});
@@ -346,7 +361,7 @@
 			}
 			if(data.ncount > 0)
 			{
-				$('#friend_non_match').html('<div class="panel-heading" >Friend non-match('+data.ncount+')</div><div class="panel-body" id="friend_non_match_body"></div>');
+				$('#friend_non_match').html('<div class="panel-heading" >Follower non-match('+data.ncount+')</div><div class="panel-body" id="friend_non_match_body"></div>');
 				$.each(data.non_match,function(index,value){
 				$('#friend_non_match_body').append('<span class="friend_match_class"><a class="ajax_nav" href="profile.php?id='+value.profileid+'"><img src="'+data.pimage[value.profileid]+'" height="30" width="30" title="'+data.name[value.profileid]+'"></a></span>');
 				});
@@ -355,6 +370,22 @@
 			{
 				$('#friend_non_match').remove();
 			}
+		}
+		function share_post(me,data)
+		{
+
+			$('#sharemodal').modal('hide');
+			$('.prompt_container').remove();     
+			$('.bg_hide_cover').remove();
+			$('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
+			
+			$('body').append('<div class="prompt_container"><div class="prompt_title">Action Successfully performed !</div><div class="prompt_content" id="invite_prompt_text"></div><div class="prompt_button"><input class="prompt_positive theme_button" type="submit" value="OK" onclick="ui.bg_hide()" /></div></div>');
+			$('body').css('overflow','hidden');
+			if(data.ack == 1)
+			{
+				$('#invite_prompt_text').append('Posted successfully in your diary !');
+			}
+
 		}
 		function employee_invite(me, data)
 		{
@@ -439,6 +470,7 @@
 		
 		function usefullinks_fetch(me, data)
 		{
+			
 				$.each(data,function(index,value){
 				$('#usefullinks_box').append('<div id="'+value.link_id+'" class="dsgn" style="position:relative;border-bottom: 0.1em solid rgb(221, 221, 221);clear: both;cursor: pointer;min-height: 2.5em;padding: 0.5em 0px 0.5em 0.4em;">'+value.title+'<span  onclick="ui.usefullinks_delete(this,'+value.link_id+')" class="dsgn_setting"></span></div>'); 
 				
@@ -448,13 +480,14 @@
 		
 		function usefullinks_load(me, data)
 		{
-			
+			if(data.length >0)
+			{
 				$('#right').append('<div id="useful_links_box" class="panel panel-default"><div class="panel-heading">Useful Links</div><div id="useful_links_box2" class="panel-body"></div></div>');
 					
 					$.each(data,function(index,value){
-					$('#useful_links_box2').append('<div><div class="name_32" ><a  style="color:#336699;font-weight:bold;" href="'+value.link+'" target="blank">'+value.title+'</a><div>'+value.link+'</div></div></br></div>');				
+					$('#useful_links_box2').append('<section><a  style="color:#336699;font-weight:bold;line-height:1.1;" href="'+value.link+'" target="blank">'+value.title+'</a><div>'+value.link+'</div></div></section>');				
 				});
-			
+			}
 		}
 		
 		function usefullinks_delete(me, data)
@@ -498,6 +531,18 @@
 				$('#center').append('<h1 class="page_title">Existing Stars</h1>');
 				$.each(data.star,function(index,value){
 					$('#center').append('<div style="height:8em;clear:both;padding:1.5em;"><a class="ajax_nav" style="font-weight:bold;" href="profile.php?id='+value.profileid+'"><img class="lfloat" height="80" width="80" src="'+data.pimage[value.profileid]+'" /></a><div class="name_80"><a class="ajax_nav" style="font-weight:bold;" href="profile.php?id='+value.profileid+'">'+data.name[value.profileid]+'</a><div>'+value.contribution+'</div><div style="float:right;"><input id="invite_button" class="theme_button" type="submit" onclick="action.star_remove(this,'+value.profileid+')" value="Remove Star" title="Remove Star" style=" cursor:pointer;font-weight:bold;height: 3.1em;width:9.3em;margin-top:3em;" /></div></div></div>');
+					});	
+		}
+		
+		function doc_load(me,data)
+		{
+				$('#center').append('<h1 class="page_title">Pinned Documents</h1><div id="existing" class="panel-body" align="left"></div>');
+				
+				$.each(data.pinned_doc,function(index,value){
+			var ext = value.caption.split('.').pop();
+			var icon_cdn = $('#icon_cdn').attr('value');
+				var fileimage =icon_cdn+'/'+ext.toLowerCase()+'.ico';
+			$('#existing').append('<div id="'+value.docid+'"  ><div class="name_50 display_inline_table"><img class="lfloat"  src="'+fileimage+'" width="50" height="50" style="padding-bottom:5px; "/><div class="name_50" ><a class="ajax_nav" style="color:#336699;font-weight:bold;" href="profile.php?id='+value.filename+'">'+value.caption+'</a><div><a style="color:#808080;" target="_blank" href="https://docs.google.com/viewer?url='+value.filename+'">Preview</a><a style="color:#808080;margin-left:1em;" href='+value.filename+' data="'+value.filename+'" target="_blank">Download</a></div><input id="invite_button" class="theme_button" type="submit" onclick="action.doc_remove(this,'+value.docid+')" value="X" title="Remove" style=" cursor:pointer;font-weight:bold;height: 2.3em;width:2.3em;margin-left:18.1em;" /></div></br></div></div>');		
 					});	
 		}
 		
@@ -608,11 +653,11 @@
 		{
 			if(data.flash.length > 0 )
 			{
-				$('#right').append('<div id="flash_board_box" class="panel panel-default"><div class="panel-heading">Flashboard</div><div id="flash_board_box2" class="panel-body"></div>');
+				$('#right').append('<div id="flash_board_box" class="panel panel-default"><div id="flash_board_box2" class="panel-body"></div>');
 					
 					$.each(data.flash,function(index,value){
 
-					$('#flash_board_box2').append('<div><img class="lfloat"  src="'+value.image+'" width="30" height="30" style="padding-bottom:5px; "/><div class="name_32" >'+value.description+'</div></br></div>');				
+					$('#flash_board_box2').append('<div><a href="'+value.description+'" target="_blank" ><img class="lfloat"  src="'+value.image+'" width="200" height="80" style="padding-bottom:5px; "/></a></br></div>');				
 				});
 			}
 		}
@@ -628,7 +673,8 @@
 			$('#right').append('<div  class="panel panel-default"><div class="panel-heading">Documents</div><div id="document_box" class="panel-body"></div></div>');		
 			$.each(data.pinned_doc,function(index,value){
 			var ext = value.caption.split('.').pop();
-			var fileimage =icon_cdn+'/'+ext.toLowerCase()+'.ico';
+			var icon_cdn = $('#icon_cdn').attr('value');
+				var fileimage =icon_cdn+'/'+ext.toLowerCase()+'.ico';
 			$('#document_box').append('<div><img class="lfloat"  src="'+fileimage+'" width="30" height="30" style="padding-bottom:5px; "/><div class="name_32" ><a class="ajax_nav" style="color:#336699;font-weight:bold;" href="'+value.filename+'">'+value.caption+'</a><div>'+value.description+'</div></div></br></div>');				
 			});
 		 }
@@ -906,7 +952,7 @@
 		{
 				var icon_cdn = $('#icon_cdn').attr('value');
 			$('#right').append('<div id="friend_suggest" class="panel panel-default"></div>'); 
-			$('#friend_suggest').html('<div class="panel-heading">Friend Suggestions<img title="Show different suggestions" class="refresh_friend_suggest" src="'+icon_cdn+'/refresh.jpg" onclick="action.suggest_refresh(this)"/></div><div class="panel-body suggest_container_body"><div class="suggest_container" id="suggest_container1"></div><div class="suggest_container" id="suggest_container2"></div><div class="suggest_container" id="suggest_container3"></div><div class="suggest_container" id="suggest_container4"></div><div class="suggest_container" id="suggest_container5"></div><div class="suggest_container" id="suggest_container6"></div><div>');
+			$('#friend_suggest').html('<div class="panel-heading">You may follow <img title="Show different suggestions" class="refresh_friend_suggest" src="'+icon_cdn+'/refresh.jpg" onclick="action.suggest_refresh(this)"/></div><div class="panel-body suggest_container_body"><div class="suggest_container" id="suggest_container1"></div><div class="suggest_container" id="suggest_container2"></div><div class="suggest_container" id="suggest_container3"></div><div class="suggest_container" id="suggest_container4"></div><div class="suggest_container" id="suggest_container5"></div><div class="suggest_container" id="suggest_container6"></div><div>');
 			if(data.action.length > 0)
 			{
 				ui.suggest_deploy(me, data);
@@ -1131,7 +1177,7 @@
 			{
 				$('#text').append('<div class="subtitle" >Friend Requests('+data.friend_request_count+')</div>');
 				$.each(data.friend,function(index,value){
-					$('#text').append('<div data="'+value.profileid+'" class="friend_request_class"><a class="ajax_nav" href="profile.php?id='+value.profileid+'"><img class="lfloat" style="margin-right:1em;" src="'+data.pimage[value.profileid]+'" height="50" width="50"></a><div><a class="bold ajax_nav" href="profile.php?id='+value.profileid+'">'+data.name[value.profileid]+'</a><div><input type="submit" class="frequest" id="1" value="Accept" onclick="action.friend_accept(this, 1)" /><input type="submit" class="frequest" style="margin-left:0.5em;" id="0" value="Deny" onclick="action.friend_accept(this, 0)" /></div></div></div>');
+					$('#text').append('<div data="'+value.profileid+'" class="friend_request_class"><a class="ajax_nav" href="profile.php?id='+value.profileid+'"><img class="lfloat" style="margin-right:1em;" src="'+data.pimage[value.profileid]+'" height="50" width="50"></a><div><a class="bold ajax_nav" href="profile.php?id='+value.profileid+'">'+data.name[value.profileid]+' is now following you .</a><div><input type="submit" class="frequest" id="1" value="Follow" onclick="action.friend_accept(this, 1)" /><input type="submit" class="frequest" style="margin-left:0.5em;" id="0" value="Cancel" onclick="action.friend_accept(this, 0)" /></div></div></div>');
 				});
 			}
 			else
@@ -1172,7 +1218,7 @@
 		{
 			if(data.ack)
 			{
-				$('#mood_container').html('<span>Your new mood has been set and your friends have been informed about your new mood.</span>');
+				$('#mood_container').html('<span>Your new mood has been set and your followers have been informed about your new mood.</span>');
 				$('#mood_container').fadeOut(1000);
 				$('.bg_hide_cover').fadeOut(1000);
 			}
@@ -1183,7 +1229,7 @@
 			if(data.action.length > 0)
 			{
 				$('#right').append('<div id="mood_recent" class="panel panel-default"></div>');
-				$('#mood_recent').html('<div class="panel-heading" >Friend\'s Mood</div><div  id="mood_recent_body"  class="panel-body"></div>');
+				$('#mood_recent').html('<div class="panel-heading" >Mood of your following </div><div  id="mood_recent_body"  class="panel-body"></div>');
 				$.each(data.action,function(index,value){ 
 				$('#mood_'+value.actionby).remove();
 				$('#mood_recent_body').append('<div class="container_32_35 pointer" onclick="ui.redirect_to_action('+value.actionid+',\''+value.life_is_fun+'\')" id="mood_'+value.actionby+'"><a class="ajax_nav" style="color:#336699;" href="profile.php?id='+value.actionby+'&pl=diary"><img class="lfloat" src="'+data.pimage[value.actionby]+'" height="35" width="32" /></a><div class="name_32_35"><a class="ajax_nav" style="color:#336699;font-weight:bold;" href="profile.php?id='+value.actionby+'&pl=diary">'+data.name[value.actionby]+'</a> is '+value.mood+'<div>'+value.page+'</div></div></div>');
@@ -1354,7 +1400,7 @@
 			if(data.action.length > 0)
 			{
 				$('#right').append('<div id="tagline_recent" class="panel panel-default"></div>');
-				$('#tagline_recent').html('<div class="panel-heading" >Friend\'s Tagline</div><div id ="tagline_recent_body" class="panel-body"></div>');
+				$('#tagline_recent').html('<div class="panel-heading" >Top Tagline from your network</div><div id ="tagline_recent_body" class="panel-body"></div>');
 				$.each(data.action,function(index,value){ 
 				$('#tagline_'+value.actionby).remove();
 				$('#tagline_recent_body').append('<div class="container_32_35 pointer" onclick="ui.redirect_to_action('+value.actionid+',\''+value.life_is_fun+'\')" id="tagline_'+value.actionby+'"><a class="ajax_nav" style="color:#336699;" href="profile.php?id='+value.actionby+'&pl=diary"><img class="lfloat" src="'+data.pimage[value.actionby]+'" height="35" width="32" /></a><div class="name_32"><a class="ajax_nav" style="color:#336699;font-weight:bold;" href="profile.php?id='+value.actionby+'&pl=diary">'+data.name[value.actionby]+'</a><div>'+value.tagline+'</div></div></div>'); 
@@ -1383,6 +1429,7 @@
 				$('.prompt_content').html('Error performing the action, please try again');
 			}
 		}
+
 		function message_delete(me,data)
 		{
 			if(data.ack)
@@ -1667,7 +1714,60 @@
 			$('#groups_append').append('<li class=""><a href="#" onclick="ui.group_create(this)" title="Create a group for people with a specific interest"><span class="badge pull-right ellipsis "></span>Create Group</a></li><li class=""><a  href="register.php?hl=group_suggest" title="Groups"><span class="badge pull-right ellipsis "></span>Browse Groups</a></li>');
 			
 		}
+		function getanalyticdetails(me,data)
+		{
+		
+		var day = [];
+		var count = [];
+        var i = 0; 
+		var j = 0;
+		$.each(data.day,function(index,value){
+		day[i++] = value;
+		});
+		$.each(data.count,function(index,value){
+		count[j++] = value;
+		});
+		$('#chart').highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: data.type
+            },
+            subtitle: {
+                text: ' '
+            },
+			credits: {
+            enabled: false
+          },
+            
+			xAxis: {
+                
+				categories: JSON.parse("[" + day + "]")
+            },
+            yAxis: {
+                title: {
+                    text: 'no.'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            series: [{
+                name: data.type,
+                data: JSON.parse("[" + count + "]") 
+            }]
+        });
+    
+		}
 	return {
+			share_post:share_post,
+			getanalyticdetails:getanalyticdetails,
 			group_and_event_select:group_and_event_select,
 			contact: contact,
 			getanalyticdetails:getanalyticdetails,
@@ -1737,6 +1837,7 @@
 			profile_update : profile_update,
 			profile_privacy_update : profile_privacy_update,
 			question : question,
+			doc_load : doc_load,
 			notification_setting_update : notification_setting_update,
 			recover_password : recover_password,
 			register : register,
@@ -1754,6 +1855,7 @@
 			addmd:addmd,
 			md_load:md_load,
 			md_remove:md_remove,
+			doc_remove:doc_remove,
 			sotw_load:sotw_load,
 			star_remove:star_remove,
 			show_all_comments : show_all_comments,

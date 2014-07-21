@@ -9,6 +9,7 @@ class Feed
 		$action[$k]['postby'] = $parent['postby'];
 		$action[$k]['visible'] = $parent['visible'];
 		$name[$action[$k]['postby']] = $help->name_fetch($action[$k]['postby'], $memcache, $database);
+		$pimage[$action[$k]['postby']] = $help->pimage_fetch($action[$k]['postby'], $memcache, $database);
 		$action[$k]['time'] = $parent['time'];
 		$action[$k]['actionid'] = $parent['actionid'];
 		$action[$k]['parenttype'] = $parent['parenttype'];	
@@ -48,6 +49,10 @@ class Feed
 		{
 			$name[$action[$k]['actionby']] = $help->name_fetch($action[$k]['actionby'], $memcache, $database);
 			$this->page_complete_encode($k,$json,$help,$encode,$database,$memcache,11,2);
+		}
+		if($action[$k]['actiontype']==10)
+		{
+			$this->share_page_complete_encode($k,$json,$help,$encode,$database,$memcache,11,2);
 		}
 		else if($action[$k]['actiontype']==5)
 		{

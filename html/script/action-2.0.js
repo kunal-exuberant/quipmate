@@ -38,7 +38,8 @@ var action = (function(){
 							case 'pphoto': deploy.photo_deploy(data); break;
 							case 'college_mate':deploy.people_deploy(data); break;
 							case 'new_user':deploy.people_deploy(data); break;
-							case 'friend': deploy.friend_deploy(data); break;
+							case 'following': deploy.friend_deploy(data); break;
+							case 'followers': deploy.friend_deploy(data); break;
 							case 'group_member': deploy.member_deploy(data); break;
 							case 'guest': deploy.guest_deploy(data,'#prev'); break;
 							case 'search': callback.search('a',data); break;
@@ -48,7 +49,7 @@ var action = (function(){
 					oldh = parseInt(oldh) + 500;
 					$("#center").height(oldh);
 					param.start += increment;
-					$('#load_more').show();
+					$('.load_more').show();
 					}
 					else
 					{
@@ -142,7 +143,7 @@ var action = (function(){
 			
 			function add_friend(me, profileid)
 			{
-				$(me).attr("value",'Inviting...'); 
+				$(me).attr("value",'Requesting...'); 
 				param.action = 'add_friend';
 				param.profileid = profileid;
 				ajax.getJSON_ajax(url, param, me, callback.add_friend);
@@ -190,19 +191,38 @@ var action = (function(){
 			{
 			
 			}
-			
+			function share_post(me)
+			{
+				param.action = 'share_post';
+				param.actionid = $(me).attr('data');
+				param.text = $('#reshare_box').val();
+				ajax.getJSON_ajax(url, param, me, callback.share_post);	
+
+			}
 			function comment(me, event)
 			{
 				var e = event.which;
 				if(e==13)
 				{
+					var icon_cdn = $('#icon_cdn').attr('value');
+					var myprofileid = $('#myprofileid_hidden').attr('value');
+					var myname = $('#myprofilename_hidden').attr('value');
+					var myphoto = $('#myprofileimage_hidden').attr('value');
+					var pageid = $(me).parent().parent().parent().attr('data');
+					var comment_time = new Date().getTime();
+					var comment = ui.escape_tags($.trim($(me).val()));
+					var pageid = $(me).parent().parent().parent().attr('data');
+					
 					param.action = 'comment';
-					param.pageid = $(me).parent().parent().parent().attr('data');
-					param.comment = $.trim($(me).val());
+					param.pageid = pageid;
+					param.comment = comment;
 					param.tag_index = tag_index;
 					param.tag_name = tag_name; 
+					param.comment_time = comment_time;
 					$(me).val('');
 					var me = $(me).parent().prev();
+					//trying to make comment before ack from server .
+					$(me).append('<div class="cclass_json" data="'+comment_time+'" id="nf_post_'+comment_time+'"><a class="ajax_nav" href="profile.php?id=' +myprofileid+ '"><img class="lfloat" src =' +myphoto+ ' height="32" width="32" /></a><div class="name_35"><div><a class="bold ajax_nav" style="margin-right:0.4em;" href="profile.php?id=' +myprofileid+ '" >' +myname+ '</a><pre>'+ui.get_smiley(ui.link_highlight(comment))+'</pre></div><div><a class="comment_time_json" href="action.php?actionid='+pageid+'&life_is_fun=0b79e9873e5cfb160d3720845df2ba4c63919f9a"><img src="'+icon_cdn+'/clock.png" width="6" /><span class="time" data="'+Math.floor((new Date()).getTime()/1000)+'">'+ui.time_difference(Math.floor((new Date()).getTime()/1000))+'</span></a><span data=' +myprofileid+ ' class = "comment_excite_json" onclick="action.response(this)">Exciting</span><span class="more_excite_json" onclick="action.response_fetch(this)" data="0"></span><span id ="'+comment_time+'" class="glyphicon glyphicon-time rfloat" style="color:#ccc;"></span></div></div><span class="comment_setting" onclick="ui.post_delete(this)" >x</span></div>');
 					ajax.getJSON_ajax(url, param, me, callback.comment);
 				}
 				else
@@ -741,7 +761,7 @@ var action = (function(){
 				{
 					if(e==13)
 					{
-						$(me).parent().append('<div class="ask_option">'+opt+'</div>');	
+						$(me).parent().append('<div class="ask_option">'+opt+'<span onclick="ui.parentRemove(this)" class="glyphicon glyphicon-remove rfloat pointer"></span></div>');	
 						$(me).attr('value','');
 					}
 				}	
@@ -1055,6 +1075,18 @@ var action = (function(){
 			  ajax.getJSON_ajax(url, param, me, callback.md_remove);
 			  
 			  }
+			  function doc_remove(me,docid)
+			  
+			  {
+			  
+			  
+				
+				param.docid = docid;
+			  param.action= 'group_pinned_doc_remove';
+			  
+			  ajax.getJSON_ajax(url, param, me, callback.doc_remove);
+			  
+			  }
 			  
 			  
 			  function flash_board_fetch(me)
@@ -1078,6 +1110,14 @@ var action = (function(){
 			  param.action= 'group_pinned_doc_fetch';
 			  param.groupid= groupid;
 			  ajax.getJSON_ajax(url, param, me, callback.document_fetch);
+			  
+			  }
+			  
+			  function doc_load(me, groupid){
+			 
+			  param.action= 'group_pinned_doc_fetch';
+			  param.groupid= groupid;
+			  ajax.getJSON_ajax(url, param, me, callback.doc_load);
 			  
 			  }
 			
@@ -1187,13 +1227,18 @@ var action = (function(){
 				}
 			}
 			
-			function friend_load(me)
+			function following_load(me)
 			{
-				param.action = 'friend_load';
+				param.action = 'following_load';
 				param.profileid = profileid;
 				var data = ajax.getJSON_ajax(url, param, me, callback.friend_load);
 			}
-			
+			function followers_load(me)
+			{
+				param.action = 'followers_load';
+				param.profileid = profileid;
+				var data = ajax.getJSON_ajax(url, param, me, callback.friend_load);
+			}
 			function friend_request_fetch(me)
 			{
 				param.action = 'friend_request_fetch';
@@ -1960,28 +2005,28 @@ var action = (function(){
 			function group_leave_positive(me)
 			{
 				param.action = 'group_leave';
-				param.groupid = $('#profileid_hidden').attr('value');
+				param.groupid = $.trim($('#profileid_hidden').attr('value'));
 				data = ajax.getJSON_ajax(url, param, me, callback.group_leave);
 			}
 			
 			function event_leave(me)
 			{
 				param.action = 'event_leave';
-				param.eventid = $('#profileid_hidden').attr('value');
+				param.eventid = $.trim($('#profileid_hidden').attr('value'));
 				data = ajax.getJSON_ajax(url, param, me, callback.event_leave);
 			}
 			
 			function event_cancel_positive(me)
 			{
 				param.action = 'event_cancel';
-				param.eventid = $('#profileid_hidden').attr('value');
+				param.eventid = $.trim($('#profileid_hidden').attr('value'));
 				data = ajax.getJSON_ajax(url, param, me, callback.event_cancel);
 			}
 			
 			function unfriend_positive(me)
 			{
 				param.action = 'unfriend';
-				param.profileid = $('#profileid_hidden').attr('value');
+				param.profileid = $.trim($('#profileid_hidden').attr('value'));
 				data = ajax.getJSON_ajax(url, param, me, callback.unfriend);
 			} 
 			function group_and_event_select(me)
@@ -2418,7 +2463,7 @@ var action = (function(){
 				{
 					$('table').append('<tr></tr>');
 				}
-				$('tr:last').append('<td class="friends_birthday_show" ><a  class="ajax_nav" href="profile.php?id='+value.profileid+'&pl=diary"><img class="lfloat" src="'+data.pimage[value.profileid]+'" height="90" width="90" /></a><br /><a  class = "ajax_nav" href="profile.php?id='+value.profileid+'&pl=diary">'+data.name[value.profileid]+'</a><br />'+value.birthday+' </td>');
+				$('tr:last').append('<td class="friends_birthday_show text-center" ><a  class="ajax_nav" href="profile.php?id='+value.profileid+'&pl=diary"><img class="text-center" src="'+data.pimage[value.profileid]+'" height="90" width="90" /></a><br /><a  class = "ajax_nav" href="profile.php?id='+value.profileid+'&pl=diary">'+data.name[value.profileid]+'</a><br />'+value.birthday+' </td>');
 				i++;
 				});
 				}); 
@@ -2455,6 +2500,7 @@ var action = (function(){
 			}
 			
 			return {
+				share_post:share_post,
 			    getanalyticdetails:getanalyticdetails,
 				praise_send : praise_send,
 				direct_to_md_send : direct_to_md_send,
@@ -2506,7 +2552,8 @@ var action = (function(){
 				email_setting_update : email_setting_update,
 				forgot_password : forgot_password,
 				friend_invite : friend_invite,
-				friend_load : friend_load,
+				following_load : following_load,
+				followers_load : followers_load,
 				friend_request_fetch : friend_request_fetch,
 				friend_accept : friend_accept,
 				friend_match : friend_match,
@@ -2574,6 +2621,7 @@ var action = (function(){
 				flash_board_fetch:flash_board_fetch,
 				csv_fetch:csv_fetch,
 				document_fetch:document_fetch,
+				doc_load : doc_load,
 				addstar:addstar,
 				addmd:addmd,
 				groups_fetch:groups_fetch,
@@ -2581,6 +2629,7 @@ var action = (function(){
 				star_remove:star_remove,
 				md_load:md_load,
 				md_remove:md_remove,
+				doc_remove:doc_remove,
 				praise_fetch:praise_fetch,
 				groups_suggest_add:groups_suggest_add,
 				group_suggest_remove:group_suggest_remove,

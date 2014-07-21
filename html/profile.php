@@ -36,7 +36,8 @@ require_once '../include/header.php';
 			<li class="links" <?php if($page == 'file') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="pphoto" href="profile.php?id=<?php echo $profileid.'&hl=file'?>" title="Your Files"><span class="name_20">Files</span></a></li>
 			<li class="links" <?php if($page == 'video') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="pphoto" href="profile.php?id=<?php echo $profileid.'&hl=video'?>" title="Your Videos"><span class="name_20">Videos</span></a></li>
 
-			<li class="links" <?php if($page == 'friend') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="friend" href="profile.php?id=<?php echo $profileid.'&hl=friend'?>" title="Your friends"><span class="name_20">Friends(<?php echo $database->friend_count($profileid); ?>)</span></a></li>
+			<li class="links" <?php if($page == 'following') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="following" href="profile.php?id=<?php echo $profileid.'&hl=following'?>" title="You are following"><span class="name_20">Following (<?php echo $database->following_count($profileid); ?>)</span></a></li>
+			<li class="links" <?php if($page == 'followers') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="followers" href="profile.php?id=<?php echo $profileid.'&hl=followers'?>" title="Your Followers"><span class="name_20">Followers (<?php echo $database->followers_count($profileid); ?>)</span></a></li>
 		</ul>
 	<?php
 	if($profile_relation == 0)
@@ -79,7 +80,7 @@ require_once '../include/header.php';
 	{
 	?>
 		<div style="margin-top:2em;text-align:center;">
-			<a style="color:#003399;" href="#" onclick="ui.unfriend(this) " >Unfriend <?php echo ' '.$profile_name; ?></a>
+			<a style="color:#003399;" href="#" onclick="ui.unfriend(this) " >Unfollow <?php echo ' '.$profile_name; ?></a>
 		</div>
 	<?php
 	}
@@ -124,28 +125,28 @@ require_once '../include/header.php';
 			if($status == 0)
 			{
 		?>
-		<div style="clear:both;margin:1em 0em;"><?php echo $profile_name; ?> is not your friend</div>
+		<div style="clear:both;margin:1em 0em;">You are not following <?php echo $profile_name; ?></div>
 		<span id="add_container" class="profile_actions_container">
-			<input class="profile_actions_button" id="<?php echo $profileid ?>" style="width:7.3em;" onclick="action.add_friend(this,<?php echo $profileid ?>)" type="submit" value="+Friend" id="<?php echo $profileid; ?>"/>
+			<input class="profile_actions_button" id="<?php echo $profileid ?>" style="width:7.3em;" onclick="action.add_friend(this,<?php echo $profileid ?>)" type="submit" value=" +Follow" id="<?php echo $profileid; ?>"/>
 		</span>
 		<?php   
 		}
 		else if($status == 1)
 		{
 		?>
-		<div style="clear:both;margin:1em 0em;"> Friendship confirmation pending with you</div>
+		<div style="clear:both;margin:1em 0em;"><?php echo $profile_name; ?> is following you </div>
 		<?php   
 		}
 		else if($status == -1)
 		{
 		?>
-		<div style="clear:both;margin:1em 0em;"> Friendship confirmation pending with <?php echo $profile_name; ?></div>
+		<div style="clear:both;margin:1em 0em;"> You are following <?php echo $profile_name; ?></div>
 		<?php   
 		}
 		else if($status == 2)
 		{
 		?>
-		<div style="clear:both;margin:1em 0em;"><?php echo $profile_name; ?> and you are friends</div>
+		<div style="clear:both;margin:1em 0em;">You and <?php echo $profile_name; ?> are following each other.</div>
 		<?php   
 		}
 	}	

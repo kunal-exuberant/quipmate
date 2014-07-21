@@ -131,6 +131,10 @@ if(isset($_SESSION['auth']))
 			{
 				$api->comment();
 			}
+			else if($_GET['action'] == 'share_post')
+			{
+				$api->share_post();
+			}
 			else if($_GET['action'] == 'show_all_comments')
 			{
 				$api->show_all_comments();
@@ -155,9 +159,13 @@ if(isset($_SESSION['auth']))
 			{
 				$api->response_fetch();
 			}
-			else if($_GET['action'] == 'friend_invite')
+			else if($_GET['action'] == 'following_load')
 			{
-				$api->friend_invite();
+				$api->following_load();
+			}
+			else if($_GET['action'] == 'followers_load')
+			{
+				$api->followers_load();
 			}
 			else if($_GET['action'] == 'employee_invite')
 			{
@@ -370,6 +378,10 @@ if(isset($_SESSION['auth']))
 			else if($_GET['action'] == 'group_pinned_doc_fetch')
 			{ 
 				$api->group_pinned_doc_fetch();
+			}
+			else if($_GET['action'] == 'group_pinned_doc_remove')
+			{ 
+				$api->group_pinned_doc_remove();
 			}
 			else if($_GET['action'] == 'live_feed')
 			{
@@ -670,6 +682,10 @@ if(isset($_SESSION['auth']))
 			else if($_GET['action'] == 'validate')
 			{
 				$api->validate();
+			}
+			else if($_GET['action'] == 'validate_name')
+			{
+				$api->validate_name();
 			}
 			else if($_GET['action'] == 'validate_email')
 			{

@@ -173,6 +173,8 @@ else if($_SERVER['SCRIPT_NAME'] == '/profile.php')
 			case 'file': $page = 'file'; break;
 			case 'video': $page = 'video'; break;
 			case 'praise': $page = 'praise'; break;
+			case 'following': $page = 'following'; break;
+			case 'followers': $page = 'followers'; break;
 			default: $page = 'profile_json';
 		}
 	}  

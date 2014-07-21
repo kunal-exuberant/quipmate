@@ -1,5 +1,5 @@
 <?php 
-require_once($_SERVER['DOCUMENT_ROOT'].'/../common/secret.php');
+require_once('/var/www/common/secret.php');
 class Database 
 {
 	public $con = '';
@@ -39,6 +39,11 @@ class Database
 	{
 	 return $this->con->query("show databases");
 	}
+	function send_query($query)
+	{
+		$this->con->query($query);
+
+	}
 	function user_delete($profileid)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
@@ -47,6 +52,8 @@ class Database
 		$this->con->query("DELETE FROM `notice` Where ACTIONBY ='$profileid' OR PROFILEID ='$profileid'");
 		$this->con->query("DELETE FROM `subscribe` Where FRIENDID ='$profileid' OR PROFILEID ='$profileid'");
 		$result=$this->con->query("DELETE FROM `inbox` Where Where ACTIONBY ='$profileid' OR ACTIONON ='$profileid'");
+		//Delete invited action for group and event from action table for that user 
+		$result=$this->con->query("DELETE ac FROM `action` as ac left join member as mem on mem.actionid = ac.actionid left join guest as gu on gu.actionid = ac.actionid where (mem.profileid ='$profileid' or gu.profileid = '$profileid') and ac.actiontype IN(308,408)");
 		return $result;
 	}
 	function photo_friend_select($profileid,$limit,$count)
@@ -56,6 +63,22 @@ class Database
 		$count = $this->con->real_escape_string($count);
 		$result= $this->con->query("SELECT IMAGEID,CDN,FILENAME,image.PROFILEID as PROFILEID,ACTIONBY FROM image INNER JOIN friend ON image.ACTIONBY=friend.FRIENDID OR image.PROFILEID = friend.FRIENDID WHERE friend.PROFILEID='$profileid' ORDER BY IMAGEID DESC LIMIT $limit,$count");
 		return $result; 
+	}
+	function email_insert($email,$subject,$mes,$additionalHeaders)
+	{
+		$email = $this->con->real_escape_string($email);
+		$subject = $this->con->real_escape_string($subject);
+		$mes = $this->con->real_escape_string($mes);
+		$additionalHeaders = $this->con->real_escape_string($additionalHeaders);
+		return $this->con->query("INSERT INTO `admin`.`email`(`email`, `subject`, `body`, `headers`) VALUES ('$email','$subject','$mes','$additionalHeaders')");
+	}
+	function pending_email_select()
+	{
+		return $this->con->query("Select * from `admin`.`email` where sent='0' ");
+	}
+	function sent_email_delete($csv_id)
+	{
+		return $this->con->query("delete from `admin`.`email` where `id` in($csv_id) ");
 	}
 	function page_view_insert($actionby,$profileid,$referer,$page,$time)
 	{
@@ -335,11 +358,14 @@ function file_json($profileid,$limit,$count)
 	function get_last_message_exchanged($profileid)
 	{    
 	     $profileid = $this->con->real_escape_string($profileid);
+		 $myprofileid = $_SESSION['userid'];
 		 return $this->con->query("SELECT A.* FROM inbox AS A JOIN (SELECT MAX(B.ACTIONID) AS ACTIONID FROM(SELECT ACTIONID,
 									CASE ACTIONBY WHEN $profileid THEN ACTIONBY ELSE ACTIONON END AS ACTIONBY,
 									CASE ACTIONON WHEN $profileid THEN ACTIONBY ELSE ACTIONON END AS ACTIONON
-									FROM inbox WHERE ACTIONON > '999999999' AND (ACTIONBY =$profileid OR ACTIONON =$profileid)) AS B
-									GROUP BY B.ACTIONBY,B.ACTIONON ) AS C ON A.ACTIONID= C.ACTIONID ORDER BY A.ACTIONID DESC");
+									FROM inbox WHERE ACTIONON > '999999999' AND (ACTIONBY =$profileid OR ACTIONON =$profileid)
+									AND CASE WHEN ACTIONBY = '$myprofileid' THEN flag_by ELSE flag_on END  ='1'
+									) AS B
+									GROUP BY B.ACTIONBY,B.ACTIONON ) AS C ON A.ACTIONID= C.ACTIONID  ORDER BY A.ACTIONID DESC");
 	}
 	
 	function update_message_readbit($profileid,$college)
@@ -383,7 +409,7 @@ function file_json($profileid,$limit,$count)
 	    $myprofileid = $this->con->real_escape_string($myprofileid);
 		$profileid = $this->con->real_escape_string($profileid);
 		$start = $this->con->real_escape_string($start);
-		return $this->con->query("select * from inbox where (ACTIONBY = '$profileid' AND ACTIONON = '$myprofileid') OR (ACTIONBY = '$myprofileid' AND ACTIONON = '$profileid') AND CASE WHEN ACTIONBY = '$myprofileid' THEN flag_by ELSE flag_on END  ='1' order by ACTIONID desc LIMIT $start,10");
+		return $this->con->query("select * from inbox where ((ACTIONBY = '$profileid' AND ACTIONON = '$myprofileid') OR (ACTIONBY = '$myprofileid' AND ACTIONON = '$profileid')) AND CASE WHEN ACTIONBY = '$myprofileid' THEN flag_by ELSE flag_on END  ='1' order by ACTIONID desc LIMIT $start,10");
 	}
 	
 	function inbox_select($profileid,$college,$start)
@@ -1505,6 +1531,14 @@ LIMIT 0 , 30");
 		$actiontype = $this->con->real_escape_string($actiontype);
 		$this->con->query("INSERT INTO notice(ACTIONID,ACTIONBY,PROFILEID,PAGEID,ACTIONTYPE) VALUES('$actionid','$myprofileid','$diaryid','$pageid','$actiontype')");
 	}
+	function broadcast_notice_insert($actionid,$actiontype,$pageid)
+	{
+		$myprofileid = $_SESSION['USERID'];
+		$actionid = strip_tags($this->con->real_escape_string($actionid));
+		$pageid = $this->con->real_escape_string($pageid);
+		$actiontype = $this->con->real_escape_string($actiontype);
+		$this->con->query("INSERT INTO notice(ACTIONID,ACTIONBY,PAGEID,ACTIONTYPE,PROFILEID) SELECT '$actionid','$myprofileid','$pageid','$actiontype',USERID from `signup`");
+	}
 	
 	function get_action($actionid)
 	{
@@ -1566,13 +1600,16 @@ LIMIT 0 , 30");
 	function make_moderator($profileid)
 	{ 
 		$profileid = $this->con->real_escape_string($profileid);
-		return $this->con->query("Insert into moderator(profileid) values('$profileid')");
+		$this->con->query("Insert into moderator(profileid) values('$profileid')");
+		return $this->con->query("update `subscriber` set priviledge ='1' where profileid='$profileid'");
+
 	
 	}
 	function moderator_remove($profileid)
 	{ 
 		$profileid = $this->con->real_escape_string($profileid);
-		return $this->con->query("Delete from moderator where profileid = '$profileid'");
+		$this->con->query("Delete from moderator where profileid = '$profileid'");
+		return $this->con->query("update `subscriber` set priviledge ='0' where profileid='$profileid'");
 	
 	}
 	
@@ -1861,6 +1898,14 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		$mapid = strip_tags($this->con->real_escape_string($mapid));
 		$result = $this->con->query("INSERT INTO map(ACTIONID,MAPID) VALUES('$actionid','$mapid')");
 		return $result;
+	}
+	
+	function mapid_select($actionid)
+	{
+		$actionid = $this->con->real_escape_string($actionid);
+		$result = $this->con->query("Select * from map where ACTIONID = '$actionid' ");
+		return $result->fetch_array();
+		
 	}
 	
 	function diary_select($actionid)
@@ -2170,6 +2215,11 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		$res = $result->fetch_array();
         return $res;
 	}
+	function bio_all_select()
+	{
+		return $result = $this->con->query("select * from `bio`");
+
+	}
 	function bio_select_new($profileid)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
@@ -2386,13 +2436,23 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 				pinned_documents.groupid = document.profileid  WHERE pinned_documents.ACTIONID = document.docid and pinned_documents.GROUPID = '$groupid' ");
 		return $result;
 	}
+	
+	function document_delete($docid)
+	{
+		$docid = $this->con->real_escape_string($docid);
+	    
+		$result = $this->con->query("DELETE FROM `document` WHERE `docid` = '$docid' ");
+		
+		return $result;
+	}
+	
 	function flash_board_insert($file,$cdn,$description)
 	{
 		
 		$cdn = $this->con->real_escape_string($cdn);
 		$description = $this->con->real_escape_string($description);
 		$file = $this->con->real_escape_string($file);
-		$result = $this->con->query("INSERT INTO `flash_board`(`FLASH_ID`,`CDN`, `FILENAME`,`DESCRIPTION`) VALUES('','$cdn','$file','$description')");
+	   $result = $this->con->query("INSERT INTO `flash_board`(`FLASH_ID`,`CDN`, `FILENAME`,`DESCRIPTION`) VALUES('','$cdn','$file','$description')");
 		return $result;
 	}
 	function flash_board_fetch($limit)
@@ -2455,12 +2515,27 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		return $this->con->query("SELECT FRIENDID FROM friend WHERE PROFILEID = '$profileid1' and FRIENDID = '$profileid2' ");
 	}
 
-    function friend_count($profileid)
+    function following_count($profileid)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
 		$result=$this->con->query("SELECT COUNT(*) FROM friend WHERE PROFILEID = '$profileid'");
 		$res =  $result->fetch_array();
-		return $res['COUNT(*)'];
+		$count1 = $res['COUNT(*)'];
+		$result1=$this->con->query("SELECT COUNT(*) FROM friend_request WHERE FRIENDID = '$profileid'");
+		$res1 =  $result1->fetch_array();
+		$count2 = $res1['COUNT(*)'];
+		return $count1+$count2;
+	}
+   function followers_count($profileid)
+	{
+		$profileid = $this->con->real_escape_string($profileid);
+		$result=$this->con->query("SELECT COUNT(*) FROM friend WHERE PROFILEID = '$profileid'");
+		$res =  $result->fetch_array();
+		$count1 = $res['COUNT(*)'];
+		$result1=$this->con->query("SELECT COUNT(*) FROM friend_request WHERE PROFILEID = '$profileid'");
+		$res1 =  $result1->fetch_array();
+		$count2 = $res1['COUNT(*)'];
+		return $count1+$count2;
 	}
 
     function friend_match($myprofileid,$profileid,$limit=0,$count=16)
@@ -2503,7 +2578,18 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		$result=$this->con->query("SELECT FRIENDID FROM friend WHERE PROFILEID = '$profileid' ORDER BY TIMESTAMP DESC LIMIT $limit,$count ");
 		 return $result;
 	}
-	
+	function following_select_incremental($profileid,$limit,$count=15)
+	{	
+		$profileid = $this->con->real_escape_string($profileid);
+		$result=$this->con->query("SELECT FRIENDID as FRIENDID,TIMESTAMP FROM friend WHERE PROFILEID = '$profileid' UNION ALL SELECT PROFILEID as FRIENDID,TIMESTAMP from friend_request where FRIENDID ='$profileid' ORDER BY TIMESTAMP DESC LIMIT $limit,$count ");
+		return $result;
+	}
+	function followers_select_incremental($profileid,$limit,$count=15)
+	{	
+		$profileid = $this->con->real_escape_string($profileid);
+		$result=$this->con->query("SELECT FRIENDID as FRIENDID,TIMESTAMP FROM friend WHERE PROFILEID = '$profileid' UNION ALL SELECT FRIENDID as FRIENDID,TIMESTAMP from friend_request where PROFILEID ='$profileid' ORDER BY TIMESTAMP DESC LIMIT $limit,$count  ");
+		return $result;
+	}
 	function invited_friend_insert($profileid,$friendid)
 	{
 		$profileid = $this->con->real_escape_string($profileid);
@@ -2543,7 +2629,7 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		$result1 = $this->con->query("DELETE FROM friend WHERE PROFILEID='$myprofileid' AND FRIENDID='$friendid' ");
 		$result1 = $this->con->query("DELETE FROM friend WHERE PROFILEID='$friendid' AND FRIENDID='$myprofileid'");
 		$result1 = $this->con->query("DELETE FROM subscribe WHERE PROFILEID='$myprofileid' AND FRIENDID='$friendid' ");
-		$result1 = $this->con->query("DELETE FROM subscribe WHERE PROFILEID='$friendid' AND FRIENDID='$myprofileid'");
+	//	$result1 = $this->con->query("DELETE FROM subscribe WHERE PROFILEID='$friendid' AND FRIENDID='$myprofileid'");
 		return $result1;
 	}
 	
@@ -2600,7 +2686,8 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 		$actionid = $this->con->real_escape_string($actionid);
 		$profileid = $this->con->real_escape_string($profileid);
 		$myprofileid = strip_tags($this->con->real_escape_string($myprofileid));
-		return $this->con->query("INSERT INTO friend_request(ACTIONID,PROFILEID,FRIENDID) VALUES($actionid,'$profileid','$myprofileid')");
+		$result = $this->con->query("INSERT INTO friend_request(ACTIONID,PROFILEID,FRIENDID) VALUES($actionid,'$profileid','$myprofileid')");
+		return $this->con->query("INSERT INTO suscribe(PROFILEID,FRIENDID) VALUES('$myprofileid','$profileid'");
 	}
 	
 	function friend_invite_delete($profileid,$frndreq)

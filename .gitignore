@@ -2,6 +2,7 @@ cgi-bin/
 error/
 common/
 icons/
+db_backup/
 html/user_image/
 html/upload_pic/
 html/mood/

@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/../common/secret.php');
+require_once('/var/www/common/secret.php');
 class Session
 {
     private static $lifetime = 0;

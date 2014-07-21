@@ -5,11 +5,12 @@ class Email
 	{
 		$email_type = $param['type'];
 		global $database;
-		$param['type'] = 'group_admin';
 		$additionalHeaders = "MIME-Version:1.0\r\n";
 		$additionalHeaders .= "Content-Type: text/html\r\n"; 
 		$additionalHeaders .= "Reply-To: no-reply<no-reply@quipmate.com>\r\n";
 		$message = '';
+		$email='';
+		$subject='';
 		if($email_type == 'group_admin')
 		{
 			$friendid = $param['friendid'];
@@ -26,11 +27,11 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $friendid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br /><br />';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$irow = $database->get_image($profileid);
@@ -41,27 +42,27 @@ class Email
 			$message .= '" width="80" height="80" />'; 
 			$message .= '</a>';
 			$message .='<div style="margin-left:80px;">';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$irow = $database->get_name($profileid);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' has made you admin of the group ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/group.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/group.php?id=';
 			$message .= $groupid; 
 			$message .= '">'; 
 			$message .= $groupname;
 			$message .= '</a>';
-			$message .= ' at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate.</a>';
+			$message .= ' at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate.</a>';
 			$message .= '</div>'; 
 			$message .= ' <br /><br />To see the updates from the group ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/group.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/group.php?id=';
 			$message .= $groupid; 
 			$message .= '">'; 
 			$message .= $groupname;
 			$message .= '</a>';
-			$message .= ' Please visit this group at <a style="text-decoration:none;" href="http://www.quipmate.com/group.php?id=';
+			$message .= ' Please visit this group at <a style="text-decoration:none;" href="https://www.quipmate.com/group.php?id=';
 			$message .= $groupid; 
 			$message .= '">'; 
 			$message .= $groupname;
@@ -82,27 +83,27 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $memberid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br />';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' has canceled the event '.$eventname.' at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>.<br /><br />';
+			$message .= ' has canceled the event '.$eventname.' at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>.<br /><br />';
 			$irow = $database->get_image($actionby);
 			$file = $irow['CDN'].$irow['FILENAME']; 
 			$file = $file;
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .= "<img style='border:none;' src='$file' width='40' height='40' />";
 			$message .= '</a>';
-			$message .= '<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id='.$actionby.'">Visit profile </a>to reply this action to ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= '<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id='.$actionby.'">Visit profile </a>to reply this action to ';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
@@ -132,11 +133,11 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $friendid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br /><br />';
-			$message .='<div style=""><a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<div style=""><a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$irow = $database->get_image($profileid);
@@ -147,7 +148,7 @@ class Email
 			$message .= '" width="80" height="80" />'; 
 			$message .= '</a>';
 			$message .='<div style="position:relative;top:10px;">';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$irow = $database->get_name($profileid);
@@ -156,20 +157,20 @@ class Email
 			$message .='</div>'; 
 			$message .='</div>';
 			$message .= ' has invited you to the event ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/event.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/event.php?id=';
 			$message .= $eventid; 
 			$message .= '">'; 
 			$message .= $eventname;
 			$message .= '</a>';
-			$message .= ' at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.';
+			$message .= ' at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>.';
 			$message .= ' <br /><br />To see the updates from the event ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/event.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/event.php?id=';
 			$message .= $eventid; 
 			$message .= '">'; 
 			$message .= $eventname;
 			$message .= '</a>';
-			$message .= ' Please visit this event at <a style="text-decoration:none;" href="http://www.quipmate.com/">';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/event.php?id=';
+			$message .= ' Please visit this event at <a style="text-decoration:none;" href="https://www.quipmate.com/">';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/event.php?id=';
 			$message .= $eventid; 
 			$message .= '">'; 
 			$message .= $eventname;
@@ -191,11 +192,11 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $friendid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br /><br />';
-			$message .='<div style=""><a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<div style=""><a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$irow = $database->get_image($profileid);
@@ -206,7 +207,7 @@ class Email
 			$message .= '" width="80" height="80" />'; 
 			$message .= '</a>';
 			$message .='<div style="position:relative;top:10px;">';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$irow = $database->get_name($profileid);
@@ -215,19 +216,19 @@ class Email
 			$message .='</div>'; 
 			$message .='</div>';
 			$message .= ' has added you into the group ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/group.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/group.php?id=';
 			$message .= $groupid; 
 			$message .= '">'; 
 			$message .= $groupname;
 			$message .= '</a>';
-			$message .= ' at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.';
+			$message .= ' at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>.';
 			$message .= ' <br /><br />To see the updates from the group ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/group.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/group.php?id=';
 			$message .= $groupid; 
 			$message .= '">'; 
 			$message .= $groupname;
 			$message .= '</a>';
-			$message .= ' Please visit this group at <a style="text-decoration:none;" href="http://www.quipmate.com/group.php?id=';
+			$message .= ' Please visit this group at <a style="text-decoration:none;" href="https://www.quipmate.com/group.php?id=';
 			$message .= $groupid; 
 			$message .= '">'; 
 			$message .= $groupname;
@@ -248,36 +249,36 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $memberid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br />';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' posted in  '.$eventname.' event at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>.<br /><br />';
+			$message .= ' posted in  '.$eventname.' event at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>.<br /><br />';
 			$irow = $database->get_image($actionby);
 			$file = $irow['CDN'].$irow['FILENAME']; 
 			$file = $file;
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .='<img style="border:none;" src="';
 			$message .= $file; 
 			$message .= '" width="40" height="40" />'; 
 			$message .= '</a>';
-			$message .= '<span style="margin-left:20px;">'.$post.'</span><br /><br />';
-			$message .= '<a style="text-decoration:none;" href="http://www.quipmate.com/event.php?id='.$eventid.'">To reply </a>this post to ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= '<span style="margin-left:20px;"><pre>'.$post.'</pre></span><br /><br />';
+			$message .= '<a style="text-decoration:none;" href="https://www.quipmate.com/event.php?id='.$eventid.'">To reply </a>this post to ';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' please click <a style="text-decoration:none;" href="http://www.quipmate.com/event.php?id='.$eventid.'">here</a>.';
+			$message .= ' please click <a style="text-decoration:none;" href="https://www.quipmate.com/event.php?id='.$eventid.'">here</a>.';
 			$additionalHeaders .= 'From:'.$irow['NAME'].'<event-post@quipmate.com>\r\n';
 	    }
 		else if($email_type == 'group_post')
@@ -294,70 +295,80 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $memberid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br />';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' posted in  '.$groupname.' group at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>.<br /><br />';
+			$message .= ' posted in  '.$groupname.' group at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>.<br /><br />';
 			$irow = $database->get_image($actionby);
 			$file = $irow['CDN'].$irow['FILENAME']; 
 			$file = $file;
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .='<img style="border:none;" src="';
 			$message .= $file; 
 			$message .= '" width="40" height="40" />'; 
 			$message .= '</a>';
-			$message .= '<span style="margin-left:20px;">'.$post.'</span><br /><br />';
-			$message .= '<a style="text-decoration:none;" href="http://www.quipmate.com/group.php?id='.$groupid.'">To reply </a>this post to ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= '<span style="margin-left:20px;"><pre>'.$post.'</pre></span><br /><br />';
+			$message .= '<a style="text-decoration:none;" href="https://www.quipmate.com/group.php?id='.$groupid.'">To reply </a>this post to ';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' please click <a style="text-decoration:none;" href="http://www.quipmate.com/group.php?id='.$groupid.'">here</a>.';
+			$message .= ' please click <a style="text-decoration:none;" href="https://www.quipmate.com/group.php?id='.$groupid.'">here</a>.';
 			$additionalHeaders .= 'From:'.$irow['NAME'].'<group-post@quipmate.com>\r\n';
 		}
 		else if($email_type == 'page_post')
 		{
 			$page_name = $param['page_name'] ;
 			$page_pageid = $param['page_pageid'] ;
-			$memberid = $param['followerid'];
 			$actionid = $param['actionid'];
 			$post = $param['page'];
 			$subject= '['.$page_name.'] '.$post;
-			$brow = $database->bio_complete_select($memberid);
-			$email = $brow['EMAIL'];
-			$name = $brow['NAME'];
-			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
-			$message .= $memberid; 
-			$message .= '">'; 
-			$message .= $name.'</a>,<br />';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/page.php?id=';
-			$message .= $page_pageid; 
-			$message .= '">'; 
-			$message .= $page_name;
-			$message .= '</a>';
-			$message .= ' has new broadcast at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>.<br /><br />';
-			$file = 'https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/broadcast.png';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/page.php?id=';
-			$message .= $page_pageid; 
-			$message .= '">'; 
-			$message .='<img style="border:none;" src="';
-			$message .= $file; 
-			$message .= '" width="40" height="40" />'; 
-			$message .= '</a>';
-			$message .= '<span style="margin-left:20px;">'.$post.'</span><br /><br />';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<broadcast-message@quipmate.com>\r\n';
+			$res = $database->bio_all_select();
+			while ($brow = $res->fetch_array())
+			{
+				$email = $brow['EMAIL'];
+				$name = $brow['NAME'];
+				$memberid = $brow['PROFILEID'];
+				$message .= 'Hi ';
+				$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
+				$message .= $memberid; 
+				$message .= '">'; 
+				$message .= $name.'</a>,<br />';
+				$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/page.php?id=';
+				$message .= $page_pageid; 
+				$message .= '">'; 
+				$message .= $page_name;
+				$message .= '</a>';
+				$message .= ' has new broadcast at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>.<br /><br />';
+				$file = 'httpss://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/broadcast.png';
+				$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/page.php?id=';
+				$message .= $page_pageid; 
+				$message .= '">'; 
+				$message .='<img style="border:none;" src="';
+				$message .= $file; 
+				$message .= '" width="40" height="40" />'; 
+				$message .= '</a>';
+				$message .= '<span style="margin-left:20px;"><pre>'.$post.'</pre></span><br /><br />';
+				$additionalHeaders .= 'From:'.$irow['NAME'].'<broadcast-message@quipmate.com>\r\n';
+				$database->email_insert($email,$subject,$message,$additionalHeaders);
+			}
+			//Another mechanish is below but both have serious performance issue 
+			/*
+				$query .= "Insert into `admin`.`email`(`email`, `subject`, `body`, `headers`) values ('$email','$subject','$message','$additionalHeaders');";
+			}
+			$database->send_query($query);
+			*/
 		}
 		else if($email_type == 'birthday_bomb')
 	    {
@@ -371,21 +382,21 @@ class Email
 			$email = $brow['EMAIL']; 
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br />';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' birthday bombed you at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>.<br /><br />';
+			$message .= ' birthday bombed you at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>.<br /><br />';
 			$irow = $database->get_image($actionby);
 			$file = $irow['CDN'].$irow['FILENAME']; 
 			$file = $file;
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .='<img style="border:none;" src="';
@@ -394,14 +405,14 @@ class Email
 			$message .= '</a>';
 			$message .= '<span style="margin-left:20px;">'.$gift.'</span><br /><br />';
 			$message .= 'To say thanx to ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' please click ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
@@ -419,7 +430,7 @@ class Email
 			$subject='Invitation from Admin to join Quipmate';
 			$message .= 'Hi ';
 			$message .= $email.'</a>,<br /><br />';
-			$message .='<div style=""><a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<div style=""><a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			//$message .= $myprofileid; 
 			$message .= '">'; 
 			$message .='<img style="border:none;" src="';
@@ -427,18 +438,18 @@ class Email
 			$message .= '" width="80" height="80" />'; 
 			$message .= '</a>';
 			$message .='<div style="position:relative;top:10px;">';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			//$message .= $myprofileid; 
 			$message .= '">'; 
 			$message .= $myname;
 			$message .= '</a>';
-			$message .= ' invited you to join <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.<br /><br />';
+			$message .= ' invited you to join <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>.<br /><br />';
 			$message .= 'Please click the following link to start the registration process'."\n\n<br/>";
 			$message .= '<a style="text-decoration:none;" href=';
-			$message .= "http://www.quipmate.com/welcome.php?email=$email";
+			$message .= "https://www.quipmate.com/welcome.php?email=$email";
 			$message .= '>Register Now</a>';
 			$message .= '<div>or copy & paste this link in your browser address bar'."\n\n<br/>";
-			$message .= "http://www.quipmate.com/welcome.php?email=$email</div>";
+			$message .= "https://www.quipmate.com/welcome.php?email=$email</div>";
 			$message .='</div>'; 
 			$message .='</div>';
 			$additionalHeaders .= 'From:'.$myname.'<invitation@quipmate.com>\r\n';
@@ -452,7 +463,7 @@ class Email
 			$email = $param['email'];
 			$subject='Star Of The Week';
 			$message .= 'Hi '.$name.',<br />';
-			$message .= 'The following is selected as Star Of The Week. <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>. Contributions: <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate.</a>-<br /><br />'.$contributions; 
+			$message .= 'The following is selected as Star Of The Week. <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>. Contributions: <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate.</a>-<br /><br />'.$contributions; 
 			global $database;
 			$additionalHeaders .= 'From:'.$irow['NAME'].'<star-of-the-week@quipmate.com>\r\n';
 		}      
@@ -464,20 +475,20 @@ class Email
 			$message .= 'Hi ';
 			$message .= $email.'</a>,<br /><br />';
 			$message .='<div style="">';
-			$m = ' You recently initiated signup process at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.<br /><br />';
+			$m = ' You recently initiated signup process at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>.<br /><br />';
 			if($email_type == 'people_invite')
 			{
-				$m= 'Your network admin has invited you to join <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.<br /><br />';
+				$m= 'Your network admin has invited you to join <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>.<br /><br />';
 			}
 			$message .= $m;
 			$message .='</div>'; 
 			$message .='</div>';
 			$message .= 'Please click the following link to proceed with the registration process'."\n\n<br/>";
 			$message .= '<a style="text-decoration:none;" href=';
-			$message .= "http://www.quipmate.com/welcome.php?email=$email&identifier=$identifier";
+			$message .= "https://www.quipmate.com/welcome.php?email=$email&identifier=$identifier";
 			$message .= '>Register Now</a>';
 			$message .= '<div>or copy & paste this link in your browser address bar'."\n\n<br/>";
-			$message .= "http://www.quipmate.com/welcome.php?email=$email&identifier=$identifier</div>";
+			$message .= "https://www.quipmate.com/welcome.php?email=$email&identifier=$identifier</div>";
 			$additionalHeaders .= 'From:Quipmate<invitation@quipmate.com>\r\n';
 		}
 		else if($email_type == 'self_invite_mobile' )
@@ -488,10 +499,10 @@ class Email
 			$message .= 'Hi ';
 			$message .= $email.'</a>,<br /><br />';
 			$message .='<div style="">';
-			$m = ' You recently initiated signup process at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.<br /><br />';
+			$m = ' You recently initiated signup process at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>.<br /><br />';
 			if($email_type == 'people_invite')
 			{
-				$m= 'Your network admin has invited you to join <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.<br /><br />';
+				$m= 'Your network admin has invited you to join <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>.<br /><br />';
 			}
 			$message .= $m;
 			$message .='</div>'; 
@@ -512,7 +523,7 @@ class Email
 			$subject='Invitation from '.$myname.' to join Quipmate';
 			$message .= 'Hi ';
 			$message .= $email.'</a>,<br /><br />';
-			$message .='<div style=""><a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<div style=""><a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $myprofileid; 
 			$message .= '">'; 
 			$message .='<img style="border:none;" src="';
@@ -520,18 +531,18 @@ class Email
 			$message .= '" width="80" height="80" />'; 
 			$message .= '</a>';
 			$message .='<div style="position:relative;top:10px;">';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $myprofileid; 
 			$message .= '">'; 
 			$message .= $myname;
 			$message .= '</a>';
-			$message .= ' invited you to join <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.<br /><br />';
+			$message .= ' invited you to join <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>.<br /><br />';
 			$message .= 'Please click the following link to start the registration process'."\n\n<br/>";
 			$message .= '<a style="text-decoration:none;" href=';
-			$message .= "http://www.quipmate.com/welcome.php?email=$email&identifier=$identifier";
+			$message .= "https://www.quipmate.com/welcome.php?email=$email&identifier=$identifier";
 			$message .= '>Register Now</a>';
 			$message .= '<div>or copy & paste this link in your browser address bar'."\n\n<br/>";
-			$message .= "http://www.quipmate.com/welcome.php?email=$email&identifier=$identifier</div>";
+			$message .= "https://www.quipmate.com/welcome.php?email=$email&identifier=$identifier</div>";
 			$message .='</div>'; 
 			$message .='</div>';
 			$additionalHeaders .= 'From:'.$myname.'<invitation@quipmate.com>\r\n';
@@ -545,11 +556,11 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $friendid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br /><br />';
-			$message .='<div style=""><a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<div style=""><a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$irow = $database->get_image($profileid);
@@ -560,7 +571,7 @@ class Email
 			$message .= '" width="80" height="80" />'; 
 			$message .= '</a>';
 			$message .='<div style="position:relative;top:10px;">';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$irow = $database->get_name($profileid);
@@ -568,28 +579,28 @@ class Email
 			$message .= '</a>';
 			$message .='</div>'; 
 			$message .='</div>';
-			$message .= ' has confirmed you as friend at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.';
+			$message .= ' is also following you at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>.';
 			$message .= ' <br /><br />To see the updates from ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' please visit your home page at <a style="text-decoration:none;" href="http://www.quipmate.com/">';
+			$message .= ' please visit your home page at <a style="text-decoration:none;" href="https://www.quipmate.com/">';
 			$message .= $name;
 			$message .= '-Quipmate</a>';
 			$message .= ' <br /><br />To learn about ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' please visit the profile at <a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= ' please visit the profile at <a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<friend-confirm@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<following-back@quipmate.com>\r\n';
 		}      
 		else if($email_type == 'gift')
 		{
@@ -602,21 +613,21 @@ class Email
 			$email = $brow['EMAIL']; 
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br />';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' send you a gift at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>.<br /><br />';
+			$message .= ' send you a gift at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>.<br /><br />';
 			$irow = $database->get_image($actionby);
 			$file = $irow['CDN'].$irow['FILENAME']; 
 			$file = $file;
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .='<img style="border:none;" src="';
@@ -624,15 +635,15 @@ class Email
 			$message .= '" width="40" height="40" />'; 
 			$message .= '</a>';
 			$message .= '<span style="margin-left:20px;">'.$gift.'</span><br /><br />';
-			$message .= '<a style="text-decoration:none;" href="http://www.quipmate.com/?hl=inbox">To give </a>a return gift to ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= '<a style="text-decoration:none;" href="https://www.quipmate.com/?hl=inbox">To give </a>a return gift to ';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' please click ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
@@ -650,15 +661,15 @@ class Email
 			$message .= '<div style="margin:10 40 20 40;">';
 			$message .= 'Hi '.$name.',<br />';
 			$message .= 'Please click '; 
-			$message .= "<a href='http://www.quipmate.com/email_confirm.php?id=$id&email=$email'>here</a>";
+			$message .= "<a href='https://www.quipmate.com/email_confirm.php?id=$id&email=$email'>here</a>";
 			$message .= ' to confirm this email account provided by you to Quipmate.';
 			$message .= '</div>';
 			$message .= '<div style="margin:20 20 20 40;">';
-			$message .= 'Additionally to visit Quipmate please click '.'<a style="text-decoration:none;" href="http://www.quipmate.com/">here</a>';
+			$message .= 'Additionally to visit Quipmate please click '.'<a style="text-decoration:none;" href="https://www.quipmate.com/">here</a>';
 			$message .= '</div>';
 			$message .= '<div style="margin:20 20 20 40;">';
 			$message .= 'If you have forgotten your password please click ';
-			$message .= "<a href='http://www.quipmate.com/forgot_password.php?id=$id&email=$email'>here</a>";
+			$message .= "<a href='https://www.quipmate.com/forgot_password.php?id=$id&email=$email'>here</a>";
 			$message .= ' to recover it.</div>';
 			$additionalHeaders .= 'From:'. $irow['NAME'].'<email-confirmation@quipmate.com>\r\n';
 		}
@@ -669,12 +680,12 @@ class Email
 			$name = $param['name'];
 			$subject='Friend Requests';
 			$message .= 'Hi '.$name.',<br />';
-			$message .= 'The following people are interested in being your friend at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>. Please accept or deny them as your friend by visiting your profile at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate.</a>-<br /><br />'; 
+			$message .= 'The following people are now following you at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>. Please follow them  by visiting your profile at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate.</a>-<br /><br />'; 
 			$result = $database->friend_invite_select($profileid);
 			while($row =$result->fetch_array())
 			{
 			 $friendid = $row['FRIENDID'];
-			 $message .='<div style=""><a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			 $message .='<div style=""><a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			 $message .= $friendid; 
 			 $message .= '">'; 
 			 $irow = $database->get_image($friendid);
@@ -685,7 +696,7 @@ class Email
 			 $message .= '" width="80" height="80" />'; 
 			 $message .= '</a>';
 			 $message .='<div style="position:relative;top:10px;">';
-			 $message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			 $message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			 $message .= $friendid; 
 			 $message .= '">'; 
 			 $irow = $database->get_name($friendid);
@@ -707,11 +718,11 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br />';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
@@ -735,25 +746,25 @@ class Email
 				case '16': $message .= ' new-pinched you.'; $subject= $irow['NAME'].' new-pinched you'; break;
 				default: $message .= ' says your post is exciting'; $subject= 'Your post is exciting'; break;
 			}
-			$message .= ' at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>.<br /><br />';
+			$message .= ' at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>.<br /><br />';
 			$irow = $database->get_image($actionby);
 			$file = $irow['CDN'].$irow['FILENAME']; 
 			$file = $file;
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .='<img style="border:none;" src="';
 			$message .= $file; 
 			$message .= '" width="80" height="80" />'; 
 			$message .= '</a><br /><br /><br />';
-			$message .= '<a style="text-decoration:none;" href="http://www.quipmate.com/?hl=diary">To reply </a>this response to ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= '<a style="text-decoration:none;" href="https://www.quipmate.com/?hl=diary">To reply </a>this response to ';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' please click <a style="text-decoration:none;" href="http://www.quipmate.com/?hl=diary">here</a>.';
+			$message .= ' please click <a style="text-decoration:none;" href="https://www.quipmate.com/?hl=diary">here</a>.';
 			$additionalHeaders .= 'From:'.$irow['NAME'].'<response@quipmate.com>\r\n';
 		}
 		else if($email_type == 'college_connect_feature_display')
@@ -764,13 +775,13 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br /><br />';
-			$message .= '<a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a> is working at connecting people across all the colleges of India.<br />';
-			$message .=' A new feature <a style="text-decoration:none;" href="http://www.quipmate.com/college_connect.php">College Connect</a> helps one send messages and and reach the emails of the people from these colleges.';
-			$message .= 'You can reach these colleges by visiting <a style="text-decoration:none;"  href="http://www.quipmate.com/college_connect.php">College Connect</a> at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>';
+			$message .= '<a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a> is working at connecting people across all the colleges of India.<br />';
+			$message .=' A new feature <a style="text-decoration:none;" href="https://www.quipmate.com/college_connect.php">College Connect</a> helps one send messages and and reach the emails of the people from these colleges.';
+			$message .= 'You can reach these colleges by visiting <a style="text-decoration:none;"  href="https://www.quipmate.com/college_connect.php">College Connect</a> at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>';
 			$additionalHeaders .= 'From:College Connect<college-connect@quipmate.com>\r\n';
 		}
 		else if($email_type == 'college_connect')
@@ -781,13 +792,13 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br /><br />';
-			$message .= '<a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a> is working at connecting people across all the colleges of India.<br />';
-			$message .=' A new feature <a style="text-decoration:none;" href="http://www.quipmate.com/college_connect.php">College Connect</a> helps one send messages and and reach the emails of the people from these colleges.';
-			$message .= 'You have not provided your college information. Please do so by visiting <a style="text-decoration:none;" href="http://www.quipmate.com/profileedit.php?t=edu">Edit Profile </a>at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>';
+			$message .= '<a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a> is working at connecting people across all the colleges of India.<br />';
+			$message .=' A new feature <a style="text-decoration:none;" href="https://www.quipmate.com/college_connect.php">College Connect</a> helps one send messages and and reach the emails of the people from these colleges.';
+			$message .= 'You have not provided your college information. Please do so by visiting <a style="text-decoration:none;" href="https://www.quipmate.com/profileedit.php?t=edu">Edit Profile </a>at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>';
 			$additionalHeaders .= 'From:College Connect<college-connect@quipmate.com>\r\n';
 		}
 		else if($email_type == 'comment')
@@ -802,11 +813,11 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br />';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
@@ -831,11 +842,11 @@ class Email
 				case '2002': $message .= 'status-song'; break;
 				case '2102': $message .= 'dedicated song';
 			}
-			$message .= ' at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>.<br /><br />';
+			$message .= ' at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>.<br /><br />';
 			$irow = $database->get_image($actionby);
 			$file = $irow['CDN'].$irow['FILENAME']; 
 			$file = $file;
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .='<img style="border:none;" src="';
@@ -843,14 +854,14 @@ class Email
 			$message .= '" width="40" height="40" />'; 
 			$message .= '</a>';
 			$message .= '<span style="margin-left:20px;">'.$comment.'</span><br /><br />';
-			$message .= '<a style="text-decoration:none;" href="http://www.quipmate.com/?hl=diary">To reply </a>this comment to ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= '<a style="text-decoration:none;" href="https://www.quipmate.com/?hl=diary">To reply </a>this comment to ';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' please click <a style="text-decoration:none;" href="http://www.quipmate.com/?hl=diary">here</a>.';
+			$message .= ' please click <a style="text-decoration:none;" href="https://www.quipmate.com/?hl=diary">here</a>.';
 			$additionalHeaders .= 'From:'.$irow['NAME'].'<post-comment@quipmate.com>\r\n';
 		}
 		else if($email_type == 'message')
@@ -863,21 +874,21 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br />';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' sent you a message at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>.<br /><br />';
+			$message .= ' sent you a message at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>.<br /><br />';
 			$irow = $database->get_image($actionby);
 			$file = $irow['CDN'].$irow['FILENAME']; 
 			$file = $file;
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .='<img style="border:none;" src="';
@@ -885,14 +896,14 @@ class Email
 			$message .= '" width="40" height="40" />'; 
 			$message .= '</a>';
 			$message .= '<span style="margin-left:20px;">'.$mess.'</span><br /><br />';
-			$message .= '<a style="text-decoration:none;" href="http://www.quipmate.com/?hl=inbox">To reply </a>this message to ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= '<a style="text-decoration:none;" href="https://www.quipmate.com/?hl=inbox">To reply </a>this message to ';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' please click <a style="text-decoration:none;" href="http://www.quipmate.com/?hl=inbox">here</a>.';
+			$message .= ' please click <a style="text-decoration:none;" href="https://www.quipmate.com/?hl=inbox">here</a>.';
 			$additionalHeaders .= 'From:'.$irow['NAME'].'<message@quipmate.com>\r\n';
 		}
 		else if($email_type == 'missu_return')
@@ -905,11 +916,11 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br /><br />';
-			$message .='<div style=""><a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<div style=""><a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_image($actionby);
@@ -920,7 +931,7 @@ class Email
 			$message .= '" width="80" height="80" />'; 
 			$message .= '</a>';
 			$message .='<div style="position:relative;top:10px;">';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
@@ -929,14 +940,14 @@ class Email
 			$message .= '</a>';
 			$message .='</div>'; 
 			$message .='</div>';
-			$message .= ' Missed U back in response to your Miss U at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.';
-			$message .= ' <br /><br />To respond to <a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= ' Missed U back in response to your Miss U at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>.';
+			$message .= ' <br /><br />To respond to <a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' please visit the profile at ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .= $irow['NAME'];
@@ -953,11 +964,11 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br /><br />';
-			$message .='<div style=""><a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<div style=""><a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_image($actionby);
@@ -968,7 +979,7 @@ class Email
 			$message .= '" width="80" height="80" />'; 
 			$message .= '</a>';
 			$message .='<div style="position:relative;top:10px;">';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
@@ -977,25 +988,25 @@ class Email
 			$message .= '</a>';
 			$message .='</div>'; 
 			$message .='</div>';
-			$message .= ' is missing you at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.';
-			$message .= ' <br /><br />To respond to <a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= ' is missing you at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>.';
+			$message .= ' <br /><br />To respond to <a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' please visit the profile at ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' and click <a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= ' and click <a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .= 'Miss Back';
 			$message .= '</a>.';
 			$message .= ' Otherwise ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .= $irow['NAME'];
@@ -1014,51 +1025,51 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br /><br />';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' posted in your diary at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>.<br /><br />';
+			$message .= ' posted in your diary at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>.<br /><br />';
 			$irow = $database->get_image($actionby);
 			$file = $irow['CDN'].$irow['FILENAME']; 
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .='<img style="border:none;" src="';
 			$message .= $file; 
 			$message .= '" width="40" height="40" />'; 
 			$message .= '</a>';
-			$message .= '<span style="margin-left:20px;">'.$post.'</span><br /><br />';
-			$message .= '<a style="text-decoration:none;" href="http://www.quipmate.com/?hl=diary">To reply </a>this post to ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= '<span style="margin-left:20px;"><pre>'.$post.'</pre></span><br /><br />';
+			$message .= '<a style="text-decoration:none;" href="https://www.quipmate.com/?hl=diary">To reply </a>this post to ';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' please click <a style="text-decoration:none;" href="http://www.quipmate.com/?hl=diary">here</a>.';
+			$message .= ' please click <a style="text-decoration:none;" href="https://www.quipmate.com/?hl=diary">here</a>.';
 			$additionalHeaders .= 'From:'.$irow['NAME'].'<profile-post@quipmate.com>\r\n';
 		}
 		else if($email_type == 'friend_request')
 		{		
 			$profileid = $param['profileid'];
 			$friendid = $param['friendid'];
-			$subject .= 'Friend Request';
+			$subject .= 'You have new follower ';
 			$brow = $database->bio_complete_select($profileid);
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br /><br />';
-			$message .='<div style=""><a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<div style=""><a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $friendid; 
 			$message .= '">'; 
 			$irow = $database->get_image($friendid);
@@ -1069,34 +1080,33 @@ class Email
 			$message .= '" width="80" height="80" />'; 
 			$message .= '</a>';
 			$message .='<div style="position:relative;top:10px;">';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $friendid; 
 			$message .= '">'; 
 			$irow = $database->get_name($friendid);
 			$message .= $irow['NAME'];
-			$subject='Friend Request by '.$irow['NAME'];
 			$message .= '</a>';
 			$message .='</div>'; 
 			$message .='</div>';
-			$message .= ' is interested in being your friend at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.';
-			$message .= ' <br /><br />Please accept or deny <a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= ' is now following you at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>.';
+			$message .= ' <br /><br />Please follow  <a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $friendid; 
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' as your friend by visiting your profile at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate.</a><br /><br />';
+			$message .= ' by visiting your profile at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate.</a><br /><br />';
 			$message .= ' <br />To learn about ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $friendid; 
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' please visit the profile at <a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= ' please visit the profile at <a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $friendid; 
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<friend-request@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<follower-new@quipmate.com>\r\n';
 		}
 		else if($email_type == 'friend_request_broadcast')
 		{
@@ -1105,13 +1115,13 @@ class Email
 			$name = $param['name'];
 			$subject='Friend Requests';
 			$message .= 'Hi '.$name.',<br />';
-			$message .= 'The following people are interested in being your friend at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>. Please accept or deny them as your friend by visiting your profile at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate.</a>-<br /><br />'; 
+			$message .= 'The following people are now following you at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>. Please follow them as by visiting your profile at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate.</a>-<br /><br />'; 
 			global $database;
 			$result = $database->friend_invite_select($profileid);
 			while($row =$result->fetch_array())
 			{
 				$friendid = $row['FRIENDID'];
-				$message .='<div style=""><a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+				$message .='<div style=""><a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 				$message .= $friendid; 
 				$message .= '">'; 
 				$irow = $database->get_image($friendid);
@@ -1122,7 +1132,7 @@ class Email
 				$message .= '" width="80" height="80" />'; 
 				$message .= '</a>';
 				$message .='<div style="position:relative;top:10px;">';
-				$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+				$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 				$message .= $friendid; 
 				$message .= '">'; 
 				$irow = $database->get_name($friendid);
@@ -1140,13 +1150,13 @@ class Email
 			$name = $param['name'];
 			$subject='Friend Requests';
 			$message .= 'Hi '.$name.',<br />';
-			$message .= 'The following people are interested in being your friend at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>. Please accept or deny them as your friend by visiting your profile at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate.</a>-<br /><br />'; 
+			$message .= 'The following people are now following you at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>. Please follow them by visiting your profile at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate.</a>-<br /><br />'; 
 			global $database;
 			$result = $database->friend_invite_select($profileid);
 			while($row =$result->fetch_array())
 			{
 				$friendid = $row['FRIENDID'];
-				$message .='<div style=""><a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+				$message .='<div style=""><a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 				$message .= $friendid; 
 				$message .= '">'; 
 				$irow = $database->get_image($friendid);
@@ -1157,7 +1167,7 @@ class Email
 				$message .= '" width="80" height="80" />'; 
 				$message .= '</a>';
 				$message .='<div style="position:relative;top:10px;">';
-				$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+				$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 				$message .= $friendid; 
 				$message .= '">'; 
 				$irow = $database->get_name($friendid);
@@ -1178,11 +1188,11 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br /><br />';
-			$message .='<div style=""><a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<div style=""><a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_image($actionby);
@@ -1193,7 +1203,7 @@ class Email
 			$message .= '" width="80" height="80" />'; 
 			$message .= '</a>';
 			$message .='<div style="position:relative;top:10px;">';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
@@ -1202,14 +1212,14 @@ class Email
 			$message .= '</a>';
 			$message .='</div>'; 
 			$message .='</div>';
-			$message .= ' has praised you at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>.';
-			$message .= ' <br /><br />To respond to <a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= ' has praised you at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>.';
+			$message .= ' <br /><br />To respond to <a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' please visit the profile at ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .= $irow['NAME'];
@@ -1227,21 +1237,21 @@ class Email
 			$email = $brow['EMAIL']; 
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br />';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$message .= ' sent you a direct letter at <a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate </a>.<br /><br />';
+			$message .= ' sent you a direct letter at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>.<br /><br />';
 			// $irow = $database->get_image($actionby);
 			$file = $irow['CDN'].$irow['FILENAME']; 
 			$file = $file;
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$message .='<img style="border:none;" src="';
@@ -1249,15 +1259,15 @@ class Email
 			$message .= '" width="40" height="40" />'; 
 			$message .= '</a>';
 			$message .= '<span style="margin-left:20px;">'.$gift.'</span><br /><br />';
-			$message .= '<a style="text-decoration:none;" href="http://www.quipmate.com/?hl=inbox">To give </a>a return gift to ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .= '<a style="text-decoration:none;" href="https://www.quipmate.com/?hl=inbox">To give </a>a return gift to ';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' please click ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
@@ -1277,11 +1287,11 @@ class Email
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
 			$message .= 'Hi ';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
 			$message .= $name.'</a>,<br />';
-			$message .='<a style="text-decoration:none;" href="http://www.quipmate.com/profile.php?id=';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $actionby; 
 			$message .= '">'; 
 			$irow = $database->get_name($actionby);
@@ -1298,31 +1308,114 @@ class Email
 			$message .= 'Hi,<br /><br />';
 			$message .= 'Please click the following link to recover your password'."\n\n<br/>";
 			$message .= '<a style="text-decoration:none;" href=';
-			$message .= "http://www.quipmate.com/welcome.php?click=recover_password&id=$id&email=$email";
+			$message .= "https://www.quipmate.com/welcome.php?click=recover_password&id=$id&email=$email";
 			$message .= '>Recover Password</a>';
 			$message .= '<div>or copy & paste this link in your browser address bar'."\n\n<br/>";
-			$message .= "http://www.quipmate.com/welcome.php?click=recover_password&id=$id&email=$email</div>";
+			$message .= "https://www.quipmate.com/welcome.php?click=recover_password&id=$id&email=$email</div>";
 			$message .= '<br /><div>If you didn\'t initiate the password recovery process, please ignore this email.</div>';
 			$additionalHeaders .= "From: Quipmate<recovery@quipmate.com>\r\n";
 		}
-		$mes .= '<html>';
+		$mes .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+		$mes .= '<html xmlns="https://www.w3.org/1999/xhtml">';
 		$mes .= '<head>';
+		$mes .= '<meta https-equiv="Content-Type" content="text/html; charset=utf-8" />';
+		$mes .= '<meta name="viewport" content="width=device-width, initial-scale=1.0"/>';
+		$mes .= '<style  type="text/css">
+ pre{
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+ display:inline;
+ border:none;margin:0;padding:0;background:none !important;
+ font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+}
+#outlook a { padding: 0; }
+body{width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0;}
+.ExternalClass {width:100%;}
+.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height: 100%;}
+#backgroundTable {margin:0; padding:0; width:100% !important; line-height: 100% !important;}
+img {outline:none; text-decoration:none; -ms-interpolation-mode: bicubic;}
+a img {border:none;}
+.image_fix {display:block;}
+p {margin: 1em 0;}
+h1, h2, h3, h4, h5, h6 {color: black !important;}
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {color: blue !important;}
+h1 a:active, h2 a:active,  h3 a:active, h4 a:active, h5 a:active, h6 a:active {
+color: red !important; }
+h1 a:visited, h2 a:visited,  h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
+color: purple !important; }
+table td {border-collapse: collapse;}
+a {color: #336699;}
+@media only screen and (max-device-width: 480px) {
+			a[href^="tel"], a[href^="sms"] {
+						text-decoration: none;
+						color: black;
+						pointer-events: none;
+						cursor: default;
+					}
+			.mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+						text-decoration: default;
+						color: #336699 !important;
+						pointer-events: auto;
+						cursor: default;
+					}
+		}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+			a[href^="tel"], a[href^="sms"] {
+						text-decoration: none;
+						color: blue;
+						pointer-events: none;
+						cursor: default;
+					}
+			.mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+						text-decoration: default;
+						color: #336699 !important;
+						pointer-events: auto;
+						cursor: default;
+					}
+		}
+
+		@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+		}
+		/* Following Android targeting from:
+		https://developer.android.com/guide/webapps/targeting.html
+		https://pugetworks.com/2011/04/css-media-queries-for-targeting-different-mobile-devices/  */
+		@media only screen and (-webkit-device-pixel-ratio:.75){
+			/* Put CSS for low density (ldpi) Android layouts in here */
+		}
+		@media only screen and (-webkit-device-pixel-ratio:1){
+			/* Put CSS for medium density (mdpi) Android layouts in here */
+		}
+		@media only screen and (-webkit-device-pixel-ratio:1.5){
+			/* Put CSS for high density (hdpi) Android layouts in here */
+		}
+</style>';
 		$mes .= '<title>';
+		if(strlen($subject)>50)
+		{
+			$subject = substr($subject,0,49).'...';
+		}
 		$mes .= $subject;
 		$mes .= '</title>';
 		$mes .= '</head>';
 		$mes .= '<body>';
-		$mes .= '<table width="100%" style="width:100%;padding:15px 15px 5px 40px;background:#f5f5f5;text-align:left" border="0" cellspacing="0" cellpadding="0">';
+		$mes .= '<table width="100%" style="width:100%;padding:15px 15px 5px 40px;background:#f5f5f5;text-align:left" border="0" cellspacing="0" cellpadding="0" id="backgroundTable">';
 		$mes .= '<tbody><tr style="text-align:right;">';
-		$mes .= '<td><a href="http://www.quipmate.com/"><img style="border:none;" src="https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/quipmate-logo.png" alt="Quipmate" /></a></td></tr><tr><td>';
+		$mes .= '<td><a href="https://www.quipmate.com/"><img style="border:none;" src="httpss://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/quipmate-logo.png" alt="Quipmate" /></a></td></tr><tr><td>';
 		$mes .= $message;
 		$mes .= '</td></tr><tr><td style="padding:20px 0px 20px 0px;">';
-		$mes .= 'Happy Quipping'.'<br />'.'Thank You'.'<br />'.'<a style="text-decoration:none;" href="http://www.quipmate.com/">Quipmate</a>';
+		$mes .= 'Happy Quipping'.'<br />'.'Thank You'.'<br />'.'<a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>';
 		$mes .= '</td></tr>'; 
-		$mes .= '<tr><td style="height:25px;text-align:right;border-top:1px dashed #cccccc;"><a style="text-decoration:none;font-size:11px;" href="http://www.quipmate.com/settings.php?hl=email_settings">Email Settings</a>&middot;<a style="text-decoration:none;font-size:11px;" href="http://www.quipmate.com/settings.php?hl=notification_settings">Notification Settings</a></td></tr>';
+		$mes .= '<tr><td style="height:25px;text-align:right;border-top:1px dashed #cccccc;"><a style="text-decoration:none;font-size:11px;" href="https://www.quipmate.com/settings.php?hl=email_settings">Email Settings</a>&middot;<a style="text-decoration:none;font-size:11px;" href="https://www.quipmate.com/settings.php?hl=notification_settings">Notification Settings</a></td></tr>';
 		$mes .= '</tbody></table></body>';
 		$mes .= '</html>';
-		return mail($email, $subject, $mes, $additionalHeaders);
+		if($email_type != 'page_post')
+		{
+			return $database->email_insert($email,$subject,$mes,$additionalHeaders);	
+		}
+		
 	}
 }
 ?>

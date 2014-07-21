@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/../common/secret.php');
+require_once('/var/www/common/secret.php');
 class Help
 { 
 	function checkPrivacy($item,$profileid)
@@ -58,7 +58,7 @@ class Help
 	}
 	function get_database_from_email($email,$database)
 	{
-		$public_email = array("gmail","yahoo","outlook","hotmail","rediffmail","facebook","fb","inbox","mail","shortmail","live","yandex","hushmail","zoho");
+		$public_email = array("gmail","yahoo","outlook","hotmail","nielsen","rediffmail","facebook","fb","inbox","mail","shortmail","live","yandex","hushmail","zoho");
 		$arr = explode('@',$email);
 		$ar = explode('.',$arr[1]);
 		$dbname = $ar[0];
@@ -1012,6 +1012,7 @@ class Help
 			switch($pagetype)
 			{
 				case '1': $rtype = '11'; break;
+				case '10': $rtype = '11'; break;
 				case '5': $rtype = '12'; break;		
 				case '6': $rtype = '15'; break;
 				case '8': $rtype = '17'; break;
@@ -1100,6 +1101,7 @@ class Help
 			switch($pagetype)
 			{
 				case '1': $ctype = '2'; break;
+				case '10': $ctype = '2'; break;
 				case '5': $ctype = '23'; break;
 				case '6': $ctype = '24'; break;
 				case '8': $ctype = '26'; break;

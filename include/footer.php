@@ -16,7 +16,29 @@
 		     <div class="online_user"></div>
 </div>
 <div id="chatbox_container"></div>
+<!--***************************** Define all Modals here  ******************************************************-->
+<div class="modal fade" id="sharemodal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            <h4 class="modal-title" id="myModalLabel">Share on your timeline</h4>
+            </div>
+            <div class="modal-body">
+				<div class="text-center">
+					<textarea style="" placeholder="Say something about this ." id="reshare_box"></textarea>
+				</div>
+                <div id="share_content">
+				</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary theme_button" id="share_actionid" data="" onclick="action.share_post(this)">Share</button>
+			</div>
+    </div>
+  </div>
+</div>
 <?php
 	$file->script_footer();
-	$file->google_analytics();
+	//$file->google_analytics();
 ?>
