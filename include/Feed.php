@@ -756,7 +756,7 @@ class Feed
 	{   
 	    global $action;
 		$e = $database->page_select($action[$k]['actionon']);
-		$action[$k]['page_pageid'] = $e['groupid'];
+		$action[$k]['page_pageid'] = $e['pageid'];
 		$action[$k]['page_name'] = $e['name'];
 		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	
 		$d = $encode->doc_encode($action[$k]['pageid'],$database);	

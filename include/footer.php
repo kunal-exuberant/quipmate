@@ -11,7 +11,7 @@
 </div>
 <div id="bottombar" class="friend_status_small"> 
 		     <div class="chat_toolbar">
-		     <div class="chat_container_title"><img style="margin-right:0.5em;" src="<?php echo $icon_cdn?>/online.png" />Friends Online </div>
+		     <div class="chat_container_title"><img style="margin-right:0.5em;" src="<?php echo $icon_cdn?>/online.png" />Colleagues Online </div>
 		     </div>
 		     <div class="online_user"></div>
 </div>

@@ -385,12 +385,12 @@ class Api
         $k = 0;
         while ($count >= 0) {
             $time = round(microtime(true) * 1000);
-            $actual_image_name[$count] = $count.$time.".".$ext;
+            $actual_image_name[$count] = $count . $time . "." . $ext;
             //Have used system function to read time in nanosecond format .
 
             $tmp = $_FILES['photo_box']['tmp_name'][$count];
             //$filename = $help->photo_name($ext);
-            $filename = $_SESSION['userid'].'_'.$time.'.'.$ext;
+            $filename = $_SESSION['userid'] . '_' . $time . '.' . $ext;
             if ($actual_image_name[$count] = $help->cdn_upload($tmp, 'photo', $filename)) {
                 $caption = $_SESSION['NAME'];
                 $actionid = array();
@@ -1152,78 +1152,64 @@ class Api
             if ($size < $limit) {
                 $tmp = $_FILES['photo_box']['tmp_name'];
                 global $database;
-                $file_to_be_uploaded = $_FILES['photo_box']['tmp_name'];
-                $ext = strtolower($ext);
-                $filename = $help->photo_name($ext);
-
-                $emails = array();
-                $row = 1;
-
                 if (($handle = fopen($tmp, "r")) !== false) {
                     while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-                        $num = count($data);
-                        for ($c = 0; $c < $num; $c++) {
-                            //echo $data[$c] . "<br />\n";
-                            $email_value = $data[$c];
-                            /*	 $emails[] = $data[$c];
-                            foreach($emails as $email_value)
-                            {*/
-                            if ($help->is_email($email_value)) {
-
-                                if ($_SESSION['database'] == $help->get_database_from_email($email_value, $database)) {
-                                    $myname = $_SESSION['name'];
-                                    $myphoto = $_GET['myphoto'];
-                                    $myprofileid = $_SESSION['userid'];
-                                    if ($email_value == $myemail) {
-                                        array_push($existing, $email_value);
-                                    } else
-                                        if ($help->is_email($email_value)) {
-                                            $row = $database->is_already_user($email_value);
-                                            if ($row['EMAIL'] == $email_value) {
-                                                array_push($existing, $email_value);
-                                            } else {
-                                                $row = $database->is_virtual_user($email_value);
-                                                if ($row['ack']) {
-                                                    array_push($invited, $email_value);
-                                                    $identifier = $row['uniqueid'];
-                                                } else {
-                                                    $virtualid = $database->virtual_create($email_value);
-                                                    $vr = $database->v_select($virtualid);
-                                                    $identifier = $vr['UNIQUEID'];
-                                                    array_push($invited, $email_value);
-                                                }
-
-                                                $param = array();
-                                                $param['type'] = 'people_invite';
-                                                $param['email'] = $email_value;
-                                                $param['identifier'] = $identifier;
-                                                $param['myname'] = $myname;
-                                                //		$param['myphoto'] = $myphoto;
-                                                $param['actionby'] = $myprofileid;
-                                                $email_object = new email();
-                                                $er = $email_object->email_sample($param);
-
-                                            }
-                                        } else {
-                                            array_push($invalid, $email_value);
-                                        }
-                                } else {
-                                    array_push($invalid, $email_value);
-                                }
-
-
-                            }
-                            /*	}
-                            */
-                        }
-                        $data['invalid'] = $invalid;
-                        $data['invited'] = $invited;
-                        $data['existing'] = $existing;
-                        $data['ack'] = 1;
-                        echo json_encode($data);
+                        $emails[] = $data[14];
                     }
-
+                   // print_r($email_value);
                     fclose($handle);
+                    foreach ($emails as $email_value) {
+                        if ($help->is_email($email_value)) {
+
+                            if ($_SESSION['database'] == $help->get_database_from_email($email_value, $database)) {
+                                $myname = $_SESSION['name'];
+                                $myphoto = $_GET['myphoto'];
+                                $myprofileid = $_SESSION['userid'];
+                                if ($email_value == $myemail) {
+                                    array_push($existing, $email_value);
+                                } else
+                                    if ($help->is_email($email_value)) {
+                                        $row = $database->is_already_user($email_value);
+                                        if ($row['EMAIL'] == $email_value) {
+                                            array_push($existing, $email_value);
+                                        } else {
+                                            $row = $database->is_virtual_user($email_value);
+                                            if ($row['ack']) {
+                                                array_push($invited, $email_value);
+                                                $identifier = $row['uniqueid'];
+                                            } else {
+                                                $virtualid = $database->virtual_create($email_value);
+                                                $vr = $database->v_select($virtualid);
+                                                $identifier = $vr['UNIQUEID'];
+                                                array_push($invited, $email_value);
+                                            }
+
+                                            $param = array();
+                                            $param['type'] = 'people_invite';
+                                            $param['email'] = $email_value;
+                                            $param['identifier'] = $identifier;
+                                            $param['myname'] = $myname;
+                                            //		$param['myphoto'] = $myphoto;
+                                            $param['actionby'] = $myprofileid;
+                                            $email_object = new email();
+                                            $er = $email_object->email_sample($param);
+
+                                        }
+                                    } else {
+                                        array_push($invalid, $email_value);
+                                    }
+                            } else {
+                                array_push($invalid, $email_value);
+                            }
+
+
+                        }
+                    }
+                    $data['invalid'] = $invalid;
+                    $data['invited'] = $invited;
+                    $data['existing'] = $existing;
+                    $data['ack'] = 1;
+                    echo json_encode($data);
                 }
 
             } else {
@@ -5724,9 +5710,9 @@ class Api
     {
         global $help;
 
-        
+
         $myprofileid = $_SESSION['userid'];
-        global $database,$icon_cdn;
+        global $database, $icon_cdn;
         global $help;
         global $json;
         global $memcached;
@@ -5738,7 +5724,7 @@ class Api
                 $group[$k]['description'] = $row['description'];
                 $group[$k]['show'] = $row['show'];
                 $group[$k]['name'] = $row['name'];
-                $group[$k]['pimage'] = $icon_cdn.'/group.png';
+                $group[$k]['pimage'] = $icon_cdn . '/group.png';
                 $k++;
             }
             $data['action'] = $group;
@@ -5757,7 +5743,7 @@ class Api
 
 
         $myprofileid = $_SESSION['userid'];
-        global $database,$icon_cdn;
+        global $database, $icon_cdn;
         global $help;
         global $json;
         global $memcached;
@@ -5770,7 +5756,7 @@ class Api
                 $group[$k]['groupid'] = $row['groupid'];
                 $group[$k]['description'] = $row['description'];
                 $group[$k]['name'] = $row['name'];
-                $group[$k]['pimage'] = $icon_cdn.'/group.png';
+                $group[$k]['pimage'] = $icon_cdn . '/group.png';
                 $k++;
 
             }
@@ -7973,7 +7959,7 @@ class Api
 
     function search()
     {
-        global $help,$icon_cdn;
+        global $help, $icon_cdn;
         if (isset($_GET['q'])) {
             if (!empty($_GET['q'])) {
                 $q = $_GET['q'];
@@ -8018,7 +8004,7 @@ class Api
                         while ($frow = $fres->fetch_array()) {
                             $search[$k]['profileid'] = $frow['groupid'];
                             $name[$search[$k]['profileid']] = $frow['name'];
-                            $pimage[$search[$k]['profileid']] = $icon_cdn.'/group.png';
+                            $pimage[$search[$k]['profileid']] = $icon_cdn . '/group.png';
                             $description[$search[$k]['profileid']] = $frow['description'];
                             $k++;
                         }
@@ -8553,7 +8539,7 @@ class Api
             if (!empty($_GET['count'])) {
                 $limit = $_GET['count'];
                 $myprofileid = $_SESSION['userid'];
-                global $database,$icon_cdn;
+                global $database, $icon_cdn;
                 global $help;
                 global $json;
                 global $memcached;
@@ -8565,7 +8551,7 @@ class Api
                     while ($row = $result->fetch_array()) {
                         $guess[$k]['profileid'] = $row['groupid'];
                         $name[$guess[$k]['profileid']] = $row['groupname'];
-                        $pimage[$guess[$k]['profileid']] = $icon_cdn.'/group.png';
+                        $pimage[$guess[$k]['profileid']] = $icon_cdn . '/group.png';
                         $k++;
                     }
                     $data['action'] = $guess;
@@ -9322,7 +9308,7 @@ class Api
                     }
 ?>
 						<span id="profile_post_privacy_link" onclick="ui.profile_post_privacy(this,event)" style="margin-left:0.5em;cursor:pointer;"><img title="Set the privacy of your next post" src="<?php echo
-$icon_image; ?>" height="14" width="14" /></span>
+                    $icon_image; ?>" height="14" width="14" /></span>
 										
 					</ol> 
 					<div id="uploader">

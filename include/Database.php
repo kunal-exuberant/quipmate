@@ -72,6 +72,13 @@ class Database
 		$additionalHeaders = $this->con->real_escape_string($additionalHeaders);
 		return $this->con->query("INSERT INTO `admin`.`email`(`email`, `subject`, `body`, `headers`) VALUES ('$email','$subject','$mes','$additionalHeaders')");
 	}
+    function broadcast_email_insert($subject,$mes,$additionalHeaders)
+	{
+		$subject = $this->con->real_escape_string($subject);
+		$mes = $this->con->real_escape_string($mes);
+		$additionalHeaders = $this->con->real_escape_string($additionalHeaders);
+		return $this->con->query("INSERT INTO `admin`.`email`(`email`, `subject`, `body`, `headers`) select EMAIL,'$subject',CONCAT('Hi <a style=`text-decoration:none;` href=`https://www.quipmate.com/profile.php?id=',PROFILEID,'`>',NAME,'</a>,<br />','$mes'),'$additionalHeaders' from bio ");
+	}
 	function pending_email_select()
 	{
 		return $this->con->query("Select * from `admin`.`email` where sent='0' ");
@@ -2218,6 +2225,13 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 	function bio_all_select()
 	{
 		return $result = $this->con->query("select * from `bio`");
+
+	}
+    function email_select($db_name)
+	{
+	    $db_name = $this->con->real_escape_string($db_name);
+		//return $this->con->query("select *  from `$db_name`.`signup` ");
+        return $this->con->query("Select EMAIL from (SELECT a.EMAIL as EMAIL,MAX(b.time) as max_time,unix_timestamp(DATE_SUB(CURDATE(), INTERVAL 7 DAY)) as days_back FROM `$db_name`.`signup` a  join `$db_name`.`page_view` b on a.USERID = b.actionby group by a.EMAIL)al where max_time<=days_back ");
 
 	}
 	function bio_select_new($profileid)

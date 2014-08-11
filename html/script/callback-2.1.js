@@ -551,7 +551,7 @@
 		
 	
 				$.each(data.action,function(index,value){
-					$('#center').append('<div style="height:8em;clear:both;padding:1.5em;"><a class="ajax_nav" href="profile.php?id='+value.actionby_profileid+'"><img class="lfloat" src="'+data.pimage[value.actionby_profileid]+'" height="50" width="50"></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id='+value.actionby_profileid+'">'+value.actionby+'</a>  praised him </div><div class="pclass_json"><pre class="nf_page">For: '+value.title+'</pre><pre style="margin:0.5em 0em;display:block;">Praise: '+value.comment+'</pre></div></div></div>');
+					$('#center').append('<div style="height:8em;clear:both;padding:1.5em;"><a class="ajax_nav" href="profile.php?id='+value.actionby_profileid+'"><img class="lfloat" src="'+data.pimage[value.actionby_profileid]+'" height="50" width="50"></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id='+value.actionby_profileid+'">'+value.actionby+'</a>  praised </div><div class="pclass_json"><pre class="nf_page">For: '+value.title+'</pre><pre style="margin:0.5em 0em;display:block;">Praise: '+value.comment+'</pre></div></div></div>');
 					});	
 		
 		
@@ -1175,14 +1175,14 @@
 			}
 			if(data.friend)
 			{
-				$('#text').append('<div class="subtitle" >Friend Requests('+data.friend_request_count+')</div>');
+				$('#text').append('<div class="subtitle" >Followers('+data.friend_request_count+')</div>');
 				$.each(data.friend,function(index,value){
 					$('#text').append('<div data="'+value.profileid+'" class="friend_request_class"><a class="ajax_nav" href="profile.php?id='+value.profileid+'"><img class="lfloat" style="margin-right:1em;" src="'+data.pimage[value.profileid]+'" height="50" width="50"></a><div><a class="bold ajax_nav" href="profile.php?id='+value.profileid+'">'+data.name[value.profileid]+' is now following you .</a><div><input type="submit" class="frequest" id="1" value="Follow" onclick="action.friend_accept(this, 1)" /><input type="submit" class="frequest" style="margin-left:0.5em;" id="0" value="Cancel" onclick="action.friend_accept(this, 0)" /></div></div></div>');
 				});
 			}
 			else
 			{
-				$('#text').append('<div class="missu_reminder_class">No Friend Request</div>');
+				$('#text').append('<div class="missu_reminder_class">No New Follower</div>');
 			}
 			if(data.event)
 			{
@@ -1202,7 +1202,7 @@
 			if(data.action.length > 0)
 			{
 				$('#right').append('<div id="missu_recent" class="panel panel-default"></div>');
-				$('#missu_recent').html('<div class="panel-heading" >Friends Being Missed</div><div id="missu_recent_body" class="panel-body"></div>');
+				$('#missu_recent').html('<div class="panel-heading" >Being Missed</div><div id="missu_recent_body" class="panel-body"></div>');
 				$.each(data.action,function(index,value){ 
 				$('#missu_'+value.actionon).remove();
 				$('#missu_recent_body').append('<div class="container_32 pointer" onclick="ui.redirect_to_action('+value.actionid+',\''+value.life_is_fun+'\')" id="missu_'+value.actionon+'"><a class="ajax_nav" style="color:#336699;" href="profile.php?id='+value.actionon+'&pl=diary"><img class="lfloat" src="'+data.pimage[value.actionon]+'" height="32" width="32" /></a><div class="name_32"><a class="ajax_nav" style="color:#336699;font-weight:bold;" href="profile.php?id='+value.actionon+'&pl=diary">'+data.name[value.actionon]+'</a></div></div>');
@@ -1553,7 +1553,7 @@
 			var profile_name = $('#profilename_hidden').attr('value');
 			if(data.ack)
 			{
-				$('.prompt_content').html(profile_name+ ' has been successfully removed from your friend list');
+				$('.prompt_content').html(profile_name+ ' has been successfully removed from your following list');
 				$('.prompt_button').html('<input class="prompt_positive" type="submit" value="Ok" onClick='+ui.goBacktoProfile(profileid)+'/>');
 			}
 			else
@@ -1572,13 +1572,9 @@
 				{
 					$(profile_post_privacy_link).html('<img title="Your next post will be shared with everyone on Quipmate" src="'+icon_cdn+'/global.png" height="14" width="14" />');
 				}
-				else if(data.privacy == 1)
-				{
-					$(profile_post_privacy_link).html('<img title="Your next post will be shared with your friends of friends" src="'+icon_cdn+'/meeting.png" height="16" width="16" />');
-				}
 				else if(data.privacy == 2)
 				{
-					$(profile_post_privacy_link).html('<img title="Your next post will be shared only with your friends" src="'+icon_cdn+'/friend.png" height="14" width="14" />');
+					$(profile_post_privacy_link).html('<img title="Your next post will be shared only with your followers" src="'+icon_cdn+'/friend.png" height="14" width="14" />');
 				}
 					
 			}
@@ -1683,7 +1679,7 @@
 		}
 		function birthday_select_all(data)
 		{
-			$('#center').html('<div class="right_item" ><div class="subtitle" style="">Friend\'s Birthday</div></div>');
+			$('#center').html('<div class="right_item" ><div class="subtitle" style="">Colleagues\' Birthday</div></div>');
 			$('#center').append('<table></table>');
 			var i = 0;
 			$.each(data.event,function(index,value){

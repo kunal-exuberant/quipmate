@@ -11,10 +11,10 @@ $mcount = $database->unread_message_select($profileid,$college);
   <div class="row" >
     <div class="col-md-2 col-lg-2 left " id="left">
 	<ul  class=" nav nav-pills nav-stacked ">  
-		<li ><a class="links ajax_nav<?php if($page=='news_json') echo ' selected'; ?>" id="news_json" href="?hl=update" title="Updates from your friends"><span class="name_20">News Feed</span></a></li>
+		<li ><a class="links ajax_nav<?php if($page=='news_json') echo ' selected'; ?>" id="news_json" href="?hl=update" title="Updates from your followings"><span class="name_20">News Feed</span></a></li>
 		<!--<li ><a class="ajax_nav<?php// if($page=='tech_json') echo ' selected'; ?>" id="tech_json" href="?hl=technical" title="Feed from all technical groups that you have joined"><span class="name_20">Technical Feed</span></a></li>-->
-		<li ><a  class="links ajax_nav<?php if($page=='inbox') echo ' selected'; ?>" id="inbox" href="?hl=inbox" title="Messages from your friends"><span class="name_20"><?php if($mcount) echo 'Messages('.$mcount.')'; else echo 'Messages'; ?></span></a></li>
-		<li ><a class="links ajax_nav<?php if($page=='photo') echo ' selected'; ?>" id="photo" href="?hl=image" title="Photo shared by your friends"><span class="name_20">Photos</span></a></li>  
+		<li ><a  class="links ajax_nav<?php if($page=='inbox') echo ' selected'; ?>" id="inbox" href="?hl=inbox" title="Messages from your colleagues"><span class="name_20"><?php if($mcount) echo 'Messages('.$mcount.')'; else echo 'Messages'; ?></span></a></li>
+		<li ><a class="links ajax_nav<?php if($page=='photo') echo ' selected'; ?>" id="photo" href="?hl=image" title="Photo shared by your followings"><span class="name_20">Photos</span></a></li>  
 		<li ><a class="links ajax_nav<?php if($page=='new_user') echo ' selected'; ?>" id="new_user" href="?hl=new_user" title="Find out who joined Quipmate after you"><span class="name_20">People Directory</span></a></li>
 	</ul> 
 	<div style="margin-top:2em;">
@@ -62,7 +62,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 		<a href="#" target="_blank"><small>&copy; Quipmate</small></a><span class="separator">|</span>
 		<a href="public/help.php" target="_blank"><small>Help</small></a><span class="separator">|</span>
 		<a href="#" onclick="ui.feedback(this)"><small>Feedback</small></a>
-	</div>
+	</div> 
 </div> 
 	<?php
 		if($page == 'news_json')

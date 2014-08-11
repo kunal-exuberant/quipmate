@@ -34,15 +34,15 @@ $myprofileid = $_SESSION['userid'];
 		<h1 class="profile_edit_title" id="basic">Notification Settings</h1>
 		<div class="profile_edit_container">
 			<div class="setting_each">
-				<span class="setting_category_name"> Friend Request:</span>
+				<span class="setting_category_name"> New follower:</span>
 				<?php $help->setting_checkbox('friend_request', $row['friend_request']); ?>
 			</div>	
 			<div class="setting_each bgcolor">
-				<span class="setting_category_name"> A friend Miss U:</span>
+				<span class="setting_category_name"> Miss U:</span>
 				<?php $help->setting_checkbox('missu', $row['missu']); ?>
 			</div>
 			<div class="setting_each">
-				<span class="setting_category_name"> When a friend posts on your profile:</span>
+				<span class="setting_category_name"> Posts on your profile:</span>
 				<?php $help->setting_checkbox('profile_post', $row['profile_post']); ?>
 			</div>
 			<div class="setting_each bgcolor">
@@ -50,7 +50,7 @@ $myprofileid = $_SESSION['userid'];
 				<?php $help->setting_checkbox('post_comment', $row['post_comment']); ?>
 			</div>	
 			<div class="setting_each">
-				<span class="setting_category_name"> Your friend request is confirmed:</span>
+				<span class="setting_category_name"> Following back:</span>
 				<?php $help->setting_checkbox('friend_confirm', $row['friend_confirm']); ?>
 			</div>
 			<div class="setting_each bgcolor">
@@ -58,11 +58,11 @@ $myprofileid = $_SESSION['userid'];
 				<?php $help->setting_checkbox('message', $row['message']); ?>
 			</div>	
 			<div class="setting_each">
-				<span class="setting_category_name"> You are invited to a group by a friend:</span>
+				<span class="setting_category_name"> You are invited to a group :</span>
 				<?php $help->setting_checkbox('group_invite', $row['group_invite']); ?>
 			</div>
 			<div class="setting_each bgcolor">
-				<span class="setting_category_name"> You are invited to an event by a friend:</span>
+				<span class="setting_category_name"> You are invited to an event :</span>
 				<?php $help->setting_checkbox('event_invite', $row['event_invite']); ?>
 			</div>	
 			<div class="setting_each">
@@ -78,7 +78,7 @@ $myprofileid = $_SESSION['userid'];
 				<?php $help->setting_checkbox('post_response', $row['post_response']); ?>
 			</div>
 			<div class="setting_each bgcolor">
-				<span class="setting_category_name"> A friend sends you a gift:</span>
+				<span class="setting_category_name">Someone sends you a gift:</span>
 				<?php $help->setting_checkbox('gift', $row['gift']); ?>
 			</div>	
 			<div class="setting_each">
@@ -86,7 +86,7 @@ $myprofileid = $_SESSION['userid'];
 				<?php $help->setting_checkbox('group_admin', $row['group_admin']); ?>
 			</div>
 			<div class="setting_each bgcolor">
-				<span class="setting_category_name"> You are praised by a friend:</span>
+				<span class="setting_category_name"> You are praised :</span>
 				<?php $help->setting_checkbox('praise', $row['praise']); ?>
 			</div>	
 			<div class="setting_each">
@@ -111,15 +111,15 @@ $myprofileid = $_SESSION['userid'];
 		<h1 class="profile_edit_title" id="basic">Email Settings</h1>
 		<div class="profile_edit_container">
 			<div class="setting_each">
-				<span class="setting_category_name"> Friend Request:</span>
+				<span class="setting_category_name"> New follower:</span>
 				<?php $help->setting_checkbox('friend_request', $row['friend_request'],0); ?>
 			</div>	
 			<div class="setting_each bgcolor">
-				<span class="setting_category_name"> A friend Miss U:</span>
+				<span class="setting_category_name"> Miss U:</span>
 				<?php $help->setting_checkbox('missu', $row['missu'],0); ?>
 			</div>
 			<div class="setting_each">
-				<span class="setting_category_name"> When a friend posts on your profile:</span>
+				<span class="setting_category_name">Posts on your profile:</span>
 				<?php $help->setting_checkbox('profile_post', $row['profile_post'],0); ?>
 			</div>
 			<div class="setting_each bgcolor">
@@ -127,7 +127,7 @@ $myprofileid = $_SESSION['userid'];
 				<?php $help->setting_checkbox('post_comment', $row['post_comment'],0); ?>
 			</div>	
 			<div class="setting_each">
-				<span class="setting_category_name"> Your friend request is confirmed:</span>
+				<span class="setting_category_name">Following back:</span>
 				<?php $help->setting_checkbox('friend_confirm', $row['friend_confirm'],0); ?>
 			</div>
 			<div class="setting_each bgcolor">
@@ -135,11 +135,11 @@ $myprofileid = $_SESSION['userid'];
 				<?php $help->setting_checkbox('message', $row['message'],0); ?>
 			</div>	
 			<div class="setting_each">
-				<span class="setting_category_name"> You are invited to a group by a friend:</span>
+				<span class="setting_category_name"> You are invited to a group:</span>
 				<?php $help->setting_checkbox('group_invite', $row['group_invite'],0); ?>
 			</div>
 			<div class="setting_each bgcolor">
-				<span class="setting_category_name"> You are invited to an event by a friend:</span>
+				<span class="setting_category_name"> You are invited to an event:</span>
 				<?php $help->setting_checkbox('event_invite', $row['event_invite'],0); ?>
 			</div>	
 			<div class="setting_each">
@@ -155,7 +155,7 @@ $myprofileid = $_SESSION['userid'];
 				<?php $help->setting_checkbox('post_response', $row['post_response'],0); ?>
 			</div>
 			<div class="setting_each bgcolor">
-				<span class="setting_category_name"> A friend sends you a gift:</span>
+				<span class="setting_category_name"> Someone sends you a gift:</span>
 				<?php $help->setting_checkbox('gift', $row['gift'],0); ?>
 			</div>	
 			<div class="setting_each">
@@ -163,7 +163,7 @@ $myprofileid = $_SESSION['userid'];
 				<?php $help->setting_checkbox('group_admin', $row['group_admin'],0); ?>
 			</div>
 			<div class="setting_each bgcolor">
-				<span class="setting_category_name"> You are praised by a friend:</span>
+				<span class="setting_category_name"> You are praised :</span>
 				<?php $help->setting_checkbox('praise', $row['praise'],0); ?>
 			</div>	
 			<div class="setting_each">
@@ -192,7 +192,7 @@ $myprofileid = $_SESSION['userid'];
 					<?php $help->privacy_level('profile_post_next', $row['profile_post_next']); ?>
 				</div>
 				<div class="setting_each bgcolor">
-					<span class="setting_category_name"> Who can post in your profile:</span><span class="rfloat">Only your Friends</span>
+					<span class="setting_category_name"> Who can post in your profile:</span><span class="rfloat">Only your following</span>
 					<?php //$help->privacy_level('profile_post', $row['profile_post']); ?>
 				</div>
 				<div class="setting_each">

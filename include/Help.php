@@ -58,7 +58,7 @@ class Help
 	}
 	function get_database_from_email($email,$database)
 	{
-		$public_email = array("gmail","yahoo","outlook","hotmail","nielsen","rediffmail","facebook","fb","inbox","mail","shortmail","live","yandex","hushmail","zoho");
+		$public_email = array("gmail","yahoo","outlook","hotmail","rediffmail","inbox","mail","shortmail","live","yandex","hushmail","zoho");
 		$arr = explode('@',$email);
 		$ar = explode('.',$arr[1]);
 		$dbname = $ar[0];

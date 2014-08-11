@@ -350,16 +350,13 @@ if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) 
 <ul><li><div>Public/Private Groups</div></li><li><div>File Sharing</div></li><li><div>Praise/Recommend Peers</div></li><li><div>Link Sharing</div></li><li><div>Questions/Polls</div></li><li><div>Ideas</div></li></ul></div>
 </div>
 <div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_analytics.png" style=" height: 100px;">
-<div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">Analytics</h4><ul><li><div>Periodic Usage</div></li><li><div>Reporting</div></li></ul></div>
-</div>
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
 <img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_admin_control.png" style=" height: 100px;"><div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">Admin Control</h4><ul><li><div>Invite/Remove User</div></li><li><div>Design</div></li><li><div>Broadcast Messages</div></li><li><div>Data Export</div></li></ul></div>
 </div>
+<!--
 <div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
 <img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_enterprise_integration_0.png" style=" height: 100px;"><div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">External Api Integration</h4><ul><li><div>Linkedin</div></li><li><div>Evernote</div></li><li><div>Google</div></li><li><div>Dropbox</div></li><li><div>Box</div></li></ul></div>
 </div>
-
+-->
 <div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
 <img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_mobile_desktop.png" style=" height: 100px;"><div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">Mobile &amp; Desktop</h4><ul><li><div>Chat/Messenger</div></li><li><div>Android</div></li></ul></div>
 </div>
@@ -375,7 +372,7 @@ if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) 
 </div>
 
 
-
+<!--
 <div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
 <img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/direct_to_md_welcome.jpg">
 <div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">Direct to MD</h4></div>
@@ -386,9 +383,9 @@ if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) 
 <div class="caption"><h4>Director’s Blog</h4></div>
 <div >Write blogs on daily/weekly basis relating to technical breakthrough, what is the goal of the product and how the contribution of every single person in that project is mapped to the customer’s needs</div>
 </div>
+-->
 <div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/group_welcome.jpg" >
-<div class="caption"><h4>Group</h4></div>
+<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/group_welcome.jpg" ><div class="caption"><h4>Group</h4></div>
 <div >Keep essential API, product documents for the whole team. Access everyone’s contribution on daily basis and encourage team to participate in problem solving</div>
 </div>
 <div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
@@ -439,7 +436,8 @@ if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) 
 <img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/birthday_reminder.jpg"><div class="caption"><h4>Birthday Updates</h4></div><div >Birthday/anniversary and important events updates from all people in your network</div>
 </div>
 <div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/bio_welcome.jpg" /><div class="caption"><h4>Bio/Resume Sharing</h4></div><div >File/video/photo sharing and version management</div>
+<img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_analytics.png" style=" height: 100px;">
+<div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">Analytics</h4><ul><li><div>Periodic Usage</div></li><li><div>Reporting</div></li></ul></div>
 </div>
 
 
@@ -455,12 +453,12 @@ if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) 
 <div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
 <img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/basic_welcome.png">
 <h4>Basic</h4>
-<ul><li><div>$1 per employee per month</div></li></ul>
+<ul><li><div>$1 per employee per month</div></li><li><div>Free 3 Months Trial</div></li></ul>
 </div>
 <div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
 <img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/premium_welcome.jpg" >
 <h4>Premium</h4>
-<ul><li><div>$2 per employee per month</div></li></ul>
+<ul><li><div>$2 per employee per month</div></li><li><div>Free 3 Months Trial</div></li></ul>
 </div>
 <div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
 <img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/premises_welcome.png"><h4>Premises</h4>

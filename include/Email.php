@@ -7,7 +7,7 @@ class Email
 		global $database;
 		$additionalHeaders = "MIME-Version:1.0\r\n";
 		$additionalHeaders .= "Content-Type: text/html\r\n"; 
-		$additionalHeaders .= "Reply-To: no-reply<no-reply@quipmate.com>\r\n";
+		$additionalHeaders .= "Reply-To:no-reply<no-reply@quipmate.com>\r\n";
 		$message = '';
 		$email='';
 		$subject='';
@@ -67,7 +67,7 @@ class Email
 			$message .= '">'; 
 			$message .= $groupname;
 			$message .= '</a>';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<group-admin@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 		else if($email_type == 'event_cancel')
 		{
@@ -111,7 +111,7 @@ class Email
 			$message .= '</a>';
 			$message .= '</body>';
 			$message .= '</html>';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<event-cancel@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 		else if($email_type == 'event_invite')
 		{
@@ -175,7 +175,7 @@ class Email
 			$message .= '">'; 
 			$message .= $eventname;
 			$message .= '</a>';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<event-invite@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		} 
 		else if($email_type == 'group_invite')
 		{
@@ -233,7 +233,7 @@ class Email
 			$message .= '">'; 
 			$message .= $groupname;
 			$message .= '</a>';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<group-invite@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 			}  
 		else if($email_type == 'event_post')
 		{
@@ -279,7 +279,7 @@ class Email
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' please click <a style="text-decoration:none;" href="https://www.quipmate.com/event.php?id='.$eventid.'">here</a>.';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<event-post@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 	    }
 		else if($email_type == 'group_post')
 		{
@@ -325,7 +325,7 @@ class Email
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' please click <a style="text-decoration:none;" href="https://www.quipmate.com/group.php?id='.$groupid.'">here</a>.';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<group-post@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 		else if($email_type == 'page_post')
 		{
@@ -334,35 +334,22 @@ class Email
 			$actionid = $param['actionid'];
 			$post = $param['page'];
 			$subject= '['.$page_name.'] '.$post;
-			$res = $database->bio_all_select();
-			while ($brow = $res->fetch_array())
-			{
-				$email = $brow['EMAIL'];
-				$name = $brow['NAME'];
-				$memberid = $brow['PROFILEID'];
-				$message .= 'Hi ';
-				$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
-				$message .= $memberid; 
-				$message .= '">'; 
-				$message .= $name.'</a>,<br />';
-				$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/page.php?id=';
-				$message .= $page_pageid; 
-				$message .= '">'; 
-				$message .= $page_name;
-				$message .= '</a>';
-				$message .= ' has new broadcast at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>.<br /><br />';
-				$file = 'httpss://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/broadcast.png';
-				$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/page.php?id=';
-				$message .= $page_pageid; 
-				$message .= '">'; 
-				$message .='<img style="border:none;" src="';
-				$message .= $file; 
-				$message .= '" width="40" height="40" />'; 
-				$message .= '</a>';
-				$message .= '<span style="margin-left:20px;"><pre>'.$post.'</pre></span><br /><br />';
-				$additionalHeaders .= 'From:'.$irow['NAME'].'<broadcast-message@quipmate.com>\r\n';
-				$database->email_insert($email,$subject,$message,$additionalHeaders);
-			}
+			$message  ='<a style="text-decoration:none;" href="https://www.quipmate.com/page.php?id=';
+			$message .= $page_pageid; 
+			$message .= '">'; 
+			$message .= $page_name;
+			$message .= '</a>';
+			$message .= ' has new broadcast at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>.<br /><br />';
+			$file = 'https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/broadcast.png';
+			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/page.php?id=';
+			$message .= $page_pageid; 
+			$message .= '">'; 
+			$message .='<img style="border:none;" src="';
+			$message .= $file; 
+			$message .= '" width="40" height="40" />'; 
+			$message .= '</a>';
+			$message .= '<span style="margin-left:20px;"><pre>'.$post.'</pre></span><br /><br />';
+			$additionalHeaders .= 'From:"Quipmate"<broadcast@quipmate.com>';
 			//Another mechanish is below but both have serious performance issue 
 			/*
 				$query .= "Insert into `admin`.`email`(`email`, `subject`, `body`, `headers`) values ('$email','$subject','$message','$additionalHeaders');";
@@ -418,7 +405,7 @@ class Email
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<birthday-wish@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 			else if($email_type == 'MD_invite')
 	    {
@@ -452,9 +439,9 @@ class Email
 			$message .= "https://www.quipmate.com/welcome.php?email=$email</div>";
 			$message .='</div>'; 
 			$message .='</div>';
-			$additionalHeaders .= 'From:'.$myname.'<invitation@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$myname.'<member@quipmate.com>';
 		}
-		else if($email_type == 'star_of_the_week_broadcast')
+	/*	else if($email_type == 'star_of_the_week_broadcast')
 		{
 			$profileid = $param['profileid'];
 			$contribution = $param['contribution'];
@@ -465,8 +452,8 @@ class Email
 			$message .= 'Hi '.$name.',<br />';
 			$message .= 'The following is selected as Star Of The Week. <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>. Contributions: <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate.</a>-<br /><br />'.$contributions; 
 			global $database;
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<star-of-the-week@quipmate.com>\r\n';
-		}      
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<star-of-the-week-qm@quipmate.com>\r\n';
+		}   */ // Not well written ;    
 		else if($email_type == 'self_invite' || $email_type == 'people_invite')
 	    {
 			$email = $param['email'];
@@ -489,7 +476,7 @@ class Email
 			$message .= '>Register Now</a>';
 			$message .= '<div>or copy & paste this link in your browser address bar'."\n\n<br/>";
 			$message .= "https://www.quipmate.com/welcome.php?email=$email&identifier=$identifier</div>";
-			$additionalHeaders .= 'From:Quipmate<invitation@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:Quipmate<register@quipmate.com>';
 		}
 		else if($email_type == 'self_invite_mobile' )
 	    {
@@ -511,7 +498,7 @@ class Email
 			$message = 'Your 4 digit confirmation code for signup is '.$code;
 			
 			
-			$additionalHeaders .= 'From:QuipmateRajat<invitation@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:"Quipmate"<register@quipmate.com>';
 		}
 		else if($email_type == 'friend_invite')
 	    {
@@ -545,7 +532,7 @@ class Email
 			$message .= "https://www.quipmate.com/welcome.php?email=$email&identifier=$identifier</div>";
 			$message .='</div>'; 
 			$message .='</div>';
-			$additionalHeaders .= 'From:'.$myname.'<invitation@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$myname.'<member@quipmate.com>';
 		}
 		else if($email_type == 'friend_confirm')
 	    {
@@ -600,7 +587,7 @@ class Email
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<following-back@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}      
 		else if($email_type == 'gift')
 		{
@@ -649,7 +636,7 @@ class Email
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<gift@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 				
 		}
 		else if($email_type == 'email_confirm')
@@ -671,7 +658,7 @@ class Email
 			$message .= 'If you have forgotten your password please click ';
 			$message .= "<a href='https://www.quipmate.com/forgot_password.php?id=$id&email=$email'>here</a>";
 			$message .= ' to recover it.</div>';
-			$additionalHeaders .= 'From:'. $irow['NAME'].'<email-confirmation@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'. $irow['NAME'].'<member@quipmate.com>';
 		}
 		else if($email_type == 'email_friend_request')
 		{
@@ -705,7 +692,7 @@ class Email
 			 $message .='</div>';
 			 $message .='</div>';
 			}
-			$additionalHeaders .= 'From:'. $irow['NAME'].'<friend-request@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'. $irow['NAME'].'<member@quipmate.com>';
 		} 
 		else if($email_type == 'response')
 		{
@@ -765,7 +752,7 @@ class Email
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' please click <a style="text-decoration:none;" href="https://www.quipmate.com/?hl=diary">here</a>.';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<response@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 		else if($email_type == 'college_connect_feature_display')
 		{
@@ -782,7 +769,7 @@ class Email
 			$message .= '<a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a> is working at connecting people across all the colleges of India.<br />';
 			$message .=' A new feature <a style="text-decoration:none;" href="https://www.quipmate.com/college_connect.php">College Connect</a> helps one send messages and and reach the emails of the people from these colleges.';
 			$message .= 'You can reach these colleges by visiting <a style="text-decoration:none;"  href="https://www.quipmate.com/college_connect.php">College Connect</a> at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>';
-			$additionalHeaders .= 'From:College Connect<college-connect@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:College Connect<admin@quipmate.com>';
 		}
 		else if($email_type == 'college_connect')
 		{ 
@@ -799,7 +786,7 @@ class Email
 			$message .= '<a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a> is working at connecting people across all the colleges of India.<br />';
 			$message .=' A new feature <a style="text-decoration:none;" href="https://www.quipmate.com/college_connect.php">College Connect</a> helps one send messages and and reach the emails of the people from these colleges.';
 			$message .= 'You have not provided your college information. Please do so by visiting <a style="text-decoration:none;" href="https://www.quipmate.com/profileedit.php?t=edu">Edit Profile </a>at <a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate </a>';
-			$additionalHeaders .= 'From:College Connect<college-connect@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:College Connect<admin@quipmate.com>';
 		}
 		else if($email_type == 'comment')
 		{
@@ -862,7 +849,7 @@ class Email
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' please click <a style="text-decoration:none;" href="https://www.quipmate.com/?hl=diary">here</a>.';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<post-comment@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 		else if($email_type == 'message')
 		{ 
@@ -904,7 +891,7 @@ class Email
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' please click <a style="text-decoration:none;" href="https://www.quipmate.com/?hl=inbox">here</a>.';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<message@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 		else if($email_type == 'missu_return')
 		{ 
@@ -952,7 +939,7 @@ class Email
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<missu@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 		else if($email_type == 'missu')
 		{		
@@ -1012,7 +999,7 @@ class Email
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' will keep missing you.';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<missu@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 		else if($email_type == 'profile_post')
 		{ 
@@ -1054,7 +1041,7 @@ class Email
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' please click <a style="text-decoration:none;" href="https://www.quipmate.com/?hl=diary">here</a>.';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<profile-post@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 		else if($email_type == 'friend_request')
 		{		
@@ -1106,7 +1093,7 @@ class Email
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<follower-new@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 		else if($email_type == 'friend_request_broadcast')
 		{
@@ -1141,7 +1128,7 @@ class Email
 				$message .='</div>';
 				$message .='</div>';
 			} 
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<friend-request@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}      
 		else if($email_type == 'sample_friend_request_email')
 		{
@@ -1175,9 +1162,8 @@ class Email
 				$message .= '</a>';
 				$message .='</div>';
 				$message .='</div>';
-				$additionalHeaders .= 'From:'.$irow['NAME'].'<friend_request@quipmate.com>\r\n';
+				$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>\r\n';
 			}
-			$additionalHeaders .= "From: Quipmate<friend-request@quipmate.com>\r\n";
 		}
 		else if ($email_type == 'praised')
 		{
@@ -1224,7 +1210,7 @@ class Email
 			$message .= '">'; 
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<missu@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 		else if ($email_type == 'direct_letter')
 		{
@@ -1273,7 +1259,7 @@ class Email
 			$irow = $database->get_name($actionby);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<direct-letter@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 		else if($email_type == 'Answered_Question')
 		{
@@ -1298,7 +1284,7 @@ class Email
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .= ' has answered your question ';
-			$additionalHeaders .= 'From:'.$irow['NAME'].'<answers@quipmate.com>\r\n';
+			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
 		else if($email_type == 'password_recover')
 	    {
@@ -1313,7 +1299,7 @@ class Email
 			$message .= '<div>or copy & paste this link in your browser address bar'."\n\n<br/>";
 			$message .= "https://www.quipmate.com/welcome.php?click=recover_password&id=$id&email=$email</div>";
 			$message .= '<br /><div>If you didn\'t initiate the password recovery process, please ignore this email.</div>';
-			$additionalHeaders .= "From: Quipmate<recovery@quipmate.com>\r\n";
+			$additionalHeaders .= 'From: "Quipmate"<share@quipmate.com>';
 		}
 		$mes .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
 		$mes .= '<html xmlns="https://www.w3.org/1999/xhtml">';
@@ -1403,7 +1389,7 @@ a {color: #336699;}
 		$mes .= '<body>';
 		$mes .= '<table width="100%" style="width:100%;padding:15px 15px 5px 40px;background:#f5f5f5;text-align:left" border="0" cellspacing="0" cellpadding="0" id="backgroundTable">';
 		$mes .= '<tbody><tr style="text-align:right;">';
-		$mes .= '<td><a href="https://www.quipmate.com/"><img style="border:none;" src="httpss://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/quipmate-logo.png" alt="Quipmate" /></a></td></tr><tr><td>';
+		$mes .= '<td><a href="https://www.quipmate.com/"><img style="border:none;" src="https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/quipmate-logo.png" alt="Quipmate" /></a></td></tr><tr><td>';
 		$mes .= $message;
 		$mes .= '</td></tr><tr><td style="padding:20px 0px 20px 0px;">';
 		$mes .= 'Happy Quipping'.'<br />'.'Thank You'.'<br />'.'<a style="text-decoration:none;" href="https://www.quipmate.com/">Quipmate</a>';
@@ -1411,10 +1397,15 @@ a {color: #336699;}
 		$mes .= '<tr><td style="height:25px;text-align:right;border-top:1px dashed #cccccc;"><a style="text-decoration:none;font-size:11px;" href="https://www.quipmate.com/settings.php?hl=email_settings">Email Settings</a>&middot;<a style="text-decoration:none;font-size:11px;" href="https://www.quipmate.com/settings.php?hl=notification_settings">Notification Settings</a></td></tr>';
 		$mes .= '</tbody></table></body>';
 		$mes .= '</html>';
-		if($email_type != 'page_post')
+		if($email_type == 'page_post')
 		{
-			return $database->email_insert($email,$subject,$mes,$additionalHeaders);	
+			return $database->broadcast_email_insert($subject,$mes,$additionalHeaders);	
 		}
+        else
+        {
+            
+            return $database->email_insert($email,$subject,$mes,$additionalHeaders);
+        }
 		
 	}
 }

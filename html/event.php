@@ -111,13 +111,13 @@ require_once '../include/header.php';
 					if($n['invite'] == 1)
 					{
 					?>
-					<div style="margin:1em 0em"><input type="checkbox" id="group_invite" checked> Guests can invite their friends</div>
+					<div style="margin:1em 0em"><input type="checkbox" id="group_invite" checked> Guests can invite their followers</div>
 					<?php 
 					}
 					else
 					{
 					?>
-					<div style="margin:1em 0em"><input type="checkbox" id="group_invite"> Guests can invite their friends</div>
+					<div style="margin:1em 0em"><input type="checkbox" id="group_invite"> Guests can invite their followers</div>
 					<?php 					
 					}
 					?>
@@ -149,7 +149,7 @@ require_once '../include/header.php';
 			{
 				?>
 					<div id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div>
-					<input type="text" id="invite_box" value="" onkeyup="ui.event_friend_invite(this)" placeholder="Invite a friend to this event" />
+					<input type="text" id="invite_box" value="" onkeyup="ui.event_friend_invite(this)" placeholder="Invite a colleague to this event" />
 					<div style="position:relative;" id="group_friend_invite"></div>
 				<?php
 			}  

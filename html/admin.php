@@ -12,14 +12,7 @@ $database= new Database();
 $help = new Help();
 $mcount = $database->unread_message_select($profileid,$college);
 ?>
-<!--
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
-<link rel="stylesheet" href="/resources/demos/style.css">
--->
+
 <script>
  /*$(function() {
 $( "#startdate" ).datepicker();
@@ -30,7 +23,7 @@ $( "#enddate" ).datepicker();
   <div class="row" >
     <div class="col-md-2 left" id="left">
 			<ul class="nav nav-pills nav-stacked"> 
-					<li class="links"><a class="ajax_nav<?php if($page=='admin_json') echo ' selected'; ?>" id="news_json" href="admin.php?hl=update" title="Updates from your friends"><span class="name_20">Admin Feed</span></a></li>
+					<li class="links"><a class="ajax_nav<?php if($page=='admin_json') echo ' selected'; ?>" id="news_json" href="admin.php?hl=update" title="Updates from people in network"><span class="name_20">Admin Feed</span></a></li>
 					<li class="links"><a class="ajax_nav<?php if($page=='invite') echo ' selected'; ?>" id="news_json" href="admin.php?hl=invite" title="Invite fellow assciates to the network"><span class="name_20">Invite Employees</span></a></li>
 					<li class="links"><a class="ajax_nav<?php if($page=='admin') echo ' selected'; ?>" id="news_json" href="admin.php?hl=admin" title="List of all admins of this network"><span class="name_20">Admin List</span></a></li>
 					
@@ -38,12 +31,10 @@ $( "#enddate" ).datepicker();
 				  <li class="links"><a class="ajax_nav<?php if($page=='designation') echo ' selected'; ?>" id="news_json" href="admin.php?hl=designation" title="Designation"><span class="name_20">Designation</span></a></li>
 				   <li class="links"><a class="ajax_nav<?php if($page=='team') echo ' selected'; ?>" id="news_json" href="admin.php?hl=team" title="Team"><span class="name_20">Team</span></a></li>
 				   <li class="links"><a class="ajax_nav<?php if($page=='sotw') echo ' selected'; ?>" id="news_json" href="admin.php?hl=sotw" title="Star Of The Week"><span class="name_20">Star Of The Week</span></a></li>
-				   <li class="links"><a class="ajax_nav" id="flashboard" href="admin.php?hl=flashboard" title="Flashboard"><span class="name_20">Flashboard</span></a></li> 
+			<!--	   <li class="links"><a class="ajax_nav" id="flashboard" href="admin.php?hl=flashboard" title="Flashboard"><span class="name_20">Flashboard</span></a></li> --> 
 				   
 				    <li class="links"><a class="ajax_nav<?php if($page=='group_byadmin') echo ' selected'; ?>" id="news_json" href="admin.php?hl=group_byadmin" title="Groups To Suggest"><span class="name_20">Groups To Suggest</span></a></li>
-				   
-					 <li class="links"><a class="ajax_nav<?php if($page=='group_suggest_admin') echo ' selected'; ?>" id="news_json" href="admin.php?hl=group_suggest_admin" title="Groups To Suggest"><span class="name_20">Groups To Suggest</span></a></li>
-					<li class="links"><a class="ajax_nav<?php if($page=='remove_user') echo ' selected'; ?>" id="news_json" href="admin.php?hl=remove_user" title="Updates from your friends"><span class="name_20">Remover User</span></a></li>
+					<li class="links"><a class="ajax_nav<?php if($page=='remove_user') echo ' selected'; ?>" id="news_json" href="admin.php?hl=remove_user" title="Remove from network"><span class="name_20">Remover User</span></a></li>
 			        <li class="links"><a class="ajax_nav<?php if($page=='anlytics') echo ' selected'; ?>" id="news_json" href="admin.php?hl=analytics" title="Analytics"><span class="name_20">Analytics</span></a></li>
 					 <li class="links"><a class="ajax_nav<?php if($page=='feature') echo ' selected'; ?>" id="news_json" href="admin.php?hl=feature" title="Feature setting"><span class="name_20">Control features</span></a></li>
             </ul> 
@@ -79,9 +70,10 @@ $( "#enddate" ).datepicker();
 				<h1 class="page_title">Invite Employees</h1>
 					<div style="margin:3em;">
 						<textarea placeholder="Paste a list of email address separated by comma" id="employee_invite_box" style="border:0.1em solid #aaaaaa;width:34.6em;height:20.2em;padding:0.5em;margin-right:0.2em;"></textarea>
-						<input type="submit" class="button" onclick="action.employee_invite(this)" value="Invite" id="employee_invite_button" title="Invite A Friend" />
+						<input type="submit" class="button" onclick="action.employee_invite(this)" value="Invite" id="employee_invite_button" title="Invite" />
 					</div>
-				<!--	<h1 class="page_title">Attach CSV</h1><form id="flashform" method="post" enctype="multipart/form-data" action="/ajax/write.php"><textarea style="border:1px solid #cccccc;height:2.7em;padding:0.5em;width:34.6em;margin-left:3em;" type="text" placeholder="Say something about this file" maxlength="200" id="photo_description" name="photo_description"></textarea><div id="vish_Btn" style="position: relative;top: 10px;font-family: calibri;width: 180px;height:100px;padding-top:35px;-webkit-border-radius: 5px;-moz-border-radius: 5px;border: 1px dashed #BBB; text-align: center;background-color:#DDD;cursor:pointer; margin-left:3em;">Upload CSV File</div><input type="file" id="html_btn" size="40" style="margin-top:-20px; margin-left:95px; display:none;" name="photo_box"/></br><input type="submit" name="upload" id="flash_upload_button" value="Upload" style="margin-left:3em;"><input type="hidden" name="action" value="employee_invite_file_upload"></form> -->
+			<h1 class="page_title">Attach CSV file in outlook's csv format.</h1><form id="csvform" method="post" enctype="multipart/form-data" action="/ajax/write.php"><textarea style="border:1px solid #cccccc;height:2.7em;padding:0.5em;width:34.6em;margin-left:3em;" type="text" placeholder="Say something about this file" maxlength="200" id="photo_description" name="photo_description"></textarea><input type="file" id="html_btn" size="40" style="margin-top:20px; margin-left:95px;" name="photo_box"/></br><input type="submit" name="upload" id="csv_upload_button" value="Upload" style="margin-left:3em;"><input type="hidden" name="action" value="employee_invite_file_upload"></form>
+            <div id="upload_progress"></div>
 			</div>
 		<?php
 		}
@@ -189,7 +181,7 @@ $( "#enddate" ).datepicker();
 				<?php $help->setting_checkbox('birthday', $row['birthday'],2); ?>
 			</div>
 			<div class="setting_each">
-				<span class="setting_category_name">Invite a friend</span>
+				<span class="setting_category_name">Invite a colleague</span>
 				<?php $help->setting_checkbox('invite_friend', $row['invite_friend'],2); ?>
 			</div>	
 			<div class="setting_each bgcolor">

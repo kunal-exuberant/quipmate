@@ -20,7 +20,7 @@ require_once '../include/header.php';
 			<ul class=" nav nav-pills nav-stacked"> 
 					<li class="links" <?php if($page == 'group_json') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="group_json" href="group.php?id=<?php echo $profileid.'&hl=post'?>" title="Your activities"><span class="name_20">Group Feed</span></a></li>
 					<li class="links" <?php if($page == 'group_about') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="about" href="group.php?id=<?php echo $profileid.'&hl=about'?>" title="Your Bio"><span class="name_20">About</span></a></li>
-					<li class="links" <?php if($page == 'member') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="inbox" href="group.php?id=<?php echo $profileid.'&hl=member'?>" title="Your friends"><span class="name_20">Members(<?php echo $database->member_count($profileid); ?>)</span></a></li>
+					<li class="links" <?php if($page == 'member') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="inbox" href="group.php?id=<?php echo $profileid.'&hl=member'?>" ><span class="name_20">Members(<?php echo $database->member_count($profileid); ?>)</span></a></li>
 			</ul>
 		<script>
 		$(function(){
@@ -137,7 +137,7 @@ require_once '../include/header.php';
 		<div id="friend_match" style="margin-top:1em;" class="panel panel-default"></div>
 		<div id="member_request" class="panel panel-default"></div>
 		<div id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div>
-		<input type="text" id="invite_box" value="" onkeyup="ui.group_friend_invite(this)" placeholder="Add a friend to this group" />
+		<input type="text" id="invite_box" value="" onkeyup="ui.group_friend_invite(this)" placeholder="Add a colleague to this group" />
 		<div style="position:relative;" id="group_friend_invite" class="panel panel-default"></div>
 		<?php
 		}
