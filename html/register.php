@@ -11,7 +11,7 @@ $(function(){
 		var icon_cdn =$('#icon_cdn').attr('value');
 		$("#next").live('click',function(){
 			$.getJSON("ajax/write.php",{action:'stepup'},function(data){
-				window.location = '/';
+				window.location = '/profile.php?hl=bio';
 			});
 		});
 		
@@ -62,26 +62,30 @@ $(function(){
   <div class="row" >
 	<div class="col-xs-6 col-md-2 " id="left"></div>
 	<div id="center" class="col-md-6 center top7">
+ <div class="panel panel-default">
 	<?php 
 		if($page == 'friend_suggest')
 		{
 	?>
-	<h1 class="page_title"><?php echo $_SESSION['NAME']; ?>, Please follow some people on your network. </h1>
-	<div id="friend_suggest"></div>
+    
+<div class="panel-heading"><h4 class=""><?php echo $_SESSION['NAME']; ?>, Please follow some people on your network. </h4>
+</div>
+
+	<div id="friend_suggest" class="panel-body"></div>
 	<?php
 		}
 		else if($page == 'group_suggest')
 		{
 	?>
-	<h1 class="page_title"><?php echo $_SESSION['NAME']; ?>, Groups you can join .</h1>
-	<div id="group_suggest"></div>
+<div class="panel-heading"><h4 class=""><?php echo $_SESSION['NAME']; ?>, Groups you can join .</h4></div>
+	<div id="group_suggest" class="panel-body"></div>
 	<?php
 		}
 		else if($page == 'profile_picture')
 		{
 			?>
-			<h1 class="page_title"><?php echo $_SESSION['NAME']; ?>, let's upload a profile picture</h1>
-			<div id="main_div" style="text-align:center;margin-top:4em;">
+<div class="panel-heading"><h4 class=""><?php echo $_SESSION['NAME']; ?>, let's upload a profile picture</h4></div>
+			<div id="main_div" style="text-align:center;margin-top:4em;" class="panel-body">
 			<div id="photo_preview" style="text-align:center;margin:0em 0em 1em 0em;"></div>	
 			
 					<form id="ppform" method="post" enctype="multipart/form-data" action="/ajax/write.php">
@@ -95,7 +99,8 @@ $(function(){
 			<?php
 		}
 	?>
-	<span id="next" style="font-weight:bold;position:absolute;top:3em;right:2em;cursor:pointer;">Next</span>
+	<span id="next" style="font-weight:bold;position:absolute;top:2em;right:2em;cursor:pointer;">Skip</span>
+    </div>
 	</div>
 </div>
 </div>

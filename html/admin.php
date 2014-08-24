@@ -168,10 +168,6 @@ $( "#enddate" ).datepicker();
 <div id="center" style="height:auto; " class="col-md-6 center">
 		<h1 class="profile_edit_title" id="basic">Set feature On/Off</h1>
 		<div class="profile_edit_container"> 
-			<div class="setting_each bgcolor">
-				<span class="setting_category_name">Send Gift</span>
-				<?php $help->setting_checkbox('gift', $row['gift'],2); ?>
-			</div>	
 			<div class="setting_each">
 				<span class="setting_category_name">Mood Sharing</span>
 				<?php $help->setting_checkbox('mood', $row['mood'],2); ?>
@@ -183,14 +179,6 @@ $( "#enddate" ).datepicker();
 			<div class="setting_each">
 				<span class="setting_category_name">Invite a colleague</span>
 				<?php $help->setting_checkbox('invite_friend', $row['invite_friend'],2); ?>
-			</div>	
-			<div class="setting_each bgcolor">
-				<span class="setting_category_name">MissU</span>
-				<?php $help->setting_checkbox('missu', $row['missu'],2); ?>
-			</div>				
-			<div class="setting_each">
-				<span class="setting_category_name">Actiontype Preview</span>
-				<?php $help->setting_checkbox('actiontype_preview', $row['actiontype_preview'],2); ?>
 			</div>			
 		</div>
 </div>

@@ -77,7 +77,7 @@ var ui = (function()
          ui.friend_invite();
          action.actiontype_preview();
          action.usefullinks_load();
-         action.flash_board_fetch();
+        // action.flash_board_fetch();
          action.birthday_fetch(this);
          //	action.friend_fetch();
          action.star_of_the_week_fetch();
@@ -106,14 +106,14 @@ var ui = (function()
       }
       else if (page == 'flashboard')
       {
-         action.flash_board_fetch();
+       //  action.flash_board_fetch();
       }
       action.friend_fetch(); // Getting called for all the pages 
    }
 
    function preview_doc(file)
    {
-      window.location = "http://docs.google.com/" + file;
+      window.location = "https://docs.google.com/" + file;
    }
 
    function share_modal()
@@ -443,7 +443,7 @@ var ui = (function()
       }
    }
 
-   function praise(me)
+ /*  function praise(me)
    {
       $('.right_pointer_container').remove();
       $('.bg_hide_cover').remove();
@@ -451,7 +451,7 @@ var ui = (function()
       $('body').append('<div class="right_pointer_container"><div class="right_item_pointer"></div></div>');
       $('.right_pointer_container').css('top', $(me).parent().position().top + 54 + 'px');
       $('.right_pointer_container').css('left', $('#search_form').position().left + 'px');
-      $('.right_pointer_container').append('<div id="direct_to_md_container" style="width:45em;height:32em;"><input type="hidden" id="birthday_wish_profileid_hidden" value=""/></div>');
+      $('.right_pointer_container').append('<div id="direct_to_md_container" style="width:45em;min-height:32em;"><input type="hidden" id="birthday_wish_profileid_hidden" value=""/></div>');
       $('#direct_to_md_container').append('<div class="right_pointer_title">Publically praise for outstanding work</div>');
       $('#direct_to_md_container').append('<div style="margin-top:1em;"><input style="padding:0.5em;width:32em;" id="letter_title" type="text" placeholder="What is the outstanding contribution?"/></div><div style="margin-top:1em;"><textarea placeholder="Word of applause" id="letter_content" style="padding:0.5em;height:16em;width:32em;resize:none;"></textarea></div>');
       $('#direct_to_md_container').append('<div style="margin-top:0.8em;"><input class="prompt_negative" type="submit" value="Cancel" id="birthday_wish_close" /><input class="group_create_positive theme_button" type="submit" value="Praise" id="letter_send" onclick="action.praise_send(this)" /></div>');
@@ -461,7 +461,7 @@ var ui = (function()
          $('.right_pointer_container').remove();
          $('.bg_hide_cover').remove();
       });
-   }
+   } */ // Changed to modal
 
    function direct_to_md(me)
    {
@@ -661,7 +661,7 @@ var ui = (function()
          $.each(data.action, function(index, value)
          {
             con_name = '#' + 'group_suggest_container' + i;
-            $(con_name).html('<div class="people" id="group_suggest_' + value.profileid + '" data="' + value.profileid + '" ><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src=' + data.pimage[value.profileid] + ' height="80" width="80" /></a><div class="name_80"><a class="ajax_nav" style="font-weight:bold;"href="group.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a><div  style="cursor:pointer;padding:0.2em 0em 0em 0em;"><span class="really_group_join" onclick="action.really_group_join(this)" >+Join Group</span></div></div></div>');
+            $(con_name).html('<div class="people" id="group_suggest_' + value.profileid + '" data="' + value.profileid + '" ><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src=' + data.pimage[value.profileid] + ' height="80" width="80" /></a><div class="name_80"><a class="ajax_nav" style="font-weight:bold;"href="group.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a><div  style="cursor:pointer;padding:0.2em 0em 0em 0em;"><span class="really_group_join" onclick="action.really_group_join_page(this)" >+Join Group</span></div></div></div>');
             i++;
          });
       }
@@ -724,7 +724,7 @@ var ui = (function()
 
    function file_upload(profileid, action)
    {
-      $('#uploader').html('<div id="main_div"><input type="hidden" value="6"/><div></div><div style="margin:0.5em;"><Strong>Select a file on your computer</strong></div><div style="margin-top:15px 0 20 0px;"><div id="photo_preview"></div><form id="pform" method="post" enctype="multipart/form-data" action="/ajax/write.php"><textarea type="text" placeholder="Say something about this file" maxlength="200" id="photo_description" name="photo_description"/></textarea><input  size="30" type="file" name="photo_box" id="photo_box" class="file_inline" /><div class="top1"><input type="submit" name="upload" id="photo_upload_button" class="theme_button" value="Upload"><input type="button" name="cancel" class="theme_button left4" value="Cancel" onclick="ui.upload_default_state()"></div><input type="hidden" id="photo_hidden_profileid" name="photo_hidden_profileid" value="' + profileid + '"/><input type="hidden" name="action" value="' + action + '"/></form></div></div>');
+      $('#uploader').html('<div id="main_div"><input type="hidden" value="6"/><div></div><div style="margin:0.5em;"><Strong>Select a file on your computer</strong></div><div style="margin-top:15px 0 20 0px;"><div id="photo_preview"></div><form id="pform" method="post" enctype="multipart/form-data" action="/ajax/write.php"><textarea type="text" placeholder="Say something about this file" id="photo_description" name="photo_description"/></textarea><input  size="30" type="file" name="photo_box" id="photo_box" class="file_inline" /><div class="top1"><input type="submit" name="upload" id="photo_upload_button" class="theme_button" value="Upload"><input type="button" name="cancel" class="theme_button left4" value="Cancel" onclick="ui.upload_default_state()"></div><input type="hidden" id="photo_hidden_profileid" name="photo_hidden_profileid" value="' + profileid + '"/><input type="hidden" name="action" value="' + action + '"/></form></div></div>');
       ui.enable_upload_area();
    }
 
@@ -783,7 +783,7 @@ var ui = (function()
    {
       $.each(data.action, function(index, value)
       {
-         $(me).html('<div class="people" id="suggest_' + value.profileid + '" data="' + value.profileid + '" ><a class="ajax_nav" href="group.php?id=' + value.profileid + '"><img class="lfloat" src=' + data.pimage[value.profileid] + ' height="35" width="35" /></a><div class="name_35"><a class="ajax_nav" style="font-weight:bold;"href="group.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a><div  style="cursor:pointer;padding:0.2em 0em 0em 0em;"><span class="really_add_friend" onclick="action.really_group_join_page(this)" >+Join Group</span></div></div></div>');
+         $(me).html('<div class="people" id="suggest_' + value.profileid + '" data="' + value.profileid + '" ><a class="ajax_nav" href="group.php?id=' + value.profileid + '"><img class="lfloat" src=' + data.pimage[value.profileid] + ' height="35" width="35" /></a><div class="name_35"><a class="ajax_nav" style="font-weight:bold;"href="group.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a><div  style="cursor:pointer;padding:0.2em 0em 0em 0em;"><span class="really_add_friend" onclick="action.really_group_join(this)" >+Join Group</span></div></div></div>');
       });
    }
 
@@ -1193,7 +1193,7 @@ var ui = (function()
    {
       var videoid = $(this).parent().children().eq(0).attr('value');
       $('body').append('<div id="video_shadow" style="position:fixed;top:0em;left:0em;width:100%;height:100%;background-color:#eeeeee;z-index:99999;"></div>');
-      $('body').append('<iframe id="video_playing" style="position:fixed;top:8em;left:30%;top:10%;z-index:999999" width="400" height="300" src="http://www.youtube.com/embed/' + videoid + '?autoplay=1" frameborder="0"></iframe>');
+      $('body').append('<iframe id="video_playing" style="position:fixed;top:8em;left:30%;top:10%;z-index:999999" width="400" height="300" src="https://www.youtube.com/embed/' + videoid + '?autoplay=1" frameborder="0"></iframe>');
    }
 
    function video_shadow_click(me)
@@ -1584,15 +1584,15 @@ var ui = (function()
       $('.profile_edit_each').remove();
       if (privacy == 1)
       {
-         $(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,' + code + ',event)" type="text" placeholder="' + placeholder + '" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\'' + key + '\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="' + icon_cdn + '/meeting.png" height="15" width="15" /></span></div>');
+         $(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,' + code + ',event)" type="text" placeholder="' + placeholder + '" class="profile_edit_textbox" value = "" size="40"/></div>');
       }
       else if (privacy == 2)
       {
-         $(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,' + code + ',event)" type="text" placeholder="' + placeholder + '" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\'' + key + '\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="' + icon_cdn + '/friend.png" height="15" width="15" /></span></div>');
+         $(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,' + code + ',event)" type="text" placeholder="' + placeholder + '" class="profile_edit_textbox" value = "" size="40"/></div>');
       }
       else
       {
-         $(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,' + code + ',event)" type="text" placeholder="' + placeholder + '" class="profile_edit_textbox" value = "" size="40"/><span id="profile_post_privacy_link" onclick="ui.bio_privacy(this,event,\'' + key + '\')" style="margin-left:1.5em;cursor:pointer;"><img title="Privacy" src="' + icon_cdn + '/global.png" height="15" width="15" /></span></div>');
+         $(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,' + code + ',event)" type="text" placeholder="' + placeholder + '" class="profile_edit_textbox" value = "" size="40"/></div>');
       }
    }
 
@@ -1651,12 +1651,12 @@ var ui = (function()
 
    function chat_time_hide(me)
    {
-      $(me).children().eq(2).hide();
+      $('.chat_time').hide();
    }
 
    function chat_time_show(me)
    {
-      $(me).children().eq(2).show();
+      $('.chat_time').show();
    }
 
    function timerIncrement()
@@ -1707,14 +1707,14 @@ var ui = (function()
       return false;
    }
 
-   function chat_new_notify(name, message)
+   function chat_new_notify(name, message,chat_notify)
    {
       $(document).attr('title', message + ' :' + name);
       if (chat_notify)
       {
          setTimeout(function()
          {
-            ui.title_restore(name, message);
+            ui.title_restore(name, message,chat_notify);
          }, 1000);
       }
       else
@@ -1723,14 +1723,13 @@ var ui = (function()
       }
    }
 
-   function title_restore(name, message)
+   function title_restore(name, message,chat_notify)
    {
-      $(document).attr('title', 'Quipmate');
       if (chat_notify)
       {
          setTimeout(function()
          {
-            ui.chat_new_notify(name, message);
+            ui.chat_new_notify(name, message,chat_notify);
          }, 1000);
       }
       else
@@ -1823,7 +1822,7 @@ var ui = (function()
       post_delete: post_delete,
       profile_post_privacy: profile_post_privacy,
       popup_error_prompt: popup_error_prompt,
-      praise: praise,
+     // praise: praise,
       removeContainerbyId: removeContainerbyId,
       request_fetch: request_fetch,
       response_comment: response_comment,

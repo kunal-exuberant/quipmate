@@ -148,7 +148,21 @@
 				i++;
 			});
 		}
-		
+		function bio_item_deply(contain,data_iteration,privacy,edit,title,edit_class,actiontype,name_call)
+        {
+         var container = $('#' + contain);
+         container.append('<div class="panel panel-default"><div class="panel-heading" id="'+title.replace(/\s/g, '')+'_title">'+title+'</div><div class="panel-body" id="'+title.replace(/\s/g, '')+'_body"></div></div>');
+         if (edit)
+         {
+            var edit_title = $('#'+title.replace(/\s/g, '')+'_title');
+            edit_title.append('<span id="'+edit_class+'" class="item_edit_link" onclick="ui.bio_item_edit('+edit_class+','+actiontype+',&quot;'+name_call+'&quot;,' +privacy+ ')">Edit</span>');
+         }
+         $.each(data_iteration, function(index, value)
+         {
+            var contain_body = $('#'+title.replace(/\s/g, '')+'_body');
+            contain_body.append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
+         }); 
+        }
 		function comment(me, data)
 		{
 			var icon_cdn = $('#icon_cdn').attr('value');
@@ -185,7 +199,7 @@
 			});	
 			
 			$('#nf_post_'+data.actionid).children().eq(1).children().eq(3).children().eq(1).append('<div><input type="text" placeholder="+Add answer" value="" class="option" onkeydown="action.option_add(this,event)"><div>');
-			$('#uploader').html('<input type="text" id="status_box" value="" placeholder="What \'s going in your life?"/><input id="link_button theme_button" type="submit" value="Share">');
+		    ui.upload_default_state();
 		}
 		
 		function comment_excite(me, data)
@@ -1162,7 +1176,7 @@
 		function request_fetch(me, data)
 		{
 				var icon_cdn = $('#icon_cdn').attr('value');
-			if(data.missu)
+		/*	if(data.missu)
 			{
 				$('#text').html('<div class="subtitle" >Friends Missing You('+data.missu_count+')</div>');
 				$.each(data.missu,function(index,value){
@@ -1172,7 +1186,7 @@
 			else
 			{
 				$('#text').append('<div class="missu_reminder_class">No MissU</div>');
-			}
+			} */
 			if(data.friend)
 			{
 				$('#text').append('<div class="subtitle" >Followers('+data.friend_request_count+')</div>');
@@ -1499,7 +1513,7 @@
 			}	
 			else
 			{
-				$('#info').html(data.error.message);
+				$('#info').html('<span style="color:#ff2222">'+data.error.message+'</span>');
 				$("#loading").remove();
 				$(me).show();
 			}
@@ -1762,6 +1776,7 @@
     
 		}
 	return {
+            bio_item_deply:bio_item_deply,
 			share_post:share_post,
 			getanalyticdetails:getanalyticdetails,
 			group_and_event_select:group_and_event_select,
@@ -1770,13 +1785,13 @@
 			employee_invite:employee_invite,
 			usefullinks:usefullinks,
 			usefullinks_fetch:usefullinks_fetch,
-				usefullinks_load:usefullinks_load,
-				designation:designation,
-				designation_fetch:designation_fetch,
-				designation_delete:designation_delete,
-				team:team,
-				team_fetch:team_fetch,
-				team_delete:team_delete,
+			usefullinks_load:usefullinks_load,
+			designation:designation,
+			designation_fetch:designation_fetch,
+			designation_delete:designation_delete,
+			team:team,
+			team_fetch:team_fetch,
+			team_delete:team_delete,
 			moderator_remove:moderator_remove,
 			make_moderator:make_moderator,
 			feature_setting_update:feature_setting_update, 

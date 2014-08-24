@@ -38,6 +38,30 @@
     </div>
   </div>
 </div>
+<!-- ************************ modal for Praise **************************** -->
+
+<div class="modal fade" id="praisemodal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            <h4 class="modal-title" id="myModalLabel">Publically praise for outstanding work</h4>
+            </div>
+            <div class="modal-body text-center">
+				<div style="margin-top:1em;"><textarea style="padding:0.5em;" id="letter_title" type="text" placeholder="What is the outstanding contribution?" ></textarea>
+                </div>
+                <div style="margin-top:1em;"><textarea placeholder="Word of applause" id="letter_content" style="padding:0.5em;height:16em;resize:none;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary theme_button" id="share_actionid" data="" onclick="action.praise_send(this)">Share</button>
+			</div>
+    </div>
+  </div>
+</div>
+<!-- ********************************************************************** -->
+
 <?php
 	$file->script_footer();
 	//$file->google_analytics();

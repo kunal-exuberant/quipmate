@@ -67,13 +67,13 @@ $mcount = $database->unread_message_select($profileid,$college);
 	<?php
 		if($page == 'news_json')
 		{
-			echo '<div id="center" class="col-md-6 col-lg-6 col-xs-12 col-sm-9 center">';
+			echo '<div id="center" class="col-md-6 center">';
 			require('../include/actions.php');
 			echo '</div>';
 		}
 		else
 		{
-			echo '<div id="center" class="col-md-6 col-lg-6 col-xs-12 col-sm-9 center"></div>';
+			echo '<div id="center" class="col-md-6  center"></div>';
 		}
 	?>
 	<div id="right" class="col-md-3 col-lg-3 right"> 

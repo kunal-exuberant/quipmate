@@ -41,8 +41,6 @@ else if($page == 'page_json' && $profile_relation == 0 )
 	  <li id="photo_link" ><a href="#">File</a></li>
 	</ol>
 	<div  id="uploader">  
-	<!--	<input type="text" id="status_box" value="" placeholder="Post in <?php //echo $profile_name;?> page"/>
-		<input id="link_button" type="submit" value="Post">     -->
 	</div>
 </div>
 <?php
@@ -95,14 +93,7 @@ else if($profile_relation == 1)
 	  <li id="status_link" ><a href="#">Post</a></li>
 	  <li id="photo_link" ><a href="#">File</a></li>
 	  <li id="moment_link" ><a href="#">Album</a></li>
-	  <?php 
-		if ($help->feature_fetch('gift', $memcached, $database))
-		{ 
-	  ?>
-		  <li onclick="ui.gift_ui_create(this)" ><a href="#">Send-Gift</a></li>
-	  <?php
-		 }
-	  ?>				
+	  <li onclick="ui.praise(this,event)" ><a href="#">Praise</a></li>			
 	</ol>
 	<div  id="uploader">  
 	<!--	<input type="text" id="status_box" value="" placeholder="Post in <?php //echo $profile_name;?>'s diary"/>

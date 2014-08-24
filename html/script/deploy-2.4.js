@@ -768,7 +768,7 @@ var deploy = (function()
          }
          else if (feed_type == 'notice_feed')
          {
-            $(container).append('<div class="notice_drop"  id="' + con + value.actionid + value.actiontype + '"><input type="hidden" id=' + value.actionid + ' value="' + value.life_is_fun + '"/><img class="lfloat" src =' + pimage[lastactionby] + ' height="50" width="50" /><div class="notice_name">' + action.name_split(name, value.actionby) + ' and you are friends now.</div></div>');
+            $(container).append('<div class="notice_drop"  id="' + con + value.actionid + value.actiontype + '"><input type="hidden" id=' + value.actionid + ' value="' + value.life_is_fun + '"/><img class="lfloat" src =' + pimage[lastactionby] + ' height="50" width="50" /><div class="notice_name">' + action.name_split(name, value.actionby) + ' is also following you.</div></div>');
          }
       }
       else if (value.actiontype == 10)
@@ -1345,300 +1345,115 @@ var deploy = (function()
 
    function bio_deploy(data)
    {
-      var myprofileid = $('#myprofileid_hidden').attr('value');
+      var myprofileid = $('#myprofileid_hidden').attr('value'); 
       var profileid = $('#profileid_hidden').attr('value');
-      $('#prev').css("padding", "1em 4em 2em 1em");
-      $('#prev').append('<span style="font-size:1.8em;font-weight:bold;">' + data.name + '</span>');
-      if (data.nickname)
+      $('.bio_indiv_container').remove();
+      $('#prev').html('<div class="row bio_row"><div style="padding:1em 1em 1em 2em; background-image:linear-gradient(to bottom, #FFFFFF 0%, #ccc 100%), linear-gradient(to bottom, #Fff 0%, #Fff 100%); background-clip: content-box, padding-box;" class="col-md-12"><input type="hidden" value="'+profileid+'" /><input type="hidden" value="50" /><img id="'+data.profile_imageid+'" data="'+data.profile_image+'" class="img-thumbnail lfloat" src="thumbnail.php?file='+data.profile_image+'&height=150&width=150" onclick="action.image_viewer(this)" /><span class="bold left1"><a  href="profile.php?id='+profileid+'" style="font-size:1.5em;">'+data.name+'</a></span><div style="margin-top:6em;margin-left:14em;" id="profile_above"><div><span class="glyphicon glyphicon-envelope "></span>:<a href=mailto:'+data.email+' >'+data.email+'</a></div></div></div>');
+      if(myprofileid != profileid)
       {
-         $('#prev span:last').append('(' + data.nickname + ')');
-      }
+        $('#profile_above').prepend('<div id="parent_con" style="margin-right:2em;"><div><input class="profile_actions_button theme_button rfloat " onclick="ui.message(this)" style="width:7.3em;" type="submit" value="+Message" /></div></div>');
+      
+      if (data.info.profile_relation != 0  && data.info.friendship_status == -1)
+      {
+        $('#parent_con').append('<div style="margin-right:8em;"><input class="profile_actions_button theme_button rfloat" id="' + profileid + '" style="width:7.3em;" onclick="action.friend_accept(this,1); this.click=null;" type="submit" value=" +Follow " id="' + profileid + '" data="follow_back"/></div>');
+     }
+    else if (data.info.friendship_status == 0 && data.info.profile_relation != 3)
+    {
+        $('#parent_con').append('<div style="margin-right:8em;"><input class="profile_actions_button theme_button rfloat" id="' + profileid + '" style="width:7.3em;" onclick="action.add_friend(this,' + profileid + '); this.click=null;" type="submit" value=" +Follow " id="' + profileid + '"/></div>');
+    }
+    else if (data.info.friendship_status == 2)
+    {
+        $('#parent_con').append('<div style="margin-right:8em;"><div><span data-toggle="modal"  data-target="#praisemodal"><input class="profile_actions_button theme_button rfloat" style="width:7.3em;" type="submit" value="Praise" /></span></div></div>');
+     }   
+    }
       if (data.tagline)
-      {
-         $('#prev').append('<div style="margin:1em 0 0 0;color:#336699;font-weight:bold;font-size:1.2em;">&quot;' + data.tagline + '&quot;</div>');
+      { 
+         $('#profile_above').append('<div><span class="glyphicon glyphicon-tags"></span>:'+data.tagline+'</div>');
       }
-/*	if(data.age)
-			{			
-				$('#prev').append('<div style="margin:1em 0 0 0;color:#336699;font-size:1.2em;">'+data.age+'</div>');
-			}	*/
-      // 
-      $('#prev').append('<div class="bio_each_title">Profession</div>');
+      if (myprofileid == profileid)
+      {
+         $('#profile_above').append('<div><span class="glyphicon glyphicon-camera"></span>:<a href="register.php?hl=profile_picture" >Change Profile Picture</a></div>');
+      }
+      $('.bio_row').append('<div class="bio_indiv_container"></div>');
+      $('.bio_indiv_container').append('<div class="bio_each col-md-6 panel panel-default" id="bio_each_profession"><div class="bio_each_title">Profession</div></div>');
       if (myprofileid == profileid || data.team.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Team</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="team_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(team_edit_link,234,&quot;School&quot;,' + data.privacy.team + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.team, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+    callback.bio_item_deply('bio_each_profession',data.team, data.privacy.team,data.edit,'Team','team_edit_link',234,'Team');
       }
       if (myprofileid == profileid || data.profession.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Profession</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="profession_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(profession_edit_link,202,&quot;Profession&quot;,' + data.privacy.profession + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.profession, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+        callback.bio_item_deply('bio_each_profession',data.profession, data.privacy.profession,data.edit,'Profession','profession_edit_link',202,'Profession');
       }
       if (myprofileid == profileid || data.designation.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Designation</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="designation_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(designation_edit_link,239,&quot;Designation&quot;,' + data.privacy.designation + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.designation, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+         callback.bio_item_deply('bio_each_profession',data.designation, data.privacy.designation,data.edit,'Designation','designation_edit_link',239,'Designation');
       }
       if (myprofileid == profileid || data.major.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Major</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="major_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(major_edit_link,235,&quot;Major&quot;,' + data.privacy.major + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.major, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+          callback.bio_item_deply('bio_each_profession',data.major, data.privacy.major,data.edit,'Major','major_edit_link',235,'Major');
       }
       if (myprofileid == profileid || data.skill.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Skill</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="skill_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(skill_edit_link,230,&quot;Skill&quot;,' + data.privacy.skill + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.skill, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+         callback.bio_item_deply('bio_each_profession',data.skill, data.privacy.skill,data.edit,'Skill','skill_edit_link',230,'Skill');
       }
       if (myprofileid == profileid || data.tool.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Tools Worked On</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="tool_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(tool_edit_link,236,&quot;Tool&quot;,' + data.privacy.tool + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.tool, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+         callback.bio_item_deply('bio_each_profession',data.tool, data.privacy.tool,data.edit,'Tools worked on','tool_edit_link',236,'Tools worked on');
       }
       if (myprofileid == profileid || data.project.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Project</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="project_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(project_edit_link,231,&quot;Project&quot;,' + data.privacy.project + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.project, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+         callback.bio_item_deply('bio_each_profession',data.project, data.privacy.project,data.edit,'Project','project_edit_link',231,'Project');
       }
       if (myprofileid == profileid || data.certificate.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Certificate</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="certificate_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(certificate_edit_link,232,&quot;Certificate&quot;,' + data.privacy.certificate + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.certificate, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+         callback.bio_item_deply('bio_each_profession',data.certificate, data.privacy.certificate,data.edit,'Certificate','certificate_edit_link',232,'Certificate');
       }
       if (myprofileid == profileid || data.award.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Award</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="award_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(award_edit_link,233,&quot;Award&quot;,' + data.privacy.award + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.award, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+         callback.bio_item_deply('bio_each_profession',data.award, data.privacy.award,data.edit,'Award','award_edit_link',233,'Award');
       }
-      $('#prev').append('<div class="bio_each_title">Background</div>');
+            $('.bio_indiv_container').append('<div class="bio_each col-md-6 panel panel-default" id="bio_each_background"><div class="bio_each_title">Background</div></div>');
       if (myprofileid == profileid || data.company.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Company</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="company_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(company_edit_link,205,&quot;Company&quot;,' + data.privacy.company + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.company, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+         callback.bio_item_deply('bio_each_background',data.company, data.privacy.company,data.edit,'Company','company_edit_link',205,'Company');
       }
       if (myprofileid == profileid || data.college.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">College</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="college_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(college_edit_link,204,&quot;College&quot;,' + data.privacy.college + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.college, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+         callback.bio_item_deply('bio_each_background',data.college, data.privacy.college,data.edit,'College','college_edit_link',204,'College');
       }
       if (myprofileid == profileid || data.school.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">School</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="school_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(school_edit_link,203,&quot;School&quot;,' + data.privacy.school + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.school, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+         callback.bio_item_deply('bio_each_background',data.school, data.privacy.school,data.edit,'School','school_edit_link',203,'School');
       }
       if (myprofileid == profileid || data.city.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">City</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="city_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(city_edit_link,201,&quot;City&quot;,' + data.privacy.city + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.city, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+         callback.bio_item_deply('bio_each_background',data.city, data.privacy.city,data.edit,'City','city_edit_link',201,'City');
       }
-      if (myprofileid == profileid || data.hobby.length > 0)
-      {
-         $('#prev').append('<div class="bio_each_title">Personal</div>');
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Hobby</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="hobby_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(hobby_edit_link,211,&quot;Hobby&quot;,' + data.privacy.hobby + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.hobby, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
-      }
-      if (myprofileid == profileid || data.music.length > 0)
-      {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Music</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="music_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(music_edit_link,206,&quot;Music&quot;,' + data.privacy.music + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.music, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
-      }
-      if (myprofileid == profileid || data.movie.length > 0)
-      {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Movie</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="movie_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(movie_edit_link,207,&quot;Movie&quot;,' + data.privacy.movie + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.movie, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
-      }
-      if (myprofileid == profileid || data.book.length > 0)
-      {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Book</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="book_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(book_edit_link,208,&quot;Book&quot;,' + data.privacy.book + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.book, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
-      }
-      if (myprofileid == profileid || data.sports.length > 0)
-      {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Sports</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="sport_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(sport_edit_link,209,&quot;Sports&quot;,' + data.privacy.sport + ')">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.sports, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
-      }
-      $('#prev').append('<div class="bio_each_title">Contact</div>');
+      $('.bio_indiv_container').append('<div class="bio_each col-md-6 panel panel-default" id="bio_each_contact"><div class="bio_each_title">Contact</div></div>');
       if (data.email)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Email</span></div>');
-         $('#prev').append('<div style="margin:1em 0 0 0;color:#336699;font-size:1.2em;">' + data.email + '</div>');
+         $('#bio_each_contact').append('<div class="panel panel-default"><div class="panel-heading" >Email</div><div class="panel-body">' + data.email + '</div></div>');
       }
-      if (myprofileid == profileid || data.office.length > 0)
+      if (myprofileid == profileid || data.extension.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Office Extension</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="office_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(office_edit_link,237,&quot;Office Extension&quot;,2)">Edit</span>');
-         }
-         $('#prev').append('<div style="margin:1em 0 0 0;color:#336699;font-size:1.2em;">' + data.extension + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
+         callback.bio_item_deply('bio_each_contact',data.extension, data.privacy.extension,data.edit,'Office Extension','extension_edit_link',237,'Office Extension');
       }
       if (myprofileid == profileid || data.mobile.length > 0)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Mobile</span></div>');
-         if (data.edit)
-         {
-            $('#prev div:last').append('<span id="mobile_edit_link" class="item_edit_link" onclick="ui.bio_item_edit(mobile_edit_link,215,&quot;Mobile&quot;,2)">Edit</span>');
-         }
-         $('#prev').append('<div class="items"></div>');
-         $.each(data.mobile, function(index, value)
-         {
-            $('#prev .items:last').append('<div class="item_each" style="margin:1em 0 0 0;color:#336699;">' + value.name + '<span class="item_edit_remove" onclick="action.bio_item_remove(this,' + value.id + ')">Remove<span></div>');
-         });
+         callback.bio_item_deply('bio_each_contact',data.mobile, data.privacy.mobile,data.edit,'Mobile','mobile_edit_link',215,'Mobile');
       }
-      if (myprofileid == profileid || data.birthday.length > 0)
+      if (myprofileid == profileid)
       {
-         $('#prev').append('<div class="item_title"><span class="item_title_text">Birthday</span></div>');
-         $('#prev').append('<div style="margin:1em 0 0 0;color:#336699;font-size:1.2em;">' + data.birthday + '</div>');
-      }
+         $('#bio_each_contact').append('<div class="panel panel-default"><div class="panel-heading" >Birthday</div><div class="panel-body">' + data.birthday + '</div></div>');
+      
+      } 
    }
 
    function friend_deploy(data)
    {
       $.each(data.action, function(index, value)
       {
-         $('#prev').append('<div id="' + value.profileid + '" class="friend_feed""><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src="' + data.pimage[value.profileid] + '" alt="" height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a></div></div>');
+         $('#center').append('<div id="' + value.profileid + '" class="friend_feed""><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src="' + data.pimage[value.profileid] + '" alt="" height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a></div></div>');
          if (value.status == 0)
          {
             $('#' + value.profileid).append('<div style="float:right;"><input id="' + value.profileid + '" class="add_friend theme_button" type="submit" value=" +Follow " " onclick ="action.add_friend(this,' + value.profileid + '); this.onclick=null;" /><div>');
@@ -1948,7 +1763,7 @@ var deploy = (function()
          }
          else
          {
-            page = 'profile';
+            page = 'bio';
             $('#page_hidden').attr('value', page);
          }
          $('.selected').removeClass('selected');
@@ -2140,7 +1955,7 @@ var deploy = (function()
          $('#profileid_hidden').attr('value', myprofileid);
          $('#profilename_hidden').attr('value', myname);
          $(document).attr('title', 'Quipmate');
-         $('#left').html('<ul class=" nav nav-pills nav-stacked"><li ><a class="links ajax_nav" id="news_json" href="?hl=update" title="Updates from your followings"><span class="name_20">News Feed</span></a></li><li ><a  class="links ajax_nav" id="inbox" href="?hl=inbox" title="Messages from your friends"><span class="name_20">Messages</span></a></li><li ><a class="links ajax_nav" id="photo" href="?hl=image" title="Photo shared by your friends"><span class="name_20">Photos</span></a></li><li ><a class="links ajax_nav" id="new_user" href="?hl=new_user" title="Find out who joined Quipmate after you"><span class="name_20">People Directory</span></a></li></ul><div name="group" style="margin-top:1em;"><span style="font-weight:bold;font-size:1em;color:gray">Groups</span><ul id="groups_append" class="nav nav-pills nav-stacked"></ul></div><div name="event" style="margin-top:1em;"><span style="font-weight:bold;font-size:1em;color:gray">Events</span><ul id="events_append" class="nav nav-pills nav-stacked"></ul></div><div id="friend_event" class="panel panel-default"><div id="friend_event_body" class="panel-body"></div></div><div style="margin-top:1em;padding-top:.5em;border-top:.1em solid #cccccc;"><a href="#" target="_blank"><small>&copy; Quipmate</small></a><span class="separator">|</span><a href="public/help.php" target="_blank"><small>Help</small></a><span class="separator">|</span><a href="#" onclick="ui.feedback(this)"><small>Feedback</small></a></div>');
+         $('#left').html('<ul class=" nav nav-pills nav-stacked"><li ><a class="links ajax_nav" id="news_json" href="?hl=update" title="Updates from your followings"><span class="name_20">News Feed</span></a></li><li ><a  class="links ajax_nav" id="inbox" href="?hl=inbox" title="Messages from your friends"><span class="name_20">Messages</span></a></li><li ><a class="links ajax_nav" id="file" href="profile.php?hl=file" title="Files shared by you"><span class="name_20">File</span></a></li><li ><a class="links ajax_nav" id="new_user" href="?hl=new_user" title="Find out who joined Quipmate after you"><span class="name_20">People Directory</span></a></li></ul><div name="group" style="margin-top:1em;"><span style="font-weight:bold;font-size:1em;color:gray">Groups</span><ul id="groups_append" class="nav nav-pills nav-stacked"></ul></div><div name="event" style="margin-top:1em;"><span style="font-weight:bold;font-size:1em;color:gray">Events</span><ul id="events_append" class="nav nav-pills nav-stacked"></ul></div><div id="friend_event" class="panel panel-default"><div id="friend_event_body" class="panel-body"></div></div><div style="margin-top:1em;padding-top:.5em;border-top:.1em solid #cccccc;"><a href="#" target="_blank"><small>&copy; Quipmate</small></a><span class="separator">|</span><a href="public/help.php" target="_blank"><small>Help</small></a><span class="separator">|</span><a href="#" onclick="ui.feedback(this)"><small>Feedback</small></a></div>');
          $('#right').html('<div id="birthday_today" class="panel panel-default"></div><div id="friend_invite" class="panel panel-default"><div id="friend_invite_heading" class="panel-heading"></div><div id="friend_invite_body" class="panel-body"></div></div>');
 /*Removed code 
 				<div id="" class="right_item"><a style="cursor:pointer;" onclick="ui.direct_to_md(this,event)">Direct to MD</a></div><div id="blog_write" class="right_item"> <a href="action.php?hl=blog-write" >Write a blog</a></div>
@@ -2160,7 +1975,7 @@ var deploy = (function()
          action.pro_stat(this);
          action.usefullinks_load();
          action.star_of_the_week_fetch();
-         action.flash_board_fetch();
+        // action.flash_board_fetch(); // Removing this feature 
          //action.csv_fetch();
       }
       else if (page == 'search')
@@ -2267,7 +2082,7 @@ var deploy = (function()
       {
          if (window.history)
          {
-            window.history.pushState('http://www.quipmate.com/', 'HTML5', 'admin.php?hl=usefullinks');
+            window.history.pushState('https://www.quipmate.com/', 'HTML5', 'admin.php?hl=usefullinks');
          }
          else
          {
@@ -2281,7 +2096,7 @@ var deploy = (function()
       {
          if (window.history)
          {
-            window.history.pushState('http://www.quipmate.com/', 'HTML5', 'admin.php?hl=team');
+            window.history.pushState('https://www.quipmate.com/', 'HTML5', 'admin.php?hl=team');
          }
          else
          {
@@ -2295,7 +2110,7 @@ var deploy = (function()
       {
          if (window.history)
          {
-            window.history.pushState('http://www.quipmate.com/', 'HTML5', 'admin.php?hl=sotw');
+            window.history.pushState('https://www.quipmate.com/', 'HTML5', 'admin.php?hl=sotw');
          }
          else
          {
@@ -2309,7 +2124,7 @@ var deploy = (function()
       {
          if (window.history)
          {
-            window.history.pushState('http://www.quipmate.com/', 'HTML5', 'admin.php?hl=group_byadmin');
+            window.history.pushState('https://www.quipmate.com/', 'HTML5', 'admin.php?hl=group_byadmin');
          }
          else
          {
@@ -2323,7 +2138,7 @@ var deploy = (function()
       {
          if (window.history)
          {
-            window.history.pushState('http://www.quipmate.com/', 'HTML5', 'admin.php?hl=flashboard');
+            window.history.pushState('https://www.quipmate.com/', 'HTML5', 'admin.php?hl=flashboard');
          }
          else
          {
@@ -2365,7 +2180,7 @@ var deploy = (function()
       {
          if (window.history)
          {
-            window.history.pushState('http://www.quipmate.com/', 'HTML5', 'admin.php?hl=designation');
+            window.history.pushState('https://www.quipmate.com/', 'HTML5', 'admin.php?hl=designation');
          }
          else
          {
@@ -2479,7 +2294,7 @@ var deploy = (function()
          param.action = 'setting_feature_select';
          window.ajax_queue.push($.getJSON(url, param, function(data)
          {
-            $('#center').html('<h1 class="profile_edit_title" id="basic">Set feature On/Off</h1><div class="profile_edit_container"><div class="setting_each bgcolor"><span class="setting_category_name">Send Gift</span><input type="checkbox" onchange="action.feature_setting_update(this)" class="privacy_drop" data="gift" ' + data.info.gift + '></div><div class="setting_each"><span class="setting_category_name">Mood Sharing</span><input type="checkbox" onchange="action.feature_setting_update(this)" class="privacy_drop" data="mood" ' + data.info.mood + '></div><div class="setting_each bgcolor"><span class="setting_category_name">Birthday wish</span><input type="checkbox" onchange="action.feature_setting_update(this)" class="privacy_drop" data="birthday" ' + data.info.birthday + '></div><div class="setting_each"><span class="setting_category_name">Invite a colleague</span><input type="checkbox" onchange="action.feature_setting_update(this)" class="privacy_drop" data="invite_friend" ' + data.info.invite_friend + '></div><div class="setting_each bgcolor"><span class="setting_category_name">MissU</span><input type="checkbox" onchange="action.feature_setting_update(this)" class="privacy_drop" data="missu" ' + data.info.missu + '></div><div class="setting_each"><span class="setting_category_name">Actiontype Preview</span><input type="checkbox" onchange="action.feature_setting_update(this)" class="privacy_drop" data="actiontype_preview" ' + data.info.actiontype_preview + '></div></div>');
+            $('#center').html('<h1 class="profile_edit_title" id="basic">Set feature On/Off</h1><div class="setting_each"><span class="setting_category_name">Mood Sharing</span><input type="checkbox" onchange="action.feature_setting_update(this)" class="privacy_drop" data="mood" ' + data.info.mood + '></div><div class="setting_each bgcolor"><span class="setting_category_name">Birthday wish</span><input type="checkbox" onchange="action.feature_setting_update(this)" class="privacy_drop" data="birthday" ' + data.info.birthday + '></div><div class="setting_each"><span class="setting_category_name">Invite a colleague</span><input type="checkbox" onchange="action.feature_setting_update(this)" class="privacy_drop" data="invite_friend" ' + data.info.invite_friend + '></div></div>');
          }));
       }
       else if (page == 'page_json')
@@ -3032,19 +2847,24 @@ var deploy = (function()
             $('#profilename_hidden').attr('value', data.info.name);
             $('#profile_relation_hidden').attr('value', data.info.profile_relation);
             $('#profilename_hidden').attr('value', data.info.name);
-            $('#left').html('<div style="text-align:center;"><input type="hidden" value="' + profileid + '" /><input type="hidden" value="50" /><img onclick="action.image_viewer(this)" id="' + data.info.profile_imageid + '" class="img-thumbnail" data="' + data.info.profile_image + '" src="' + data.info.profile_image + '" /></div><div class="text-center"><a  class="ajax_nav"  href="profile.php?id=' + profileid + '">' + data.info.name + '</a></div><ul class=" nav nav-pills nav-stacked"><li class="links"><a class="ajax_nav" id="profile_json" href="profile.php?id=' + profileid + '&hl=diary" title="Your activities"><span class="name_20">Diary</span></a></li><li class="links"><a class="ajax_nav" id="bio" href="profile.php?id=' + profileid + '&hl=bio" title="Your Bio"><span class="name_20">Bio</span></a></li><li class="links"><a class="ajax_nav" id="praise" href="profile.php?id=' + profileid + '&hl=praise" title="Your Praises"><span class="name_20">Praises</span></a></li><li class="links"><a class="ajax_nav" id="pphoto" href="profile.php?id=' + profileid + '&hl=image" title="Your Photos"><span class="name_20">Photos</span></a></li><li class="links"><a class="ajax_nav" id="file" href="profile.php?id=' + profileid + '&hl=file" title="Your Files"><span class="name_20">Files</span></a></li><li class="links"><a class="ajax_nav" id="video" href="profile.php?id=' + profileid + '&hl=video" title="Your Videos"><span class="name_20">Videos</span></a></li><li class="links"><a  class="ajax_nav" id="following" href="profile.php?id=' + profileid + '&hl=following" title="You are following"><span class="name_20">Following (' + data.info.following_count + ')</span></a></li><li class="links"><a  class="ajax_nav" id="followers" href="profile.php?id=' + profileid + '&hl=followers" title="Your followers"><span class="name_20">Followers (' + data.info.followers_count + ')</span></a></li></ul><div id="friend_event" class="right_item" style="margin:1em 0em 0em 0em;padding:0em;"></div>');
+            $('#left').html('<ul class=" nav nav-pills nav-stacked"><li class="links"><a class="ajax_nav" id="profile_json" href="profile.php?id=' + profileid + '&hl=diary" title="Your activities"><span class="name_20">Diary</span></a></li><li class="links"><a class="ajax_nav" id="bio" href="profile.php?id=' + profileid + '&hl=bio" title="Your Bio"><span class="name_20">Bio</span></a></li><li class="links"><a class="ajax_nav" id="praise" href="profile.php?id=' + profileid + '&hl=praise" title="Your Praises"><span class="name_20">Praises</span></a></li><li class="links"><a class="ajax_nav" id="pphoto" href="profile.php?id=' + profileid + '&hl=image" title="Your Photos"><span class="name_20">Photos</span></a></li><li class="links"><a class="ajax_nav" id="file" href="profile.php?id=' + profileid + '&hl=file" title="Your Files"><span class="name_20">Files</span></a></li><li class="links"><a class="ajax_nav" id="video" href="profile.php?id=' + profileid + '&hl=video" title="Your Videos"><span class="name_20">Videos</span></a></li><li class="links"><a  class="ajax_nav" id="following" href="profile.php?id=' + profileid + '&hl=following" title="You are following"><span class="name_20">Following (' + data.info.following_count + ')</span></a></li><li class="links"><a  class="ajax_nav" id="followers" href="profile.php?id=' + profileid + '&hl=followers" title="Your followers"><span class="name_20">Followers (' + data.info.followers_count + ')</span></a></li></ul><div id="friend_event" class="right_item" style="margin:1em 0em 0em 0em;padding:0em;"></div>');
+            
+//removed from left 
+            //<div style="text-align:center;"><input type="hidden" value="' + profileid + '" /><input type="hidden" value="50" /><img onclick="action.image_viewer(this)" id="' + data.info.profile_imageid + '" class="img-thumbnail" data="' + data.info.profile_image + '" src="' + data.info.profile_image + '" /></div><div class="text-center"><a  class="ajax_nav"  href="profile.php?id=' + profileid + '">' + data.info.name + '</a></div>
+            
+            
             $(document).attr('title', data.info.name);
             if (data.info.profile_relation == 2)
             {
                $('#left').append('<div style="margin-top:2em;text-align:center;"><a style="color:#003399;" href="#" onclick="ui.unfriend(this) " >Unfollow ' + data.info.name + '</a></div>');
             }
-            if (data.info.profile_relation != 0 && data.info.profile_relation != -99)
+            if (data.info.profile_relation != 0 )
             {
-               if (data.info.friendship_status == 1)
+               if (data.info.friendship_status == -1)
                {
-                  $('#right').html('<div style="clear:both;margin:1em 0em;"> ' + data.info.name + ' is following you .</div><span id="add_container" class="profile_actions_container"><input class="profile_actions_button theme_button" id="' + profileid + '" style="width:7.3em;" onclick="action.add_friend(this,' + profileid + '); this.click=null;" type="submit" value=" +Follow " id="' + profileid + '"/></span>');
+                  $('#right').html('<div style="clear:both;margin:1em 0em;"> ' + data.info.name + ' is following you .</div><span id="add_container" class="profile_actions_container"><input class="profile_actions_button theme_button" id="' + profileid + '" style="width:7.3em;" onclick="action.friend_accept(this,1); this.click=null;" type="submit" value=" +Follow " id="' + profileid + '" data="follow_back"/></span>');
                }
-               else if (data.info.friendship_status == -1)
+               else if (data.info.friendship_status == 1)
                {
                   $('#right').html('<div style="clear:both;margin:1em 0em;"> You are following ' + data.info.name + '</div>');
                }
@@ -3053,7 +2873,7 @@ var deploy = (function()
                   $('#right').html('<div style="clear:both;margin:1em 0em;">You and ' + data.info.name + ' are following each other.</div>');
                }
             }
-            if (data.info.friendship_status == 0 && data.info.profile_relation != -99)
+            if (data.info.friendship_status == 0 && data.info.profile_relation != 3)
             {
                $('#right').html('<div style="clear:both;margin:1em 0em;">You are not following ' + data.info.name + '</div><span id="add_container" class="profile_actions_container"><input class="profile_actions_button theme_button" id="' + profileid + '" style="width:7.3em;" onclick="action.add_friend(this,' + profileid + '); this.click=null;" type="submit" value=" +Follow " id="' + profileid + '"/></span>');
             }
@@ -3068,7 +2888,7 @@ var deploy = (function()
                if (data.info.friendship_status == 2)
                {
                   $('#left').append('<div style="margin-top:2em;text-align:center;"><a onclick="ui.unfriend(this)" href="#" style="color:#003399;">Unfollow ' + profile_name + '</a></div>');
-                  $('#right').append('<div id="" class="right_item" style="margin-bottom:1em;"><a style="cursor:pointer;" onclick="ui.praise(this,event)">Praise/Recommend</a></div><span class="profile_actions_container" ><input class="profile_actions_button theme_button" onclick="action.missu(this)" style="width:8em;" type="submit" value="Missu" /></span>');
+                  $('#right').append('<div id="" class="right_item" style="margin-bottom:1em;"><a style="cursor:pointer;" onclick="ui.praise(this,event)">Praise/Recommend</a></div>');
                }
                $('#right').append('<div id="friend_match" class="panel panel-default"></div><div id="friend_non_match" class="panel panel-default"></div>');
             }
@@ -3496,12 +3316,12 @@ var deploy = (function()
          window.ajax_queue.push($.getJSON(url, param, function(data)
          {
             $('#profile_relation_hidden').attr('value', data.info.profile_relation);
-            $('#left').html('<div style="text-align:center;"><input type="hidden" value="' + profileid + '" /><input type="hidden" value="50" /><img onclick="action.image_viewer(this)" id="' + data.info.profile_imageid + '" class="img-thumbnail" data="' + data.info.profile_image + '" src="' + data.info.profile_image + '" /></div><div class="text-center"><a  class="ajax_nav"  href="profile.php?id=' + profileid + '">' + data.info.name + '</a></div><ul class=" nav nav-pills nav-stacked"><li class="links"><a class="ajax_nav" id="profile_json" href="profile.php?id=' + profileid + '&hl=diary" title="Your activities"><span class="name_20">Diary</span></a></li><li class="links"><a class="ajax_nav" id="bio" href="profile.php?id=' + profileid + '&hl=bio" title="Your Bio"><span class="name_20">Bio</span></a></li><li class="links"><a class="ajax_nav" id="praise" href="profile.php?id=' + profileid + '&hl=praise" title="Your Praises"><span class="name_20">Praises</span></a></li><li class="links"><a class="ajax_nav" id="pphoto" href="profile.php?id=' + profileid + '&hl=image" title="Your Photos"><span class="name_20">Photos</span></a></li><li class="links"><a class="ajax_nav" id="file" href="profile.php?id=' + profileid + '&hl=file" title="Your Files"><span class="name_20">Files</span></a></li><li class="links"><a class="ajax_nav" id="video" href="profile.php?id=' + profileid + '&hl=video" title="Your Videos"><span class="name_20">Videos</span></a></li><li class="links"><a  class="ajax_nav" id="following" href="profile.php?id=' + profileid + '&hl=following" title="You are following"><span class="name_20">Following (' + data.info.following_count + ')</span></a></li><li class="links"><a  class="ajax_nav" id="followers" href="profile.php?id=' + profileid + '&hl=followers" title="Your followers"><span class="name_20">Followers (' + data.info.followers_count + ')</span></a></li></ul><div id="friend_event" class="right_item" style="margin:1em 0em 0em 0em;padding:0em;"></div>');
+            $('#left').html('<ul class=" nav nav-pills nav-stacked"><li class="links"><a class="ajax_nav" id="profile_json" href="profile.php?id=' + profileid + '&hl=diary" title="Your activities"><span class="name_20">Diary</span></a></li><li class="links"><a class="ajax_nav" id="bio" href="profile.php?id=' + profileid + '&hl=bio" title="Your Bio"><span class="name_20">Bio</span></a></li><li class="links"><a class="ajax_nav" id="praise" href="profile.php?id=' + profileid + '&hl=praise" title="Your Praises"><span class="name_20">Praises</span></a></li><li class="links"><a class="ajax_nav" id="pphoto" href="profile.php?id=' + profileid + '&hl=image" title="Your Photos"><span class="name_20">Photos</span></a></li><li class="links"><a class="ajax_nav" id="file" href="profile.php?id=' + profileid + '&hl=file" title="Your Files"><span class="name_20">Files</span></a></li><li class="links"><a class="ajax_nav" id="video" href="profile.php?id=' + profileid + '&hl=video" title="Your Videos"><span class="name_20">Videos</span></a></li><li class="links"><a  class="ajax_nav" id="following" href="profile.php?id=' + profileid + '&hl=following" title="You are following"><span class="name_20">Following (' + data.info.following_count + ')</span></a></li><li class="links"><a  class="ajax_nav" id="followers" href="profile.php?id=' + profileid + '&hl=followers" title="Your followers"><span class="name_20">Followers (' + data.info.followers_count + ')</span></a></li></ul><div id="friend_event" class="right_item" style="margin:1em 0em 0em 0em;padding:0em;"></div>');
             $('#profilename_hidden').attr('value', data.info.name);
             $(document).attr('value', data.info.name);
             if (data.info.profile_relation == 2)
             {
-               $('#left').append('<div style="margin-top:2em;text-align:center;"><a style="color:#003399;" href="#" onclick="ui.unfriend(this) " >Unfriend ' + data.info.name + '</a></div>');
+               $('#left').append('<div style="margin-top:2em;text-align:center;"><a style="color:#003399;" href="#" onclick="ui.unfriend(this) " >Unfollow ' + data.info.name + '</a></div>');
             }
          }));
          var myprofileid = $('#myprofileid_hidden').attr('value');
@@ -3526,6 +3346,21 @@ var deploy = (function()
       param.page = page;
       param.lastScrollTopfeed = $(window).scrollTop();
       $('#page_hidden').attr('value', page);
+            
+        if(page == 'bio')
+        {
+        
+        $('#center').removeClass('col-md-6');
+        $('#center').addClass('col-md-8');
+        $('#right').hide();
+        }
+        else
+        {
+        $('#center').removeClass('col-md-8');
+        $('#center').addClass('col-md-6');
+        $('#right').show();
+        }
+      
       return false;
    }
    return {

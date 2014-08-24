@@ -27,6 +27,7 @@ $title = 'Quipmate';
 $database = new Database();
 $help = new Help ();
 $memcached = new Memcached();
+$help->skill_update($memcached,$database,$_SESSION['database']);
 //-----------------CDN urls-----------------------------------------------
 $doc_cdn='https://33b933d2350357486cc1-d29c0c794c48ec4a25d5921c354b372e.ssl.cf2.rackcdn.com';
 $video_cdn='https://d3e2cb1ca268cb3294f9-0fef5c8c1028eda88d7042156742e54b.ssl.cf2.rackcdn.com';
@@ -382,13 +383,13 @@ else if($_SERVER['SCRIPT_NAME'] == '/register.php')
 }
 $database->page_view_insert($myprofileid, $profileid, $_SERVER['HTTP_REFERER'], $_SERVER['REQUEST_URI'], time());
 ?>
-<meta name="description" content="Quipmate enhances the productivity of your organization by connecting people, conversations, project and ideas in a private network"/>
+<meta name="description" content="Quipmate is private social network for your company. It is a communication software for your employees which facilitates knowledge sharing and collaboration within your company"/>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-<meta name= "url" content="http://www.quipmate.com"/>
-<meta name= "keywords" content="enterprise social network, social, profile, collaboration, team, files sharing, project, idea sharing, innovation, creativity, conversation, knowledge management, engagement platform, identify hidden experts, breakdown silos, improve transparency, poll, questions, democratic decision making, enterprise 2.0, microblogging, employee engagement, groups, bottom-up communication, human capital"/>
+<meta name= "url" content="https://www.quipmate.com"/>
+<meta name= "keywords" content="private social network , enterprise social network , social , profile , collaboration , team , files sharing , project , idea sharing , innovation , creativity , conversation , knowledge management ,knowledge sharing , engagement platform , identify hidden experts , breakdown silos , improve transparency , poll , questions , democratic decision making , enterprise 2.0 , microblogging , employee engagement , groups , bottom-up communication , human capital "/>
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -435,7 +436,7 @@ $database->page_view_insert($myprofileid, $profileid, $_SERVER['HTTP_REFERER'], 
 	  
 	  <form class="navbar-form navbar-left" role="search">
 		<div class="form-group" id="search_form">
-		<input type="text" id="to" autocomplete="off" style="width:20em;" class="form-control" placeholder="Search people, group, events, pages">
+		<input type="text" id="to" autocomplete="off" style="width:20em;" class="form-control" placeholder="Search people, group, skill, event">
 		</div>
 		<button type="submit" class="btn btn-default" id="search_button_header" >Search</button>
 	  </form>
@@ -484,6 +485,8 @@ $database->page_view_insert($myprofileid, $profileid, $_SERVER['HTTP_REFERER'], 
 	<input type="hidden" id="page_hidden" value="<?php echo $page; ?>" />
 	<input type="hidden" id="session_name_hidden" value='<?php echo json_encode($_SESSION["name_json"]); ?>' />
 	<input type="hidden" id="session_pimage_hidden" value='<?php echo json_encode( $_SESSION["pimage_json"]); ?>' />
+    <input type="hidden" id="session_skill_hidden" value='<?php echo json_encode($_SESSION["skillname_json"]); ?>' />
+    <input type="hidden" id="session_group_hidden" value='<?php echo json_encode($_SESSION["groupname_json"]); ?>' />
 	<input type="hidden" id="session_tagline_hidden" value='<?php echo json_encode($_SESSION["tag_json"]); ?>' /> 
 	<input type="hidden" id="online_hidden" value="" />
 	<input type="hidden" id="profile_relation_hidden" value="<?php echo $profile_relation; ?>" />

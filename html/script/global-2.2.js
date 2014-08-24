@@ -17,25 +17,12 @@ jQuery.postJSON = function(url, args, callback)
       }
    });
 };
+
 var last_poll_time_rt = -1;
 var global_time = Math.floor((new Date()).getTime() / 1000);
 var icon_cdn = $('#icon_cdn').attr('value');
 $(function()
-{
-
-    $('.next-image').live('click',function(){
-      
-       action.image_viewer($('.album-image').next());
-            $('.album-image').next()=$('.album-image').next();
-    })
-      
- /*
-               var curr = $('.album-image');
-          $('.next-image').live('click',function(){
-             action.image_viewer(curr.next());
-             curr = curr.next();
-          }) 
-      */     
+{  
    if (window.location.hash) // when the user's browser does not support the html5 it will fall back to hash
    { //in that case when fresh page will load this code will revert browser to non-hash euivalent of the page
       var hash_part = window.location.hash.substring(1);
@@ -320,7 +307,7 @@ $(function()
       var ptagline = JSON.parse($('#session_tagline_hidden').attr('value'));
       var pic = pphoto[profileid];
       var nm = pname[profileid];
-      var tag = ptagline[profileid];;
+      var tag = ptagline[profileid];
       if (!ptagline[profileid])
       {
          tag = "";
@@ -419,11 +406,12 @@ $(function()
       {
          $('#search_filter_hidden').attr('value', 'search_people');
       }
-      $(this).parent().html('');
+      $('#search_container').hide();
+      $('#to').attr('value','');
    });
    $('#center, #left, #right').live('click', function()
    {
-      $('.search_items').hide();
+      $('#search_container').hide();
    });
    $('.search_items').live('mouseover', function()
    {
@@ -1017,7 +1005,7 @@ $(function()
                var myprofileid = $('#myprofileid_hidden').attr('value');
                var profileid = $('#profileid_hidden').attr('value').trim();
                var icon_cdn = $('#icon_cdn').attr('value');
-               if (data.actiontype == 2906)
+               if (data.actiontype == 2906 || data.actiontype == 2926 || data.actiontype == 2925)
                {
                   var page_image = icon_cdn + '/broadcast.png';
                   $('#prev').prepend('<div id="nf_post_' + data.actionid + '" data="' + data.actionid + '" class="nf_post"><div class="name_50"></div><div data=' + data.actionid + ' class="pageclass_json"><input type="hidden" value=' + profileid + ' /><input type="hidden" value="6"/><a class="ajax_nav"  href="page.php?id=' + data.page_pageid + ' "><img class="lfloat" src =' + page_image + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="page.php?id=' + data.page_pageid + ' " >' + data.page_name + '</a><div><input type="hidden" value="' + data.life_is_fun + '"/><div style="margin:0.5em 0em;">' + data.page + '</div></div></div>');
@@ -1328,14 +1316,15 @@ $(function()
                   if (actiontype == 1600)
                   {
                      $('#link_callback').remove();
+                     $('#link_box').attr('placeholder','Say something about this ...');
                      $('#uploader').append('<div id="link_callback" style="margin:1em;height:auto;width:48em;"></div>');
                      if (video)
                      {
-                        $('#link_callback').html('<iframe style="margin-top: 1em;float: left;margin-left:2em;" width="400" height="300" src="http://www.youtube.com/embed/' + path + '" frameborder="0"></iframe><div style="display:block;margin:1em 0em 0em 1em;float:right;margin-right:8em;">' + title + '<br /><a href="' + host + '">' + host + '</a><br />' + meta + '</div><div style="clear:left;"></div>');
+                        $('#link_callback').html('<iframe style="margin-top: 1em;float: left;margin-left:2em;" width="400" height="300" src="https://www.youtube.com/embed/' + path + '" frameborder="0"></iframe><div style="display:block;margin:1em 0em 0em 1em;float:right;margin-right:8em;" class="link_title">' + title + '</div><div><a href="' + host + '">' + host + '</a></div><div class="link_meta">' + meta + '</div><div style="clear:left;"></div>');
                      }
                      else
                      {
-                        $('#link_callback').html('<div id="link_thumb_container" ><img style="max-height:25em;max-width:25em;" src="' + src[thumb_index] + '" ></div><div style="display:block;margin-left: 0.5em;">' + title + '<br /><a href="' + host + '">' + host + '</a><br />' + meta + '</div><div style="clear:left;"></div>');
+                        $('#link_callback').html('<div id="link_thumb_container" ><img style="max-height:25em;max-width:25em;" src="' + src[thumb_index] + '" ></div><div style="display:block;margin-left: 0.5em;" class="link_title">' + title + '</div><div><a href="' + host + '">' + host + '</a></div><div class="link_meta">' + meta + '</div><div style="clear:left;"></div>');
                         $('#link_callback').append('<div class="text-left"><input type="submit" id="thumb_prev" title ="select previous thumbnail" value="<"><input type="submit" id="thumb_next" title ="select next thumbnail" value=">"></div>');
                      }
                      $('#thumb_next').live('click', function()
@@ -1472,7 +1461,7 @@ $(function()
                         ui.response_comment('#nf_post_' + data.actionid, data.actionid, data.life_is_fun, data.time, myprofileid, myphoto);
                         if (video)
                         {
-                           $('#nf_post_' + data.actionid).children().eq(1).children().eq(3).children().eq(1).append('<input type="hidden" value="' + path + '" /><img class="video_play lfloat"  onclick="action.image_viewer(this)" style="margin:0em 1em 1em 0em;cursor:pointer;" id="' + data.actionid + '" src="http://img.youtube.com/vi/' + path + '/default.jpg" /><img class="video_play"  onclick="action.image_viewer(this)" style="position:absolute;left:4em;top:3em;cursor:pointer;" id="' + data.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + title + '</div><a href="' + host + '" target="_blank">' + host + '</a><div>' + meta + '</div><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(page))) + '</div></div><br style= "clear:both;"/></div>');
+                           $('#nf_post_' + data.actionid).children().eq(1).children().eq(3).children().eq(1).append('<input type="hidden" value="' + path + '" /><img class="video_play lfloat"  onclick="action.image_viewer(this)" style="margin:0em 1em 1em 0em;cursor:pointer;" id="' + data.actionid + '" src="https://img.youtube.com/vi/' + path + '/default.jpg" /><img class="video_play"  onclick="action.image_viewer(this)" style="position:absolute;left:4em;top:3em;cursor:pointer;" id="' + data.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + title + '</div><a href="' + host + '" target="_blank">' + host + '</a><div>' + meta + '</div><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(page))) + '</div></div><br style= "clear:both;"/></div>');
                         }
                         else
                         {
@@ -1529,7 +1518,7 @@ $(function()
                      $('#uluploader').append('<div id="link_callback" style="margin:1em;height:auto;width:48em;"></div>');
                      if (video)
                      {
-                        $('#link_callback').html('<iframe style="margin-top: 1em;float: left;margin-left:2em;" width="400" height="300" src="http://www.youtube.com/embed/' + path + '" frameborder="0"></iframe><div style="display:block;margin:1em 0em 0em 1em;float:right;margin-right:8em;">' + title + '<br /><a href="' + host + '">' + host + '</a><br />' + meta + '</div><div style="clear:left;"></div>');
+                        $('#link_callback').html('<iframe style="margin-top: 1em;float: left;margin-left:2em;" width="400" height="300" src="https://www.youtube.com/embed/' + path + '" frameborder="0"></iframe><div style="display:block;margin:1em 0em 0em 1em;float:right;margin-right:8em;">' + title + '<br /><a href="' + host + '">' + host + '</a><br />' + meta + '</div><div style="clear:left;"></div>');
                      }
                      else
                      {

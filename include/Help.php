@@ -453,7 +453,7 @@ class Help
 	
 	function photo_name($ext)
 	{
-		return $_SESSION['userid'].'_'.time().'.'.$ext;
+		return $_SESSION['database'].'_'.$_SESSION['userid'].'_'.time().'.'.$ext;
 	}
 
 	function image_name()
@@ -555,7 +555,7 @@ class Help
 		}
 		$name  = array();
 		$name[$row['USERID']]= $prow['NAME'];
-		$_SESSION['name_json'] = $name;
+		$_SESSION['name_json'] = $name; 
 		
 		
 		$pimage  = array();
@@ -563,6 +563,8 @@ class Help
 		$_SESSION['pimage_json'] = $pimage;
 		
 		$_SESSION['tag_json'] = array();
+        $_SESSION['skillname_json'] =array();
+        $_SESSION['groupname_json'] =array();
 	}
 	
 	function name_fetch($key, $memcache, $database)
@@ -578,6 +580,48 @@ class Help
 			$memcache->set($_SESSION['database'].'_name_'.$key, $row['NAME']);
 			return $row['NAME'];
 		}
+	}
+	function skill_fetch($key, $memcache, $database)
+	{
+		$value = $memcache->get($_SESSION['database'].'_skill_');
+		if($value)
+		{
+			return $value;
+		}
+		else
+		{
+		/*	$row = $database->get_name($key); 
+			$memcache->set($_SESSION['database'].'_skill_'.$key, $row['NAME']);
+			return $row['NAME']; */
+            return ;
+		}
+	}
+    function skill_update($memcache,$database,$db_name)
+	{
+          $fres = $database->bio_skill_all_select($db_name);
+          $k = 0;
+          $j = 0;
+          $i = 0;
+          while ($frow = $fres->fetch_array())
+          {
+    		$value = $memcache->get($db_name.'_name_'.$frow['profileid']);
+            if($value)
+            {
+            	break ;
+            }
+            else
+            {
+            	$memcache->set($db_name.'_name_'.$frow['profileid'],$frow['name']);
+            }
+             $k++;
+          }
+          while ($frow = $fres->fetch_array())
+          {
+            $skill[$frow['profileid']] = $frow['skill'];
+            
+          } 
+          $memcache->set($db_name.'_skill',$skill);
+            
 	}
 	function moderator_status($key, $memcache, $database,$set=0)
 	{
@@ -656,7 +700,7 @@ class Help
 					$return[] = $act;
 				}
 			}
-		}
+		} 
 				
 		function cmp_by_time($a, $b) 
 		{
@@ -682,7 +726,7 @@ class Help
 			}
 			else
 			{
-			    $href = 'http://'.$m;
+			    $href = 'https://'.$m;
 				$str = str_replace($m, "<a href='$href' target='_blank'>$m</a>", $str);	
 			}
 		}

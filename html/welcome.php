@@ -468,10 +468,10 @@ if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) 
 </div>
 <div id="footer"> 
 	<a href="#" target="_blank">&copy; Quipmate</a><span class="separator">|</span>
-	<a href="http://blog.quipmate.com/" target="_blank">Blog</a><span class="separator">|</span>
-	<a href="http://faq.quipmate.com/" target="_blank">FAQ</a><span class="separator">|</span>
-	<a href="http://help.quipmate.com/" target="_blank">Help</a><span class="separator">|</span>
-	<a href="http://www.quipmate.com/public/team.php" target="_blank">Team</a><span class="separator">|</span>
+	<a href="public/blog.php" target="_blank">Blog</a><span class="separator">|</span>
+	<a href="public/faq.php" target="_blank">FAQ</a><span class="separator">|</span>
+	<a href="public/help.php" target="_blank">Help</a><span class="separator">|</span>
+	<a href="public/team.php" target="_blank">Team</a><span class="separator">|</span>
 	<a href="public/terms.php" target="_blank">Terms of Use</a><span class="separator">|</span>
 	<a href="public/security.php" target="_blank">Security &amp; Compliance</a><span class="separator">|</span>
 	<a href="public/privacy.php" target="_blank">Privacy Policy</a>

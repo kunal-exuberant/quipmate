@@ -1401,6 +1401,10 @@ a {color: #336699;}
 		{
 			return $database->broadcast_email_insert($subject,$mes,$additionalHeaders);	
 		}
+        else if($email_type == 'self_invite')
+        {
+            return mail($email,$subject,$mes,$additionalHeaders); //Instant mail in case of signup .
+        }
         else
         {
             

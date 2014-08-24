@@ -737,11 +737,11 @@ var feed = (function()
       postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> shared <a href="' + value.link + '" target="_blank">' + value.title + '</a> in the event <a class="ajax_nav" href="event.php?id=' + value.eventid + ' " > ' + value.event_name + '</a></div></div>');
       if (value.video)
       {
-         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="http://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div>' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div>' + value.meta + '</div></div><br class="bclear"/></div>');
+         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="https://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div>' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div>' + value.meta + '</div></div><br class="bclear"/></div>');
       }
       else
       {
-         postid.children().eq(1).children().eq(3).append('<div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div style="margin:1em 0em 0em 0em;">' + value.title + '<br /><a href="' + value.link + '"  target="_blank">' + value.host + '</a><br />' + value.meta + '<br />' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div class="lclear"></div></div>');
+         postid.children().eq(1).children().eq(3).append('<div style="margin:1em 0em 0em 0em;">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div class="link_title">' + value.title + '</div><div ><a href="' + value.link + '"  target="_blank">' + value.host + '</a></div><div class="link_meta">' + value.meta + '</div></div></div>');
       }
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
@@ -758,11 +758,11 @@ var feed = (function()
       postid.children().eq(1).append('<a class="ajax_nav" href="page.php?id=' + value.page_pageid + ' " ><img class="lfloat" src =' + page_image + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="page.php?id=' + value.page_pageid + ' " >' + value.page_name + '</a></div></div>');
       if (value.video)
       {
-         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="http://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div>' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div>' + value.meta + '</div></div><br class="bclear"/></div>');
+         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="https://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div>' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div>' + value.meta + '</div></div><br class="bclear"/></div>');
       }
       else
       {
-         postid.children().eq(1).children().eq(3).append('<div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div style="margin:1em 0em 0em 0em;">' + value.title + '<br /><a href="' + value.link + '"  target="_blank">' + value.host + '</a><br />' + value.meta + '<br />' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div class="lclear"></div></div>');
+        postid.children().eq(1).children().eq(3).append('<div style="margin:1em 0em 0em 0em;">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div class="link_title">' + value.title + '</div><div ><a href="' + value.link + '"  target="_blank">' + value.host + '</a></div><div class="link_meta">' + value.meta + '</div></div></div>');
       }
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
@@ -778,11 +778,11 @@ var feed = (function()
       postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> shared <a href="' + value.link + '" target="_blank">' + value.title + '</a> in the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div></div>');
       if (value.video)
       {
-         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="http://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div>' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div>' + value.meta + '</div></div><br class="bclear"/></div>');
+         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="https://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div>' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div>' + value.meta + '</div></div><br class="bclear"/></div>');
       }
       else
       {
-         postid.children().eq(1).children().eq(3).append('<div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div style="margin:1em 0em 0em 0em;">' + value.title + '<br /><a href="' + value.link + '"  target="_blank">' + value.host + '</a><br />' + value.meta + '<br />' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div class="lclear"></div></div>');
+         postid.children().eq(1).children().eq(3).append('<div style="margin:1em 0em 0em 0em;">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div class="link_title">' + value.title + '</div><div ><a href="' + value.link + '"  target="_blank">' + value.host + '</a></div><div class="link_meta">' + value.meta + '</div></div></div>');
       }
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
@@ -798,11 +798,11 @@ var feed = (function()
       postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> shared <a href="' + value.link + '" target="_blank">' + value.title + '</a></div></div>');
       if (value.video)
       {
-         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="http://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div>' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div>' + value.meta + '</div></div><br class="bclear"/></div>');
+         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="https://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div class="link_title">' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div class="link_meta">' + value.meta + '</div></div><br class="bclear"/></div>');
       }
       else
       {
-         postid.children().eq(1).children().eq(3).append('<div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div style="margin:1em 0em 0em 0em;">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '<br />' + value.title + '<br /><a href="' + value.link + '"  target="_blank">' + value.host + '</a><br />' + value.meta + '<br /></div><div class="lclear"></div></div>');
+         postid.children().eq(1).children().eq(3).append('<div style="margin:1em 0em 0em 0em;">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div class="link_title">' + value.title + '</div><div ><a href="' + value.link + '"  target="_blank">' + value.host + '</a></div><div class="link_meta">' + value.meta + '</div></div></div>');
       }
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
@@ -866,31 +866,32 @@ var feed = (function()
       }
       if (value.hasOwnProperty('admin_feed') && value.admin_feed == 1)
       {
-         postid.children().eq(1).children().eq(3).append('<div class="time_tag_json"><span onclick="' + fun + '" class="' + class_type + '" style="color:#336699;"></span><a href="action.php?actionid=' + value.pageid + '&life_is_fun=' + value.life_is_fun + '"><span class="glyphicon glyphicon-time" style="color:#ccc;"></span><span class="time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></a></div>');
+         postid.children().eq(1).children().eq(3).append('<div class="time_tag_json" id="time_tag_json_'+value.pageid+'"><span onclick="' + fun + '" class="' + class_type + '" style="color:#336699;"></span><a href="action.php?actionid=' + value.pageid + '&life_is_fun=' + value.life_is_fun + '"><span class="glyphicon glyphicon-time" style="color:#ccc;"></span><span class="time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></a></div>');
       }
       else
       {
-         postid.children().eq(1).children().eq(3).append('<div class="time_tag_json"><span onclick="' + fun + '" class="' + class_type + '" style="color:#336699;">' + exciting + ' </span><a href="action.php?actionid=' + value.pageid + '&life_is_fun=' + value.life_is_fun + '"><span class="glyphicon glyphicon-time" style="color:#ccc;"></span><span class="time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></a></div>');
+         postid.children().eq(1).children().eq(3).append('<div class="time_tag_json" id="time_tag_json_'+value.pageid+'"><span onclick="' + fun + '" class="' + class_type + '" style="color:#336699;">' + exciting + ' </span><a href="action.php?actionid=' + value.pageid + '&life_is_fun=' + value.life_is_fun + '"><span class="glyphicon glyphicon-time" style="color:#ccc;"></span><span class="time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></a></div>');
       }
+      var container_to_append =$('#'+'time_tag_json_'+value.pageid);
       if (value.visible == 0)
       {
-         postid.children().eq(1).children().eq(3).children().eq(2).append('&nbsp;&nbsp;&nbsp;<b>·</b><span class="post_privacy_display"><img style="height:1em" title="Shared with Everyone" width="15" height="15" src="' + icon_cdn + '/global.png" /></span>');
+         container_to_append.append('&nbsp;&nbsp;&nbsp;<b>·</b><span class="post_privacy_display"><img style="height:1em" title="Shared with Everyone" width="15" height="15" src="' + icon_cdn + '/global.png" /></span>');
       }
-      else if (value.visible == 1)
+   /*   else if (value.visible == 1)
       {
          postid.children().eq(1).children().eq(3).children().eq(2).append('&nbsp;&nbsp;&nbsp;<b>·</b><span class="post_privacy_display"><img style="height:1em" title="Shared with followers of followers" src="' + icon_cdn + '/meeting.png" /></span>');
-      }
+      } */
       else if (value.visible == 2)
       {
-         postid.children().eq(1).children().eq(3).children().eq(2).append('&nbsp;&nbsp;&nbsp;<b>·</b><span class="post_privacy_display"><img  style="height:1em" title="Shared with followers" src="' + icon_cdn + '/friend.png" /></span>');
+         container_to_append.append('&nbsp;&nbsp;&nbsp;<b>·</b><span class="post_privacy_display"><img  style="height:1em" title="Shared with followers" src="' + icon_cdn + '/friend.png" /></span>');
       }
       else if (value.visible == 5)
       {
-         postid.children().eq(1).children().eq(3).children().eq(2).append('&nbsp;&nbsp;&nbsp;<b>·</b><span class="post_privacy_display"><img  style="height:1em" title="Shared with this group" src="' + icon_cdn + '/group.png" /></span>');
+         container_to_append.append('&nbsp;&nbsp;&nbsp;<b>·</b><span class="post_privacy_display"><img  style="height:1em" title="Shared with this group" src="' + icon_cdn + '/group.png" /></span>');
       }
       else if (value.visible == 6)
       {
-         postid.children().eq(1).children().eq(3).children().eq(2).append('&nbsp;&nbsp;&nbsp;<b>·</b><span class="post_privacy_display"><img  style="height:1em" title="Shared with this event" src="' + icon_cdn + '/event.png"/></span>');
+         container_to_append.append('&nbsp;&nbsp;&nbsp;<b>·</b><span class="post_privacy_display"><img  style="height:1em" title="Shared with this event" src="' + icon_cdn + '/event.png"/></span>');
       }
    
    /*   if ((value.actiontype < 200 || value.actiontype >= 200) && value.actiontype != 50)

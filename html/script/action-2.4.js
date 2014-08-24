@@ -362,48 +362,152 @@ var action = (function()
       {
         var global_name = JSON.parse($('#session_name_hidden').attr('value'));
         var global_pimage = JSON.parse($('#session_pimage_hidden').attr('value'));
+        var global_skill = JSON.parse($('#session_skill_hidden').attr('value'));
+        var global_group = JSON.parse($('#session_group_hidden').attr('value'));
         $('#session_name_hidden').attr('value', JSON.stringify($.extend(global_name, data.name)));
         $('#session_pimage_hidden').attr('value', JSON.stringify($.extend(global_pimage, data.pimage)));
+        $('#session_skill_hidden').attr('value', JSON.stringify($.extend(global_skill, data.skillname)));
+        $('#session_group_hidden').attr('value', JSON.stringify($.extend(global_group, data.groupname)));
         global_name = JSON.parse($('#session_name_hidden').attr('value'));
         global_pimage = JSON.parse($('#session_pimage_hidden').attr('value'));
+        global_skill = JSON.parse($('#session_skill_hidden').attr('value'));
+        global_group = JSON.parse($('#session_group_hidden').attr('value'));
         $('#search_container').html('');
+        $('#search_container').append('<table width="100%"><tbody><tr id="result_people" class="search-result_left"><td width="30%" class="text-center bold">People</td><td width="70%"></td></tr><tr id="result_skill" class="search-result_left"><td width="30%" class="text-center bold">Skill</td><td width="70%"></td></tr><tr id="result_group" class="search-result_left"><td width="30%" class="text-center bold">Group</td><td width="70%"></td></tr></tbody></table>')
         var count = 0;
-        $.each(global_name, function(index, value)
+        if(!data.skillname)
         {
-          if (value != null)
-          {
-            if (q.indexOf(' ') == -1)
+            $('#result_skill').hide();
+        }
+        if(!data.groupname)
+        {
+            $('#result_group').hide();
+        }
+        if(!data.name)
+        {
+            $('#result_people').hide();
+        }
+        if(!data.email)
+        {
+            $.each(global_name, function(index, value)
             {
-              var search_name = value.toLowerCase().split(" ");
-              for (var i = 0; i < search_name.length; i++)
+              if (value != null)
               {
-                if ((count < 9) && (search_name[i].toLowerCase().search('^' + q.toLowerCase()) != -1))
+                if (q.indexOf(' ') == -1)
                 {
-                  $('#search_' + index).remove();
-                  $('#search_container').append('<div class="search_items container_50 ajax_nav" href="profile.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
-                  $('.search_items:first').css('background', '#cccccc');
-                  $('.search_items:first .name_50 a').css('color', 'white');
-                  count++;
+                  var search_name = value.toLowerCase().split(" ");
+                  for (var i = 0; i < search_name.length; i++)
+                  {
+                    if ((count < 5) && (search_name[i].toLowerCase().search('^' + q.toLowerCase()) != -1))
+                    {
+                      $('#search_' + index).remove();
+                      $('#result_people td:last').append('<div class="search_items container_50 ajax_nav" href="profile.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+                      $('.search_items:first').css('background', '#cccccc');
+                      $('.search_items:first .name_50 a').css('color', 'white');
+                      count++;
+                    }
+                  }
+                }
+                else
+                {
+                  if ((count < 5) && (value.toLowerCase().search('^' + q.toLowerCase()) != -1))
+                  {
+                    $('#search_' + index).remove();
+                    $('#result_people td:last').append('<div class="search_items container_50 ajax_nav" href="profile.php?id=' + index + '" id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+                    $('.search_items:first').css('background', '#cccccc');
+                    $('.search_items:first .name_50 a').css('color', 'white');
+                    count++;
+                  }
+                }
+
+              }
+      
+            });
+            if (count == 0)
+              {
+                   $('#result_people').hide();                
+              }
+//****************************** Skill ******************************************
+        var count_s = 0;
+        $.each(global_skill, function(index, value)
+            {
+              if (value != null)
+              {
+                if (q.indexOf(' ') == -1)
+                {
+                  var search_name = value.toLowerCase().split(" ");
+                  for (var i = 0; i < search_name.length; i++)
+                  {
+                    if ((count_s < 5) && (search_name[i].toLowerCase().search('^' + q.toLowerCase()) != -1))
+                    {
+                      $('#search_' + index).remove();
+                      $('#result_skill td:last').append('<div class="search_items container_50 ajax_nav" href="profile.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div><div class="left4">Skill matched :'+value+'</div></div>');
+                      $('.search_items:first').css('background', '#cccccc');
+                      $('.search_items:first .name_50 a').css('color', 'white');
+                      count_s++;
+                    }
+                  }
+                }
+                else
+                {
+                  if ((count_s < 5) && (value.toLowerCase().search('^' + q.toLowerCase()) != -1))
+                  {
+                    $('#search_' + index).remove();
+                    $('#result_skill td:last').append('<div class="search_items container_50 ajax_nav" href="profile.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div><div class="name_50 ">Skill matched :'+value+'</div></div>');
+                    $('.search_items:first').css('background', '#cccccc');
+                    $('.search_items:first .name_50 a').css('color', 'white');
+                    count_s++;
+                  }
                 }
               }
-            }
-            else
+            });
+//*************************************************************************
+//********************************** group search *********************************
+ var count_g = 0;
+ $.each(global_group, function(index, value)
             {
-              if ((count < 9) && (value.toLowerCase().search('^' + q.toLowerCase()) != -1))
+              if (value != null)
               {
-                $('#search_' + index).remove();
-                $('#search_container').append('<div class="search_items container_50 ajax_nav" href="profile.php?id=' + index + '" id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
-                $('.search_items:first').css('background', '#cccccc');
-                $('.search_items:first .name_50 a').css('color', 'white');
-                count++;
+                if (q.indexOf(' ') == -1)
+                {
+                  var search_name = value.toLowerCase().split(" ");
+                  for (var i = 0; i < search_name.length; i++)
+                  {
+                    if ((count_g < 5) && (search_name[i].toLowerCase().search('^' + q.toLowerCase()) != -1))
+                    {
+                      $('#search_' + index).remove();
+                      $('#result_group td:last').append('<div class="search_items container_50 ajax_nav" href="group.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="group.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="group.php?id=' + index + '">' + value + '</a></div></div>');
+                      $('.search_items:first').css('background', '#cccccc');
+                      $('.search_items:first .name_50 a').css('color', 'white');
+                      count_g++;
+                    }
+                  }
+                }
+                else
+                {
+                  if ((count_g < 5) && (value.toLowerCase().search('^' + q.toLowerCase()) != -1))
+                  {
+                    $('#search_' + index).remove();
+                    $('#result_group td:last').append('<div class="search_items container_50 ajax_nav" href="group.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="group.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="group.php?id=' + index + '">' + value + '</a></div></div>');
+                    $('.search_items:first').css('background', '#cccccc');
+                    $('.search_items:first .name_50 a').css('color', 'white');
+                    count_g++;
+                  }
+                }
               }
-            }
-          }
-        });
+            });
+//***********************************************************************************
+        }
+        else
+        {
+             $('#result_people td:last').append('<div class="search_items container_50 ajax_nav" href="profile.php?id=' + data.action[0] + '"  id="search_' + data.action[0] + '" data="' + data.action[0] + '"><a class="ajax_nav" href="profile.php?id=' + data.action[0] + '"><img class="lfloat" src=' + global_pimage[data.action[0]] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + data.action[0] + '">' + global_name[data.action[0]] + '</a></div></div>');
+        }
       }));
       $('#search_container').html('');
       var global_name = JSON.parse($('#session_name_hidden').attr('value'));
       var global_pimage = JSON.parse($('#session_pimage_hidden').attr('value'));
+      var global_skill = JSON.parse($('#session_skill_hidden').attr('value'));
+      var global_group = JSON.parse($('#session_group_hidden').attr('value'));
       var count = 0;
       $.each(global_name, function(index, value)
       {
@@ -414,10 +518,10 @@ var action = (function()
             var search_name = value.toLowerCase().split(" ");
             for (var i = 0; i < search_name.length; i++)
             {
-              if ((count < 9) && (search_name[i].toLowerCase().search('^' + q.toLowerCase()) != -1))
+              if ((count < 5) && (search_name[i].toLowerCase().search('^' + q.toLowerCase()) != -1))
               {
                 $('#search_' + index).remove();
-                $('#search_container').append('<div class="search_items container_50 ajax_nav" href="profile.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+                $('#result_people td:last').append('<div class="search_items container_50 ajax_nav" href="profile.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
                 $('.search_items:first').css('background', '#cccccc');
                 $('.search_items:first .name_50 a').css('color', 'white');
                 count++;
@@ -426,10 +530,10 @@ var action = (function()
           }
           else
           {
-            if ((count < 9) && (value.toLowerCase().search('^' + q.toLowerCase()) != -1))
+            if ((count < 5) && (value.toLowerCase().search('^' + q.toLowerCase()) != -1))
             {
               $('#search_' + index).remove();
-              $('#search_container').append('<div class="search_items container_50 ajax_nav" href="profile.php?id=' + index + '" id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+              $('#result_people td:last').append('<div class="search_items container_50 ajax_nav" href="profile.php?id=' + index + '" id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
               $('.search_items:first').css('background', '#cccccc');
               $('.search_items:first .name_50 a').css('color', 'white');
               count++;
@@ -437,6 +541,76 @@ var action = (function()
           }
         }
       });
+ //************************************ Skill search *******************************************
+  var count_s =0;
+  $.each(global_skill, function(index, value)
+      {
+        if (value != null)
+        {
+          if (q.indexOf(' ') == -1)
+          {
+            var search_name = value.toLowerCase().split(" ");
+            for (var i = 0; i < search_name.length; i++)
+            {
+              if ((count_s < 5) && (search_name[i].toLowerCase().search('^' + q.toLowerCase()) != -1))
+              {
+                $('#search_' + index).remove();
+                $('#result_skill td:last').append('<div class="search_items container_50 ajax_nav" href="profile.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div><div class="left4">Skill matched :'+value+'</div></div>');
+                $('.search_items:first').css('background', '#cccccc');
+                $('.search_items:first .name_50 a').css('color', 'white');
+                count_s++;
+              }
+            }
+          }
+          else
+          {
+            if ((count_s < 5) && (value.toLowerCase().search('^' + q.toLowerCase()) != -1))
+            {
+              $('#search_' + index).remove();
+              $('#result_skill td:last').append('<div class="search_items container_50 ajax_nav" href="profile.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div><div class="left4">Skill matched :'+value+'</div></div>');
+              $('.search_items:first').css('background', '#cccccc');
+              $('.search_items:first .name_50 a').css('color', 'white');
+              count_s++;
+            }
+          }
+        }
+      });
+ //*********************************************************************************************    
+ //********************************* group search ************************************************
+ var count_g =0 ;
+ $.each(global_group, function(index, value)
+      {
+        if (value != null)
+        {
+          if (q.indexOf(' ') == -1)
+          {
+            var search_name = value.toLowerCase().split(" ");
+            for (var i = 0; i < search_name.length; i++)
+            {
+              if ((count_g < 5) && (search_name[i].toLowerCase().search('^' + q.toLowerCase()) != -1))
+              {
+                $('#search_' + index).remove();
+                $('#result_group td:last').append('<div class="search_items container_50 ajax_nav" href="group.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="group.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="group.php?id=' + index + '">' + value + '</a></div></div>');
+                $('.search_items:first').css('background', '#cccccc');
+                $('.search_items:first .name_50 a').css('color', 'white');
+                count_g++;
+              }
+            }
+          }
+          else
+          {
+            if ((count_g < 5) && (value.toLowerCase().search('^' + q.toLowerCase()) != -1))
+            {
+              $('#search_' + index).remove();
+              $('#result_group td:last').append('<div class="search_items container_50 ajax_nav" href="group.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="group.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="group.php?id=' + index + '">' + value + '</a></div></div>');
+              $('.search_items:first').css('background', '#cccccc');
+              $('.search_items:first .name_50 a').css('color', 'white');
+              count_g++;
+            }
+          }
+        }
+      });
+ //************************************************************************************************  
       $('#to').keydown(function(e)
       {
         if (e.keyCode == 40)
@@ -447,7 +621,7 @@ var action = (function()
     }
     else if ($.trim($('#to').attr('value')) == '')
     {
-      $('#search_container').html('<div class="search_items container_50" data="people"><img class="lfloat" src="http://profile-1.qmcdn.net/male.png" width="50" height="50" /><div class="name_50"><a class="bold">Search People</a></div></div><div class="search_items container_50" data="group"><img class="lfloat" src="' + icon_cdn + '/group.png" width="50" height="50" /><div class="name_50"><a class="bold">Search Group</a></div></div><div class="search_items container_50" data="skill"><img class="lfloat" src="' + icon_cdn + '/skill.png" width="50" height="50" /><div class="name_50"><a class="bold">Search Skills</a></div></div><div class="search_items container_50" data="event"><img class="lfloat" src="' + icon_cdn + '/event.png" width="50" height="50" /><div class="name_50"><a class="bold">Search Event</a></div></div><div class="search_items container_50" data="post"><img class="lfloat" src="' + icon_cdn + '/post_icon.png" width="50" height="50" /><div class="name_50"><a class="bold">Search Post</a></div></div>');
+      $('#search_container').html('<div class="search_items container_50" data="people"><img class="lfloat" src="https://ebdd192075d95c350eef-28241eefd51f43f0990a7c61585ebde0.ssl.cf2.rackcdn.com/male.png" width="40" height="40" /><div class="left4"><a class="bold">Search People</a></div></div><div class="search_items container_50" data="group"><img class="lfloat" src="' + icon_cdn + '/group.png" width="40" height="40" /><div class="left4"><a class="bold">Search Group</a></div></div><div class="search_items container_50" data="skill"><img class="lfloat" src="' + icon_cdn + '/skill.png" width="40" height="40" /><div class="left4"><a class="bold">Search Skills</a></div></div><div class="search_items container_50" data="event"><img class="lfloat" src="' + icon_cdn + '/event.png" width="40" height="40" /><div class="left4"><a class="bold">Search Event</a></div></div><div class="search_items container_50" data="post"><img class="lfloat" src="' + icon_cdn + '/post_icon.png" width="40" height="40" /><div class="left4"><a class="bold">Search Post</a></div></div>');
     }
   }
  function colleague_search(action, q, request)
@@ -581,7 +755,7 @@ var action = (function()
                 {
                   var name = global_name[index];
                   $('#search_' + index).remove();
-                  $('#star_container').append('<div class="star_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+                  $('#star_container').append('<div class="star_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
                   $('.star_items:first').css('background', '#4C66A4');
                   $('.star_items:first .name_50 a').css('color', 'white');
                   count++;
@@ -594,7 +768,7 @@ var action = (function()
               {
                 var name = global_name[index];
                 $('#search_' + index).remove();
-                $('#star_container').append('<div class="star_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+                $('#star_container').append('<div class="star_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
                 $('.star_items:first').css('background', '#4C66A4');
                 $('.star_items:first .name_50 a').css('color', 'white');
                 count++;
@@ -620,7 +794,7 @@ var action = (function()
               {
                 var name = global_name[index];
                 $('#search_' + index).remove();
-                $('#star_container').append('<div class="star_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+                $('#star_container').append('<div class="star_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
                 $('.star_items:first').css('background', '#4C66A4');
                 $('.star_items:first .name_50 a').css('color', 'white');
                 count++;
@@ -633,7 +807,7 @@ var action = (function()
             {
               var name = global_name[index];
               $('#search_' + index).remove();
-              $('#star_container').append('<div class="star_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+              $('#star_container').append('<div class="star_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
               $('.star_items:first').css('background', '#4C66A4');
               $('.star_items:first .name_50 a').css('color', 'white');
               count++;
@@ -651,7 +825,7 @@ var action = (function()
     }
     else if ($.trim($('#hso').attr('value')) == '')
     {
-      $('#star_container').html('<div class="star_items container_50" data="people"><img class="lfloat" src="http://profile-1.qmcdn.net/male.png" width="30" height="30" /><div class="name_50"><a class="bold">Search People</a></div></div>');
+      $('#star_container').html('<div class="star_items container_50" data="people"><img class="lfloat" src="https://ebdd192075d95c350eef-28241eefd51f43f0990a7c61585ebde0.ssl.cf2.rackcdn.com/male.png" width="30" height="30" /><div class="left4"><a class="bold">Search People</a></div></div>');
     }
     $('.star_items').live('click', function()
     {
@@ -709,7 +883,7 @@ var action = (function()
                 {
                   var name = global_name[index];
                   $('#search_' + index).remove();
-                  $('#md_container').append('<div class="md_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+                  $('#md_container').append('<div class="md_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
                   $('.md_items:first').css('background', '#4C66A4');
                   $('.md_items:first .name_50 a').css('color', 'white');
                   count++;
@@ -722,7 +896,7 @@ var action = (function()
               {
                 var name = global_name[index];
                 $('#search_' + index).remove();
-                $('#md_container').append('<div class="md_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+                $('#md_container').append('<div class="md_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
                 $('.md_items:first').css('background', '#4C66A4');
                 $('.md_items:first .name_50 a').css('color', 'white');
                 count++;
@@ -748,7 +922,7 @@ var action = (function()
               {
                 var name = global_name[index];
                 $('#search_' + index).remove();
-                $('#md_container').append('<div class="md_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+                $('#md_container').append('<div class="md_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
                 $('.md_items:first').css('background', '#4C66A4');
                 $('.md_items:first .name_50 a').css('color', 'white');
                 count++;
@@ -761,7 +935,7 @@ var action = (function()
             {
               var name = global_name[index];
               $('#search_' + index).remove();
-              $('#md_container').append('<div class="md_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+              $('#md_container').append('<div class="md_items container_50" id="search_' + index + '" data="' + index + '" pname="' + name + '" ><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
               $('.md_items:first').css('background', '#4C66A4');
               $('.md_items:first .name_50 a').css('color', 'white');
               count++;
@@ -779,7 +953,7 @@ var action = (function()
     }
     else if ($.trim($('#mdadd').attr('value')) == '')
     {
-      $('#md_container').html('<div class="star_items container_50" data="people"><img class="lfloat" src="http://profile-1.qmcdn.net/male.png" width="30" height="30" /><div class="name_50"><a class="bold">Search People</a></div></div>');
+      $('#md_container').html('<div class="star_items container_50" data="people"><img class="lfloat" src="https://ebdd192075d95c350eef-28241eefd51f43f0990a7c61585ebde0.ssl.cf2.rackcdn.com/male.png" width="30" height="30" /><div class="left4"><a class="bold">Search People</a></div></div>');
     }
     $('.md_items').live('click', function()
     {
@@ -877,7 +1051,7 @@ var action = (function()
       param.action = 'post_question';
       param.question = $('#question_box').val();
       param.option = option;
-      param.profileid = $('#profileid_hidden').attr('value');
+      param.profileid = $('#profileid_hidden').attr('value').trim();
       ajax.getJSON_ajax(url, param, me, callback.question);
     }
   }
@@ -894,7 +1068,7 @@ var action = (function()
       param.action = 'group_post_question';
       param.question = $('#question_box').val();
       param.option = option;
-      param.profileid = $('#profileid_hidden').attr('value');
+      param.profileid = $('#profileid_hidden').attr('value').trim();
       ajax.getJSON_ajax(url, param, me, callback.question);
     }
   }
@@ -1274,11 +1448,20 @@ var action = (function()
     var icon_cdn = $('#icon_cdn').attr('value');
     param.action = 'friend_request_accept';
     param.flag = flag;
-    param.profileid = $(me).parent().parent().parent().attr('data');
-    var me = $(me).parent().parent().parent();
-    $(me).html('<img src="' + icon_cdn + '/loading.gif" />');
-    $(me).attr('class', 'accepted');
-    ajax.getJSON_ajax(url, param, me, callback.friend_accept);
+    var type = $(me).attr('data');
+    if (type=="follow_back")
+    {
+     param.profileid=$(me).attr('id');   
+     ajax.getJSON_ajax(url, param, me, callback.friend_accept);
+    }
+    else
+    {                
+     param.profileid = $(me).parent().parent().parent().attr('data');
+     var me = $(me).parent().parent().parent();
+     $(me).html('<img src="' + icon_cdn + '/loading.gif" />');
+     $(me).attr('class', 'accepted');
+     ajax.getJSON_ajax(url, param, me, callback.friend_accept);
+    }                
   }
 
   function group_invite(me, flag)
@@ -1625,7 +1808,7 @@ var action = (function()
     param.email = $(me).parent().children(0).attr('value');
     param.identifier = $('#identifier_hidden').val();
     $(me).hide();
-    $('#signup_button_container').append('<img src="https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/loading.gif" alt="Signing Up..."/>');
+    $('#signup_button_container').append('<img src="https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/loading.gif"  alt="Signing Up..." id ="loading"  />');
     param.name = $('#signup_name').val();
     param.password = $('#signup_password').val();
     param.gender = $('#signup_gender').val();
@@ -1849,7 +2032,7 @@ var action = (function()
               {
                 if ((count < 9) && (search_name[i].toLowerCase().search('^' + q.toLowerCase()) != -1))
                 {
-                  $('#search_container').append('<div class="search_items container_50" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+                  $('#search_container').append('<div class="search_items container_50" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
                   $('.search_items:first').css('background', '##ebebeb');
                   $('.search_items:first .name_50 a').css('color', 'white');
                   count++;
@@ -1860,7 +2043,7 @@ var action = (function()
             {
               if ((count < 9) && (value.toLowerCase().search('^' + q.toLowerCase()) != -1))
               {
-                $('#search_container').append('<div class="search_items container_50" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="50" height="50" /></a><div class="name_50"><a class="ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
+                $('#search_container').append('<div class="search_items container_50" data="' + index + '"><a class="ajax_nav" href="profile.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="ajax_nav" href="profile.php?id=' + index + '">' + global_name[index] + '</a></div></div>');
                 $('.search_items:first').css('background', '##ebebeb');
                 $('.search_items:first .name_50 a').css('color', 'white');
                 count++;
@@ -1945,7 +2128,7 @@ var action = (function()
   {
     var profileid = $(me).parent().parent().parent().attr('data');
     var me = $(me).parent().parent().parent().parent();
-    $('#suggest_' + profileid).remove();
+    $('#suggest_' + profileid).slideUp("normal", function(){ $(this).remove();} );
     param.action = 'add_friend';
     param.profileid = profileid;
     ajax.getJSON_ajax(url, param, me, callback.add_friend);
@@ -1958,7 +2141,7 @@ var action = (function()
   {
     var profileid = $(me).parent().parent().parent().attr('data');
     var me = $(me).parent().parent().parent().parent();
-    $('#suggest_' + profileid).remove();
+    $('#suggest_' + profileid).slideUp("normal", function(){ $(this).remove();} );
     param.action = 'add_friend';
     param.profileid = profileid;
     param.msg = 'Hi';
@@ -1972,7 +2155,7 @@ var action = (function()
   {
     var eventid = $(me).parent().parent().parent().attr('data');
     var me = $(me).parent().parent().parent().parent();
-    $('#suggest_' + eventid).remove();
+    $('#suggest_' + eventid).slideUp("normal", function(){ $(this).remove();} );
     param.action = 'event_join';
     param.eventid = eventid;
     ajax.getJSON_ajax(url, param, me, callback.add_friend);
@@ -1985,7 +2168,7 @@ var action = (function()
   {
     var groupid = $(me).parent().parent().parent().attr('data');
     var me = $(me).parent().parent().parent().parent();
-    $('#suggest_' + groupid).remove();
+    $('#suggest_' + groupid).slideUp("normal", function(){ $(this).remove();} );
     param.action = 'group_join';
     param.groupid = groupid;
     ajax.getJSON_ajax(url, param, me, callback.add_friend);
@@ -1998,7 +2181,7 @@ var action = (function()
   {
     var groupid = $(me).parent().parent().parent().attr('data');
     var me = $(me).parent().parent().parent().parent();
-    $('#suggest_' + groupid).remove();
+    $('#suggest_' + groupid).slideUp("normal", function(){ $(this).remove();} );
     param.action = 'group_join';
     param.groupid = groupid;
     ajax.getJSON_ajax(url, param, me, callback.group_join);
@@ -2241,17 +2424,19 @@ var action = (function()
   {
     var icon_cdn = $('#icon_cdn').attr('value');
     var random = $('#random_hidden').attr('value');
-    var profileid = $('#myprofileid_hidden').attr('value');
+    var myprofileid = $('#myprofileid_hidden').attr('value');
     var database = $('#database_hidden').attr('value');
     var param =
     {
-      "profileid": profileid,
+      "profileid": myprofileid,
       "random": random,
       "database": database,
       "last_chat_time": last_chat_time
     }
+
     $.postJSON('/chat/chat_update', param, function(data)
     {
+      var chat_notify = false;
       $.each(data.action, function(index, value)
       {
         if (value.type == 1)
@@ -2270,16 +2455,20 @@ var action = (function()
         }
         else if (value.type == 3)
         {
-          if (!document.hasFocus() || sound_flag == 1)
+          if ((!document.hasFocus() || sound_flag == 1) && value.sentto == myprofileid)
           {
             chat_notify = true;
-            ui.chat_new_notify(data.name[value.sentby], value.message)
+            ui.chat_new_notify(data.name[value.sentby], value.message,chat_notify);
             ui.chat_sound_play();
             sound_flag = 0;
           }
+          else
+          {
+             $(document).attr('title', 'Quipmate');
+          }
           var you = value.sentby,
               unread = 1;
-          if (value.sentby == profileid)
+          if (value.sentby == myprofileid)
           {
             you = value.sentto;
             unread = 0;
@@ -2294,10 +2483,9 @@ var action = (function()
           }
           else
           {
-            $(document).attr('title', 'Quipmate');
             $('#chatbox_' + value.you).children().eq(2).html('<img class="chatbox_online_icon" src="' + icon_cdn + '/online.png" /><a class="ajax_nav" href="profile.php?id=' + you + ' ">' + data.name[you] + '</a>');
             $('#chat_' + value.actionid).remove();
-            if (value.sentby == profileid)
+            if (value.sentby == myprofileid)
             {
               $('#chatbox_' + you).children().eq(3).append('<div class="chat_each" id="chat_' + value.actionid + '" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><div class="chat_each_message chat_actionbyme"><pre>' + ui.get_smiley(ui.link_highlight(value.message)) + '</pre></div><span class="time chat_time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></div>');
             }
@@ -2310,6 +2498,7 @@ var action = (function()
           }
           last_chat_time = value.time;
         }
+
       });
       setTimeout(individualChat, 0);
     });
@@ -2341,12 +2530,14 @@ var action = (function()
     if ($(me).hasClass('video_play'))
     {
       var videoid = $(me).parent().children().eq(0).attr('value');
-      $('body').append('<div id="image_con" class="container-fluid" ><div id="container_for_image" class="col-md-7" style="height:' + maxh + 'px;float:none;"><iframe id="video_playing" height ="' + maxh + '" width ="' + maxw + '" src="http://www.youtube.com/embed/' + videoid + '?autoplay=1" frameborder="0"></iframe></div><div style="height:' + maxh + 'px;"><div class="img_viewer_div col-md-4"  data=' + actionid + ' id="viweable_sidebar" ><input type="hidden" value="' + profileid + '"/><input type="hidden" value="' + actiontype + '"/></div></div></div>');
+      $('body').append('<div id="image_con" class="container-fluid" ><div id="container_for_image" class="col-md-7" style="height:' + maxh + 'px;float:none;"><iframe id="video_playing" height ="' + maxh + '" width ="' + maxw + '" src="https://www.youtube.com/embed/' + videoid + '?autoplay=1" frameborder="0"></iframe></div><div style="height:' + maxh + 'px;"><div class="img_viewer_div col-md-4"  data=' + actionid + ' id="viweable_sidebar" ><input type="hidden" value="' + profileid + '"/><input type="hidden" value="' + actiontype + '"/></div></div></div>');
     }
     else
     {
-      $('body').append('<div id="image_con" class="container-fluid"  ><div id="container_for_image" class="col-md-7" style="height:' + maxh + 'px;float:none;"><span class="glyphicon glyphicon-chevron-left pointer prev-image"></span><img src="thumbnail.php?file=' + file + '&maxw=' + maxw + '&maxh=' + maxh + '"/><span class="glyphicon glyphicon-chevron-right pointer next-image"></span></div><div class="img_viewer_div col-md-4" style="height:' + maxh + 'px;"><div data=' + actionid + ' id="viweable_sidebar"><input type="hidden" value="' + profileid + '"/><input type="hidden" value="' + actiontype + '"/></div></div></div>');
+      $('body').append('<div id="image_con" class="container-fluid"  ><div id="container_for_image" class="col-md-7" style="height:' + maxh + 'px;float:none;"><img src="thumbnail.php?file=' + file + '&maxw=' + maxw + '&maxh=' + maxh + '"/></div><div class="img_viewer_div col-md-4" style="height:' + maxh + 'px;"><div data=' + actionid + ' id="viweable_sidebar"><input type="hidden" value="' + profileid + '"/><input type="hidden" value="' + actiontype + '"/></div></div></div>');
     }
+    //<span class="glyphicon glyphicon-chevron-right pointer next-image"></span>
+    //<span class="glyphicon glyphicon-chevron-left pointer prev-image"></span>        
     $.getJSON('ajax/write.php', {
       action: 'action_fetch_life_is_not_always_fun',
       actionid: actionid,
@@ -2464,13 +2655,8 @@ var action = (function()
 
   function praise_send(me)
   {
-    var wish = $('#birthday_wish_box').val();
-    if (wish != '')
-    {
-      $('#letter_send').hide();
       var letter_title = $('#letter_title').attr('value');
       var letter_content = $('#letter_content').val();
-      $('#direct_to_md__container').html('<span>Sending...</span>');
       var profileid = $('#profileid_hidden').attr('value');
       $.getJSON('ajax/write.php', {
         action: 'praise',
@@ -2481,11 +2667,10 @@ var action = (function()
       {
         if (data.ack)
         {
-          $('#direct_to_md__container').html('Your have successfully priased !');
-          $('.right_pointer_container').fadeOut(2000);
+          $('#praisemodal').html('<h4>Your have successfully praised !</h4>');
+          $('#praisemodal').modal('hide');
         }
       });
-    }
   }
 
   function direct_to_md_send(me)
