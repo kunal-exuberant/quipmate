@@ -34,7 +34,7 @@ $( "#enddate" ).datepicker();
 			<!--	   <li class="links"><a class="ajax_nav" id="flashboard" href="admin.php?hl=flashboard" title="Flashboard"><span class="name_20">Flashboard</span></a></li> --> 
 				   
 				    <li class="links"><a class="ajax_nav<?php if($page=='group_byadmin') echo ' selected'; ?>" id="news_json" href="admin.php?hl=group_byadmin" title="Groups To Suggest"><span class="name_20">Groups To Suggest</span></a></li>
-					<li class="links"><a class="ajax_nav<?php if($page=='remove_user') echo ' selected'; ?>" id="news_json" href="admin.php?hl=remove_user" title="Remove from network"><span class="name_20">Remover User</span></a></li>
+					<li class="links"><a class="ajax_nav<?php if($page=='remove_user') echo ' selected'; ?>" id="news_json" href="admin.php?hl=remove_user" title="Disable a user account"><span class="name_20">Disable User Account</span></a></li>
 			        <li class="links"><a class="ajax_nav<?php if($page=='anlytics') echo ' selected'; ?>" id="news_json" href="admin.php?hl=analytics" title="Analytics"><span class="name_20">Analytics</span></a></li>
 					 <li class="links"><a class="ajax_nav<?php if($page=='feature') echo ' selected'; ?>" id="news_json" href="admin.php?hl=feature" title="Feature setting"><span class="name_20">Control features</span></a></li>
             </ul> 
@@ -210,7 +210,7 @@ $( "#enddate" ).datepicker();
 				<?php
 			}
 			?>
-			</div>
+			</div> 
 			<?php
 		}
 		else if($page == 'remove_user')
@@ -218,10 +218,10 @@ $( "#enddate" ).datepicker();
 			?>
 			<div id="center" class="col-md-6 center">
 				<div class="">
-				<h1 class="page_title">Remove User From Network</h1>
+				<h1 class="page_title">Disable the account of an user </h1>
 					<div style="padding:5em;">
-						<input id="remove_user_email" type="text" placeholder="Enter the email address" value="" style="height:2.4em;padding:0.4em;width: 22em;" />
-						<input class="theme_button" type="submit" class="button" onclick="action.user_details(this)" value="Remove User" data="Remove User" title="Remove User"  />
+						<input id="remove_user_email" type="text" placeholder="Enter the email address" value="" style="padding:0.5em;width: 22em;" />
+						<input class="theme_button" type="submit" class="button" onclick="action.user_details(this)" value="Disable User" data="Disable User" title="Disable User"  />
 					</div>
 					<div id="fetch_user_details" style="padding:1.5em;"></div>
 				</div>

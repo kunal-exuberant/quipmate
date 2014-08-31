@@ -36,8 +36,8 @@ $style_cdn='https://7f0cf736abbdd4f83d8b-475de27d87a6fd312d1dd9701d87a2a9.ssl.cf
 //--------------------------------------------------------------------------------------
 $action = array();
 
-
-if(isset($_SESSION['auth']))
+//-1 checks if the account has been disabled ;
+if(isset($_SESSION['auth']) && $_SESSION['STEP'] != -1 )
 {
 	if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET))
 	{
@@ -150,6 +150,10 @@ if(isset($_SESSION['auth']))
 			else if($_GET['action'] == 'event_join')
 			{
 				$api->event_join();
+			}
+            else if($_GET['action'] == 'enable_user')
+			{
+				$api->enable_user();
 			}
 			else if($_GET['action'] == 'guest_accept')
 			{
@@ -284,7 +288,6 @@ if(isset($_SESSION['auth']))
 			{
 				$api->group_remove();
 			}
-			
 			
 			else if($_GET['action'] == 'group_create')
 			{
@@ -503,10 +506,18 @@ if(isset($_SESSION['auth']))
 			{
 				$api->video_fetch();
 			}
+			else if($_GET['action'] == 'group_doc_fetch')
+			{
+				$api->group_doc_fetch();
+			}
+			else if($_GET['action'] == 'event_doc_fetch')
+			{
+				$api->event_doc_fetch();
+			}
 			else if($_GET['action'] == 'file_fetch')
 			{
 				$api->file_fetch();
-			}
+			}                        
 			else if($_GET['action'] == 'post_delete')
 			{
 				$api->post_delete();
@@ -743,23 +754,23 @@ if(isset($_SESSION['auth']))
 			{
               if($_GET['typedata']=='post')
             {			  
-			$api->analytics_details_post();
+			     $api->analytics_details_post();
 			}
 			if($_GET['typedata']=='joined')
 			{
-			$api->analytics_details_joined();
+			     $api->analytics_details_joined();
 			}
-			if($_GET['typedata']=='comment')
+             if($_GET['typedata']=='comment')
 			{
-			$api->analytics_details_comment();
+		      	$api->analytics_details_comment();
 			}
 			if($_GET['typedata']=='view')
 			{
-			$api->analytics_details_view();
+		      	$api->analytics_details_view();
 			}
-			if($_GET['typedata']=='visit')
+            if($_GET['typedata']=='visit')
 			{
-			$api->analytics_details_visit();
+		      	$api->analytics_details_visit();
 			}
 			
 			}

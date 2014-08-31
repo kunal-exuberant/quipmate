@@ -150,6 +150,7 @@ $(function()
    window.load = true;
    $(window).scroll(function()
    {
+    var page = $('#page_hidden').attr('value').trim();
       if (page != 'bio')
       {
          var st = $(this).scrollTop();
@@ -180,6 +181,8 @@ $(function()
       var centerwidth = $('.center').width();
       //when the user reached the bottom of '#right' set its position to fixed 
       //to prevent it from moving on scroll 
+    if(page != 'bio' || page != 'file' || page != 'group_file' || page != 'event_file')
+    {
       if (winBottom >= rightBottom)
       {
          right.css(
@@ -216,7 +219,9 @@ $(function()
             'margin-left': '' + (centerwidth + leftwidth) + 'px',
             'padding-right': '5em',
          });
-      } /*#######################################################################################*/
+      } 
+     } 
+      /*#######################################################################################*/
    });
    var rtm_load = true;
    var start = 0;
@@ -339,6 +344,7 @@ $(function()
    var q = $.trim($('#to').attr('value'));
    $('#to').bind('keyup mousedown input', function()
    {
+    
       filter = $('#search_filter_hidden').attr('value');
       if (filter == '') filter = 'search_people';
       $('#search_container').show();
@@ -380,7 +386,7 @@ $(function()
          $('#star_container').show();
       });
    });
-   $('.search_items').live('click', function()
+ /*  $('.search_items').live('click', function()
    {
       if ($(this).attr('data') == 'group')
       {
@@ -408,7 +414,7 @@ $(function()
       }
       $('#search_container').hide();
       $('#to').attr('value','');
-   });
+   }); */
    $('#center, #left, #right').live('click', function()
    {
       $('#search_container').hide();
@@ -998,7 +1004,8 @@ $(function()
          success: function(response)
          {
             var data = $.parseJSON(response);
-            if (data.ack == '1')
+            var page = $('#page_hidden').attr('value');
+            if (data.ack == '1' && page != 'file' && page != 'group_file' && page != 'event_file')
             {
                var postid = $('#' + dom_id);
                var file = data.file;

@@ -538,10 +538,10 @@ class Email
 	    {
 			$profileid = $param['profileid'];
 			$friendid = $param['friendid'];
-			$subject='Friendship Confirmation';
 			$brow = $database->bio_complete_select($friendid);
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
+            $subject=$name.' is also following you at Quipmate';
 			$message .= 'Hi ';
 			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $friendid; 

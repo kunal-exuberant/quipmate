@@ -460,8 +460,10 @@ $database->page_view_insert($myprofileid, $profileid, $_SERVER['HTTP_REFERER'], 
 				<li><a class="ajax_nav" href="profile.php?hl=bio&id=<?php echo $_SESSION['USERID'];?>" >Edit Profile</a></li>
 				<li><a href="register.php?hl=profile_picture">Change Profile Picture</a></li>
 				<li><a href="settings.php">Account Settings</a></li>
+                <li onclick="action.user_delete(this,<?php echo $myprofileid;?>)"><a href="#">Disable Account</a></li>
 				<li class="divider"></li>
 				<li><a href="logout.php">Logout</a></li>
+                
 			<?php 
 			if($help->moderator_status($myprofileid,$memcached,$database)) 
 			{

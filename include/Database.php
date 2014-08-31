@@ -45,7 +45,10 @@ class Database
       $this->con->query($query);
 
    }
-   function user_delete($profileid)
+ /*  
+ This one is an old implementation where we used to delete user and all their actions from database .New implementation is below
+ 
+ function user_delete($profileid)
    {
       $profileid = $this->con->real_escape_string($profileid);
       $this->con->query("DELETE FROM `signup` Where USERID ='$profileid' ");
@@ -57,6 +60,28 @@ class Database
       $result = $this->con->query("DELETE ac FROM `action` as ac left join member as mem on mem.actionid = ac.actionid left join guest as gu on gu.actionid = ac.actionid where (mem.profileid ='$profileid' or gu.profileid = '$profileid') and ac.actiontype IN(308,408)");
       return $result;
    }
+ */
+ 
+  function user_delete($profileid)
+  {
+    $db_name = $_SESSION['database'];
+    $myprofileid = $_SESSION['USERID'];
+    $profileid = $this->con->real_escape_string($profileid);
+    
+    if($profileid != $myprofileid)
+    {
+    $this->con->query("Delete from `session`.session where profileid='$profileid' and data like '%$db_name%'");
+    return $this->con->query("Update `signup` set STEP=-1 where USERID = '$profileid'");
+    }
+    else
+    {
+       return $this->con->query("Update `signup` set STEP=-2 where USERID = '$profileid'"); 
+    }
+  }
+  function user_enable($profileid)
+  {
+    return $this->con->query("Update `signup` set STEP=0 where USERID = '$profileid'");
+  }
    function photo_friend_select($profileid, $limit, $count)
    {
       $profileid = $this->con->real_escape_string($profileid);
@@ -147,10 +172,25 @@ class Database
       $profileid = $this->con->real_escape_string($profileid);
       $limit = $this->con->real_escape_string($limit);
       $count = $this->con->real_escape_string($count);
-      $result = $this->con->query("SELECT DISTINCT docid,cdn,filename,caption, profileid,actionby FROM document WHERE actionby='$profileid' ORDER BY docid DESC LIMIT $limit,$count");
+      $result = $this->con->query("SELECT doc.*,gp.name as groupname,et.name as eventname FROM document as doc left outer join `group` as gp on doc.profileid = gp.groupid left outer join `event` as et on doc.profileid = et.eventid where (gp.Visible = '0' OR gp.Visible is NULL) and (et.privacy ='0' OR et.privacy is NULL) ORDER BY docid DESC LIMIT $limit,$count");
       return $result;
    }
-
+   function group_doc_fetch($myprofileid,$groupid, $limit, $count)
+   {
+      $groupid = $this->con->real_escape_string($groupid);
+      $limit = $this->con->real_escape_string($limit);
+      $count = $this->con->real_escape_string($count);
+      $result = $this->con->query("SELECT doc.*,gp.name as groupname,gp.visible as visible  FROM document as doc  join `group` as gp on doc.profileid = gp.groupid  WHERE doc.profileid ='$groupid' ORDER BY docid DESC LIMIT $limit,$count");
+      return $result;
+   }
+    function event_doc_fetch($myprofileid,$eventid, $limit, $count)
+   {
+      $eventid = $this->con->real_escape_string($eventid);
+      $limit = $this->con->real_escape_string($limit);
+      $count = $this->con->real_escape_string($count);
+      $result = $this->con->query("SELECT doc.*,et.name as eventname,et.privacy as visible  FROM document as doc  join `event` as et on doc.profileid = et.eventid  WHERE doc.profileid ='$eventid' ORDER BY docid DESC LIMIT $limit,$count");
+      return $result;
+   }
    function set_MD($profileid)
    {
       $profileid = $this->con->real_escape_string($profileid);
@@ -2329,7 +2369,8 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
 
    function user_select($start)
    {
-      $result = $this->con->query("SELECT * FROM bio ORDER BY PROFILEID DESC LIMIT $start,10");
+
+      $result = $this->con->query("Select r.profileid, MAX(CASE r.type WHEN 202 THEN detail END) AS profession, MAX(CASE r.type WHEN 234 THEN detail END) AS team, MAX(CASE r.type WHEN 239 THEN detail  END) AS designation,r.email FROM (SELECT b.profileid as profileid,bh.type as type,b.email as email,group_concat(i.name) as detail FROM bio as b left join bio_history as bh on b.profileid = bh.profileid left join info AS i ON i.diaryid = bh.diaryid  where i.type is null or i.type in(202,239,234) group by b.profileid,i.type ) r group by r.profileid,r.email order by r.profileid desc LIMIT $start,20");
       return $result;
    }
    function user_select_all_at_once()

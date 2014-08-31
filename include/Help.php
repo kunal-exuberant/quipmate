@@ -1018,9 +1018,8 @@ class Help
 		?>
 		<select data = "<?php echo $name ?>" class="privacy_drop" onchange="action.profile_privacy_update(this)" >  
 		<?php 
-		$arr[0] = "Everyone";
-		$arr[1] = "Friends of Friends";
-		$arr[2] = "Friends";
+		$arr[0] = "Everyone on network";
+		$arr[2] = "Followers";
 		for($i=0; $i < 3; $i++)
 		{
 			if($i==$level)

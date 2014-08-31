@@ -47,7 +47,7 @@
 				var text = $(me).attr('data');
 				if(text == 'Add Admin')
 				var function_call = "action.make_moderator(this,"+data.profileid+")";
-				else if(text == 'Remove User') 
+				else if(text == 'Disable User') 
 				var function_call = "action.user_delete(this,"+data.profileid+")";
 				$('#invite_button').attr('value',text);
 				if(data.ack ==1)
@@ -62,15 +62,27 @@
 		
 		function user_delete(me, data)
 		{
-			if(data.ack ==1)
+		var myprofileid = $('#myprofileid_hidden').attr('value');
+        if(data.profileid != myprofileid)
+        {
+            if(data.ack ==1)
 			{
-				$('#fetch_user_details').html('<div>User removed from the network successfully </div>');
+				$('#fetch_user_details').html('<div>User account has been disabled .</div>');
 			}
 			else
 			{
 				$('#fetch_user_details').html('<div>'+data.error.message+'</div>');
 			}
+         }
+         else
+         {
+            window.location="/";
+         }
 		}
+        function enable_user(me,data)
+        {
+            $(me).html('<a class="btn btn-primary btn-lg" role="button" href="/">Go to home</a>')
+        }
 		function make_moderator(me, data)
 		{
 			if(data.ack ==1)
@@ -1724,6 +1736,15 @@
 			$('#groups_append').append('<li class=""><a href="#" onclick="ui.group_create(this)" title="Create a group for people with a specific interest"><span class="badge pull-right ellipsis "></span>Create Group</a></li><li class=""><a  href="register.php?hl=group_suggest" title="Groups"><span class="badge pull-right ellipsis "></span>Browse Groups</a></li>');
 			
 		}
+        function group_and_event_select_file(me,data)
+        {
+            $.each(data.event,function(index,value){
+			$('.event_body').append('<div class="panel panel-default ajax_nav" href="event.php?id='+value.eventid+'&hl=file"><div class="panel-heading pointer"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">'+value.eventname+'</h4></div></div>');
+			});
+            $.each(data.group,function(index,value){
+			$('.group_body').append('<div class="panel panel-default ajax_nav" href="group.php?id='+value.groupid+'&hl=file"><div class="panel-heading pointer"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">'+value.groupname+'</h4></div></div>');
+			});
+        }
 		function getanalyticdetails(me,data)
 		{
 		
@@ -1776,9 +1797,11 @@
     
 		}
 	return {
+	   enable_user:enable_user,
             bio_item_deply:bio_item_deply,
 			share_post:share_post,
 			getanalyticdetails:getanalyticdetails,
+            group_and_event_select_file:group_and_event_select_file,
 			group_and_event_select:group_and_event_select,
 			contact: contact,
 			getanalyticdetails:getanalyticdetails,

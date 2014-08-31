@@ -58,9 +58,39 @@
                 <button type="button" class="btn btn-primary theme_button" id="share_actionid" data="" onclick="action.praise_send(this)">Share</button>
 			</div>
     </div>
-  </div>
+  </div> 
 </div>
 <!-- ********************************************************************** -->
+<!-- **************************************modal to upload a file ************************** -->
+<div class="modal fade" id="uploadfilemodal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            <h4 class="modal-title" id="file_upload_modal_level" >Upload file in </h4> 
+            </div>
+            <div class="modal-body text-center">
+            <form action="/ajax/write.php" enctype="multipart/form-data" method="post" id="pform">
+                <input type="hidden" value="" name="photo_hidden_profileid" id="photo_hidden_profileid" />
+                <input type="hidden" value="" name="action" id="action_hidden"/>
+				<div style="margin-top:1em;">
+                <textarea style="padding:0.5em;" id="photo_description" name="photo_description"  placeholder="Say something about this file" ></textarea>
+                </div>
+                <div>
+						<input type="file" id="photo_box" name="photo_box" class="file_inline" />
+				</div> 
+                <div id="upload_progress"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary theme_button" id="photo_upload_button" data="" value="Upload"/>
+    			</div>
+          </form>  
+    </div>
+  </div>
+</div>
+
+<!-- **************************************************************************************** -->
 
 <?php
 	$file->script_footer();

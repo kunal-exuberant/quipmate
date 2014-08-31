@@ -4939,7 +4939,7 @@ class Api
          $result = $database->moderator_select();
          while ($row = $result->fetch_array())
          {
-            $action[$i]['profileid'] = $row['profileid'];
+            $row['profileid'] = $row['profileid'];
             $action[$i]['name'] = $help->name_fetch($row['profileid'], $memcached, $database);
             $action[$i]['image'] = $help->pimage_fetch($row['profileid'], $memcached, $database);
             $i++;
@@ -5707,6 +5707,22 @@ class Api
          $help->error_description(9);
       }
    }
+   function enable_user()
+   {
+    global $database,$help;
+    $myprofileid = $_SESSION['userid'];
+    if($database->user_enable($myprofileid))
+    {
+        $_SESSION['STEP'] =0;    
+        $data['ack'] = 1;
+        echo json_encode($data);
+    }
+    else
+    {
+        $help->error_description(15);
+    }
+    
+   }
    function user_delete()
    {
       global $help;
@@ -5716,20 +5732,34 @@ class Api
          {
             global $database;
             $myprofileid = $_SESSION['userid'];
+            $profileid = $_GET['profileid'];
             if($database->moderator_check($myprofileid))
             {
-               $profileid = $_GET['profileid'];
                $row = $database->is_user($profileid);
                if($row['USERID'] == $profileid)
                {
                   $database->user_delete($profileid);
                   $data['ack'] = 1;
+                  $data['profileid'] =$profileid;
+                  if($myprofileid == $profileid)
+                  {
+                    $_SESSION['STEP'] = -2;
+                  }
                   echo json_encode($data);
                }
                else
                {
                   $help->error_description(16);
                }
+
+            }
+            else if($myprofileid == $profileid)
+            {
+                $database->user_delete($profileid);
+                $_SESSION['STEP'] = -2;
+                $data['profileid'] =$profileid;
+                $data['ack'] = 1;
+                echo json_encode($data);
             }
             else
             {
@@ -5995,45 +6025,61 @@ class Api
    function people_fetch()
    {
       global $help;
-      if(isset($_GET['start']) && (isset($_GET['college']) || isset($_GET['new_user'])))
+      if(isset($_GET['start']) && isset($_GET['new_user']))
       {
-         if($_GET['start'] != '' && (!empty($_GET['college']) || !empty($_GET['new_user'])))
+         if($_GET['start'] != '' &&  !empty($_GET['new_user']))
          {
             $myprofileid = $_SESSION['USERID'];
             $start = $_GET['start'];
             global $database;
             global $memcached;
-            if(isset($_GET['college']))
-            {
-               $res = $database->mate_select($start);
-            }
-            else
-               if(isset($_GET['new_user']))
-               {
-                  $res = $database->user_select($start);
-               }
+            $res = $database->user_select($start);
+            $email = array();
             $i = 0;
+            $j = 0;
             while ($row = $res->fetch_array())
             {
-               $people[$i]['profileid'] = $row['PROFILEID'];
-               $name[$people[$i]['profileid']] = $help->name_fetch($people[$i]['profileid'], $memcached,
-                  $database);
-               $pimage[$people[$i]['profileid']] = $help->pimage_fetch($people[$i]['profileid'],
-                  $memcached, $database);
-               if(isset($_GET['college']))
+                
+              /* if(!(array_key_exists($row['profileid'],$email)))
+               { 
+               $action[$j]['profileid'] = $row['profileid'];
+               $action[$j]['status'] = $database->check_friendship($myprofileid, $action[$j]['profileid']);
+               $j++;
+               } */
+               $action[$i]['profileid'] = $row['profileid'];
+               $action[$i]['status'] = $database->check_friendship($myprofileid, $action[$i]['profileid']);
+               $email[$row['profileid']] = $row['email'];
+                $value = end(explode(',',$row['profession']));
+                $profession[$row['profileid']] = $value;
+                $value = end(explode(',',$row['designation']));
+                $designation[$row['profileid']] = $value;
+                $team[$row['profileid']] = $row['team'];
+            /*   if($row['type'] == 202)
                {
-                  $people[$i]['cyear'] = $row['CYEAR'];
-                  $profession = '';
-                  $people[$i]['profession'] = '';
-                  $company = $row['COMPANY'];
-                  $people[$i]['company'] = '';
+                 $value = end(explode(',',$row['detail']));
+                 $profession[$row['profileid']] = $value;
                }
-               $people[$i]['status'] = $database->check_friendship($myprofileid, $people[$i]['profileid']);
+               if($row['type'] == 239)
+               {
+                 $value = end(explode(',',$row['detail']));
+                 $designation[$row['profileid']] = $value;
+               }
+               if($row['type'] == 234)
+               {
+                 $team[$row['profileid']] = $row['detail'];
+               }     */          
+               $name[$row['profileid']] = $help->name_fetch($row['profileid'], $memcached,$database);
+               $pimage[$row['profileid']] = $help->pimage_fetch($row['profileid'],$memcached, $database);
+               
                $i++;
             }
-            $data['action'] = $people;
+            $data['action'] = $action;
             $data['name'] = $name;
             $data['pimage'] = $pimage;
+            $data['profession'] = $profession;
+            $data['designation'] = $designation;
+            $data['team'] = $team;
+            $data['email'] = $email;
             echo json_encode($data);
          }
          else
@@ -9175,23 +9221,179 @@ class Api
                   $k = 0;
                   while ($row = $r->fetch_array())
                   {
+                    
+                     $file[$k]['sharedwith'] = (empty($row['groupname']) ? (empty($row['eventname']) ? 'Global': $row['eventname']) : $row['groupname'] ); 
                      $file[$k]['file'] = $row['cdn'] . $row['filename'];
                      $file[$k]['profileid'] = $row['profileid'];
                      $file[$k]['actionby'] = $row['actionby'];
                      $file[$k]['actionid'] = $row['docid'];
                      $file[$k]['caption'] = $row['caption'];
+                     $file[$k]['date'] = $row['timestamp'];
                      $file[$k]['life_is_fun'] = sha1($row['docid'] . 'pass1reset!');
+                     
                      global $memcached;
-                     $name[$file[$k]['actionby']] = $help->name_fetch($file[$k]['actionby'], $memcached,
-                        $database);
-
-
                      $name[$file[$k]['actionby']] = $help->name_fetch($file[$k]['actionby'], $memcached,
                         $database);
                      $pimage[$file[$k]['actionby']] = $help->pimage_fetch($file[$k]['actionby'], $memcached,
                         $database);
 
                      $k++;
+                  }
+                  $data['name'] = $name;
+                  $data['pimage'] = $pimage;
+                  $data['action'] = $file;
+                  echo json_encode($data);
+               }
+               else
+               {
+                  $help->error_description(15);
+               }
+            }
+            else
+            {
+               $help->error_description(20);
+            }
+         }
+         else
+         {
+            $help->error_description(18);
+         }
+      }
+      else
+      {
+         $help->error_description(9);
+      }
+   }
+   function event_doc_fetch()
+   {
+      global $help;
+      if(isset($_GET['start']))
+      {
+         if($_GET['start'] != '')
+         {
+            $eventid = $_GET['eventid'];
+            $start = $_GET['start'];
+            $data = array();
+            $file = array();
+            if(is_numeric($start))
+            {
+               global $database;
+      //if the group is private then it gives the result only when $_SESSION['USERID'] is a member of that group.
+      //Otherwise this API can be used to fetch all the documents for a particular group .
+      $myprofileid = $_SESSION['USERID'];
+               if($r = $database->event_doc_fetch($myprofileid,$eventid, $start, 20))
+               {
+                  $k = 0;
+                  while ($row = $r->fetch_array())
+                  {
+                    if($row['visible'] == '0' || ($database->is_guest($eventid,$myprofileid)))
+                    {
+                     $file[$k]['sharedwith'] = $row['eventname']; 
+                     $file[$k]['file'] = $row['cdn'] . $row['filename'];
+                     $file[$k]['profileid'] = $row['profileid'];
+                     $file[$k]['actionby'] = $row['actionby'];
+                     $file[$k]['actionid'] = $row['docid'];
+                     $file[$k]['caption'] = $row['caption'];
+                     $file[$k]['date'] = $row['timestamp'];
+                     $file[$k]['life_is_fun'] = sha1($row['docid'] . 'pass1reset!');
+                     
+                     global $memcached;
+                     $name[$file[$k]['actionby']] = $help->name_fetch($file[$k]['actionby'], $memcached,
+                        $database);
+                     $pimage[$file[$k]['actionby']] = $help->pimage_fetch($file[$k]['actionby'], $memcached,
+                        $database);
+                     }
+                     if($k == 0)
+                     {
+                         $data['eventname'] = $row['eventname'];
+                         $data['eventid'] = $row['profileid'];
+                     }
+                     $k++;
+                  }
+                  if($k == 0) // if No data in document table for this event
+                  {
+                    $row = $database->event_select($eventid);
+                    $data['eventname'] = $row['name'];
+                    $data['eventid'] = $row['eventid'];
+                    
+                  }
+                  $data['name'] = $name;
+                  $data['pimage'] = $pimage;
+                  $data['action'] = $file;
+                  echo json_encode($data);
+               }
+               else
+               {
+                  $help->error_description(15);
+               }
+            }
+            else
+            {
+               $help->error_description(20);
+            }
+         }
+         else
+         {
+            $help->error_description(18);
+         }
+      }
+      else
+      {
+         $help->error_description(9);
+      }
+   }
+   function group_doc_fetch()
+   {
+      global $help;
+      if(isset($_GET['start']))
+      {
+         if($_GET['start'] != '')
+         {
+            $groupid = $_GET['groupid'];
+            $start = $_GET['start'];
+            $data = array();
+            $file = array();
+            if(is_numeric($start))
+            {
+               global $database;
+      //if the group is private then it gives the result only when $_SESSION['USERID'] is a member of that group.
+      //Otherwise this API can be used to fetch all the documents for a particular group .
+      $myprofileid = $_SESSION['USERID'];
+               if($r = $database->group_doc_fetch($myprofileid,$groupid, $start, 20))
+               {
+                  $k = 0;
+                  while ($row = $r->fetch_array())
+                  {
+                    if($row['visible'] == '0' || ($database->is_member($groupid,$myprofileid)))
+                    {
+                     $file[$k]['sharedwith'] = $row['groupname']; 
+                     $file[$k]['file'] = $row['cdn'] . $row['filename'];
+                     $file[$k]['profileid'] = $row['profileid'];
+                     $file[$k]['actionby'] = $row['actionby'];
+                     $file[$k]['actionid'] = $row['docid'];
+                     $file[$k]['caption'] = $row['caption'];
+                     $file[$k]['date'] = $row['timestamp'];
+                     $file[$k]['life_is_fun'] = sha1($row['docid'] . 'pass1reset!');
+                     
+                     global $memcached;
+                     $name[$file[$k]['actionby']] = $help->name_fetch($file[$k]['actionby'], $memcached,
+                        $database);
+                     $pimage[$file[$k]['actionby']] = $help->pimage_fetch($file[$k]['actionby'], $memcached,
+                        $database);
+                     }
+                     if($k == 0)
+                     {
+                         $data['groupname'] = $row['groupname'];
+                         $data['groupid'] = $row['profileid'];
+                     }
+                     $k++;
+                  }
+                  if($k == 0) // if No data in document table for this group
+                  {
+                    $row = $database->group_select($groupid);
+                    $data['groupname'] = $row['name'];
+                    $data['groupid'] = $row['groupid'];
+                    
                   }
                   $data['name'] = $name;
                   $data['pimage'] = $pimage;
@@ -10808,22 +11010,24 @@ class Api
                $fres = $database->profile_search($q, 0);
                $skillres = $database->bio_history_search(230, $q,0);
                $groupres = $database->group_search($q,0);
-                $j = 0;
-                while ($skillrow = $skillres->fetch_array())
-                {
-                   $search[$k] = $skillrow['profileid'];
-                   $skillname[$search[$k]] = $skillrow['skill'];
-                   $name[$search[$k]] = $help->name_fetch($search[$k], $memcached, $database);
-                   $pimage[$search[$k]] = $help->pimage_fetch($search[$k], $memcached, $database);
-                   $j++;
-                }
+                
                 $i = 0;
                 while($grouprow = $groupres->fetch_array())
                 {
-                   $search[$k] = $grouprow['groupid'];
-                   $groupname[$search[$k]] = $grouprow['name'];
-                   $pimage[$search[$k]] = 'https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/group.png';
+                   $search[$i] = $grouprow['groupid'];
+                   $groupname[$search[$i]] = $grouprow['name'];
+                   $pimage[$search[$i]] = 'https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/group.png';
                    $i++;
+                }
+               
+                $j = 0;
+                while($skillrow = $skillres->fetch_array())
+                {
+                   $search[$j] = $skillrow['profileid'];
+                   $skillname[$search[$j]] = $skillrow['skill'];
+                   $name[$search[$j]] = $help->name_fetch($search[$j], $memcached, $database);
+                   $pimage[$search[$j]] = $help->pimage_fetch($search[$j], $memcached, $database);
+                   $j++;
                 }
             }
                             

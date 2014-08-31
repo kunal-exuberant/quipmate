@@ -41,11 +41,6 @@ if(isset($_GET['filter']))
 		link_echo($filter,'major');
 		link_echo($filter,'certificate');
 		link_echo($filter,'award');
-		link_echo($filter,'hobby');
-		link_echo($filter,'sport');
-		link_echo($filter,'book');
-		link_echo($filter,'movie');
-		link_echo($filter,'music');
 		link_echo($filter,'company');
 		link_echo($filter,'college');
 		link_echo($filter,'school');

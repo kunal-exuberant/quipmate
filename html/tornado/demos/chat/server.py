@@ -167,6 +167,7 @@ def strip_tags(html):
 class BaseHandler(tornado.web.RequestHandler, Query):
 	def authenticate(self):
 		sessionid = self.get_cookie("PHPSESSID")
+		print sessionid
 		cursor = self.session_read(sessionid)
 		for row in cursor:  
 			return row[0]
@@ -351,7 +352,7 @@ class ChatMixin(tornado.web.RequestHandler, Query):
 class ChatNewHandler(BaseHandler, ChatMixin):
     @tornado.web.asynchronous
     def post(self): 
-		if self.authenticate():
+		#if self.authenticate():
 			chat = {}
 			name = {}
 			photo = {}
@@ -375,8 +376,8 @@ class ChatNewHandler(BaseHandler, ChatMixin):
 				action.append(chat)
 				self.message(chat,name,photo,database)
 				self.finish(dict(action=action,name=name,photo=photo))
-		else:
-			self.finish(dict(action="",name="",photo="",ack="0",msg="authentication failure"))
+		#else:
+		#	self.finish(dict(action="",name="",photo="",ack="0",msg="authentication failure"))
 
 class ChatUpdateHandler(BaseHandler, ChatMixin):
     @tornado.web.asynchronous

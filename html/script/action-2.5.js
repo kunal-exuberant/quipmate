@@ -15,6 +15,7 @@ var action = (function()
   function first_loader(page, param)
   {
     var icon_cdn = $('#icon_cdn').attr('value');
+    $('.no_feed_show').remove();
     if (param.action != '')
     {
       window.ajax_queue.push($.getJSON(url, param, function(data)
@@ -66,6 +67,12 @@ var action = (function()
           case 'file':
             deploy.file_deploy(data);
             break;
+          case 'group_file':
+            deploy.file_deploy(data);
+            break;
+          case 'event_file':
+            deploy.file_deploy(data);
+            break;  
           case 'video':
             deploy.video_deploy(data);
             break;
@@ -100,7 +107,7 @@ var action = (function()
           var oldh = $("#prev").height();
           oldh = parseInt(oldh) + 500;
           $("#center").height(oldh);
-          param.start += increment;
+          param.start += window.increment;
           $('.load_more').show();
         }
         else
@@ -111,9 +118,12 @@ var action = (function()
           {
             $('#prev').append('<div style="text-align:center;"><img width="136" height="136" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/noposts.png" alt=""><div style="font-size:2.4em;color:#adb2bb;font-weight:bold;">No posts to show</div><div style="margin-top:1.45em;"><a style="float:left;margin-left:4em;" class="really_group_join" href="/register.php?hl=friend_suggest">Find Friends</a><a style="margin-right:4em;" class="really_group_join" href="/register.php?hl=group_suggest">Join Groups</a></div></div>');
           }
-          else
+          else 
           {
-            $('#prev').append('<div style="text-align:center;"><img src="' + icon_cdn + '/feed.jpg" /></div><div style="margin-top:1em;text-align:center;">No more feed available !</div></div>');
+/* ***************************** this has to show if no data comes *************************/            
+            ui.central_repo_heading(data);
+/********************************************************** */            
+            $('#prev').append('<div style="text-align:center;" class="no_feed_show"><img src="' + icon_cdn + '/feed.jpg" /><div style="margin-top:1em;text-align:center;">Nothing to show !</div></div>');
           }
         }
       }));
@@ -165,6 +175,12 @@ var action = (function()
     ajax.getJSON_ajax(url, param, me, callback.user_details);
   }
 
+  function enable_user_account(me)
+  {
+    $(me).attr("value", 'Enabling');
+    param.action ='enable_user';
+    ajax.getJSON_ajax(url, param, me, callback.enable_user);
+  }
   function user_delete(me, profileid)
   {
     $(me).attr("value", 'Requesting...');
@@ -366,11 +382,12 @@ var action = (function()
         var global_group = JSON.parse($('#session_group_hidden').attr('value'));
         $('#session_name_hidden').attr('value', JSON.stringify($.extend(global_name, data.name)));
         $('#session_pimage_hidden').attr('value', JSON.stringify($.extend(global_pimage, data.pimage)));
-        $('#session_skill_hidden').attr('value', JSON.stringify($.extend(global_skill, data.skillname)));
+        $('#session_skill_hidden').attr('value', JSON.stringify(data.skillname));
         $('#session_group_hidden').attr('value', JSON.stringify($.extend(global_group, data.groupname)));
         global_name = JSON.parse($('#session_name_hidden').attr('value'));
-        global_pimage = JSON.parse($('#session_pimage_hidden').attr('value'));
+                
         global_skill = JSON.parse($('#session_skill_hidden').attr('value'));
+        global_pimage = JSON.parse($('#session_pimage_hidden').attr('value'));
         global_group = JSON.parse($('#session_group_hidden').attr('value'));
         $('#search_container').html('');
         $('#search_container').append('<table width="100%"><tbody><tr id="result_people" class="search-result_left"><td width="30%" class="text-center bold">People</td><td width="70%"></td></tr><tr id="result_skill" class="search-result_left"><td width="30%" class="text-center bold">Skill</td><td width="70%"></td></tr><tr id="result_group" class="search-result_left"><td width="30%" class="text-center bold">Group</td><td width="70%"></td></tr></tbody></table>')
@@ -428,6 +445,8 @@ var action = (function()
                    $('#result_people').hide();                
               }
 //****************************** Skill ******************************************
+
+      
         var count_s = 0;
         $.each(global_skill, function(index, value)
             {
@@ -1326,7 +1345,19 @@ var action = (function()
     param.groupid = groupid;
     ajax.getJSON_ajax(url, param, me, callback.document_fetch);
   }
-
+ /* function group_doc_fetch(me,groupid)
+  {
+    param.action = 'group_doc_fetch';
+    param.groupid = groupid.trim();
+    ajax.getJSON_ajax(url, param, me, callback.group_doc_fetch);
+  }
+  function event_doc_fetch(me,eventid)
+  {
+    param.action = 'event_doc_fetch';
+    param.eventid = eventid.trim();
+    ajax.getJSON_ajax(url, param, me, callback.event_doc_fetch);
+  }
+  */
   function doc_load(me, groupid)
   {
     param.action = 'group_pinned_doc_fetch';
@@ -2233,8 +2264,17 @@ var action = (function()
 
   function group_and_event_select(me)
   {
-    param.action = 'group_and_event_select';
-    data = ajax.getJSON_ajax(url, param, me, callback.group_and_event_select);
+     param.action = 'group_and_event_select';
+    var page = $('#page_hidden').attr('value');
+
+     if(page == 'file')
+     {
+       data = ajax.getJSON_ajax(url, param, me, callback.group_and_event_select_file);
+     }
+     else
+     {
+       data = ajax.getJSON_ajax(url, param, me, callback.group_and_event_select);
+     }
   }
 
   function name_split(name, value)
@@ -2414,7 +2454,11 @@ var action = (function()
         deploy.action_decode('live_feed', value, data.name, data.photo, '#rtm_container', dom_id, 1, 0);
       });
       var response = jQuery.parseJSON(data.response);
+      var page = $('#page_hidden').attr('value');
+      if(page == 'home' || page == 'news_json')
+      {
       if (response) feed.news_deploy(response, '#prev', 0, 0);
+      }
       last_poll_time_rt = data.last_poll_time
       setTimeout(real_time, 0);
     });
@@ -2667,7 +2711,6 @@ var action = (function()
       {
         if (data.ack)
         {
-          $('#praisemodal').html('<h4>Your have successfully praised !</h4>');
           $('#praisemodal').modal('hide');
         }
       });
@@ -2755,6 +2798,7 @@ var action = (function()
     }
   }
   return {
+    enable_user_account:enable_user_account,
     colleague_search:colleague_search,
     share_post: share_post,
     getanalyticdetails: getanalyticdetails,

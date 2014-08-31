@@ -37,5 +37,10 @@ else
 		header('Location: /register.php?hl=profile_picture');
 		exit;
 	}
+    else if(($_SESSION['STEP'] == -1 || $_SESSION['STEP'] == '-2')&& $_SERVER['REQUEST_URI'] !='/account_disabled.php')
+	{
+		header('Location: /account_disabled.php');
+		exit;
+	}
 }
 ?>

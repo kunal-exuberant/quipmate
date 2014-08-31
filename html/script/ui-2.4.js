@@ -348,10 +348,10 @@ var ui = (function()
          param.profileid = $('#profileid_hidden').attr('value');
          increment = 25;
          var profile_name = $('#profilename_hidden').attr('value');
-         $('#center').append('<div id="prev"></div>');
+         $('#center').html('<div id="prev"></div>');
          $('#center').append('<input type="submit" class="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Files" />');
-         $('#prev').append('<h1 class="page_title">' + profile_name + ' - Files</h1>');
-         $('#prev').append('<table style="padding:1.5em;"></table>');
+             
+         
       }
       else if (page == 'video')
       {
@@ -377,8 +377,8 @@ var ui = (function()
          param.new_user = 'new_user';
          increment = 10;
          $('#center').html('<div id="prev"></div>');
-         $('#prev').html('<h1 class="page_title">People Who Recently Joined Quipmate</h1>');
-         $('#center').append('<input type="submit" class="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Photo" />');
+         $('#prev').html('<h1 class="page_title">Co-workers</h1>');
+         $('#center').append('<input type="submit" class="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show more result" />');
       }
       else if (page == 'search')
       {
@@ -757,6 +757,13 @@ var ui = (function()
          {
             "color": "#fff"
          }); //change status text to white after 50%
+      }
+      if(percentComplete == 100)
+      {
+        $("#upload_progress").html('Uploaded Successfully !');
+        $("#upload_progress").fadeOut(1000,function(){
+           $('#uploadfilemodal').modal('hide'); 
+        });
       }
    }
 
@@ -1747,7 +1754,30 @@ var ui = (function()
    {
       $(me).parent().remove();
    }
+   function central_repo_heading(data)
+   {
+        if(data.hasOwnProperty('groupname')) 
+        {
+            $('.file_center_title').html(''+data.groupname+' - File')
+            $('#file_upload_modal_level').html('Upload file in <span style="color:#336699">'+data.groupname+'</span>');
+            $('#photo_hidden_profileid').attr('value',data.groupid);
+            $('#action_hidden').attr('value','group_photo_upload');
+           // param.action ='group_photo_upload';
+        }
+        else if(data.hasOwnProperty('eventname'))
+        {
+            $('.file_center_title').html(''+data.eventname+' - File')
+            $('#file_upload_modal_level').html('Upload file in <span style="color:#336699">'+data.eventname+'</span>');
+            $('#photo_hidden_profileid').attr('value',data.eventid);
+            $('#action_hidden').attr('value','event_photo_upload');
+        }
+        else
+        {
+            $('#file_upload_modal_level').html('Upload file to All files <br/><span style="font-size:0.5em;color:light gray;">(Uploaded files will not be shared with anyone .But it will be accessible form here . If you want to share with group or event please select from left menu .)</span>');
+        }
+   }
    return {
+    central_repo_heading:central_repo_heading,
       popup_close: popup_close,
       share_post: share_post,
       parentRemove: parentRemove,

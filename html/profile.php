@@ -15,10 +15,7 @@ require_once '../include/header.php';
 					 
 			 <li class="links" <?php if($page == 'praise') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="pphoto" href="profile.php?id=<?php echo $profileid.'&hl=praise'?>" title="Your Praises"><span class="name_20">Praises</span></a></li>
 			 
-			<li class="links" <?php if($page == 'pphoto') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="pphoto" href="profile.php?id=<?php echo $profileid.'&hl=image'?>" title="Your Photos"><span class="name_20">Photos</span></a></li>
-			<li class="links" <?php if($page == 'file') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="pphoto" href="profile.php?id=<?php echo $profileid.'&hl=file'?>" title="Your Files"><span class="name_20">Files</span></a></li>
-			<li class="links" <?php if($page == 'video') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="pphoto" href="profile.php?id=<?php echo $profileid.'&hl=video'?>" title="Your Videos"><span class="name_20">Videos</span></a></li>
-
+		    <li class="links" <?php if($page == 'pphoto') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="pphoto" href="profile.php?id=<?php echo $profileid.'&hl=image'?>" title="Your Photos"><span class="name_20">Photos</span></a></li>
 			<li class="links" <?php if($page == 'following') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="following" href="profile.php?id=<?php echo $profileid.'&hl=following'?>" title="You are following"><span class="name_20">Following (<?php echo $database->following_count($profileid); ?>)</span></a></li>
 			<li class="links" <?php if($page == 'followers') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="followers" href="profile.php?id=<?php echo $profileid.'&hl=followers'?>" title="Your Followers"><span class="name_20">Followers (<?php echo $database->followers_count($profileid); ?>)</span></a></li>
 		</ul>
