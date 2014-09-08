@@ -425,6 +425,7 @@ var feed = (function()
       {
          file: value.file,
          title: value.page,
+         image: value.caption,
          width: "100%",
          aspectratio: "16:9",
          fallback: "false",
@@ -460,6 +461,7 @@ var feed = (function()
       {
          file: value.file,
          title: value.page,
+         image: value.caption,
          width: "100%",
          aspectratio: "16:9",
          fallback: "false",
@@ -550,6 +552,7 @@ var feed = (function()
       {
          file: value.file,
          title: value.page,
+         image: value.caption,
          width: "100%",
          aspectratio: "16:9",
          fallback: "false",
@@ -589,6 +592,7 @@ var feed = (function()
       jwplayer(dom_id + "video_" + value.actionid).setup(
       {
          file: value.file,
+         image: value.caption,
          width: "100%",
          aspectratio: "16:9",
          fallback: "false",
@@ -650,10 +654,14 @@ var feed = (function()
 
    function praise_decode(value, name, pimage, container, dom_id)
    {
+      var icon_cdn = $('#icon_cdn').attr('value');
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
+      var file = icon_cdn+'/'+value.file;
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="1"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.actionon + '"><img class="lfloat" src =' + pimage[value.actionon] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.actionon + '">' + name[value.actionon] + '</a> was praised by <a class="ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a></div><div class="pclass_json"><pre class="nf_page">For: ' + ui.see_more(ui.get_smiley(ui.link_highlight(value.letter_title))) + '</pre><pre style="margin:0.5em 0em;display:block;">Praise: ' + ui.see_more(ui.get_smiley(ui.link_highlight(value.letter_content))) + '</pre></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.actionon + '"><img class="lfloat" src =' + pimage[value.actionon] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.actionon + '">' + name[value.actionon] + '</a> was praised by <a class="ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a></div><div class="lfloat"><img src="'+file+'" width="70" height="70" /><div class="text-center"><strong>'+value.mood+'</strong></div></div><div class="praise_texts"><pre class="nf_page"><strong>For: '+ ui.see_more(ui.get_smiley(ui.link_highlight(value.letter_title))) + '</strong></pre><pre style="margin:0.5em 0em;display:block;"><strong>Praise: </strong>'+ ui.see_more(ui.get_smiley(ui.link_highlight(value.letter_content))) + '</pre></div></div>');
+      
+      
       if (value.postby == myprofileid)
       {
          postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');

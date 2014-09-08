@@ -39,7 +39,73 @@
   </div>
 </div>
 <!-- ************************ modal for Praise **************************** -->
-
+<div class="modal fade" id="praisemodalbadge" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+             <h4 class="modal-title" id="myModalLabel">Publically praise for outstanding work by sending a badge .</h4>
+            </div>
+            <div class="modal-body">
+				<div id="badge_picker">
+                    <ul>
+                    <li class="badge">
+                    <a class="badge_chooser" data-badge-id="101" href="#"><img alt="Quick Learner" height="70" src="<?php echo $icon_cdn ;?>/earlyadopter_square70.png" width="70" />
+                    <div class="badge_name">Quick Learner</div>
+                    </a></li>
+                    <li class="badge">
+                    <a class="badge_chooser" data-badge-id="102" href="#"><img alt="Leader" height="70" src="<?php echo $icon_cdn ;?>/leadership_square70.png" width="70" />
+                    <div class="badge_name">Leader</div>
+                    </a></li>
+                    <li class="badge">
+                    <a class="badge_chooser" data-badge-id="103" href="#"><img alt="Mentor" height="70" src="<?php echo $icon_cdn ;?>/mentor_square70.png" width="70"/>
+                    <div class="badge_name">Mentor</div>
+                    </a></li>
+                    <li class="badge">
+                    <a class="badge_chooser" data-badge-id="104" href="#"><img alt="Presentation" height="70" src="<?php echo $icon_cdn ;?>/presentation_square70.png" width="70"/>
+                    <div class="badge_name">Presentation</div>
+                    </a></li>
+                    <li class="badge">
+                    <a class="badge_chooser" data-badge-id="105" href="#"><img alt="Problem Solver" height="70" src="<?php echo $icon_cdn ;?>/problemsolver_square70.png" width="70" />
+                    <div class="badge_name">Problem Solver</div>
+                    </a></li>
+                    <li class="badge">
+                    <a class="badge_chooser" data-badge-id="106" href="#"><img alt="Teamwork" height="70" src="<?php echo $icon_cdn ;?>/teamwork_square70.png" width="70" />
+                    <div class="badge_name">Teamwork</div>
+                    </a></li>
+                    <li class="badge">
+                    <a class="badge_chooser" data-badge-id="107" href="#"><img alt="Visionary" height="70" src="<?php echo $icon_cdn ;?>/visionary_square70.png" width="70" />
+                    <div class="badge_name">Visionary</div>
+                    </a></li>
+                    <li class="badge">
+                    <a class="badge_chooser" data-badge-id="108" href="#"><img alt="Work Ethic" height="70" src="<?php echo $icon_cdn ;?>/workethic_square70.png" width="70" />
+                    <div class="badge_name">Work Ethic</div>
+                    </a></li>
+                    <li class="badge">
+                    <a class="badge_chooser" data-badge-id="109" href="#"><img alt="You Rock" height="70" src="<?php echo $icon_cdn ;?>/yourock_square70.png" width="70" />
+                    <div class="badge_name">You Rock</div>
+                    </a></li>
+                     <li class="badge">
+                    <a class="badge_chooser" data-badge-id="110" href="#"><img alt="Communication" height="70" src="<?php echo $icon_cdn ;?>/communication_square70.png" width="70" />
+                    <div class="badge_name">Communication</div>
+                    </a></li>
+                    <li class="badge">
+                    <a class="badge_chooser" data-badge-id="111" href="#"><img alt="Company Spirit" height="70" src="<?php echo $icon_cdn ;?>/companyspirit_square70.png" width="70" />
+                    <div class="badge_name">Company Spirit</div>
+                    </a></li>
+                    <li class="badge">
+                    <a class="badge_chooser" data-badge-id="112" href="#"><img alt="Customer Satisfaction" height="70" src="<?php echo $icon_cdn ;?>/customersatisfaction_square70.png" width="70" />
+                    <div class="badge_name">Customer Satisfaction</div>
+                    </a></li>                   
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+			</div>
+    </div>
+  </div>  
+</div>
 <div class="modal fade" id="praisemodal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -48,9 +114,12 @@
             <h4 class="modal-title" id="myModalLabel">Publically praise for outstanding work</h4>
             </div>
             <div class="modal-body text-center">
-				<div style="margin-top:1em;"><textarea style="padding:0.5em;" id="letter_title" type="text" placeholder="What is the outstanding contribution?" ></textarea>
+				<div style="margin-top:1em;" id="praisebody">
+                <input type="hidden" id="badge_id" value=""></input>
+                <span id="badge_image"></span>
+                <textarea style="padding:0.5em;" id="letter_title" type="text" placeholder="Title for praise " ></textarea>
                 </div>
-                <div style="margin-top:1em;"><textarea placeholder="Word of applause" id="letter_content" style="padding:0.5em;height:16em;resize:none;"></textarea>
+                <div style="margin-top:1em;"><textarea placeholder="Description of praise" id="letter_content" style="padding:0.5em;height:16em;resize:none;"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -60,6 +129,7 @@
     </div>
   </div> 
 </div>
+ 
 <!-- ********************************************************************** -->
 <!-- **************************************modal to upload a file ************************** -->
 <div class="modal fade" id="uploadfilemodal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">

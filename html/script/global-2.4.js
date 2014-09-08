@@ -93,6 +93,12 @@ $(function()
       $('.inboxui_msg').css('height', $(window).height() - 150);
       $('.right_pointer_container').css('left', $('#search_form').position().left + 285 + 'px');
       $('#search_container').css('left', $('#search_form').position().left + 'px');
+    var page = $('#page_hidden').attr('value').trim();
+    if(page == 'bio' || page == 'file' || page == 'group_file' || page == 'event_file' || page == 'video' || page == 'group_video' || page == 'event_video')
+    {
+        $('#right').hide();
+    }
+      
    });
    //Chat after windows minimised 	
    $('.friend_status_small').live('click', function()
@@ -181,7 +187,7 @@ $(function()
       var centerwidth = $('.center').width();
       //when the user reached the bottom of '#right' set its position to fixed 
       //to prevent it from moving on scroll 
-    if(page != 'bio' || page != 'file' || page != 'group_file' || page != 'event_file')
+    if(page != 'bio' || page != 'file' || page != 'group_file' || page != 'event_file' || page != 'video' || page != 'group_video' || page != 'event_video')
     {
       if (winBottom >= rightBottom)
       {
@@ -1005,8 +1011,8 @@ $(function()
          {
             var data = $.parseJSON(response);
             var page = $('#page_hidden').attr('value');
-            if (data.ack == '1' && page != 'file' && page != 'group_file' && page != 'event_file')
-            {
+            if (data.ack == '1' && page != 'file' && page != 'group_file' && page != 'event_file' && page != 'video' && page != 'group_video' && page != 'event_video')
+            { 
                var postid = $('#' + dom_id);
                var file = data.file;
                var myprofileid = $('#myprofileid_hidden').attr('value');
@@ -1320,7 +1326,21 @@ $(function()
                   host = data.host;
                   src = data.src;
                   link = data.link;
-                  if (actiontype == 1600)
+                  var page = $('#page_hidden').attr('value');
+                 if( actiontype == 1600 && (page == 'usefullinks')) 
+                  {  
+                     $('#link_callback').remove();
+                     $('#center').append('<div id="link_callback" style="margin:1em;height:auto;width:45em;"></div>');
+                     if (video)
+                     {
+                        $('#link_callback').html('<iframe style="margin-top: 1em;float: left;margin-left:2em;" width="400" height="300" src="https://www.youtube.com/embed/' + path + '" frameborder="0"></iframe><div style="display:block;margin:1em 0em 0em 1em;float:right;margin-right:8em;">' + title + '<br /><a href="' + host + '">' + host + '</a><br />' + meta + '</div><div style="clear:left;"></div>');
+                     }
+                     else
+                     {
+                        $('#link_callback').html('<div id="link_thumb_container" ><img style="max-height:25em;max-width:25em;" src="' + src[thumb_index] + '" ></div><div style="display:block;margin-left: 0.5em;">' + title + '<br /><a href="' + host + '">' + host + '</a><br />' + meta + '</div><div style="clear:left;"></div>');
+                     }
+                  }
+                  else if (actiontype == 1600)
                   {
                      $('#link_callback').remove();
                      $('#link_box').attr('placeholder','Say something about this ...');
@@ -1348,6 +1368,36 @@ $(function()
                }));
             }
          });
+/*********************** Add link Admin **************************************/         
+         $('#ullink_button').live('click', function()
+         {
+            var profileid = $('#profileid_hidden').attr('value').trim();
+            if ($.trim($('#link_box').val()) != '')
+            {
+               var action = 'usefullinks';
+               $.getJSON('ajax/write.php', {
+                  action: action,
+                  profileid: profileid,
+                  title: title,
+                  links: link
+               }, function(data)
+               {
+                  if (data.ack == 1)
+                  {
+                     $('#usefullinks_box').append('<div id="' + data.link_id + '" class="dsgn" style="position:relative;border-bottom: 0.1em solid rgb(221, 221, 221);clear: both;cursor: pointer;min-height: 2.5em;padding: 0.5em 0px 0.5em 0.4em;">' + title + '<span  onclick="ui.usefullinks_delete(this,' + data.link_id + ')" class="dsgn_setting"></span></div>');
+                  }
+                  else if (data.ack == 2)
+                  {
+                     $('body').append('<div class="prompt_container"><div class="prompt_title">Post Prompt</div><div class="prompt_content" id="post_prompt_text"></div><div class="prompt_button"><input class="prompt_positive theme_button" type="submit" value="OK" onclick="ui.bg_hide()" /></div></div>');
+                     $('body').css('overflow', 'hidden');
+                     $('#post_prompt_text').append("Entry Already Exists..!");
+                  }
+                  $('#link_callback').remove();
+               });
+            }
+         });  
+         
+/*********************************************************************************/         
          var myprofileid = $('#myprofileid_hidden').attr('value');
          var profileid = $('#profileid_hidden').attr('value').trim();
          var myphoto = $('#myprofileimage_hidden').attr('value');
@@ -1483,95 +1533,21 @@ $(function()
          });
       }
    }); // option link closes
-   $('#ullink_box').live('focus', function()
-   {
-      $('#uluploader').html('<textarea id="link_box" placeholder="What are you working on today?"/></textarea><input id="ullink_button" type="submit" class="theme_button" value="Add">');
-      if (!executed)
-      {
-         executed = true;
-         var i = 0,
-             request = [],
-             actiontype = 1,
-             video, meta, path, title, host, src = [],
-             thumb_index = 0,
-             link;
-         var text_change = $.trim($('#link_box').val());
-         $('#link_box').live('keyup mousedown input', function(e)
-         {
-            if (text_change != $.trim($('#link_box').val()))
-            {
-               for (i = 0; i < request.length; i++)
-               {
-                  request[i].abort();
-               }
-               text_change = $.trim($('#link_box').val());
-               link = $.trim($('#link_box').val());
-               request.push($.getJSON('ajax/write.php', {
-                  action: 'link_details_fetch',
-                  link: link
-               }, function(data)
-               {
-                  actiontype = data.actiontype;
-                  video = data.video;
-                  meta = data.meta;
-                  path = data.path;
-                  title = data.title;
-                  host = data.host;
-                  src = data.src;
-                  link = data.link;
-                  if (actiontype == 1600)
-                  {
-                     $('#link_callback').remove();
-                     $('#uluploader').append('<div id="link_callback" style="margin:1em;height:auto;width:48em;"></div>');
-                     if (video)
-                     {
-                        $('#link_callback').html('<iframe style="margin-top: 1em;float: left;margin-left:2em;" width="400" height="300" src="https://www.youtube.com/embed/' + path + '" frameborder="0"></iframe><div style="display:block;margin:1em 0em 0em 1em;float:right;margin-right:8em;">' + title + '<br /><a href="' + host + '">' + host + '</a><br />' + meta + '</div><div style="clear:left;"></div>');
-                     }
-                     else
-                     {
-                        $('#link_callback').html('<div id="link_thumb_container" ><img style="max-height:25em;max-width:25em;" src="' + src[thumb_index] + '" ></div><div style="display:block;margin-left: 0.5em;">' + title + '<br /><a href="' + host + '">' + host + '</a><br />' + meta + '</div><div style="clear:left;"></div>');
-                     }
-                  }
-               }));
-            }
-         });
-         var myprofileid = $('#myprofileid_hidden').attr('value');
-         var profileid = $('#profileid_hidden').attr('value').trim();
-         var myphoto = $('#myprofileimage_hidden').attr('value').trim();
-         var myname = $('#myprofilename_hidden').attr('value').trim();
-         $('#ullink_button').live('click', function()
-         {
-            var profileid = $('#profileid_hidden').attr('value').trim();
-            if ($.trim($('#link_box').val()) != '')
-            {
-               var action = 'usefullinks';
-               $.getJSON('ajax/write.php', {
-                  action: action,
-                  profileid: profileid,
-                  title: title,
-                  links: link
-               }, function(data)
-               {
-                  if (data.ack == 1)
-                  {
-                     $('#usefullinks_box').append('<div id="' + data.link_id + '" class="dsgn" style="position:relative;border-bottom: 0.1em solid rgb(221, 221, 221);clear: both;cursor: pointer;min-height: 2.5em;padding: 0.5em 0px 0.5em 0.4em;">' + title + '<span  onclick="ui.usefullinks_delete(this,' + data.link_id + ')" class="dsgn_setting"></span></div>');
-                  }
-                  if (data.ack == 2)
-                  {
-                     $('body').append('<div class="prompt_container"><div class="prompt_title">Post Prompt</div><div class="prompt_content" id="post_prompt_text"></div><div class="prompt_button"><input class="prompt_positive theme_button" type="submit" value="OK" onclick="ui.bg_hide()" /></div></div>');
-                     $('body').css('overflow', 'hidden');
-                     $('#post_prompt_text').append("Entry Already Exists..!");
-                  }
-                  $('#link_callback').remove();
-                  ui.upload_default_state();
-               });
-            }
-         });
-      }
-   });
+          
 });
 $(function()
 {
    $("#startdate").datepicker();
    $("#enddate").datepicker();
+});
+
+$('.badge_chooser').click(function(){
+ badgeid = $(this).attr('data-badge-id');
+  $('#praisemodalbadge').modal('hide');
+  $('#praisemodal').modal('show');
+  console.log(badgeid);
+  $('#badge_id').attr('value',badgeid);
+  me_badge=this;
+  $("img:first",'#praisebody').html('');
+  $('#badge_image').html(($("img:first",me_badge).clone().addClass('lfloat')));
 });

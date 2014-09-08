@@ -416,10 +416,10 @@ $database->page_view_insert($myprofileid, $profileid, $_SERVER['HTTP_REFERER'], 
 		  </div>
 	</div>
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-right: 16.5em;">
-	  <ul class="nav navbar-nav">
+	  <ul class="nav navbar-nav name_profile">
 		<li ><a class="ajax_nav"  id="home" href="/" target="_parent" title="Home">Home</a></li>
-		<li ><a class="ajax_nav" id="profile" href="profile.php?id=<?php echo $_SESSION['USERID'];?>" target="_parent" title="Your Profile">Profile</a></li>
-		<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+		<li ><a class="ajax_nav" id="profile" href="profile.php?id=<?php echo $_SESSION['USERID'];?>" target="_parent" title="Your Profile"><img src="<?php echo $_SESSION['pimage']?>" height="25" width="25" /><?php echo ' '.$_SESSION['FNAME'];?></a></li>
+		<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
 	<!--	<li class="dropdown">
 		  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filter<b class="caret"></b></a>
 		  <ul class="dropdown-menu">

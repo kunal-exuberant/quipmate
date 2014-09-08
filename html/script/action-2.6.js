@@ -20,7 +20,8 @@ var action = (function()
     {
       window.ajax_queue.push($.getJSON(url, param, function(data)
       {
-        if (data.action.length > 0)
+        console.log(page);
+        if (page == 'search' || data.action.length > 0)
         {
           window.load = true;
           switch (page)
@@ -76,6 +77,12 @@ var action = (function()
           case 'video':
             deploy.video_deploy(data);
             break;
+          case 'group_video':
+            deploy.video_deploy(data);
+            break;
+          case 'event_video':
+            deploy.video_deploy(data);
+            break;
           case 'pphoto':
             deploy.photo_deploy(data);
             break;
@@ -86,10 +93,10 @@ var action = (function()
             deploy.people_deploy(data);
             break;
           case 'following':
-            deploy.friend_deploy(data);
+            deploy.friend_deploy(data,'#prev');
             break;
           case 'followers':
-            deploy.friend_deploy(data);
+            deploy.friend_deploy(data,'#prev');
             break;
           case 'group_member':
             deploy.member_deploy(data);
@@ -1916,6 +1923,7 @@ var action = (function()
     var user = $(me).parent().children().eq(0).attr('value');
     var name = $('#myprofilename_hidden').attr('value');
     var profileid = $('#profileid_hidden').attr('value');
+    var chat_sent_time = new Date().getTime();
     if (event.which == 13 && $.trim($(me).val()))
     {
       typing = true;
@@ -1930,16 +1938,32 @@ var action = (function()
         "message": message,
         "name": name,
         "photo": photo,
-        "database": database
+        "database": database,
+        "chat_sent_time": chat_sent_time
       }
+    //Append the message before ack comes from server .
+   $(me).parent().children().eq(3).append('<div class="message_each" id="message_' + chat_sent_time + '"><img class="message_each_photo" title="' + name + '" height="50" width=50 src="' + photo + '"><div class="message_each_message"><pre>' + ui.get_smiley(ui.link_highlight(message)) + '</pre></div><div style="text-align:right;color:gray;" class="message_time_other"><img width="6" src="' + icon_cdn + '/clock.png"><span style="color:gray;" class="time" data="' +chat_sent_time + '">' + ui.time_difference(chat_sent_time) + '</span></div><span id="' + chat_sent_time + '" class="glyphicon glyphicon-time rfloat" style="color:#ccc;"></span></div>');
+   
       $.postJSON('/chat/chat_new', param, function(data)
       {
         $.each(data.action, function(index, value)
         {
+          action.last_chat_time = value.time;
           $('#chat_' + value.actionid).remove();
-          $(me).parent().children().eq(3).append('<div class="message_each" id=' + value.actionid + '><img class="message_each_photo" title="' + name + '" height="50" width=50 src="' + photo + '"><div class="message_each_message"><pre>' + ui.get_smiley(ui.link_highlight(message)) + '</pre></div><div style="text-align:right;color:gray;"><img width="6" src="' + icon_cdn + '/clock.png"><span style="color:gray;" class="time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></div><span onclick="ui.message_delete(this,' + value.actionid + ')" class="post_setting"></span></div>');
+          /* $('.chatbox').css(
+           {
+              "height": "2.7em"
+           }); */
+           $('#message_' + value.chat_sent_time).attr('id',value.actionid);
+           //$('#chat_time_' + value.chat_sent_time).attr('data', value.time);
+          // $('#chat_time_' + value.chat_sent_time).html('' + ui.time_difference(value.time) + '');
+          $('.message_time_other').append('<span onclick="ui.message_delete(this,' + value.actionid + ')" class="post_setting"></span>');
+           $('#' + value.chat_sent_time).removeClass('glyphicon-time');
+           $('#' + value.chat_sent_time).addClass('glyphicon-ok');
+           $(me).parent().children().eq(3).scrollTop($('.inboxui_msg').get(0).scrollHeight);
+         
         });
-        $(me).parent().children().eq(3).scrollTop($('.inboxui_msg').get(0).scrollHeight);
+        
       });
     }
   }
@@ -2022,7 +2046,7 @@ var action = (function()
       {
         if ($('.inboxui_msg').length > 0)
         {
-          //$('#inbox_'+user).children().eq(3).scrollTop($('.inboxui_msg').get(0).scrollHeight);
+          $('#inbox_'+user).children().eq(3).scrollTop($('.inboxui_msg').get(0).scrollHeight);
         }
       }
       chat_load = true;
@@ -2267,7 +2291,7 @@ var action = (function()
      param.action = 'group_and_event_select';
     var page = $('#page_hidden').attr('value');
 
-     if(page == 'file')
+     if(page == 'file' || page == 'video')
      {
        data = ajax.getJSON_ajax(url, param, me, callback.group_and_event_select_file);
      }
@@ -2701,12 +2725,14 @@ var action = (function()
   {
       var letter_title = $('#letter_title').attr('value');
       var letter_content = $('#letter_content').val();
+      var badgeid = $('#badge_id').attr('value');
       var profileid = $('#profileid_hidden').attr('value');
       $.getJSON('ajax/write.php', {
         action: 'praise',
         letter_title: letter_title,
         letter_content: letter_content,
-        profileid: profileid
+        profileid: profileid,
+        badgeid : badgeid
       }, function(data)
       {
         if (data.ack)

@@ -1424,6 +1424,7 @@ class Help
 							$this->friend_memcache_update($fid, $database, $memcache);
 							$this->friend_memcache_update($profileid, $database, $memcache);
 						}
+                        $ret = $database->subscribe_broadcast_pages($actionid,$profileid);
 						$image = $this->pimage_fetch($profileid, $memcache, $database);
 						$_SESSION['pimage'] = $image;
 						$data['ack']=1;

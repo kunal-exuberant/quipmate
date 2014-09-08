@@ -761,9 +761,12 @@ var ui = (function()
       if(percentComplete == 100)
       {
         $("#upload_progress").html('Uploaded Successfully !');
-        $("#upload_progress").fadeOut(1000,function(){
-           $('#uploadfilemodal').modal('hide'); 
-        });
+        $("#upload_progress").html('');
+        $('#uploadfilemodal').modal('hide'); 
+        $("#pform").get(0).reset();
+       /* $("#upload_progress").fadeOut(1000,function(){
+           
+        });*/
       }
    }
 
@@ -1462,10 +1465,11 @@ var ui = (function()
       $(me).prev().hide();
       $(me).hide();
    }
-
-   function see_more(page)
+//Old implementation
+ /*  function see_more(page)
    {
       var left, right, pos, pos1;
+      console.log(page.length);
       if (page.length > 153)
       {
          right = page.substr(150, page.length - 1);
@@ -1478,10 +1482,31 @@ var ui = (function()
             right = ' ' + page.substr(150 + pos + 1, page.length - 1);
             return left + '<div onclick="ui.show_more(this)" style="margin-top:0.5em;color:#336699;cursor:pointer;font-size:0.9em;">See more</div><span class="see_more" style="display:none;">' + right + '</span><div onclick="ui.show_less(this)" style="margin-top:0.5em;color:#336699;cursor:pointer;display:none;font-size:0.9em;">See less</div>';
          }
+           else
+          {
+           return page;
+          } 
       }
-      return page;
+      else
+      {
+       return page;
+      } 
+   } */ 
+ function see_more(page)
+   {
+      var left, right, pos, pos1;
+      if (page.length > 153)
+      {
+        right = page.substr(151, page.length - 1);
+		left = page.substr(0, 150);
+		right = ' ' + page.substr(150, page.length - 1);
+		return left + '<div onclick="ui.show_more(this)" style="margin-top:0.5em;color:#336699;cursor:pointer;font-size:0.9em;">See more</div><span class="see_more" style="display:none;">' + right + '</span><div onclick="ui.show_less(this)" style="margin-top:0.5em;color:#336699;cursor:pointer;display:none;font-size:0.9em;">See less</div>';
+      }
+      else
+      {
+       return page;
+      } 
    }
-
    function time_difference(time)
    {
       now = Math.floor((new Date()).getTime() / 1000);
@@ -1756,6 +1781,9 @@ var ui = (function()
    }
    function central_repo_heading(data)
    {
+      var page = $('#page_hidden').attr('value');
+      if(page == 'file' || page == 'group_file' || page == 'event_file')
+      {
         if(data.hasOwnProperty('groupname')) 
         {
             $('.file_center_title').html(''+data.groupname+' - File')
@@ -1775,6 +1803,29 @@ var ui = (function()
         {
             $('#file_upload_modal_level').html('Upload file to All files <br/><span style="font-size:0.5em;color:light gray;">(Uploaded files will not be shared with anyone .But it will be accessible form here . If you want to share with group or event please select from left menu .)</span>');
         }
+       }
+       else if(page == 'video' || page == 'group_video' || page == 'event_video')
+       {
+        if(data.hasOwnProperty('groupname')) 
+        {
+            $('.file_center_title').html(''+data.groupname+' - Video')
+            $('#file_upload_modal_level').html('Upload video in <span style="color:#336699">'+data.groupname+'</span>');
+            $('#photo_hidden_profileid').attr('value',data.groupid);
+            $('#action_hidden').attr('value','group_photo_upload');
+           // param.action ='group_photo_upload';
+        }
+        else if(data.hasOwnProperty('eventname'))
+        {
+            $('.file_center_title').html(''+data.eventname+' - Video')
+            $('#file_upload_modal_level').html('Upload video in <span style="color:#336699">'+data.eventname+'</span>');
+            $('#photo_hidden_profileid').attr('value',data.eventid);
+            $('#action_hidden').attr('value','event_photo_upload');
+        }
+        else
+        {
+            $('#file_upload_modal_level').html('Upload video to All videos <br/><span style="font-size:0.5em;color:light gray;">(Uploaded videos will not be shared with anyone .But it will be accessible form here . If you want to share with group or event please select from left menu .)</span>');
+        }
+       } 
    }
    return {
     central_repo_heading:central_repo_heading,

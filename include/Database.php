@@ -159,6 +159,29 @@ class Database
       $result = $this->con->query("SELECT DISTINCT IMAGEID,CDN,FILENAME,image.PROFILEID as PROFILEID,ACTIONBY FROM image WHERE PROFILEID='$profileid' ORDER BY IMAGEID DESC LIMIT $limit,$count");
       return $result;
    }
+   function video_json($limit, $count)
+   {
+      $limit = $this->con->real_escape_string($limit);
+      $count = $this->con->real_escape_string($count);
+      $result = $this->con->query("SELECT vdo.*,gp.name as groupname,et.name as eventname,dr.page as page FROM video as vdo left outer join `group` as gp on vdo.profileid = gp.groupid left outer join `event` as et on vdo.profileid = et.eventid left join diary as dr on vdo.videoid = dr.actionid where (gp.Visible = '0' OR gp.Visible is NULL) and (et.privacy ='0' OR et.privacy is NULL) ORDER BY videoid DESC LIMIT $limit,$count ");
+      return $result;
+   }
+    function group_video_fetch($groupid, $limit, $count)
+   {
+      $limit = $this->con->real_escape_string($limit);
+      $count = $this->con->real_escape_string($count);
+      $result = $this->con->query("SELECT vdo.*,gp.name as groupname,dr.page as page FROM video as vdo  join `group` as gp on vdo.profileid = gp.groupid join diary as dr on vdo.videoid = dr.actionid WHERE vdo.profileid ='$groupid' ORDER BY videoid DESC LIMIT $limit,$count ");
+      return $result;
+   }
+   
+   function event_video_fetch($eventid, $limit, $count)
+   {
+      $limit = $this->con->real_escape_string($limit);
+      $count = $this->con->real_escape_string($count);
+      $result = $this->con->query("SELECT vdo.*,et.name as eventname,dr.page as page FROM video as vdo join `event` as et on vdo.profileid = et.eventid join diary as dr on vdo.videoid = dr.actionid  WHERE vdo.profileid ='$eventid' ORDER BY videoid DESC LIMIT $limit,$count ");
+      return $result;
+   }
+   /* 
    function video_json($profileid, $limit, $count)
    {
       $profileid = $this->con->real_escape_string($profileid);
@@ -167,9 +190,11 @@ class Database
       $result = $this->con->query("SELECT DISTINCT videoid,cdn,filename,thumbnail,video.profileid as profileid,video.actionby,diary.PAGE FROM video inner join diary ON video.videoid= diary.actionid WHERE video.profileid='$profileid' ORDER BY videoid DESC ");
       return $result;
    }
-   function file_json($profileid, $limit, $count)
+   
+   */
+   
+   function file_json($limit, $count)
    {
-      $profileid = $this->con->real_escape_string($profileid);
       $limit = $this->con->real_escape_string($limit);
       $count = $this->con->real_escape_string($count);
       $result = $this->con->query("SELECT doc.*,gp.name as groupname,et.name as eventname FROM document as doc left outer join `group` as gp on doc.profileid = gp.groupid left outer join `event` as et on doc.profileid = et.eventid where (gp.Visible = '0' OR gp.Visible is NULL) and (et.privacy ='0' OR et.privacy is NULL) ORDER BY docid DESC LIMIT $limit,$count");
@@ -656,6 +681,21 @@ class Database
       $result = $this->con->query("insert into `subscribe`(friendid,profileid) select '$pageid',USERID from `signup` ");
       $result = $this->con->query("update `subscriber` SET priviledge= '$priviledge' Where pageid ='$pageid' and profileid IN(select profileid from `moderator`)");
       return $result;
+   }
+   function subscribe_broadcast_pages($actionid,$profileid)
+   {
+     $actionid = $this->con->real_escape_string($actionid);
+     $profileid = $this->con->real_escape_string($profileid);
+     $res = $this->con->query("select * from `page`");
+     While($ret = $res->fetch_array())
+     {
+         $pageid = $ret['pageid'];
+         $result = $this->con->query("insert into `subscriber`(actionid,pageid,priviledge,profileid) values('$actionid','$pageid','0','$profileid')");
+         $result = $this->con->query("insert into `subscribe`(friendid,profileid) values('$pageid','$profileid')");
+     }
+     
+     return $result;
+       
    }
 
    function guest_insert($actionid, $profileid1, $profileid2, $priviledge)
@@ -1496,7 +1536,7 @@ LIMIT 0 , 30");
    {
       $actionid = $this->con->real_escape_string($actionid);
 
-      $result = $this->con->query("SELECT COMMENT,PAGE from `comment` , `diary`   where `diary`.ACTIONID ='$actionid' AND `comment`.ACTIONID = '$actionid' ");
+      $result = $this->con->query("SELECT COMMENT,PAGE,MOOD,FILENAME from `comment` INNER JOIN  `diary` on `diary`.ACTIONID = `comment`.ACTIONID INNER JOIN `map` on map.actionid = `comment`.actionid INNER JOIN mood on mood.MOODID = map.MAPID Where `comment`.ACTIONID = '$actionid' ");
       return $result->fetch_array();
    }
    function info_fetch($profileid, $type)
@@ -1994,18 +2034,12 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
       $c = $r['result'];
       if($c == 0)
       {
-         $result = $this->con->query("INSERT INTO `moderator_usefullink`(`key`,usefullink,title) values('','$new_link','$link_title')");
-         if($result)
-         {
-            $result = $this->con->query("SELECT `key` FROM `moderator_usefullink` WHERE usefullink = '$new_link' AND title='$link_title' ORDER BY `key` DESC LIMIT 1 ");
-            $res = $result->fetch_array();
-            return $res['key'];
-         }
+        $result =  $this->con->query("INSERT INTO `moderator_usefullink`(usefullink,title) values('$new_link','$link_title')");
+        return 1;
       }
       else
       {
-         $data['ack'] = 2;
-         echo json_encode($data);
+        return 2;
       }
    }
    function usefullink_fetch()
@@ -2370,7 +2404,7 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
    function user_select($start)
    {
 
-      $result = $this->con->query("Select r.profileid, MAX(CASE r.type WHEN 202 THEN detail END) AS profession, MAX(CASE r.type WHEN 234 THEN detail END) AS team, MAX(CASE r.type WHEN 239 THEN detail  END) AS designation,r.email FROM (SELECT b.profileid as profileid,bh.type as type,b.email as email,group_concat(i.name) as detail FROM bio as b left join bio_history as bh on b.profileid = bh.profileid left join info AS i ON i.diaryid = bh.diaryid  where i.type is null or i.type in(202,239,234) group by b.profileid,i.type ) r group by r.profileid,r.email order by r.profileid desc LIMIT $start,20");
+      $result = $this->con->query("Select r.profileid, MAX(CASE r.type WHEN 202 THEN detail END) AS profession, MAX(CASE r.type WHEN 234 THEN detail END) AS team, MAX(CASE r.type WHEN 239 THEN detail  END) AS designation,r.email FROM (SELECT b.profileid as profileid,bh.type as type,b.email as email,group_concat(i.name) as detail FROM bio as b left join bio_history as bh on b.profileid = bh.profileid left join info AS i ON i.diaryid = bh.diaryid  where i.type is null or i.type in(202,239,234) group by b.profileid,i.type ) r group by r.profileid,r.email order by r.profileid desc LIMIT $start,10");
       return $result;
    }
    function user_select_all_at_once()

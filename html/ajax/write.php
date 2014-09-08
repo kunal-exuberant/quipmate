@@ -271,7 +271,11 @@ if(isset($_SESSION['auth']) && $_SESSION['STEP'] != -1 )
 			{
 				$api->praise_fetch();
 			}
-			
+			else if($_GET['action'] == 'preview_doc')
+			{
+				$api->preview_doc();
+			}
+						
 			else if($_GET['action'] == 'group_fetch')
 			{
 				$api->group_fetch();
@@ -513,6 +517,14 @@ if(isset($_SESSION['auth']) && $_SESSION['STEP'] != -1 )
 			else if($_GET['action'] == 'event_doc_fetch')
 			{
 				$api->event_doc_fetch();
+			}
+			else if($_GET['action'] == 'group_video_fetch')
+			{
+				$api->group_video_fetch();
+			}
+			else if($_GET['action'] == 'event_video_fetch')
+			{
+				$api->event_video_fetch();
 			}
 			else if($_GET['action'] == 'file_fetch')
 			{
@@ -837,6 +849,10 @@ if(isset($_SESSION['auth']) && $_SESSION['STEP'] != -1 )
 			{ 
 				$api->group_pinned_doc_upload();
 			}
+            else if($_POST['action'] == 'login')
+            {
+            	$api->login(); 
+            }
 			else
 			{ 
 				$help->error_description(8);

@@ -474,7 +474,8 @@ if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) 
 	<a href="public/team.php" target="_blank">Team</a><span class="separator">|</span>
 	<a href="public/terms.php" target="_blank">Terms of Use</a><span class="separator">|</span>
 	<a href="public/security.php" target="_blank">Security &amp; Compliance</a><span class="separator">|</span>
-	<a href="public/privacy.php" target="_blank">Privacy Policy</a>
+	<a href="public/privacy.php" target="_blank">Privacy Policy</a><span class="separator">|</span>
+    <a href="public/getting_started.php" target="_blank">Getting Started</a>
 </div>
 <div style="position:fixed;bottom:0em;right:2em;background-color:#dddddd;" id="message_leave">
 	<div id="message_leave_title" onclick="ui.message_leave_grow(this)" style="cursor:pointer;font-size:1.2em;padding:0.5em;width:14em;background-color:#4c66a4;color:#ffffff;font-weight:bold;">Leave a message<img src="https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/downarrow.gif" style="float:right;" /></div>

@@ -76,7 +76,7 @@ require_once '../include/header.php';
 			}
 			else if($page == 'group_settings')
 			{
-				echo '<div id="center" style="text-align:center" class="col-md-6 center">';
+				echo '<div id="center" class="col-md-6 center"><div class="text-center">';
 				?>
 				<h1 class="page_title">Group Settings</h1>
 					<div id="group_info"></div>
@@ -117,7 +117,7 @@ require_once '../include/header.php';
 					
 					
 				<?php
-				echo '</div>';
+				echo '</div></div>';
 			}
 			else
 			{

@@ -208,7 +208,7 @@ class Feed
 		}
 		else if($action[$k]['actiontype']== 2400)
 		{
-			$this->direct_letter_complete_encode($k,$json,$help,$encode,$database,$memcache,2411,2402);
+			$this->praise_complete_encode($k,$json,$help,$encode,$database,$memcache,2411,2402);
 		}
 		else if($action[$k]['actiontype']==2500)
 		{
@@ -333,7 +333,7 @@ class Feed
 		else if($action[$k]['actiontype']==2402 || $action[$k]['actiontype']==2411)
 		{
 			$this->parent_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
-			$this->direct_letter_complete_encode($k,$json,$help,$encode,$database,$memcache,2411,2402);
+			$this->praise_complete_encode($k,$json,$help,$encode,$database,$memcache,2411,2402);
 		}		
 		else if($action[$k]['actiontype']==2511 || $action[$k]['actiontype']==2502)
 		{    
@@ -631,13 +631,23 @@ class Feed
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype); 
 	}
 	
-	function direct_letter_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
+  	function direct_letter_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
 	{   global $action;
 		$action[$k]['letter_title'] = $encode->page_encode($action[$k]['pageid'],$database);	
 		$action[$k]['letter_content'] = $encode->page_comment_encode($action[$k]['pageid'],$database);			
 	 	$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);
 	}
-	
+	function praise_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
+	{   global $action;
+//		$action[$k]['sex'] = $database->sex_select($action[$k]['postby']);
+		$action[$k]['letter_title'] = $encode->page_encode($action[$k]['pageid'],$database);	
+		$action[$k]['letter_content'] = $encode->page_comment_encode($action[$k]['pageid'],$database);
+		$mood = $encode->mood_encode($action[$k]['pageid'],$database);	
+		$action[$k]['mood'] = $mood['mood'];
+		$action[$k]['page'] = $mood['page'];
+		$action[$k]['file'] = $mood['file'];
+		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
+	}
 	function page_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
 	{   global $action;
 		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	

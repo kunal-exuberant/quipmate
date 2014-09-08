@@ -32,13 +32,11 @@ class Api
             $data['pimage'] = $pimage;
             $data['tag'] = $_SESSION['tag_json'];
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -76,13 +74,11 @@ class Api
             $data['pimage'] = $pimage;
             $data['tag'] = $_SESSION['tag_json'];
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -123,18 +119,15 @@ class Api
                $data['pimage'] = $pimage;
                $data['tag'] = $_SESSION['tag_json'];
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(27);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -175,32 +168,27 @@ class Api
                      // $param[''] =
                      //$result = $email->email_sample($profileid,$myprofileid);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
                if($status == 2)
                {
                   $data['ack'] = 0;
                   $data['message'] = "You have already requested to join this group";
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $data['ack'] = 0;
                   $data['message'] = "You have already a member of this group";
                   echo json_encode($data);
                }
-         }
-         else
+         } else
          {
             echo $help->error_description(16);
          }
-      }
-      else
+      } else
       {
          echo $help->error_description(9);
       }
@@ -226,13 +214,11 @@ class Api
                   $data['ack'] = 1;
                   $data['message'] = 'Going';
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
                if($status == 2 || $status == 3)
                {
                   $result = $database->guest_update($eventid, $myprofileid, 1);
@@ -241,25 +227,21 @@ class Api
                      $data['ack'] = 1;
                      $data['message'] = 'Going';
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $data['ack'] = 1;
                   $data['message'] = 'Going';
                   echo json_encode($data);
                }
-         }
-         else
+         } else
          {
             echo $help->error_description(16);
          }
-      }
-      else
+      } else
       {
          echo $help->error_description(9);
       }
@@ -302,51 +284,43 @@ class Api
                      $param['friendid'] = $myprofileid;
                      $result = $email->email_sample($param);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
                if($status == -1)
                {
                   $data['ack'] = 0;
                   $data['message'] = "You have already following";
                   echo json_encode($data);
-               }
-               else
+               } else
                   if($status == 1)
                   {
                      $data['ack'] = 0;
                      $data['message'] = "You are one of the followers";
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                      if($status == 2)
                      {
                         $data['ack'] = 0;
                         $data['message'] = "You are already following";
                         echo json_encode($data);
-                     }
-                     else
+                     } else
                         if($status == 3)
                         {
                            $data['ack'] = 0;
                            $data['message'] = "Are you crazy? You want to follow yourself ! Well you already are!";
                            echo json_encode($data);
-                        }
-                        else
+                        } else
                         {
                            echo $help->error_description(-1);
                         }
-         }
-         else
+         } else
          {
             echo $help->error_description(16);
          }
-      }
-      else
+      } else
       {
          echo $help->error_description(9);
       }
@@ -395,18 +369,15 @@ class Api
                $data['pimage'] = $pimage;
                $data['action'] = $photo;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(18);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -447,22 +418,19 @@ class Api
                if($size < (10240 * 1024))
                {
                   ;
-               }
-               else
+               } else
                {
                   $data['ack'] = 3;
                   echo json_encode($data);
                   exit();
                }
-            }
-            else
+            } else
             {
                $data['ack'] = 4;
                echo json_encode($data);
                exit();
             }
-         }
-         else
+         } else
          {
             $data['ack'] = 5;
             json_encode($data);
@@ -493,7 +461,8 @@ class Api
 
          $tmp = $_FILES['photo_box']['tmp_name'][$count];
          //$filename = $help->photo_name($ext);
-         $filename = $_SESSION['database'].'_'.$_SESSION['userid'] . '_' . $time . '.' . $ext;
+         $filename = $_SESSION['database'] . '_' . $_SESSION['userid'] . '_' . $time .
+            '.' . $ext;
          if($actual_image_name[$count] = $help->cdn_upload($tmp, 'photo', $filename))
          {
             $caption = $_SESSION['NAME'];
@@ -509,8 +478,7 @@ class Api
                $data['ack'] = 1;
                $k++;
             }
-         }
-         else
+         } else
          {
             $data['ack'] = 2;
          }
@@ -603,8 +571,7 @@ class Api
          $data['name'] = $name;
          $data['pimage'] = $pimage;
          echo json_encode($data);
-      }
-      else
+      } else
       {
          $help->error_description(15);
       }
@@ -643,13 +610,11 @@ class Api
                $data['pimage'] = $pimage;
                echo json_encode($data);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -679,13 +644,11 @@ class Api
                   if($row['priviledge'] == 0)
                   {
                      $no_response[]['profileid'] = $row['profileid'];
-                  }
-                  else
+                  } else
                      if($row['priviledge'] == 1)
                      {
                         $going[]['profileid'] = $row['profileid'];
-                     }
-                     else
+                     } else
                         if($row['priviledge'] == 2)
                         {
                            $declined[]['profileid'] = $row['profileid'];
@@ -704,13 +667,11 @@ class Api
                $data['pimage'] = $pimage;
                echo json_encode($data);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -738,8 +699,7 @@ class Api
                if($profileid != $myprofileid)
                {
                   $status = $database->check_friendship($friendid, $myprofileid);
-               }
-               else
+               } else
                {
                   $status = 3;
                }
@@ -755,13 +715,11 @@ class Api
             $data['pimage'] = $pimage;
             $data['action'] = $friend;
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -789,8 +747,7 @@ class Api
                if($profileid != $myprofileid)
                {
                   $status = $database->check_friendship($friendid, $myprofileid);
-               }
-               else
+               } else
                {
                   $status = 3;
                }
@@ -806,13 +763,11 @@ class Api
             $data['pimage'] = $pimage;
             $data['action'] = $friend;
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -824,8 +779,7 @@ class Api
       if(isset($_GET['profileid']))
       {
          $profileid = $_GET['profileid'];
-      }
-      else
+      } else
       {
          $profileid = $_SESSION['userid'];
       }
@@ -845,8 +799,7 @@ class Api
             $name[$f] = $help->name_fetch($f, $memcached, $database);
             $pimage[$f] = $help->pimage_fetch($f, $memcached, $database);
          }
-      }
-      else
+      } else
       {
          while ($NROW = $res->fetch_array())
          {
@@ -862,8 +815,7 @@ class Api
                      $k++;
                   }
                }
-            }
-            else
+            } else
                if($NROW['ACTIONON'] == $profileid)
                {
                   if(!in_array($NROW['ACTIONBY'], $friend))
@@ -929,13 +881,11 @@ class Api
                $data['pimage'] = $pimage;
                echo json_encode($data);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -987,33 +937,27 @@ class Api
                         $data['response'] = 1;
                         $data['message'] = 'Friend invited to the event';
                         echo json_encode($data);
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(38);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(41);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(2);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -1063,28 +1007,23 @@ class Api
                      $data['response'] = 1;
                      $data['message'] = 'Member added to the group';
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(33);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(2);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -1113,13 +1052,11 @@ class Api
                      $data['response'] = 0;
                      $data['message'] = 'Event request declined';
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                   if($flag == 1)
                   {
                      $result = $database->guest_update($eventid, $myprofileid, 1);
@@ -1129,28 +1066,23 @@ class Api
                         $data['response'] = 1;
                         $data['message'] = 'Event request accepted';
                         echo json_encode($data);
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-            }
-            else
+            } else
             {
                $help->error_description(21);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -1189,13 +1121,11 @@ class Api
                            $data['response'] = 0;
                            $data['message'] = 'Member request rejected';
                            echo json_encode($data);
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(15);
                         }
-                     }
-                     else
+                     } else
                         if($flag == 1)
                         {
                            $actiontype = 308;
@@ -1227,33 +1157,27 @@ class Api
                               $data['message'] = 'Member request accpted';
                               echo json_encode($data);
                            }
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(21);
                         }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(21);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(2);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -1288,13 +1212,11 @@ class Api
                            $data['response'] = 0;
                            $data['message'] = 'Friend request rejected';
                            echo json_encode($data);
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(15);
                         }
-                     }
-                     else
+                     } else
                         if($flag == 1)
                         {
                            $result = 0;
@@ -1334,38 +1256,31 @@ class Api
                                  $data['message'] = 'Friend request accpted';
                                  echo json_encode($data);
                               }
-                           }
-                           else
+                           } else
                            {
                               $help->error_description(15);
                            }
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(21);
                         }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(21);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(2);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -1407,33 +1322,27 @@ class Api
                         $param['wish'] = $wish;
                         $result = $email->email_sample($param);
                         echo json_encode(1);
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -1462,8 +1371,7 @@ class Api
             $container = 'photo';
             $cdn = $doc_cdn . '/';
             $limit = 10240 * 1024;
-         }
-         else
+         } else
          {
             $data['ack'] = 4;
             echo json_encode($data);
@@ -1477,7 +1385,7 @@ class Api
             {
                while (($data = fgetcsv($handle, 1000, ",")) !== false)
                {
-                  $emails[] = $data[14]; 
+                  $emails[] = $data[14];
                }
                // print_r($email_value);
                fclose($handle);
@@ -1494,24 +1402,21 @@ class Api
                         if($email_value == $myemail)
                         {
                            array_push($existing, $email_value);
-                        }
-                        else
+                        } else
                            if($help->is_email($email_value))
                            {
                               $row = $database->is_already_user($email_value);
                               if($row['EMAIL'] == $email_value)
                               {
                                  array_push($existing, $email_value);
-                              }
-                              else
+                              } else
                               {
                                  $row = $database->is_virtual_user($email_value);
                                  if($row['ack'])
                                  {
                                     array_push($invited, $email_value);
                                     $identifier = $row['uniqueid'];
-                                 }
-                                 else
+                                 } else
                                  {
                                     $virtualid = $database->virtual_create($email_value);
                                     $vr = $database->v_select($virtualid);
@@ -1530,13 +1435,11 @@ class Api
                                  $er = $email_object->email_sample($param);
 
                               }
-                           }
-                           else
+                           } else
                            {
                               array_push($invalid, $email_value);
                            }
-                     }
-                     else
+                     } else
                      {
                         array_push($invalid, $email_value);
                      }
@@ -1551,13 +1454,11 @@ class Api
                echo json_encode($data);
             }
 
-         }
-         else
+         } else
          {
             $help->error_description(12);
          }
-      }
-      else
+      } else
       {
          $data['ack'] = 5;
          echo json_encode($data);
@@ -1584,31 +1485,26 @@ class Api
                   {
                      $data[ack] = 1;
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $data[ack] = 2;
                   echo json_encode($data);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
 
 
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
          if(!isset($_GET['id']) && isset($_GET['value']))
          {
             if(!empty($_GET['value']))
@@ -1641,19 +1537,16 @@ class Api
                      }
 
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(23);
                }
 
-            }
-            else
+            } else
             {
                $help->error_description(18);
             }
-         }
-         else
+         } else
          {
             $help->error_description(9);
          }
@@ -1678,13 +1571,11 @@ class Api
 
             $data['action'] = $action;
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(15);
          }
-      }
-      else
+      } else
       {
          $help->error_description(12);
       }
@@ -1778,13 +1669,11 @@ class Api
                $n++;
             }
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -1807,13 +1696,11 @@ class Api
                $data['diaryid'] = $back['DIARYID'];
                echo json_encode($data);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -1846,43 +1733,35 @@ class Api
                            if($update)
                            {
                               echo json_encode(2);
-                           }
-                           else
+                           } else
                            {
                               $help->error_description(15);
                            }
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(30);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(25);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(26);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(31);
                }
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -1916,38 +1795,31 @@ class Api
                         if($update)
                         {
                            echo json_encode(2);
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(15);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(25);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(26);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(42);
                }
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -1980,24 +1852,20 @@ class Api
                {
                   $data['ack'] = 1;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $data['ack'] = 0;
                   echo json_encode($data);
                }
-            }
-            else
+            } else
             {
                $help->error_description(18);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -2022,18 +1890,15 @@ class Api
                   $data[$diaryid] = $name;
                }
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -2070,18 +1935,15 @@ class Api
                }
                $data['user'] = $user;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(9);
             }
-         }
-         else
+         } else
          {
             $help->error_description(9);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -2175,18 +2037,15 @@ class Api
                                  }
                               }
                            }
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(15);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $error['code'] = 12;
                      $error['message'] = 'You don\'t have sufficient permission to perform this action';
@@ -2194,23 +2053,19 @@ class Api
                      $data['error'] = $error;
                      echo json_encode($data);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(11);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -2279,23 +2134,19 @@ class Api
                   $data['name'] = $name;
                   $data['pimage'] = $pimage;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(11);
                }
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -2332,8 +2183,7 @@ class Api
                         $profileid = $database->virtual_create($email);
                         $visible_id = $_SESSION['visible'];
                         $actionid = $database->get_actionid($profileid, $actiontype, 0, $visible_id);
-                     }
-                     else
+                     } else
                         if($retv['ack'] == 1)
                         {
                            $actiontype = 1151;
@@ -2341,8 +2191,7 @@ class Api
                            $visible_id = $_SESSION['visible'];
                            $actionid = $database->get_actionid($profileid, $actiontype, 0, $visible_id);
                         }
-                  }
-                  else
+                  } else
                   {
                      $actiontype = 1101;
                      $profileid = $row['USERID'];
@@ -2358,8 +2207,7 @@ class Api
                         if($actiontype = 1101)
                         {
                            $email_object->crush($profileid);
-                        }
-                        else
+                        } else
                            if($actiontype = 1151)
                            {
                               $email_object->crush_outsource($email);
@@ -2367,13 +2215,11 @@ class Api
                         echo json_encode($data);
                         exit;
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   if($rets['status'] == 1)
                   {
@@ -2383,16 +2229,14 @@ class Api
                         if($actiontype = '1101')
                         {
                            $email_object->crush($profileid);
-                        }
-                        else
+                        } else
                            if($actiontype = '1151')
                            {
                               $email_object->crush_outsource($email);
                            }
                         echo json_encode($data);
                         exit;
-                     }
-                     else
+                     } else
                         if($rets['crushat'] == $myemail)
                         {
                            $status = $rets['status'] - 1;
@@ -2412,8 +2256,7 @@ class Api
                               exit;
                            }
                         }
-                  }
-                  else
+                  } else
                      if($rets['status'] == 0)
                      {
                         $data['result'] = 4;
@@ -2421,18 +2264,15 @@ class Api
                         exit;
                      }
                }
-            }
-            else
+            } else
             {
                $help->error_description(23);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -2461,34 +2301,28 @@ class Api
                         $data['ack'] = 1;
                         $data['diaryid'] = $res['DIARYID'];
                         $data['message'] = 'Diary Created';
-                     }
-                     else
+                     } else
                      {
                         $data['ack'] = 0;
                         $data['message'] = 'Unable to create diary';
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(10);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -2519,18 +2353,15 @@ class Api
                $data['name'] = $name;
                $data['pimage'] = $pimage;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(24);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -2568,28 +2399,23 @@ class Api
                      $data['name'] = $name;
                      $data['pimage'] = $pimage;
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(24);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(11);
                }
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -2625,33 +2451,27 @@ class Api
                         $data['ack'] = 1;
                         $data['message'] = 'A link has been sent to this email address. Please click at the link or paste the link in the browser to recover your password.';
                         echo json_encode($data);
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(17);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(16);
                }
-            }
-            else
+            } else
             {
                $help->error_description(23);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -2680,24 +2500,21 @@ class Api
                   if($email_value == $myemail)
                   {
                      array_push($existing, $email_value);
-                  }
-                  else
+                  } else
                      if($help->is_email($email_value))
                      {
                         $row = $database->is_already_user($email_value);
                         if($row['EMAIL'] == $email_value)
                         {
                            array_push($existing, $email_value);
-                        }
-                        else
+                        } else
                         {
                            $row = $database->is_virtual_user($email_value);
                            if($row['ack'])
                            {
                               array_push($invited, $email_value);
                               $identifier = $row['uniqueid'];
-                           }
-                           else
+                           } else
                            {
                               $virtualid = $database->virtual_create($email_value);
                               $vr = $database->v_select($virtualid);
@@ -2714,13 +2531,11 @@ class Api
                            $param['actionby'] = $myprofileid;
                            $er = $email_object->email_sample($param);
                         }
-                     }
-                     else
+                     } else
                      {
                         array_push($invalid, $email_value);
                      }
-               }
-               else
+               } else
                {
                   array_push($invalid, $email_value);
                }
@@ -2732,13 +2547,11 @@ class Api
             $data['ack'] = 1;
             echo json_encode($data);
 
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -2764,8 +2577,7 @@ class Api
                {
                   $data['ack'] = 0;
                   echo json_encode($data);
-               }
-               else
+               } else
                   if($help->is_email($email))
                   {
                      $row = $database->is_already_user($email);
@@ -2774,15 +2586,13 @@ class Api
                         $data['ack'] = 1;
                         $data['profileid'] = $row['USERID'];
                         echo json_encode($data);
-                     }
-                     else
+                     } else
                      {
                         $row = $database->is_virtual_user($email);
                         if($row['ack'])
                         {
                            $virtualid = $row['virtualid'];
-                        }
-                        else
+                        } else
                         {
                            $virtualid = $database->virtual_create($email);
                         }
@@ -2803,24 +2613,20 @@ class Api
                            echo json_encode($data);
                         }
                      }
-                  }
-                  else
+                  } else
                   {
                      $data['ack'] = 3;
                      echo json_encode($data);
                   }
-            }
-            else
+            } else
             {
                $help->error_description(36);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -2848,15 +2654,13 @@ class Api
                   $data['message'] = "This email is already registered with Quipmate. Please login to continue.";
                   $data['profileid'] = $row['USERID'];
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $row = $database->is_virtual_user($email);
                   if($row['ack'])
                   {
                      $virtualid = $row['virtualid'];
-                  }
-                  else
+                  } else
                   {
                      $virtualid = $database->virtual_create($email);
                   }
@@ -2872,26 +2676,22 @@ class Api
                      $data['ack'] = 2;
                      $data['message'] = "A link has been sent to your email. Please click that link to register for Quipmate.";
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $data['ack'] = 3;
                      $data['message'] = "There is some problem in sending registration link to your email!";
                      echo json_encode($data);
                   }
                }
-            }
-            else
+            } else
             {
                $help->error_description(23);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -2919,16 +2719,14 @@ class Api
                   $data['message'] = "This email is already registered with Quipmate. Please login to continue.";
                   $data['profileid'] = $row['USERID'];
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $row = $database->is_virtual_user($email);
                   if($row['ack'])
                   {
                      $virtualid = $row['virtualid'];
                      $code = $row['code'];
-                  }
-                  else
+                  } else
                   {
                      $code = rand(1000, 9999);
                      $virtualid = $database->virtual_create_mobile($email, $code);
@@ -2951,18 +2749,15 @@ class Api
                      echo json_encode($data);
                   }
                }
-            }
-            else
+            } else
             {
                $help->error_description(23);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -3000,25 +2795,21 @@ class Api
                   $data['name'] = $name;
                   $data['pimage'] = $pimage;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $data['count'] = 0;
                   $data['message'] = 'No pending member request';
                   echo json_encode($data);
                }
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -3051,15 +2842,13 @@ class Api
             $data['name'] = $name;
             $data['pimage'] = $pimage;
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $data['count'] = 0;
             $data['message'] = 'You don\'t have any pending friend request';
             echo json_encode($data);
          }
-      }
-      else
+      } else
       {
          $help->error_description(15);
       }
@@ -3101,8 +2890,7 @@ class Api
          $data['name'] = $_SESSION['name_json'];
          $data['pimage'] = $_SESSION['pimage_json'];
          echo json_encode($data);
-      }
-      else
+      } else
       {
          $help->error_description(15);
       }
@@ -3121,8 +2909,7 @@ class Api
             if(isset($_GET['profileid']) && !empty($_GET['profileid']))
             {
                $profileid = $_GET['profileid'];
-            }
-            else
+            } else
             {
                $profileid = $_SESSION['userid'];
             }
@@ -3148,23 +2935,19 @@ class Api
                   $data['name'] = $name;
                   $data['pimage'] = $pimage;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $error_description(10);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -3224,53 +3007,43 @@ class Api
                                        $email->email_sample($param);
                                     }
                                     echo json_encode($data);
-                                 }
-                                 else
+                                 } else
                                  {
                                     $help->error_description(15);
                                  }
-                              }
-                              else
+                              } else
                               {
                                  $help->error_description(15);
                               }
-                           }
-                           else
+                           } else
                            {
                               $help->error_description(15);
                            }
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(10);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(16);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(12);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(2);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -3301,33 +3074,27 @@ class Api
                         $data['ack'] = 1;
                         $data['message'] = 'Removed';
                         echo json_encode($data);
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(32);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -3375,33 +3142,27 @@ class Api
                         $data['ack'] = 1;
                         $data['message'] = 'Admin';
                         echo json_encode($data);
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(32);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(32);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -3429,28 +3190,23 @@ class Api
                      $data['ack'] = 1;
                      $data['message'] = 'Admin Removed';
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(10);
                }
-            }
-            else
+            } else
             {
                $help->error_description(32);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -3488,43 +3244,35 @@ class Api
                               $data['ack'] = 1;
                               $data['groupid'] = $groupid;
                               echo json_encode($data);
-                           }
-                           else
+                           } else
                            {
                               $help->error_description(15);
                            }
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(12);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(10);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(10);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -3562,38 +3310,31 @@ class Api
                            $data['ack'] = 1;
                            $data['groupid'] = $groupid;
                            echo json_encode($data);
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(15);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(10);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(10);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -3622,29 +3363,24 @@ class Api
                      $data['ack'] = 1;
                      $data['pageid'] = $pageid;
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
 
-               }
-               else
+               } else
                {
                   $help->error_description(10);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -3692,48 +3428,39 @@ class Api
                                  $data['ack'] = 1;
                                  $data['eventid'] = $eventid;
                                  echo json_encode($data);
-                              }
-                              else
+                              } else
                               {
                                  $help->error_description(15);
                               }
-                           }
-                           else
+                           } else
                            {
                               $help->error_description(12);
                            }
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(29);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(28);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(10);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -3782,43 +3509,35 @@ class Api
                               $data['ack'] = 1;
                               $data['eventid'] = $eventid;
                               echo json_encode($data);
-                           }
-                           else
+                           } else
                            {
                               $help->error_description(15);
                            }
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(29);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(29);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(28);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(10);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -3869,48 +3588,39 @@ class Api
                                  $data['ack'] = 1;
                                  $data['eventid'] = $eventid;
                                  echo json_encode($data);
-                              }
-                              else
+                              } else
                               {
                                  $help->error_description(15);
                               }
-                           }
-                           else
+                           } else
                            {
                               $help->error_description(29);
                            }
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(28);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(10);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(10);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -3936,8 +3646,7 @@ class Api
                if(preg_match("/^http:\/\//", $m) || preg_match("/^https:\/\//", $m))
                {
                   ;
-               }
-               else
+               } else
                {
                   $m = 'https://' . $m;
                }
@@ -3949,8 +3658,7 @@ class Api
             {
                $data['actiontype'] = 1;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $dom = new DOMDocument();
                $src = array();
@@ -3992,8 +3700,7 @@ class Api
                      $src[] = $link;
                      $data['src'] = $src;
                      $data['link'] = $link;
-                  }
-                  else
+                  } else
                      if($host == 'http://youtu.be/' || $host == 'https://youtu.be/')
                      {
                         $host = 'https://youtu.be/';
@@ -4002,8 +3709,7 @@ class Api
                         $path = explode($host, $link);
                         $data['link'] = $link;
                         $data['path'] = $path[1];
-                     }
-                     else
+                     } else
                         if($host == 'http://www.youtube.com/' || $host == 'https://www.youtube.com/')
                         {
                            $host == 'https://www.youtube.com/';
@@ -4013,8 +3719,7 @@ class Api
                            $path = explode('&', $path[1]);
                            $data['link'] = $link;
                            $data['path'] = $path[0];
-                        }
-                        else
+                        } else
                         {
                            $data['actiontype'] = 1600;
                            $data['video'] = 0;
@@ -4043,19 +3748,16 @@ class Api
                            $data['link'] = $link;
                         }
                         echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(19);
                }
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -4108,23 +3810,19 @@ class Api
                   $data['name'] = $name;
                   $data['photo'] = $pimage;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(22);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -4168,8 +3866,7 @@ class Api
                   {
                      $name[$message[$k]['actionon']] = $help->diary_name_fetch($message[$k]['actionon'],
                         $memcached, $database);
-                  }
-                  else
+                  } else
                   {
                      $name[$message[$k]['actionon']] = $help->name_fetch($message[$k]['actionon'], $memcached,
                         $database);
@@ -4185,18 +3882,15 @@ class Api
                $data['name'] = $name;
                $data['pimage'] = $pimage;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -4229,8 +3923,7 @@ class Api
                $pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcached, $database);
                $data['ack'] = 1;
             }
-         }
-         else
+         } else
             if($NROW['ACTIONON'] == $myprofileid)
             {
                if(!in_array($NROW['ACTIONBY'], $friend))
@@ -4293,33 +3986,27 @@ class Api
                         $data['actionid'] = $actionid;
                         $data['message'] = $message;
                         echo json_encode($data);
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(10);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(2);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -4363,28 +4050,23 @@ class Api
                      $data['actionid'] = $actionid;
                      $data['message'] = $message;
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(10);
                }
-            }
-            else
+            } else
             {
                $help->error_description(11);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -4420,28 +4102,23 @@ class Api
                            echo json_encode($data);
                         }
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(10);
                }
-            }
-            else
+            } else
             {
                $help->error_description(11);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -4475,38 +4152,37 @@ class Api
             $data['friend'] = $friend;
             $data['name'] = $name;
             $data['pimage'] = $pimage;
-         }
-         else
+         } else
          {
             $data['count'] = 0;
             $data['message'] = 'You don\'t have any pending friend request';
          }
       }
-     /* if($result = $database->missu_select($myprofileid))
+      /* if($result = $database->missu_select($myprofileid))
       {
-         if($result->num_rows)
-         {
-            $k = 0;
-            while ($row = $result->fetch_array())
-            {
-               $missu[$k]['profileid'] = $row['ACTIONBY'];
-               $missu[$k]['pageid'] = $row['ACTIONID'];
-               $name[$missu[$k]['profileid']] = $help->name_fetch($missu[$k]['profileid'], $memcached,
-                  $database);
-               $pimage[$missu[$k]['profileid']] = $help->pimage_fetch($missu[$k]['profileid'],
-                  $memcached, $database);
-               $k++;
-            }
-            $data['missu_count'] = $result->num_rows;
-            $data['missu'] = $missu;
-            $data['name'] = $name;
-            $data['pimage'] = $pimage;
-         }
-         else
-         {
-            $data['count'] = 0;
-            $data['message'] = 'Opps ! Nobody\'s missing you !';
-         }
+      if($result->num_rows)
+      {
+      $k = 0;
+      while ($row = $result->fetch_array())
+      {
+      $missu[$k]['profileid'] = $row['ACTIONBY'];
+      $missu[$k]['pageid'] = $row['ACTIONID'];
+      $name[$missu[$k]['profileid']] = $help->name_fetch($missu[$k]['profileid'], $memcached,
+      $database);
+      $pimage[$missu[$k]['profileid']] = $help->pimage_fetch($missu[$k]['profileid'],
+      $memcached, $database);
+      $k++;
+      }
+      $data['missu_count'] = $result->num_rows;
+      $data['missu'] = $missu;
+      $data['name'] = $name;
+      $data['pimage'] = $pimage;
+      }
+      else
+      {
+      $data['count'] = 0;
+      $data['message'] = 'Opps ! Nobody\'s missing you !';
+      }
       } */
       if($result = $database->event_request_select($myprofileid))
       {
@@ -4523,8 +4199,7 @@ class Api
             }
             $data['event_request_count'] = $result->num_rows;
             $data['event'] = $event;
-         }
-         else
+         } else
          {
             $data['count'] = 0;
             $data['message'] = 'Opps ! No event requests !';
@@ -4561,15 +4236,13 @@ class Api
             $data['name'] = $name;
             $data['pimage'] = $pimage;
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $data['count'] = 0;
             $data['message'] = 'Opps ! Nobody\'s missing you !';
             echo json_encode($data);
          }
-      }
-      else
+      } else
       {
          $help->error_description(15);
       }
@@ -4623,14 +4296,12 @@ class Api
                               }
                               echo json_encode($data);
                            }
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(15);
 
                         }
-                     }
-                     else
+                     } else
                         if($row['status'] == 2)
                         {
                            $pageid = $database->missu_actionid_select($myprofileid, $profileid);
@@ -4660,40 +4331,33 @@ class Api
                                     $email->email_sample($param);
                                  }
                               }
-                           }
-                           else
+                           } else
                            {
                               $help->error_description(15);
                            }
-                        }
-                        else
+                        } else
                         {
                            $data['ack'] = 0;
                            $data['message'] = 'Please wait for a response on your miss u';
                            echo json_encode($data);
                         }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(12);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(2);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -4734,18 +4398,15 @@ class Api
                $data['name'] = $name;
                $data['pimage'] = $pimage;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -4806,18 +4467,15 @@ class Api
                $data['name'] = $name;
                $data['pimage'] = $pimage;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -4841,23 +4499,19 @@ class Api
                   $value = $help->moderator_status($profileid, $memcached, $database, 1);
                   $data['ack'] = 1;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(16);
                }
-            }
-            else
+            } else
             {
                $help->error_description(12);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -4906,23 +4560,19 @@ class Api
                {
                   $data['ack'] = '1';
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(12);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -4939,15 +4589,14 @@ class Api
          $result = $database->moderator_select();
          while ($row = $result->fetch_array())
          {
-            $row['profileid'] = $row['profileid'];
+            $action[$i]['profileid'] = $row['profileid'];
             $action[$i]['name'] = $help->name_fetch($row['profileid'], $memcached, $database);
             $action[$i]['image'] = $help->pimage_fetch($row['profileid'], $memcached, $database);
             $i++;
          }
          $data['action'] = $action;
          echo json_encode($data);
-      }
-      else
+      } else
       {
          $help->error_description(12);
       }
@@ -4969,8 +4618,7 @@ class Api
          }
          $data['info'] = $info;
          echo json_encode($data);
-      }
-      else
+      } else
       {
          $help->error_description(12);
       }
@@ -4984,33 +4632,39 @@ class Api
          if(!empty($_GET['links']) && !empty($_GET['title']))
          {
             global $database;
-
-            $new_link = $_GET['links'];
-            $link_title = $_GET['title'];
-            $size = strlen($new_link);
-            if($size < 500)
+            $myprofileid = $_SESSION['userid'];
+            if($database->moderator_check($myprofileid))
             {
-
-               if($data['link_id'] = $database->usefullink_insert($new_link, $link_title))
+               $new_link = $_GET['links'];
+               $link_title = $_GET['title'];
+               $size = strlen($new_link);
+               if($ret = $database->usefullink_insert($new_link, $link_title))
                {
-                  $data['ack'] = 1;
-                  echo json_encode($data);
+                  if($ret == 1)
+                  {
+                     $data['ack'] = 1;
+                     echo json_encode($data);
+                  } else
+                     if($ret == 2)
+                     {
+                        $data['ack'] = 2;
+                        echo json_encode($data);
+                     }
+               } else
+               {
+                  $help->error_description(15);
                }
-
-            }
-            else
+            } else
             {
-               $help->error_description(43);
-
+               $help->error_description(12);
             }
-         }
-         else
+
+         } else
          {
             $help->error_description(18);
          }
 
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -5056,19 +4710,16 @@ class Api
                $data['id'] = $link_id;
                echo json_encode($data);
 
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
 
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -5082,30 +4733,33 @@ class Api
       {
          if(!empty($_GET['infoadd']) && !empty($_GET['infotype']))
          {
-            global $database;
-
-            $info_name = $_GET['infoadd'];
-            $type = $_GET['infotype'];
-
-            if($data['infoid'] = $database->mydiary_create_wo_admin($type, $info_name))
+            if($database->moderator_check($myprofileid))
             {
-               $data['ack'] = 1;
-               $data['infoadd'] = $info_name;
-               echo json_encode($data);
+               global $database;
 
-            }
-            else
+               $info_name = $_GET['infoadd'];
+               $type = $_GET['infotype'];
+
+               if($data['infoid'] = $database->mydiary_create_wo_admin($type, $info_name))
+               {
+                  $data['ack'] = 1;
+                  $data['infoadd'] = $info_name;
+                  echo json_encode($data);
+
+               } else
+               {
+                  $help->error_description(15);
+               }
+            } else
             {
-               $help->error_description(15);
+               $help->error_description(12);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
 
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -5134,13 +4788,11 @@ class Api
             $data['info'] = $info;
 
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -5163,25 +4815,107 @@ class Api
                $data['id'] = $info_id;
                echo json_encode($data);
 
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
 
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
 
    }
+function preview_doc()
+{
+  global $help;
+  if(isset($_GET['doc']))
+  {
+     if(!empty($_GET['doc']))
+     {
+        $docname = $_GET['doc'];
+        
+         // Get cURL resource
+        $curl = curl_init();
+        // Set some options - we are passing in a useragent too here
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => 'https://view-api.box.com/1/documents',
+            CURLOPT_HTTPHEADER => array('Authorization :Token jizb4owywrjwi0qbcjh3l5q40rmdxt63','Content-type : application/json'),
+            CURLOPT_POST => 1,
+            CURLOPT_POSTFIELDS => array(url => $docname)
+        ));
+        
+            // Send the request & save response to $resp
+            $resp = curl_exec($curl);
+            // Close request to clear up some resources
+            curl_close($curl);  
+            $array = json_decode($resp);
+            foreach ($array as $key => $value) 
+            {
+                if($key == 'id')
+                {
+                    $documentid = $value;
+                    break;
+                }
+            }
+           echo $documentid;
+           $data['document_id'] = $documentid;
+           // echo json_encode($data);
+            //$data = '{"document_id":"'.$documentid.'"}';
+            //$query = http_build_query($data, '', '&');
+            //$data = json_encode($data);
+            //echo $data;
+            $curl1 = curl_init(); 
+            curl_setopt_array($curl1, array( 
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => 'https://view-api.box.com/1/sessions',
+            CURLOPT_POST => 1,
+          //  CURLOPT_HTTPHEADER => array('Authorization :Token jizb4owywrjwi0qbcjh3l5q40rmdxt63','Content-Type : application/json',),
+            CURLOPT_POSTFIELDS => json_encode($data)
+            //CURLOPT_POSTFIELDS => array("document_id" => $documentid)
+            //CURLOPT_POSTFIELDS => $query
+            ));
+            curl_setopt($curl1, CURLOPT_HTTPHEADER, array(
+                'Authorization :Token jizb4owywrjwi0qbcjh3l5q40rmdxt63',
+                'Content-type: application/json'
+                //'Content-Length: ' . strlen($documentid)
+                
+            ));
+            
+            
+            $resp1 = curl_exec($curl1);
+            curl_close($curl1); 
 
+           echo $resp1;   
+           /* $array = json_decode($resp);
+            foreach ($array as $key => $value) 
+            {
+                if($key == 'id')
+                {
+                    $sessonid = $value;
+                }
+            }
+            echo $sessonid;*/
+            
+        
+     } 
+     else
+     {
+        $help->error_description(18);
+     }
+
+  } 
+  else
+  {
+     $help->error_description(9);
+  }
+
+}
    function star_of_the_week()
    {
       global $help;
@@ -5223,26 +4957,22 @@ class Api
                         $email->email_sample($param);
                      }
 
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
                }
-            }
-            else
+            } else
             {
                $help->error_description(44);
 
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
 
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -5271,8 +5001,7 @@ class Api
          $data['name'] = $name;
          $data['star'] = $star;
          echo json_encode($data);
-      }
-      else
+      } else
       {
          $help->error_description(15);
       }
@@ -5317,8 +5046,7 @@ class Api
             $container = 'doc';
             $cdn = $doc_cdn . '/';
             $limit = 10240 * 1024;
-         }
-         else
+         } else
          {
             $data['ack'] = 4;
             echo json_encode($data);
@@ -5395,36 +5123,30 @@ class Api
                               }
                            }
                         }
-                     }
-                     else
+                     } else
                      {
                         $data['ack'] = 0;
                         echo json_encode($data);
                      }
-                  }
-                  else
+                  } else
                   {
                      $data['ack'] = 2;
                      echo json_encode($data);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $data['ack'] = 3;
             echo json_encode($data);
          }
-      }
-      else
+      } else
       {
          $data['ack'] = 5;
          echo json_encode($data);
@@ -5457,13 +5179,11 @@ class Api
 
             $data['pinned_doc'] = $a;
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_desscription(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -5485,19 +5205,16 @@ class Api
                $data['ack'] = 1;
                $data['docid'] = $docid;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_desscription(15);
             }
 
-         }
-         else
+         } else
          {
             $help->error_desscription(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -5529,8 +5246,7 @@ class Api
             $container = 'photo';
             $cdn = $photo_cdn . '/';
             $limit = 10240 * 1024;
-         }
-         else
+         } else
          {
             $data['ack'] = 4;
             echo json_encode($data);
@@ -5570,25 +5286,21 @@ class Api
                   $data['file'] = $cdn . $actual_image_name;
                   $data['caption'] = $name;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $data['ack'] = 0;
                   echo json_encode($data);
                }
-            }
-            else
+            } else
             {
                $data['ack'] = 2;
                echo json_encode($data);
             }
-         }
-         else
+         } else
          {
             $help->error_description(12);
          }
-      }
-      else
+      } else
       {
          $data['ack'] = 5;
          echo json_encode($data);
@@ -5618,8 +5330,7 @@ class Api
 
          $data['flash'] = $flash;
          echo json_encode($data);
-      }
-      else
+      } else
       {
          $help->error_description(15);
       }
@@ -5646,23 +5357,19 @@ class Api
                   $database->star_remove($profileid);
                   $data['ack'] = 1;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(16);
                }
-            }
-            else
+            } else
             {
                $help->error_description(12);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -5686,42 +5393,37 @@ class Api
                   $value = $help->moderator_status($profileid, $memcached, $database, 1);
                   $data['ack'] = 1;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(16);
                }
-            }
-            else
+            } else
             {
                $help->error_description(12);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
    }
    function enable_user()
    {
-    global $database,$help;
-    $myprofileid = $_SESSION['userid'];
-    if($database->user_enable($myprofileid))
-    {
-        $_SESSION['STEP'] =0;    
-        $data['ack'] = 1;
-        echo json_encode($data);
-    }
-    else
-    {
-        $help->error_description(15);
-    }
-    
+      global $database, $help;
+      $myprofileid = $_SESSION['userid'];
+      if($database->user_enable($myprofileid))
+      {
+         $_SESSION['STEP'] = 0;
+         $data['ack'] = 1;
+         echo json_encode($data);
+      } else
+      {
+         $help->error_description(15);
+      }
+
    }
    function user_delete()
    {
@@ -5740,38 +5442,34 @@ class Api
                {
                   $database->user_delete($profileid);
                   $data['ack'] = 1;
-                  $data['profileid'] =$profileid;
+                  $data['profileid'] = $profileid;
                   if($myprofileid == $profileid)
                   {
-                    $_SESSION['STEP'] = -2;
+                     $_SESSION['STEP'] = -2;
                   }
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(16);
                }
 
-            }
-            else if($myprofileid == $profileid)
-            {
-                $database->user_delete($profileid);
-                $_SESSION['STEP'] = -2;
-                $data['profileid'] =$profileid;
-                $data['ack'] = 1;
-                echo json_encode($data);
-            }
-            else
-            {
-               $help->error_description(12);
-            }
-         }
-         else
+            } else
+               if($myprofileid == $profileid)
+               {
+                  $database->user_delete($profileid);
+                  $_SESSION['STEP'] = -2;
+                  $data['profileid'] = $profileid;
+                  $data['ack'] = 1;
+                  echo json_encode($data);
+               } else
+               {
+                  $help->error_description(12);
+               }
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -5801,28 +5499,23 @@ class Api
                      $data['name'] = $help->name_fetch($profileid, $memcached, $database);
                      $data['pimage'] = $help->pimage_fetch($profileid, $memcached, $database);
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(16);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(23);
                }
-            }
-            else
+            } else
             {
                $help->error_description(12);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -5863,18 +5556,15 @@ class Api
                $data['pimage'] = $pimage;
                $data['tag'] = $_SESSION['tag_json'];
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(12);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -5911,13 +5601,11 @@ class Api
             $data['pimage'] = $pimage;
             $data['tag'] = $_SESSION['tag_json'];
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -5954,13 +5642,11 @@ class Api
             $data['pimage'] = $pimage;
             $data['tag'] = $_SESSION['tag_json'];
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -6010,24 +5696,22 @@ class Api
             $data['name'] = $name;
             $data['pimage'] = $pimage;
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
    }
 
-   function people_fetch()
+	function people_fetch()
    {
       global $help;
       if(isset($_GET['start']) && isset($_GET['new_user']))
       {
-         if($_GET['start'] != '' &&  !empty($_GET['new_user']))
+         if($_GET['start'] != '' && !empty($_GET['new_user']))
          {
             $myprofileid = $_SESSION['USERID'];
             $start = $_GET['start'];
@@ -6039,55 +5723,27 @@ class Api
             $j = 0;
             while ($row = $res->fetch_array())
             {
-                
-              /* if(!(array_key_exists($row['profileid'],$email)))
-               { 
-               $action[$j]['profileid'] = $row['profileid'];
-               $action[$j]['status'] = $database->check_friendship($myprofileid, $action[$j]['profileid']);
-               $j++;
-               } */
                $action[$i]['profileid'] = $row['profileid'];
                $action[$i]['status'] = $database->check_friendship($myprofileid, $action[$i]['profileid']);
-               $email[$row['profileid']] = $row['email'];
-                $value = end(explode(',',$row['profession']));
-                $profession[$row['profileid']] = $value;
-                $value = end(explode(',',$row['designation']));
-                $designation[$row['profileid']] = $value;
-                $team[$row['profileid']] = $row['team'];
-            /*   if($row['type'] == 202)
-               {
-                 $value = end(explode(',',$row['detail']));
-                 $profession[$row['profileid']] = $value;
-               }
-               if($row['type'] == 239)
-               {
-                 $value = end(explode(',',$row['detail']));
-                 $designation[$row['profileid']] = $value;
-               }
-               if($row['type'] == 234)
-               {
-                 $team[$row['profileid']] = $row['detail'];
-               }     */          
-               $name[$row['profileid']] = $help->name_fetch($row['profileid'], $memcached,$database);
-               $pimage[$row['profileid']] = $help->pimage_fetch($row['profileid'],$memcached, $database);
-               
+               $action[$i]['email'] = $row['email'];
+               $value = end(explode(',', $row['profession']));
+               $action[$i]['profession'] = $value;
+               $value = end(explode(',', $row['designation']));
+               $action[$i]['designation'] = $value;
+               $action[$i]['team'] = $row['team'];
+               $name[$row['profileid']] = $help->name_fetch($row['profileid'], $memcached, $database);
+               $pimage[$row['profileid']] = $help->pimage_fetch($row['profileid'], $memcached,$database);
                $i++;
             }
             $data['action'] = $action;
             $data['name'] = $name;
             $data['pimage'] = $pimage;
-            $data['profession'] = $profession;
-            $data['designation'] = $designation;
-            $data['team'] = $team;
-            $data['email'] = $email;
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -6124,13 +5780,11 @@ class Api
             $data['pimage'] = $pimage;
             $data['tag'] = $_SESSION['tag_json'];
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -6199,38 +5853,32 @@ class Api
                            $data['life_is_fun'] = sha1($actionid . 'pass1reset!');
                            $data['file'] = $photo_cdn . '/' . $actual_image_name;
                            echo json_encode($data);
-                        }
-                        else
+                        } else
                         {
                            $data['ack'] = 0;
                            echo json_encode($data);
                         }
-                     }
-                     else
+                     } else
                      {
                         $data['ack'] = 2;
                         echo json_encode($data);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description();
                   }
                }
-            }
-            else
+            } else
             {
                $data['ack'] = 3;
                echo json_encode($data);
             }
-         }
-         else
+         } else
          {
             $data['ack'] = 4;
             echo json_encode($data);
          }
-      }
-      else
+      } else
       {
          $data['ack'] = 5;
          echo json_encode($data);
@@ -6293,38 +5941,32 @@ class Api
                         $data['photo'] = $profile1_cdn . '/' . $filename;
                         $data['thumb'] = $profile1_cdn . '/' . $filename;
                         echo json_encode($data);
-                     }
-                     else
+                     } else
                      {
                         $data['ack'] = 0;
                         echo json_encode($data);
                      }
-                  }
-                  else
+                  } else
                   {
                      $data['ack'] = 2;
                      echo json_encode($data);
                   }
-               }
-               else
+               } else
                {
                   $data['ack'] = 2;
                   echo json_encode($data);
                }
-            }
-            else
+            } else
             {
                $data['ack'] = 3;
                echo json_encode($data);
             }
-         }
-         else
+         } else
          {
             $data['ack'] = 4;
             echo json_encode($data);
          }
-      }
-      else
+      } else
       {
          $data['ack'] = 5;
          echo json_encode($data);
@@ -6381,28 +6023,25 @@ class Api
             $container = 'photo';
             $cdn = $photo_cdn . '/';
             $limit = 10240 * 1024;
-         }
-         else
+         } else
             if(in_array(strtolower($ext), $video_formats))
             {
                $actiontype = 425;
                $container = 'video';
                $cdn = $video_cdn . '/';
                $limit = 100960 * 1024;
-            }
-            else
+            } else
                if(in_array(strtolower($ext), $doc_formats))
                {
                   $actiontype = 426;
                   $container = 'doc';
                   $cdn = $doc_cdn . '/';
                   $limit = 10240 * 1024;
-               }
-               else
+               } else
                {
                   $data['ack'] = 4;
                   echo json_encode($data);
-                  exit(1); 
+                  exit(1);
                }
                if($size < $limit)
                {
@@ -6444,14 +6083,12 @@ class Api
                               {
                                  $result = $database->doc_insert($profileid, $actionid, $actual_image_name, $name,
                                     $cdn);
-                              }
-                              else
+                              } else
                                  if($container == 'video')
                                  {
-                                    $result = $database->video_insert($profileid, $actionid, $actual_image_name, $cdn);
+                                    $result = $database->video_insert($profileid, $actionid, $actual_image_name, $cdn,$vthumb);
                                     $name = $cdn . $vthumb;
-                                 }
-                                 else
+                                 } else
                                     if($container == 'photo')
                                     {
                                        $result = $database->image_insert($profileid, $actionid, $actual_image_name, '0',
@@ -6494,36 +6131,30 @@ class Api
                                     }
                                  }
                               }
-                           }
-                           else
+                           } else
                            {
                               $data['ack'] = 0;
                               echo json_encode($data);
                            }
-                        }
-                        else
+                        } else
                         {
                            $data['ack'] = 2;
                            echo json_encode($data);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(12);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(16);
                   }
-               }
-               else
+               } else
                {
                   $data['ack'] = 3;
                   echo json_encode($data);
                }
-      }
-      else
+      } else
       {
          $data['ack'] = 5;
          echo json_encode($data);
@@ -6579,24 +6210,21 @@ class Api
             $container = 'photo';
             $cdn = $photo_cdn . '/';
             $limit = 10240 * 1024;
-         }
-         else
+         } else
             if(in_array(strtolower($ext), $video_formats))
             {
                $actiontype = 2925;
                $container = 'video';
                $cdn = $video_cdn . '/';
                $limit = 100960 * 1024;
-            }
-            else
+            } else
                if(in_array(strtolower($ext), $doc_formats))
                {
                   $actiontype = 2926;
                   $container = 'doc';
                   $cdn = $doc_cdn . '/';
                   $limit = 10240 * 1024;
-               }
-               else
+               } else
                {
                   $data['ack'] = 4;
                   echo json_encode($data);
@@ -6640,14 +6268,12 @@ class Api
                               {
                                  $result = $database->doc_insert($profileid, $actionid, $actual_image_name, $name,
                                     $cdn);
-                              }
-                              else
+                              } else
                                  if($container == 'video')
                                  {
-                                    $result = $database->video_insert($profileid, $actionid, $actual_image_name, $cdn);
+                                    $result = $database->video_insert($profileid, $actionid, $actual_image_name, $cdn,$vthumb);
                                     $name = $cdn . $vthumb;
-                                 }
-                                 else
+                                 } else
                                     if($container == 'photo')
                                     {
                                        $result = $database->image_insert($profileid, $actionid, $actual_image_name, '0',
@@ -6674,36 +6300,30 @@ class Api
                               $param['actionby'] = $myprofileid;
                               $param['actionid'] = $actionid;
                               $database->broadcast_notice_insert($actionid, $actiontype, $profileid);
-                           }
-                           else
+                           } else
                            {
                               $data['ack'] = 0;
                               echo json_encode($data);
                            }
-                        }
-                        else
+                        } else
                         {
                            $data['ack'] = 2;
                            echo json_encode($data);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(12);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(16);
                   }
-               }
-               else
+               } else
                {
                   $data['ack'] = 3;
                   echo json_encode($data);
                }
-      }
-      else
+      } else
       {
          $data['ack'] = 5;
          echo json_encode($data);
@@ -6760,24 +6380,21 @@ class Api
             $container = 'photo';
             $cdn = $photo_cdn . '/';
             $limit = 10240 * 1024;
-         }
-         else
+         } else
             if(in_array(strtolower($ext), $video_formats))
             {
                $actiontype = 325;
                $container = 'video';
                $cdn = $video_cdn . '/';
                $limit = 100960 * 1024;
-            }
-            else
+            } else
                if(in_array(strtolower($ext), $doc_formats))
                {
                   $actiontype = 326;
                   $container = 'doc';
                   $cdn = $doc_cdn . '/';
                   $limit = 10240 * 1024;
-               }
-               else
+               } else
                {
                   $data['ack'] = 4;
                   echo json_encode($data);
@@ -6823,14 +6440,12 @@ class Api
                               {
                                  $result = $database->doc_insert($profileid, $actionid, $actual_image_name, $name,
                                     $cdn);
-                              }
-                              else
+                              } else
                                  if($container == 'video')
                                  {
-                                    $result = $database->video_insert($profileid, $actionid, $actual_image_name, $cdn);
+                                    $result = $database->video_insert($profileid, $actionid, $actual_image_name, $cdn,$vthumb);
                                     $name = $cdn . $vthumb;
-                                 }
-                                 else
+                                 } else
                                     if($container == 'photo')
                                     {
                                        $result = $database->image_insert($profileid, $actionid, $actual_image_name, '0',
@@ -6874,36 +6489,30 @@ class Api
                                     }
                                  }
                               }
-                           }
-                           else
+                           } else
                            {
                               $data['ack'] = 0;
                               echo json_encode($data);
                            }
-                        }
-                        else
+                        } else
                         {
                            $data['ack'] = 2;
                            echo json_encode($data);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(12);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(16);
                   }
-               }
-               else
+               } else
                {
                   $data['ack'] = 3;
                   echo json_encode($data);
                }
-      }
-      else
+      } else
       {
          $data['ack'] = 5;
          echo json_encode($data);
@@ -6961,8 +6570,7 @@ class Api
             $container = 'doc';
             $cdn = $doc_cdn . '/';
             $limit = 10240 * 1024;
-         }
-         else
+         } else
          {
             $data['ack'] = 4;
             echo json_encode($data);
@@ -7033,36 +6641,30 @@ class Api
                               }
                            }
                         }
-                     }
-                     else
+                     } else
                      {
                         $data['ack'] = 0;
                         echo json_encode($data);
                      }
-                  }
-                  else
+                  } else
                   {
                      $data['ack'] = 2;
                      echo json_encode($data);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $data['ack'] = 3;
             echo json_encode($data);
          }
-      }
-      else
+      } else
       {
          $data['ack'] = 5;
          echo json_encode($data);
@@ -7119,24 +6721,21 @@ class Api
             $container = 'photo';
             $cdn = $photo_cdn . '/';
             $limit = 10240 * 1024;
-         }
-         else
+         } else
             if(in_array(strtolower($ext), $video_formats))
             {
                $actiontype = 2500;
                $container = 'video';
                $cdn = $video_cdn . '/';
                $limit = 100960 * 1024;
-            }
-            else
+            } else
                if(in_array(strtolower($ext), $doc_formats))
                {
                   $actiontype = 2600;
                   $container = 'doc';
                   $cdn = $doc_cdn . '/';
                   $limit = 10240 * 1024;
-               }
-               else
+               } else
                {
                   $data['ack'] = 4;
                   echo json_encode($data);
@@ -7183,15 +6782,12 @@ class Api
                               {
                                  $result = $database->doc_insert($profileid, $actionid, $actual_image_name, $name,
                                     $cdn);
-                              }
-                              else
+                              } else
                                  if($container == 'video')
                                  {
-                                    $result = $database->video_insert($profileid, $actionid, $actual_image_name, $cdn,
-                                       $vthumb);
+                                    $result = $database->video_insert($profileid, $actionid, $actual_image_name, $cdn,$vthumb);
                                     $name = $cdn . $vthumb;
-                                 }
-                                 else
+                                 } else
                                     if($container == 'photo')
                                     {
                                        $result = $database->image_insert($profileid, $actionid, $actual_image_name, '0',
@@ -7228,36 +6824,30 @@ class Api
                                     $email->email_sample($param);
                                  }
                               }
-                           }
-                           else
+                           } else
                            {
                               $data['ack'] = 0;
                               echo json_encode($data);
                            }
-                        }
-                        else
+                        } else
                         {
                            $data['ack'] = 2;
                            echo json_encode($data);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(12);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(16);
                   }
-               }
-               else
+               } else
                {
                   $data['ack'] = 3;
                   echo json_encode($data);
                }
-      }
-      else
+      } else
       {
          $data['ack'] = 5;
          echo json_encode($data);
@@ -7293,13 +6883,11 @@ class Api
             $data['pimage'] = $pimage;
             $data['tag'] = $_SESSION['tag_json'];
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -7309,13 +6897,15 @@ class Api
    function praise()
    {
       global $help;
-      if(isset($_GET['letter_title']) && isset($_GET['letter_content']) && isset($_GET['profileid']))
+      if(isset($_GET['letter_title']) && isset($_GET['letter_content']) && isset($_GET['profileid']) &&
+         isset($_GET['badgeid']))
       {
          if(!empty($_GET['letter_title']) && !empty($_GET['letter_content']) && $_GET['profileid'] !=
-            '')
+            '' && $_GET['badgeid'] != '')
          {
             $myprofileid = $_SESSION['userid'];
             $letter_title = $_GET['letter_title'];
+            $badgeid = $_GET['badgeid'];
             global $database;
             $letter_content = $_GET['letter_content'];
             $profileid = $_GET['profileid'];
@@ -7328,6 +6918,7 @@ class Api
                {
                   $result = $database->diary_insert($actionid, $letter_title);
                   $result = $database->comment_insert($actionid, $letter_content);
+                  $res = $database->map_insert($actionid, $badgeid);
                   if($result)
                   {
                      $rnotice = $database->setting_notice_select($profileid);
@@ -7353,23 +6944,19 @@ class Api
                      $data['letter_content'] = $letter_content;
                      echo json_encode($data);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -7401,8 +6988,7 @@ class Api
          }
          $data['action'] = $group;
          echo json_encode($data);
-      }
-      else
+      } else
       {
          $help->error_description(15);
       }
@@ -7439,8 +7025,7 @@ class Api
 
          $data['action'] = $group;
          echo json_encode($data);
-      }
-      else
+      } else
       {
          $help->error_description(15);
       }
@@ -7472,18 +7057,15 @@ class Api
 
                $data['ack'] = '1';
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -7512,18 +7094,15 @@ class Api
 
                $data['ack'] = '1';
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -7681,6 +7260,8 @@ class Api
                   {
 
                      $praise[$k]['title'] = $m['PAGE'];
+                     $praise[$k]['mood'] = $m['MOOD'];
+                     $praise[$k]['file'] = $m['FILENAME'];
 
                      $praise[$k]['comment'] = $m['COMMENT'];
 
@@ -7692,18 +7273,15 @@ class Api
                $data['pimage'] = $pimage;
                echo json_encode($data);
 
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -7763,23 +7341,19 @@ class Api
                      $data['letter_content'] = $letter_content;
                      echo json_encode($data);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -7851,18 +7425,15 @@ class Api
                               $param['actionid'] = $actionid;
                               $email->email_sample($param);
                            }
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(15);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      if($rw = $database->myanswer_select($optionid, $myprofileid))
                      {
@@ -7889,19 +7460,16 @@ class Api
                            $data['pimage'] = $pimage;
                            $data['tag'] = $_SESSION['tag_json'];
                            echo json_encode($data);
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(15);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
                   }
-               }
-               else
+               } else
                {
                   $error['code'] = 12;
                   $error['message'] = 'You don\'t have sufficient permission to perform this action';
@@ -7909,18 +7477,15 @@ class Api
                   $data['error'] = $error;
                   echo json_encode($data);
                }
-            }
-            else
+            } else
             {
                $help->error_description(11);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -8008,33 +7573,27 @@ class Api
                            $data['option'] = $option;
                            echo json_encode($data);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -8079,33 +7638,27 @@ class Api
                         {
                            $database->notice_insert($actionid, $profileid, $ctype, $pageid);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(13);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -8183,33 +7736,27 @@ class Api
                            $data['option'] = $option;
                            echo json_encode($data);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -8262,28 +7809,23 @@ class Api
                         $data['page'] = $page;
                         echo json_encode($data);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(10);
                }
-            }
-            else
+            } else
             {
                $help->error_description(11);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -8337,33 +7879,27 @@ class Api
                            $data['page'] = $page;
                            echo json_encode($data);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -8434,33 +7970,27 @@ class Api
                            }
                            */
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -8524,33 +8054,27 @@ class Api
                            $data['page'] = $page;
                            echo json_encode($data);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -8611,28 +8135,23 @@ class Api
                         $data['page'] = $page;
                         echo json_encode($data);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(10);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -8702,38 +8221,31 @@ class Api
                                  }
                               }
                            }
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(15);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -8804,38 +8316,31 @@ class Api
                               }
                            }
 
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(15);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -8911,38 +8416,31 @@ class Api
                               }
                            }
 
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(15);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -8988,33 +8486,27 @@ class Api
                            $data['page'] = $page;
                            echo json_encode($data);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(10);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9058,23 +8550,19 @@ class Api
                   $data['name'] = $name;
                   $data['action'] = $photo;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(22);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9118,23 +8606,19 @@ class Api
                   $data['name'] = $name;
                   $data['action'] = $photo;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(20);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9146,30 +8630,28 @@ class Api
       {
          if($_GET['start'] != '')
          {
-            $profileid = $_GET['profileid'];
             $start = $_GET['start'];
             $data = array();
             $video = array();
             if(is_numeric($start))
             {
                global $database;
-               if($r = $database->video_json($profileid, $start, 20))
+               if($r = $database->video_json($start, 20))
                {
                   $k = 0;
                   while ($row = $r->fetch_array())
                   {
+                    $file[$k]['sharedwith'] = (empty($row['groupname']) ? (empty($row['eventname']) ? 'Global' : $row['eventname']) : $row['groupname']);
                      $video[$k]['file'] = $row['cdn'] . $row['filename'];
                      $video[$k]['profileid'] = $row['profileid'];
                      $video[$k]['actionby'] = $row['actionby'];
                      $video[$k]['actionid'] = $row['videoid'];
-                     $video[$k]['caption'] = $row['PAGE'];
+                     $video[$k]['caption'] = $row['page'];
                      $video[$k]['thumbnail'] = $row['cdn'] . $row['thumbnail'];
                      $video[$k]['life_is_fun'] = sha1($row['videoid'] . 'pass1reset!');
+                     
+                     
                      global $memcached;
-                     $name[$video[$k]['actionby']] = $help->name_fetch($video[$k]['actionby'], $memcached,
-                        $database);
-
-
                      $name[$video[$k]['actionby']] = $help->name_fetch($video[$k]['actionby'], $memcached,
                         $database);
                      $pimage[$video[$k]['actionby']] = $help->pimage_fetch($video[$k]['actionby'], $memcached,
@@ -9181,23 +8663,159 @@ class Api
                   $data['pimage'] = $pimage;
                   $data['action'] = $video;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(20);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
+      } else
+      {
+         $help->error_description(9);
       }
-      else
+   }
+   function event_video_fetch()
+   {
+      global $help;
+      if(isset($_GET['start']))
+      {
+         if($_GET['start'] != '')
+         {
+            $start = $_GET['start'];
+            $eventid = $_GET['eventid'];
+            $data = array();
+            $video = array();
+            if(is_numeric($start))
+            {
+               global $database;
+               if($r = $database->event_video_fetch($eventid,$start, 20))
+               {
+                  $k = 0;
+                  while ($row = $r->fetch_array())
+                  {
+                    if($row['visible'] == '0' || ($database->is_guest($eventid, $myprofileid)))
+                    {
+                     $file[$k]['sharedwith'] = $row['eventname'];
+                     $video[$k]['file'] = $row['cdn'] . $row['filename'];
+                     $video[$k]['profileid'] = $row['profileid'];
+                     $video[$k]['actionby'] = $row['actionby'];
+                     $video[$k]['actionid'] = $row['videoid'];
+                     $video[$k]['caption'] = $row['page'];
+                     $video[$k]['thumbnail'] = $row['cdn'] . $row['thumbnail'];
+                     $video[$k]['life_is_fun'] = sha1($row['videoid'] . 'pass1reset!');
+                     
+                     
+                     global $memcached;
+                     $name[$video[$k]['actionby']] = $help->name_fetch($video[$k]['actionby'], $memcached, $database);
+                     $pimage[$video[$k]['actionby']] = $help->pimage_fetch($video[$k]['actionby'], $memcached,$database);
+                     }
+                     if($k == 0)
+                     {
+                        $data['eventname'] = $row['eventname'];
+                        $data['eventid'] = $row['profileid'];
+                     }
+                     $k++;
+                   }  
+                  if($k == 0) // if No data in document table for this event
+                  {
+                     $row = $database->event_select($eventid);
+                     $data['eventname'] = $row['name'];
+                     $data['eventid'] = $row['eventid'];
+
+                  }
+                  $data['name'] = $name;
+                  $data['pimage'] = $pimage;
+                  $data['action'] = $video;
+                  echo json_encode($data);
+               } else
+               {
+                  $help->error_description(15);
+               }
+            } else
+            {
+               $help->error_description(20);
+            }
+         } else
+         {
+            $help->error_description(18);
+         }
+      } else
+      {
+         $help->error_description(9);
+      }
+   }
+   function group_video_fetch()
+   {
+      global $help;
+      if(isset($_GET['start']))
+      {
+         if($_GET['start'] != '')
+         {
+            $start = $_GET['start'];
+            $groupid = $_GET['groupid'];
+            $data = array();
+            $video = array();
+            if(is_numeric($start))
+            {
+               global $database;
+               if($r = $database->group_video_fetch($groupid,$start, 20))
+               {
+                  $k = 0;
+                  while ($row = $r->fetch_array())
+                  {
+                    if($row['visible'] == '0' || ($database->is_member($groupid, $myprofileid)))
+                     {
+                         $file[$k]['sharedwith'] = $row['groupname'];
+                         $video[$k]['file'] = $row['cdn'] . $row['filename'];
+                         $video[$k]['profileid'] = $row['profileid'];
+                         $video[$k]['actionby'] = $row['actionby'];
+                         $video[$k]['actionid'] = $row['videoid'];
+                         $video[$k]['caption'] = $row['page'];
+                         $video[$k]['thumbnail'] = $row['cdn'] . $row['thumbnail'];
+                         $video[$k]['life_is_fun'] = sha1($row['videoid'] . 'pass1reset!');
+                         
+                         
+                         global $memcached;
+                         $name[$video[$k]['actionby']] = $help->name_fetch($video[$k]['actionby'], $memcached,$database);
+                         $pimage[$video[$k]['actionby']] = $help->pimage_fetch($video[$k]['actionby'], $memcached,$database);
+                      }
+                     if($k == 0)
+                     {
+                        $data['groupname'] = $row['groupname'];
+                        $data['groupid'] = $row['profileid'];
+                     }
+                     $k++;
+                  }
+                  if($k == 0) // if No data in document table for this group
+                  {
+                     $row = $database->group_select($groupid);
+                     $data['groupname'] = $row['name'];
+                     $data['groupid'] = $row['groupid'];
+
+                  }
+                  $data['name'] = $name;
+                  $data['pimage'] = $pimage;
+                  $data['action'] = $video;
+                  echo json_encode($data);
+               } else
+               {
+                  $help->error_description(15);
+               }
+            } else
+            {
+               $help->error_description(20);
+            }
+         } else
+         {
+            $help->error_description(18);
+         }
+      } else
       {
          $help->error_description(9);
       }
@@ -9209,20 +8827,20 @@ class Api
       {
          if($_GET['start'] != '')
          {
-            $profileid = $_GET['profileid'];
             $start = $_GET['start'];
             $data = array();
             $file = array();
             if(is_numeric($start))
             {
                global $database;
-               if($r = $database->file_json($profileid, $start, 20))
+               if($r = $database->file_json($start, 20))
                {
                   $k = 0;
                   while ($row = $r->fetch_array())
                   {
-                    
-                     $file[$k]['sharedwith'] = (empty($row['groupname']) ? (empty($row['eventname']) ? 'Global': $row['eventname']) : $row['groupname'] ); 
+
+                     $file[$k]['sharedwith'] = (empty($row['groupname']) ? (empty($row['eventname']) ?
+                        'Global' : $row['eventname']) : $row['groupname']);
                      $file[$k]['file'] = $row['cdn'] . $row['filename'];
                      $file[$k]['profileid'] = $row['profileid'];
                      $file[$k]['actionby'] = $row['actionby'];
@@ -9230,7 +8848,7 @@ class Api
                      $file[$k]['caption'] = $row['caption'];
                      $file[$k]['date'] = $row['timestamp'];
                      $file[$k]['life_is_fun'] = sha1($row['docid'] . 'pass1reset!');
-                     
+
                      global $memcached;
                      $name[$file[$k]['actionby']] = $help->name_fetch($file[$k]['actionby'], $memcached,
                         $database);
@@ -9243,23 +8861,19 @@ class Api
                   $data['pimage'] = $pimage;
                   $data['action'] = $file;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(20);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9278,66 +8892,62 @@ class Api
             if(is_numeric($start))
             {
                global $database;
-      //if the group is private then it gives the result only when $_SESSION['USERID'] is a member of that group.
-      //Otherwise this API can be used to fetch all the documents for a particular group .
-      $myprofileid = $_SESSION['USERID'];
-               if($r = $database->event_doc_fetch($myprofileid,$eventid, $start, 20))
+               //if the group is private then it gives the result only when $_SESSION['USERID'] is a member of that group.
+               //Otherwise this API can be used to fetch all the documents for a particular group .
+               $myprofileid = $_SESSION['USERID'];
+               if($r = $database->event_doc_fetch($myprofileid, $eventid, $start, 20))
                {
                   $k = 0;
                   while ($row = $r->fetch_array())
                   {
-                    if($row['visible'] == '0' || ($database->is_guest($eventid,$myprofileid)))
-                    {
-                     $file[$k]['sharedwith'] = $row['eventname']; 
-                     $file[$k]['file'] = $row['cdn'] . $row['filename'];
-                     $file[$k]['profileid'] = $row['profileid'];
-                     $file[$k]['actionby'] = $row['actionby'];
-                     $file[$k]['actionid'] = $row['docid'];
-                     $file[$k]['caption'] = $row['caption'];
-                     $file[$k]['date'] = $row['timestamp'];
-                     $file[$k]['life_is_fun'] = sha1($row['docid'] . 'pass1reset!');
-                     
-                     global $memcached;
-                     $name[$file[$k]['actionby']] = $help->name_fetch($file[$k]['actionby'], $memcached,
-                        $database);
-                     $pimage[$file[$k]['actionby']] = $help->pimage_fetch($file[$k]['actionby'], $memcached,
-                        $database);
+                     if($row['visible'] == '0' || ($database->is_guest($eventid, $myprofileid)))
+                     {
+                        $file[$k]['sharedwith'] = $row['eventname'];
+                        $file[$k]['file'] = $row['cdn'] . $row['filename'];
+                        $file[$k]['profileid'] = $row['profileid'];
+                        $file[$k]['actionby'] = $row['actionby'];
+                        $file[$k]['actionid'] = $row['docid'];
+                        $file[$k]['caption'] = $row['caption'];
+                        $file[$k]['date'] = $row['timestamp'];
+                        $file[$k]['life_is_fun'] = sha1($row['docid'] . 'pass1reset!');
+
+                        global $memcached;
+                        $name[$file[$k]['actionby']] = $help->name_fetch($file[$k]['actionby'], $memcached,
+                           $database);
+                        $pimage[$file[$k]['actionby']] = $help->pimage_fetch($file[$k]['actionby'], $memcached,
+                           $database);
                      }
                      if($k == 0)
                      {
-                         $data['eventname'] = $row['eventname'];
-                         $data['eventid'] = $row['profileid'];
+                        $data['eventname'] = $row['eventname'];
+                        $data['eventid'] = $row['profileid'];
                      }
                      $k++;
                   }
                   if($k == 0) // if No data in document table for this event
                   {
-                    $row = $database->event_select($eventid);
-                    $data['eventname'] = $row['name'];
-                    $data['eventid'] = $row['eventid'];
-                    
+                     $row = $database->event_select($eventid);
+                     $data['eventname'] = $row['name'];
+                     $data['eventid'] = $row['eventid'];
+
                   }
                   $data['name'] = $name;
                   $data['pimage'] = $pimage;
                   $data['action'] = $file;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(20);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9356,66 +8966,62 @@ class Api
             if(is_numeric($start))
             {
                global $database;
-      //if the group is private then it gives the result only when $_SESSION['USERID'] is a member of that group.
-      //Otherwise this API can be used to fetch all the documents for a particular group .
-      $myprofileid = $_SESSION['USERID'];
-               if($r = $database->group_doc_fetch($myprofileid,$groupid, $start, 20))
+               //if the group is private then it gives the result only when $_SESSION['USERID'] is a member of that group.
+               //Otherwise this API can be used to fetch all the documents for a particular group .
+               $myprofileid = $_SESSION['USERID'];
+               if($r = $database->group_doc_fetch($myprofileid, $groupid, $start, 20))
                {
                   $k = 0;
                   while ($row = $r->fetch_array())
                   {
-                    if($row['visible'] == '0' || ($database->is_member($groupid,$myprofileid)))
-                    {
-                     $file[$k]['sharedwith'] = $row['groupname']; 
-                     $file[$k]['file'] = $row['cdn'] . $row['filename'];
-                     $file[$k]['profileid'] = $row['profileid'];
-                     $file[$k]['actionby'] = $row['actionby'];
-                     $file[$k]['actionid'] = $row['docid'];
-                     $file[$k]['caption'] = $row['caption'];
-                     $file[$k]['date'] = $row['timestamp'];
-                     $file[$k]['life_is_fun'] = sha1($row['docid'] . 'pass1reset!');
-                     
-                     global $memcached;
-                     $name[$file[$k]['actionby']] = $help->name_fetch($file[$k]['actionby'], $memcached,
-                        $database);
-                     $pimage[$file[$k]['actionby']] = $help->pimage_fetch($file[$k]['actionby'], $memcached,
-                        $database);
+                     if($row['visible'] == '0' || ($database->is_member($groupid, $myprofileid)))
+                     {
+                        $file[$k]['sharedwith'] = $row['groupname'];
+                        $file[$k]['file'] = $row['cdn'] . $row['filename'];
+                        $file[$k]['profileid'] = $row['profileid'];
+                        $file[$k]['actionby'] = $row['actionby'];
+                        $file[$k]['actionid'] = $row['docid'];
+                        $file[$k]['caption'] = $row['caption'];
+                        $file[$k]['date'] = $row['timestamp'];
+                        $file[$k]['life_is_fun'] = sha1($row['docid'] . 'pass1reset!');
+
+                        global $memcached;
+                        $name[$file[$k]['actionby']] = $help->name_fetch($file[$k]['actionby'], $memcached,
+                           $database);
+                        $pimage[$file[$k]['actionby']] = $help->pimage_fetch($file[$k]['actionby'], $memcached,
+                           $database);
                      }
                      if($k == 0)
                      {
-                         $data['groupname'] = $row['groupname'];
-                         $data['groupid'] = $row['profileid'];
+                        $data['groupname'] = $row['groupname'];
+                        $data['groupid'] = $row['profileid'];
                      }
                      $k++;
                   }
                   if($k == 0) // if No data in document table for this group
                   {
-                    $row = $database->group_select($groupid);
-                    $data['groupname'] = $row['name'];
-                    $data['groupid'] = $row['groupid'];
-                    
+                     $row = $database->group_select($groupid);
+                     $data['groupname'] = $row['name'];
+                     $data['groupid'] = $row['groupid'];
+
                   }
                   $data['name'] = $name;
                   $data['pimage'] = $pimage;
                   $data['action'] = $file;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(20);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9438,23 +9044,19 @@ class Api
                   $data['ack'] = 1;
                   $data['actionid'] = $actionid;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(12);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9484,28 +9086,23 @@ class Api
                      $data['actionid'] = $actionid;
                      $data['pageid'] = $pageid;
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(12);
                }
-            }
-            else
+            } else
             {
                $help->error_description(11);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9540,13 +9137,11 @@ class Api
             $data['pimage'] = $pimage;
             $data['tag'] = $_SESSION['tag_json'];
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_desscription(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9581,13 +9176,11 @@ class Api
             $data['pimage'] = $pimage;
             $data['tag'] = $_SESSION['tag_json'];
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_desscription(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9623,13 +9216,11 @@ class Api
             $data['pimage'] = $pimage;
             $data['tag'] = $_SESSION['tag_json'];
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_desscription(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9666,13 +9257,11 @@ class Api
             $data['pimage'] = $pimage;
             $data['tag'] = $_SESSION['tag_json'];
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_desscription(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9698,28 +9287,23 @@ class Api
                      $help->feature_fetch($field, $memcached, $database, 1);
                      $data['ack'] = 1;
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(0);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9741,23 +9325,19 @@ class Api
                {
                   $data['ack'] = 1;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9781,23 +9361,19 @@ class Api
                {
                   $data['ack'] = 1;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9819,18 +9395,15 @@ class Api
                $data['ack'] = 1;
                $data['privacy'] = $privacy;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9851,18 +9424,15 @@ class Api
                $data['ack'] = 1;
                $data['message'] = 'Removed';
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(9);
          }
-      }
-      else
+      } else
       {
          $help->error_description(18);
       }
@@ -9885,18 +9455,15 @@ class Api
                $data['ack'] = 1;
                $data['message'] = 'Message Dropped';
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9920,18 +9487,15 @@ class Api
                $data['ack'] = 1;
                $data['message'] = 'Feedback sent';
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -9953,13 +9517,11 @@ class Api
                if($diaryid = $database->diaryid_select($item, $value))
                {
                   ;
-               }
-               else
+               } else
                {
                   $diaryid = $database->mydiary_create_wo_admin($item, $value);
                }
-            }
-            else
+            } else
             {
                $diaryid = $_GET['diaryid'];
             }
@@ -9975,23 +9537,19 @@ class Api
                   $data['ack'] = 1;
                   $data['message'] = 'Added';
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -10020,8 +9578,7 @@ class Api
                {
                   $friend[$k] = $NROW['ACTIONON'];
                   $inbox[$k]['friend'] = $NROW['ACTIONON'];
-               }
-               else
+               } else
                   if($NROW['ACTIONON'] == $myprofileid)
                   {
                      $friend[$k] = $NROW['ACTIONON'];
@@ -10039,13 +9596,11 @@ class Api
             $data['name'] = $name;
             $data['pimage'] = $pimage;
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -10100,8 +9655,7 @@ class Api
                               default:
                                  $help->error_description(28);
                            }
-                        }
-                        else
+                        } else
                            if($day == 30)
                            {
                               switch ($month)
@@ -10114,8 +9668,7 @@ class Api
                                     exit;
                               }
 
-                           }
-                           else
+                           } else
                               if($day == 29)
                               {
                                  switch ($month)
@@ -10126,20 +9679,17 @@ class Api
                                           $help->register_user_mobile($email, $identifier, $name, $password, $gender, $day,
                                              $month, $year);
                                           exit;
-                                       }
-                                       else
+                                       } else
                                           if($year % 100 == 0)
                                           {
                                              $help->error_description(28);
-                                          }
-                                          else
+                                          } else
                                              if($year % 4 == 0)
                                              {
                                                 $help->register_user_moblile($email, $identifier, $name, $password, $gender, $day,
                                                    $month, $year);
                                                 exit;
-                                             }
-                                             else
+                                             } else
                                              {
                                                 $help->register_user_mobile($email, $identifier, $name, $password, $gender, $day,
                                                    $month, $year);
@@ -10150,39 +9700,32 @@ class Api
                                                 $month, $year);
                                        exit;
                                  }
-                              }
-                              else
+                              } else
                               {
                                  $help->register_user_mobile($email, $identifier, $name, $password, $gender, $day,
                                     $month, $year);
                               }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(18);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(26);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(35);
                }
-            }
-            else
+            } else
             {
                $help->error_description(18);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -10239,8 +9782,7 @@ class Api
                               default:
                                  $help->error_description(28);
                            }
-                        }
-                        else
+                        } else
                            if($day == 30)
                            {
                               switch ($month)
@@ -10253,8 +9795,7 @@ class Api
                                     exit;
                               }
 
-                           }
-                           else
+                           } else
                               if($day == 29)
                               {
                                  switch ($month)
@@ -10265,20 +9806,17 @@ class Api
                                           $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,
                                              $year);
                                           exit;
-                                       }
-                                       else
+                                       } else
                                           if($year % 100 == 0)
                                           {
                                              $help->error_description(28);
-                                          }
-                                          else
+                                          } else
                                              if($year % 4 == 0)
                                              {
                                                 $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,
                                                    $year);
                                                 exit;
-                                             }
-                                             else
+                                             } else
                                              {
                                                 $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,
                                                    $year);
@@ -10289,39 +9827,32 @@ class Api
                                                 $year);
                                        exit;
                                  }
-                              }
-                              else
+                              } else
                               {
                                  $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,
                                     $year);
                               }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(18);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(26);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(35);
                }
-            }
-            else
+            } else
             {
                $help->error_description(18);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -10388,35 +9919,29 @@ class Api
                         $data['ack'] = 1;
                         $data['actiontype'] = $rtype;
                         echo json_encode($data);
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
 
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(12);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(13);
                }
 
-            }
-            else
+            } else
             {
                $help->error_description(11);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -10444,23 +9969,19 @@ class Api
                   $data['ack'] = 1;
                   $data['actiontype'] = $rtype;
                   echo json_encode($data);
-               }
-               else
+               } else
                {
                   $help->error_description(14);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -10480,29 +10001,27 @@ class Api
             if(isset($_GET['filter']) && !empty($_GET['filter']))
             {
                $filter = $_GET['filter'];
-            }
-            else
+            } else
             {
                $filter = 'people';
             }
             if(isset($_GET['start']) && $_GET['start'] != '')
             {
                $start = $_GET['start'];
-            }
-            else
+            } else
             {
                $start = 0;
             }
+         //   $search['error'] ='String to make action not null'; // Description says it all .
             if($filter == 'people')
             {
                if($help->is_email($q))
                {
                   $fres = $database->profile_email_search($q);
-               }
-               else
+               } else
                {
                   $fres = $database->profile_search($q, $start);
-               }
+               } 
                $k = 0;
                while ($frow = $fres->fetch_array())
                {
@@ -10519,8 +10038,7 @@ class Api
                $data['name'] = $name;
                $data['pimage'] = $pimage;
                echo json_encode($data);
-            }
-            else
+            } else
                if($filter == 'group')
                {
                   $fres = $database->group_search($q, $start);
@@ -10540,8 +10058,7 @@ class Api
                   $data['description'] = $description;
                   $data['pimage'] = $pimage;
                   echo json_encode($data);
-               }
-               else
+               } else
                   if($filter == 'event')
                   {
                      $fres = $database->event_search($q, $start);
@@ -10561,8 +10078,7 @@ class Api
                      $data['description'] = $description;
                      $data['pimage'] = $pimage;
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                      if($filter == 'post')
                      {
                         $fres = $database->post_search($q, $start);
@@ -10584,8 +10100,7 @@ class Api
                         $data['name'] = $name;
                         $data['pimage'] = $pimage;
                         echo json_encode($data);
-                     }
-                     else
+                     } else
                         if($filter == 'comment')
                         {
                            $fres = $database->comment_search($q, $start);
@@ -10607,8 +10122,7 @@ class Api
                            $data['name'] = $name;
                            $data['pimage'] = $pimage;
                            echo json_encode($data);
-                        }
-                        else
+                        } else
                            if($filter == 'skill')
                            {
                               $fres = $database->bio_history_search(230, $q, $start);
@@ -10630,8 +10144,7 @@ class Api
                               $data['name'] = $name;
                               $data['pimage'] = $pimage;
                               echo json_encode($data);
-                           }
-                           else
+                           } else
                               if($filter == 'project')
                               {
                                  $fres = $database->bio_history_search(231, $q, $start);
@@ -10653,8 +10166,7 @@ class Api
                                  $data['name'] = $name;
                                  $data['pimage'] = $pimage;
                                  echo json_encode($data);
-                              }
-                              else
+                              } else
                                  if($filter == 'tool')
                                  {
                                     $fres = $database->bio_history_search(236, $q, $start);
@@ -10676,8 +10188,7 @@ class Api
                                     $data['name'] = $name;
                                     $data['pimage'] = $pimage;
                                     echo json_encode($data);
-                                 }
-                                 else
+                                 } else
                                     if($filter == 'major')
                                     {
                                        $fres = $database->bio_history_search(235, $q, $start);
@@ -10699,8 +10210,7 @@ class Api
                                        $data['name'] = $name;
                                        $data['pimage'] = $pimage;
                                        echo json_encode($data);
-                                    }
-                                    else
+                                    } else
                                        if($filter == 'certificate')
                                        {
                                           $fres = $database->bio_history_search(232, $q, $start);
@@ -10722,8 +10232,7 @@ class Api
                                           $data['name'] = $name;
                                           $data['pimage'] = $pimage;
                                           echo json_encode($data);
-                                       }
-                                       else
+                                       } else
                                           if($filter == 'award')
                                           {
                                              $fres = $database->bio_history_search(233, $q, $start);
@@ -10745,8 +10254,7 @@ class Api
                                              $data['name'] = $name;
                                              $data['pimage'] = $pimage;
                                              echo json_encode($data);
-                                          }
-                                          else
+                                          } else
                                              if($filter == 'hobby')
                                              {
                                                 $fres = $database->bio_history_search(211, $q, $start);
@@ -10768,8 +10276,7 @@ class Api
                                                 $data['name'] = $name;
                                                 $data['pimage'] = $pimage;
                                                 echo json_encode($data);
-                                             }
-                                             else
+                                             } else
                                                 if($filter == 'sports')
                                                 {
                                                    $fres = $database->bio_history_search(209, $q, $start);
@@ -10791,8 +10298,7 @@ class Api
                                                    $data['name'] = $name;
                                                    $data['pimage'] = $pimage;
                                                    echo json_encode($data);
-                                                }
-                                                else
+                                                } else
                                                    if($filter == 'book')
                                                    {
                                                       $fres = $database->bio_history_search(208, $q, $start);
@@ -10814,8 +10320,7 @@ class Api
                                                       $data['name'] = $name;
                                                       $data['pimage'] = $pimage;
                                                       echo json_encode($data);
-                                                   }
-                                                   else
+                                                   } else
                                                       if($filter == 'movie')
                                                       {
                                                          $fres = $database->bio_history_search(207, $q, $start);
@@ -10837,8 +10342,7 @@ class Api
                                                          $data['name'] = $name;
                                                          $data['pimage'] = $pimage;
                                                          echo json_encode($data);
-                                                      }
-                                                      else
+                                                      } else
                                                          if($filter == 'music')
                                                          {
                                                             $fres = $database->bio_history_search(206, $q, $start);
@@ -10860,8 +10364,7 @@ class Api
                                                             $data['name'] = $name;
                                                             $data['pimage'] = $pimage;
                                                             echo json_encode($data);
-                                                         }
-                                                         else
+                                                         } else
                                                             if($filter == 'company')
                                                             {
                                                                $fres = $database->bio_history_search(205, $q, $start);
@@ -10883,8 +10386,7 @@ class Api
                                                                $data['name'] = $name;
                                                                $data['pimage'] = $pimage;
                                                                echo json_encode($data);
-                                                            }
-                                                            else
+                                                            } else
                                                                if($filter == 'college')
                                                                {
                                                                   $fres = $database->bio_history_search(204, $q, $start);
@@ -10906,8 +10408,7 @@ class Api
                                                                   $data['name'] = $name;
                                                                   $data['pimage'] = $pimage;
                                                                   echo json_encode($data);
-                                                               }
-                                                               else
+                                                               } else
                                                                   if($filter == 'school')
                                                                   {
                                                                      $fres = $database->bio_history_search(203, $q, $start);
@@ -10929,8 +10430,7 @@ class Api
                                                                      $data['name'] = $name;
                                                                      $data['pimage'] = $pimage;
                                                                      echo json_encode($data);
-                                                                  }
-                                                                  else
+                                                                  } else
                                                                      if($filter == 'profession')
                                                                      {
                                                                         $fres = $database->bio_history_search(202, $q, $start);
@@ -10952,8 +10452,7 @@ class Api
                                                                         $data['name'] = $name;
                                                                         $data['pimage'] = $pimage;
                                                                         echo json_encode($data);
-                                                                     }
-                                                                     else
+                                                                     } else
                                                                         if($filter == 'city')
                                                                         {
                                                                            $fres = $database->bio_history_search(201, $q, $start);
@@ -10976,13 +10475,11 @@ class Api
                                                                            $data['pimage'] = $pimage;
                                                                            echo json_encode($data);
                                                                         }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11004,41 +10501,41 @@ class Api
             {
                $fres = $database->profile_email_search($q);
                $email = 1;
-            }
-            else
+            } else
             {
                $fres = $database->profile_search($q, 0);
-               $skillres = $database->bio_history_search(230, $q,0);
-               $groupres = $database->group_search($q,0);
-                
-                $i = 0;
-                while($grouprow = $groupres->fetch_array())
-                {
-                   $search[$i] = $grouprow['groupid'];
-                   $groupname[$search[$i]] = $grouprow['name'];
-                   $pimage[$search[$i]] = 'https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/group.png';
-                   $i++;
-                }
-               
-                $j = 0;
-                while($skillrow = $skillres->fetch_array())
-                {
-                   $search[$j] = $skillrow['profileid'];
-                   $skillname[$search[$j]] = $skillrow['skill'];
-                   $name[$search[$j]] = $help->name_fetch($search[$j], $memcached, $database);
-                   $pimage[$search[$j]] = $help->pimage_fetch($search[$j], $memcached, $database);
-                   $j++;
-                }
+               $skillres = $database->bio_history_search(230, $q, 0);
+               $groupres = $database->group_search($q, 0);
+
+               $i = 0;
+               while ($grouprow = $groupres->fetch_array())
+               {
+                  $search[$i] = $grouprow['groupid'];
+                  $groupname[$search[$i]] = $grouprow['name'];
+                  $pimage[$search[$i]] =
+                     'https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/group.png';
+                  $i++;
+               }
+
+               $j = 0;
+               while ($skillrow = $skillres->fetch_array())
+               {
+                  $search[$j] = $skillrow['profileid'];
+                  $skillname[$search[$j]] = $skillrow['skill'];
+                  $name[$search[$j]] = $help->name_fetch($search[$j], $memcached, $database);
+                  $pimage[$search[$j]] = $help->pimage_fetch($search[$j], $memcached, $database);
+                  $j++;
+               }
             }
-                            
-                $k = 0;
-                while ($frow = $fres->fetch_array())
-                {
-                   $search[$k] = $frow['PROFILEID'];
-                   $name[$search[$k]] = $help->name_fetch($search[$k], $memcached, $database);
-                   $pimage[$search[$k]] = $help->pimage_fetch($search[$k], $memcached, $database);
-                   $k++;
-                }
+
+            $k = 0;
+            while ($frow = $fres->fetch_array())
+            {
+               $search[$k] = $frow['PROFILEID'];
+               $name[$search[$k]] = $help->name_fetch($search[$k], $memcached, $database);
+               $pimage[$search[$k]] = $help->pimage_fetch($search[$k], $memcached, $database);
+               $k++;
+            }
             $data['action'] = $search;
             $data['name'] = $name;
             $data['skillname'] = $skillname;
@@ -11046,13 +10543,11 @@ class Api
             $data['pimage'] = $pimage;
             $data['email'] = $email;
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11069,14 +10564,12 @@ class Api
          {
             $data['ack'] = 1;
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $data['ack'] = 0;
             echo json_encode($data);
          }
-      }
-      else
+      } else
       {
          $data['ack'] = -1;
          echo json_encode($data);
@@ -11114,18 +10607,15 @@ class Api
                $data['name'] = $name;
                $data['pimage'] = $pimage;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11163,18 +10653,15 @@ class Api
                $data['name'] = $name;
                $data['pimage'] = $pimage;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11211,18 +10698,15 @@ class Api
                $data['name'] = $name;
                $data['pimage'] = $pimage;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11250,18 +10734,15 @@ class Api
                }
                $data['song'] = $song;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11298,33 +10779,27 @@ class Api
                            $data['ack'] = $res;
                            echo json_encode($data);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(11);
                }
-            }
-            else
+            } else
             {
                $help->error_description(10);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11368,48 +10843,39 @@ class Api
                                     $data['ack'] = $res;
                                     echo json_encode($data);
                                  }
-                              }
-                              else
+                              } else
                               {
                                  $help->error_description(15);
                               }
-                           }
-                           else
+                           } else
                            {
                               $help->error_description(15);
                            }
-                        }
-                        else
+                        } else
                         {
                            $help->error_description(11);
                         }
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(10);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(1);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(2);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11424,8 +10890,7 @@ class Api
       if($step == 1 || $step == 2)
       {
          $step += 1;
-      }
-      else
+      } else
       {
          $step = 0;
       }
@@ -11434,8 +10899,7 @@ class Api
          $_SESSION['STEP'] = $step;
          $data['ack'] = 1;
          echo json_encode($data);
-      }
-      else
+      } else
       {
          $help->error_description(15);
       }
@@ -11450,8 +10914,7 @@ class Api
          $column2 = 'SYEAR';
          $year = $_GET['syear'];
          $_SESSION['SCHOOL'] = $school;
-      }
-      else
+      } else
          if(isset($_GET['cyear']))
          {
             $column1 = 'COLLEGE';
@@ -11486,23 +10949,19 @@ class Api
                   $result = $database->set_tag($tagline);
                   $result = $database->diary_insert($actionid, $tagline);
                   echo json_encode(1);
-               }
-               else
+               } else
                {
                   $help->error_description(15);
                }
-            }
-            else
+            } else
             {
                $help->error_description(18);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11557,33 +11016,27 @@ class Api
                         }
                         $data['ack'] = 1;
                         echo json_encode($data);
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(1);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11613,33 +11066,27 @@ class Api
                         $data['actionid'] = $database->get_actionid($eventid, 409, 0, 5);
                         $data['ack'] = 1;
                         echo json_encode($data);
-                     }
-                     else
+                     } else
                      {
                         $help->error_description(15);
                      }
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(39);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11668,28 +11115,23 @@ class Api
                      $data['actionid'] = $database->get_actionid($groupid, 309, 0, 5);
                      $data['ack'] = 1;
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(40);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11720,28 +11162,23 @@ class Api
                      $help->friend_memcache_update($profileid, $database, $memcached);
                      $data['ack'] = 1;
                      echo json_encode($data);
-                  }
-                  else
+                  } else
                   {
                      $help->error_description(15);
                   }
-               }
-               else
+               } else
                {
                   $help->error_description(1);
                }
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11792,8 +11229,7 @@ class Api
                                  echo json_encode(4);
                                  exit;
                            }
-                        }
-                        else
+                        } else
                            if($day == 30)
                            {
                               switch ($month)
@@ -11806,8 +11242,7 @@ class Api
                                     exit;
                               }
 
-                           }
-                           else
+                           } else
                               if($day == 29)
                               {
                                  switch ($month)
@@ -11817,20 +11252,17 @@ class Api
                                        {
                                           echo json_encode(5);
                                           exit;
-                                       }
-                                       else
+                                       } else
                                           if($year % 100 == 0)
                                           {
                                              echo json_encode(4);
                                              exit;
-                                          }
-                                          else
+                                          } else
                                              if($year % 4 == 0)
                                              {
                                                 echo json_encode(5);
                                                 exit;
-                                             }
-                                             else
+                                             } else
                                              {
                                                 echo json_encode(4);
                                                 exit;
@@ -11839,39 +11271,32 @@ class Api
                                              echo json_encode(5);
                                        exit;
                                  }
-                              }
-                              else
+                              } else
                               {
                                  echo json_encode(5);
                                  exit;
                               }
-                     }
-                     else
+                     } else
                      {
                         echo json_encode(3);
                      }
-                  }
-                  else
+                  } else
                   {
                      echo json_encode(2);
                   }
-               }
-               else
+               } else
                {
                   echo json_encode(1);
                }
-            }
-            else
+            } else
             {
                echo json_encode(0);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11885,13 +11310,11 @@ class Api
          if(!empty($_GET['email']))
          {
             echo json_encode($help->validate_email($_GET['email']));
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11905,13 +11328,11 @@ class Api
          if(!empty($_GET['name']))
          {
             echo json_encode($help->validate_name($_GET['name']));
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11925,13 +11346,11 @@ class Api
          if(!empty($_POST['password']))
          {
             echo json_encode($help->validate_password($_POST['password']));
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11945,13 +11364,11 @@ class Api
          if(!empty($_GET['school']))
          {
             echo json_encode($help->validate_school($_GET['school']));
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -11965,13 +11382,11 @@ class Api
          if(!empty($_GET['year']))
          {
             echo json_encode($help->validate_year($_GET['year']));
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -12010,18 +11425,15 @@ class Api
                $data['photo'] = $help->pimage_fetch($row['USERID'], $memcached, $database);
                $data['session_name'] = session_name();
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(37);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -12058,18 +11470,15 @@ class Api
                $data['photo'] = $help->pimage_fetch($row['USERID'], $memcached, $database);
                $data['session_name'] = session_name();
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(37);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -12093,8 +11502,7 @@ class Api
          $data['type'] = "Daily";
          $data['total'] = $count[0] + $count[1] + $count[2];
          echo json_encode($data);
-      }
-      else
+      } else
       {
          $help->error_description(15);
       }
@@ -12113,8 +11521,7 @@ class Api
          $data['type'] = "Weekly";
          $data['total'] = $count[0] + $count[1] + $count[2];
          echo json_encode($data);
-      }
-      else
+      } else
       {
          $help->error_description(15);
       }
@@ -12133,8 +11540,7 @@ class Api
          $data['type'] = "Monthly";
          $data['total'] = $count[0] + $count[1] + $count[2];
          echo json_encode($data);
-      }
-      else
+      } else
       {
          $help->error_description(15);
       }
@@ -12169,8 +11575,7 @@ class Api
 			</div>
 			<?php
 
-      }
-      else
+      } else
          if($page == 'event_json' || $page == 'page_json')
          {
 
@@ -12192,8 +11597,7 @@ class Api
 			</div>
 			<?php
 
-         }
-         else
+         } else
             if($profile_relation == 0)
             {
                $myprofileid = $_SESSION['userid'];
@@ -12247,8 +11651,7 @@ class Api
 				</div>
 			<?php
 
-            }
-            else
+            } else
                if($profile_relation == 1)
                {
 
@@ -12290,19 +11693,16 @@ class Api
                $info['page_description'] = $result['description'];
                $data['info'] = $info;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(15);
             }
 
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -12384,8 +11784,7 @@ class Api
                {
                   $info['profile_image'] = $_SESSION['pimage'];
                   $info['profile_imageid'] = $_SESSION['profile_imageid'];
-               }
-               else
+               } else
                {
                   $pirow = $database->get_image($profileid);
                   $info['profile_image'] = $pirow['CDN'] . $pirow['FILENAME'];
@@ -12396,8 +11795,7 @@ class Api
                {
                   $arr = explode('_', $info['profile_image']);
                   $info['profile_image'] = $arr[0] . '.' . $ext;
-               }
-               else
+               } else
                {
                   $arr = explode('/', $info['profile_image']);
                   $info['profile_image'] = $profile_cdn . '/' . $arr[3];
@@ -12408,18 +11806,15 @@ class Api
                //mutual_friend can be called to fectch friend_match and friend_non_match .
                $data['info'] = $info;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -12462,18 +11857,15 @@ class Api
                $data['pimage'] = $pimage;
                echo json_encode($data);
 
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -12522,8 +11914,7 @@ class Api
                         $pimage[$top_influencer[$k]] = $help->pimage_fetch($top_influencer[$k], $memcached,
                            $database);
                         $k++;
-                     }
-                     else
+                     } else
                      {
                         $k++;
                      }
@@ -12535,19 +11926,16 @@ class Api
                $data['name'] = $name;
                $data['pimage'] = $pimage;
                echo json_encode($data);
-            }
-            else
+            } else
             {
                $help->error_description(16);
             }
 
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }
@@ -12585,7 +11973,7 @@ class Api
 
    function bio_fetch()
    {
-      global $help,$profile_cdn;
+      global $help, $profile_cdn;
       if(isset($_GET['profileid']))
       {
          if(!empty($_GET['profileid']))
@@ -12595,30 +11983,28 @@ class Api
             $newrow = $database->bio_complete_select($profileid);
             $res = $database->bio_select_new($profileid);
             $myprofileid = $_SESSION['USERID'];
-            
+
             if($profileid == $myprofileid)
-               {
-                  $data['profile_image'] = $_SESSION['pimage'];
-                  $data['profile_imageid'] = $_SESSION['profile_imageid'];
-               }
-               else
-               {
-                  $pirow = $database->get_image($profileid);
-                  $data['profile_image'] = $pirow['CDN'] . $pirow['FILENAME'];
-                  $data['profile_imageid'] = $pirow['IMAGEID'];
-               }
-               $ext = pathinfo($data['profile_image'], PATHINFO_EXTENSION);
-               if(strpos($data['profile_image'], '_t') > -1)
-               {
-                  $arr = explode('_', $data['profile_image']);
-                  $data['profile_image'] = $arr[0] . '.' . $ext;
-               }
-               else
-               {
-                  $arr = explode('/', $data['profile_image']);
-                  $data['profile_image'] = $profile_cdn . '/' . $arr[3];
-               }
-               
+            {
+               $data['profile_image'] = $_SESSION['pimage'];
+               $data['profile_imageid'] = $_SESSION['profile_imageid'];
+            } else
+            {
+               $pirow = $database->get_image($profileid);
+               $data['profile_image'] = $pirow['CDN'] . $pirow['FILENAME'];
+               $data['profile_imageid'] = $pirow['IMAGEID'];
+            }
+            $ext = pathinfo($data['profile_image'], PATHINFO_EXTENSION);
+            if(strpos($data['profile_image'], '_t') > -1)
+            {
+               $arr = explode('_', $data['profile_image']);
+               $data['profile_image'] = $arr[0] . '.' . $ext;
+            } else
+            {
+               $arr = explode('/', $data['profile_image']);
+               $data['profile_image'] = $profile_cdn . '/' . $arr[3];
+            }
+
             $company = array();
             $team = array();
             $major = array();
@@ -12661,20 +12047,20 @@ class Api
             $r = 0;
             $s = 0;
             $t = 0;
-            
+
             $profile_relation = -99;
             $friendship_status = $database->check_friendship($profileid, $myprofileid);
             $info['friendship_status'] = $friendship_status;
             if($profileid == $myprofileid)
             {
-              $profile_relation = 0;
+               $profile_relation = 0;
             }
             if($friendship_status == 2)
             {
-              $profile_relation = 1;
+               $profile_relation = 1;
             }
             $info['profile_relation'] = $profile_relation;
-               
+
             while ($brow = $res->fetch_array())
             {
                if($brow['type'] == 205)
@@ -12682,8 +12068,7 @@ class Api
                   $company[$a]['name'] = $brow['name'];
                   $company[$a]['id'] = $brow['actionid'];
                   $a++;
-               }
-               else
+               } else
                   if($brow['type'] == 202)
                   {
                      if($flag == 0)
@@ -12693,8 +12078,7 @@ class Api
                         $flag = 1;
                         $b++;
                      }
-                  }
-                  else
+                  } else
                      if($brow['type'] == 239)
                      {
                         if($flag_des == 0)
@@ -12704,120 +12088,103 @@ class Api
                            $flag_des = 1;
                            $c++;
                         }
-                     }
-                     else
+                     } else
                         if($brow['type'] == 204)
                         {
                            $college[$d]['name'] = $brow['name'];
                            $college[$d]['id'] = $brow['actionid'];
                            $d++;
-                        }
-                        else
+                        } else
                            if($brow['type'] == 203)
                            {
                               $school[$e]['name'] = $brow['name'];
                               $school[$e]['id'] = $brow['actionid'];
                               $e++;
-                           }
-                           else
+                           } else
                               if($brow['type'] == 206)
                               {
                                  $music[$f]['name'] = $brow['name'];
                                  $music[$f]['id'] = $brow['actionid'];
                                  $f++;
-                              }
-                              else
+                              } else
                                  if($brow['type'] == 209)
                                  {
                                     $sports[$g]['name'] = $brow['name'];
                                     $sports[$g]['id'] = $brow['actionid'];
                                     $g++;
-                                 }
-                                 else
+                                 } else
                                     if($brow['type'] == 208)
                                     {
                                        $book[$h]['name'] = $brow['name'];
                                        $book[$h]['id'] = $brow['actionid'];
                                        $h++;
-                                    }
-                                    else
+                                    } else
                                        if($brow['type'] == 201)
                                        {
                                           $city[$i]['name'] = $brow['name'];
                                           $city[$i]['id'] = $brow['actionid'];
                                           $i++;
-                                       }
-                                       else
+                                       } else
                                           if($brow['type'] == 207)
                                           {
                                              $movie[$j]['name'] = $brow['name'];
                                              $movie[$j]['id'] = $brow['actionid'];
                                              $j++;
-                                          }
-                                          else
+                                          } else
                                              if($brow['type'] == 211)
                                              {
                                                 $hobby[$k]['name'] = $brow['name'];
                                                 $hobby[$k]['id'] = $brow['actionid'];
                                                 $k++;
-                                             }
-                                             else
+                                             } else
                                                 if($brow['type'] == 215)
                                                 {
                                                    $mobile[$l]['name'] = $brow['name'];
                                                    $mobile[$l]['id'] = $brow['actionid'];
                                                    $l++;
-                                                }
-                                                else
+                                                } else
                                                    if($brow['type'] == 230)
                                                    {
                                                       $skill[$m]['name'] = $brow['name'];
                                                       $skill[$m]['id'] = $brow['actionid'];
                                                       $m++;
-                                                   }
-                                                   else
+                                                   } else
                                                       if($brow['type'] == 231)
                                                       {
                                                          $project[$n]['name'] = $brow['name'];
                                                          $project[$n]['id'] = $brow['actionid'];
                                                          $n++;
-                                                      }
-                                                      else
+                                                      } else
                                                          if($brow['type'] == 232)
                                                          {
                                                             $certificate[$o]['name'] = $brow['name'];
                                                             $certificate[$o]['id'] = $brow['actionid'];
                                                             $o++;
-                                                         }
-                                                         else
+                                                         } else
                                                             if($brow['type'] == 233)
                                                             {
                                                                $award[$p]['name'] = $brow['name'];
                                                                $award[$p]['id'] = $brow['actionid'];
                                                                $p++;
-                                                            }
-                                                            else
+                                                            } else
                                                                if($brow['type'] == 234)
                                                                {
                                                                   $team[$q]['name'] = $brow['name'];
                                                                   $team[$q]['id'] = $brow['actionid'];
                                                                   $q++;
-                                                               }
-                                                               else
+                                                               } else
                                                                   if($brow['type'] == 235)
                                                                   {
                                                                      $major[$r]['name'] = $brow['name'];
                                                                      $major[$r]['id'] = $brow['actionid'];
                                                                      $r++;
-                                                                  }
-                                                                  else
+                                                                  } else
                                                                      if($brow['type'] == 236)
                                                                      {
                                                                         $tool[$s]['name'] = $brow['name'];
                                                                         $tool[$s]['id'] = $brow['actionid'];
                                                                         $s++;
-                                                                     }
-                                                                     else
+                                                                     } else
                                                                         if($brow['type'] == 237)
                                                                         {
                                                                            $extension[$t]['name'] = $brow['name'];
@@ -12885,7 +12252,7 @@ class Api
                   $data['nickname'] = $nickname;
                }
             }
-           // $data['age'] = $database->get_age($profileid) . ' years old';
+            // $data['age'] = $database->get_age($profileid) . ' years old';
             if($help->checkPrivacy('EMAIL', $profileid) == 1)
             {
                $data['email'] = $email;
@@ -12905,13 +12272,11 @@ class Api
             $data['action'] = 'brijesh';
             $data['info'] = $info;
             echo json_encode($data);
-         }
-         else
+         } else
          {
             $help->error_description(18);
          }
-      }
-      else
+      } else
       {
          $help->error_description(9);
       }

@@ -1348,7 +1348,7 @@ var deploy = (function()
       var myprofileid = $('#myprofileid_hidden').attr('value'); 
       var profileid = $('#profileid_hidden').attr('value');
       $('.bio_indiv_container').remove();
-      $('#prev').html('<div class="row bio_row"><div style="padding:1em 1em 1em 2em; background-image:linear-gradient(to bottom, #FFFFFF 0%, #ccc 100%), linear-gradient(to bottom, #Fff 0%, #Fff 100%); background-clip: content-box, padding-box;" class="col-md-12"><input type="hidden" value="'+profileid+'" /><input type="hidden" value="50" /><img id="'+data.profile_imageid+'" data="'+data.profile_image+'" class="img-thumbnail lfloat" src="thumbnail.php?file='+data.profile_image+'&height=150&width=150" onclick="action.image_viewer(this)" /><span class="bold left1"><a  href="profile.php?id='+profileid+'" style="font-size:1.5em;">'+data.name+'</a></span><div style="margin-top:6em;margin-left:14em;" id="profile_above"><div><span class="glyphicon glyphicon-envelope "></span>:<a href=mailto:'+data.email+' >'+data.email+'</a></div></div></div>');
+      $('#prev').html('<div class="row bio_row"><div style="padding:1em 1em 1em 2em; background-image:linear-gradient(to bottom, #FFFFFF 0%, #ccc 100%), linear-gradient(to bottom, #Fff 0%, #Fff 100%); background-clip: content-box, padding-box;" class="col-md-12"><input type="hidden" value="'+profileid+'" /><input type="hidden" value="50" /><img id="'+data.profile_imageid+'" data="'+data.profile_image+'" class="img-thumbnail lfloat" src="thumbnail.php?file='+data.profile_image+'&height=150&width=150" onclick="action.image_viewer(this)" /><span class="bold left1"><a class="ajax_nav" href="profile.php?id='+profileid+'" style="font-size:1.5em;">'+data.name+'</a></span><div style="margin-top:6em;margin-left:14em;" id="profile_above"><div><span class="glyphicon glyphicon-envelope "></span>:<a href=mailto:'+data.email+' >'+data.email+'</a></div></div></div>');
       if(myprofileid != profileid)
       {
         $('#profile_above').prepend('<div id="parent_con" style="margin-right:2em;"><div><input class="profile_actions_button theme_button rfloat " onclick="ui.message(this)" style="width:7.3em;" type="submit" value="+Message" /></div></div>');
@@ -1363,7 +1363,7 @@ var deploy = (function()
     }
     else if (data.info.friendship_status == 2)
     {
-        $('#parent_con').append('<div style="margin-right:8em;"><div><span data-toggle="modal"  data-target="#praisemodal"><input class="profile_actions_button theme_button rfloat" style="width:7.3em;" type="submit" value="Praise" /></span></div></div>');
+        $('#parent_con').append('<div style="margin-right:8em;"><div><span data-toggle="modal"  data-target="#praisemodalbadge"><input class="profile_actions_button theme_button rfloat" style="width:7.3em;" type="submit" value="Praise" /></span></div></div>');
      }   
     }
       if (data.tagline)
@@ -1449,11 +1449,11 @@ var deploy = (function()
       } 
    }
 
-   function friend_deploy(data)
+   function friend_deploy(data,container)
    {
       $.each(data.action, function(index, value)
       {
-         $('#center').append('<div id="' + value.profileid + '" class="friend_feed""><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src="' + data.pimage[value.profileid] + '" alt="" height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a></div></div>');
+         $(container).append('<div id="' + value.profileid + '" class="friend_feed""><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src="' + data.pimage[value.profileid] + '" alt="" height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a></div></div>');
          if (value.status == 0)
          {
             $('#' + value.profileid).append('<div style="float:right;"><input id="' + value.profileid + '" class="add_friend theme_button" type="submit" value=" +Follow " " onclick ="action.add_friend(this,' + value.profileid + '); this.onclick=null;" /><div>');
@@ -1571,10 +1571,32 @@ var deploy = (function()
    }
    function video_deploy(data)
    {
-      var i = 0;
+    if(data.hasOwnProperty('groupname')) 
+    {
+        $('.file_center_title').html(''+data.groupname+' - Videos')
+        $('#file_upload_modal_level').html('Upload video in <span style="color:#336699">'+data.groupname+'</span>');
+        $('#photo_hidden_profileid').attr('value',data.groupid);
+        $('#action_hidden').attr('value','group_photo_upload');
+       // param.action ='group_photo_upload';
+    }
+    else if(data.hasOwnProperty('eventname'))
+    {
+        $('.file_center_title').html(''+data.eventname+' - Videos')
+        $('#file_upload_modal_level').html('Upload video in <span style="color:#336699">'+data.eventname+'</span>');
+        $('#photo_hidden_profileid').attr('value',data.eventid);
+        $('#action_hidden').attr('value','event_photo_upload');
+    }
+    else
+    {
+        $('#file_upload_modal_level').html('Upload video to All videos <br/><span style="font-size:0.5em;color:light gray;">(Uploaded video will be shared with everyone on your network . If you want to share with group or event please select from left menu .)</span>');
+        $('#action_hidden').attr('value','photo_upload');
+        var myprofileid = $('#myprofileid_hidden').attr('value');
+        $('#photo_hidden_profileid').attr('value',myprofileid);
+    }
+    
       $.each(data.action, function(index, value)
       {
-         $('#prev').append('<div style="margin-left:8px; display:inline;"><div id="videobox' + value.actionid + '" ></div></div>');
+         $('.video_table_body').append('<div style="margin-left:8px; display:inline;"><div id="videobox' + value.actionid + '" ></div></div>');
          jwplayer("videobox" + value.actionid).setup(
          {
             file: value.file,
@@ -1584,11 +1606,19 @@ var deploy = (function()
             aspectratio: "16:9",
             fallback: "false",
             primary: "flash"
-         });
-         i++;
-         if (i % 4 == 0)
+         }); 
+/*
+$('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="videobox' + value.actionid + '"></div><div>'+value.caption+'</div></tr>');
+         jwplayer("videobox" + value.actionid).setup(
          {
-         }
+            file: value.file,
+            image: value.thumbnail,
+            title: value.caption,
+            width: "41%",
+            aspectratio: "16:9",
+            fallback: "false",
+            primary: "flash"
+         }); */
       });
    }
 
@@ -1623,26 +1653,25 @@ var deploy = (function()
       {
          $('#prev').append('<div class="user people_each" id="' + value.profileid + '"><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src="' + data.pimage[value.profileid] + '" width="100" height="100"></a><div class="name_80"><a class="bold ajax_nav" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a></div></div>');
          
-         if (data.designation[value.profileid] != null)
+         if (value.designation != null)
          {
-            $('#' + value.profileid).children().eq(1).append('<div><strong>' +data.designation[value.profileid]+ '</strong></div>');
+            $('#' + value.profileid).children().eq(1).append('<div><strong>' +value.designation+ '</strong></div>');
          }
-         if (data.email[value.profileid] != null)
+         if (value.email != null)
          {
-            $('#' + value.profileid).children().eq(1).append('<div style="margin-top:1em;"><span class="glyphicon glyphicon-envelope"></span>' +data.email[value.profileid]+ '</div>');
+            $('#' + value.profileid).children().eq(1).append('<div style="margin-top:1em;"><span class="glyphicon glyphicon-envelope"></span>' +value.email+ '</div>');
          }
-         if (data.profession[value.profileid] != '')
+         if (value.profession != '')
          {
-            console.log('coming');
-            $('#' + value.profileid).children().eq(1).append('<div title="Profession"><span class="glyphicon glyphicon-briefcase"></span>' +data.profession[value.profileid]+ '</div>');
+            $('#' + value.profileid).children().eq(1).append('<div title="Profession"><span class="glyphicon glyphicon-briefcase"></span>' +value.profession+ '</div>');
          }
-         if (data.team[value.profileid] != null)
+         if (value.team != null)
          {
-            $('#' + value.profileid).children().eq(1).append('<div title="Team"><span class="glyphicon glyphicon-tasks"></span>' +data.team[value.profileid]+ '</div>');
-         }
+            $('#' + value.profileid).children().eq(1).append('<div title="Team"><span class="glyphicon glyphicon-tasks"></span>' +value.team+ '</div>');
+         } 
          if (value.status == '0')
          {
-            $('#' + value.profileid+' '+'a:last').append('<input class="profile_actions_button theme_button" onclick="action.add_friend(this,' + value.profileid + '); this.onclick=null;" style="width:7em;" type="submit" value=" +Follow " id="' + value.profileid + '"/>');
+            $('#' + value.profileid+' '+' .name_80:first').prepend('<input class="profile_actions_button theme_button" onclick="action.add_friend(this,' + value.profileid + '); this.onclick=null;" style="width:7em;" type="submit" value=" +Follow " id="' + value.profileid + '"/>');
          }
       });
    }
@@ -1815,6 +1844,10 @@ var deploy = (function()
             {
                page = 'group_file';
             }
+            else if (page == 'video')
+            {
+               page = 'group_video';
+            }
             else if (page == 'member')
             {
                page = 'group_member';
@@ -1849,6 +1882,10 @@ var deploy = (function()
             else if (page == 'file')
             {
                page = 'event_file';
+            }
+             else if (page == 'video')
+            {
+               page = 'event_video';
             }
             else if (page == 'guest')
             {
@@ -1972,7 +2009,7 @@ var deploy = (function()
             }
          }
          $('.row').html('');
-         $('.row').append('<div class="col-xs-6 col-md-2 left" id="left"></div><div id="center" class="col-md-6 center"></div><div id="right" class="col-md-3 right"></div>');
+         $('.row').append('<div class="col-md-2 left" id="left"></div><div id="center" class="col-md-6 center"></div><div id="right" class="col-md-3 right"></div>');
          page = 'news_json';
          url = 'ajax/write.php';
          param.action = 'news_feed';
@@ -2119,7 +2156,7 @@ var deploy = (function()
             window.location.hash = 'admin.php?hl=usefullinks';
          }
          $(document).attr('title', 'Quipmate - Admin Interface');
-         $('#center').html('<h1 class="page_title">Post Useful Links</h1><div style="margin:3em;border:0.1em solid #aaaaaa;width:34.6em;height:20.2em;padding:0.5em;margin-right:0.2em; overflow-y:scroll; overflow-x:hidden;" id="usefullinks_box"></div><input type="submit"  value="Got Link"  id="ullink_box" title="Paste Link" /><div id="uluploader"></div>');
+         $('#center').html('<h1 class="page_title">Post Useful Links</h1><div style="margin:3em;border:0.1em solid #aaaaaa;width:34.6em;height:20.2em;padding:0.5em;margin-right:0.2em; overflow-y:scroll; overflow-x:hidden;" id="usefullinks_box"></div><textarea id="link_box" placeholder="Paste/type a link here ?"/></textarea><input id="ullink_button" type="submit" class="theme_button" value="Share"></div>');
          action.usefullinks_fetch();
       }
       else if (page == 'team')
@@ -2217,7 +2254,10 @@ var deploy = (function()
             window.location.hash = 'admin.php?hl=designation';
          }
          $(document).attr('title', 'Quipmate - Admin Interface');
-         $('#center').html('<h1 class="page_title">Designations</h1><div style="margin:3em;border:0.1em solid #aaaaaa;width:34.6em;height:20.2em;padding:0.5em;margin-right:0.2em; overflow-y:scroll; overflow-x:hidden;" id="designation_show_box"></div><input type="text" class="form-control" placeholder="Add a designation" style="margin-left:2.80em;width:50%;display:inline" id="designation_box"/> 	<input type="submit" onclick="action.designation(this)" value="Add" id="designation_button" class="theme_button" title="Add" /><h1 class="page_title">Managing Director</h1><input type="text" id="mdadd" autocomplete="off" style="width:20em; margin-left:2.80em; margin-top:20px;" class="form-control" placeholder="Who is the managing director"> <div id="md_container" width="200px" style="margin-left:20px;" ></div><div id="md_co" style="width:30em; margin-left:20px;"><input type="submit" class="theme_button" style="margin-top:-34px;" onclick="action.addmd(this)" value="Add MD" id="add_md_button" title="Add MD" /></div>	');
+         $('#center').html('<h1 class="page_title">Designations</h1><div style="margin:3em;border:0.1em solid #aaaaaa;width:34.6em;height:20.2em;padding:0.5em;margin-right:0.2em; overflow-y:scroll; overflow-x:hidden;" id="designation_show_box"></div><input type="text" class="form-control" placeholder="Add a designation" style="margin-left:2.80em;width:50%;display:inline" id="designation_box"/> 	<input type="submit" onclick="action.designation(this)" value="Add" id="designation_button" class="theme_button" title="Add" /></div>	');
+         
+ // Removed code 
+ //<h1 class="page_title">Managing Director</h1><input type="text" id="mdadd" autocomplete="off" style="width:20em; margin-left:2.80em; margin-top:20px;" class="form-control" placeholder="Who is the managing director"> <div id="md_container" width="200px" style="margin-left:20px;" ></div><div id="md_co" style="width:30em; margin-left:20px;"><input type="submit" class="theme_button" style="margin-top:-34px;" onclick="action.addmd(this)" value="Add MD" id="add_md_button" title="Add MD" />        
          action.designation_fetch();
       }
       else if (page == 'admin_list')
@@ -2248,7 +2288,7 @@ var deploy = (function()
          {
             $.each(data.action, function(index, value)
             {
-               $('#center').append('<div style="height:8em;clear:both;padding:1.5em;"><a class="ajax_nav" style="font-weight:bold;" href="profile.php?id=' + value.profileid + '"><img class="lfloat" height="80" width="80" src="' + value.image + '" /></a><div class="name_80"><a class="ajax_nav" style="font-weight:bold;" href="profile.php?id=' + value.profileid + '">' + value.name + '</a><div style="float:right;"><input id="invite_button" class="theme_button" type="submit" onclick="action.moderator_remove(this,' + value.profileid + ')" value="Remove Admin" title="Remove Admin" style=" width:9.3em;margin-top:3em;" /></div></div></div>');
+               $('#center').append('<div style="height:8em;clear:both;padding:1.5em;"><a class="ajax_nav" style="font-weight:bold;" href="profile.php?id=' + value.profileid + '"><img class="lfloat" height="80" width="80" src="' + value.image + '" /></a><div class="name_80"><a class="ajax_nav" style="font-weight:bold;" href="profile.php?id=' + value.profileid + '">' + value.name + '</a><div style="float:right;"><input id="invite_button" class="theme_button" type="submit" onclick="action.moderator_remove(this,'+value.profileid+')" value="Remove Admin" title="Remove Admin" style=" width:9.3em;margin-top:3em;" /></div></div></div>');
             });
          }));
       }
@@ -2571,6 +2611,41 @@ var deploy = (function()
          //action.group_suggest("object",6);
          $('#news_json').addClass('selected');
       }
+      else if (page == 'group_video')
+      {
+         $('#profileid_hidden').attr('value', profileid);
+         if (!state.pop)
+         {
+            if (window.history)
+            {
+               var st =
+               {
+                  url: state.url,
+                  page: page,
+                  param: param,
+                  me: "object"
+               };
+               window.history.pushState(st, 'HTML5', 'group.php?id=' + profileid + "&hl=video");
+            }
+            else
+            {
+               window.location.hash = 'group.php?id=' + profileid + "&hl=video";
+            }
+         }
+         url = 'ajax/write.php';
+         param.action = 'group_video_fetch';
+         param.groupid = profileid;
+         window.increment = 20;
+         $('.video_table_body').html('');
+      /*   window.ajax_queue.push($.getJSON(url, param, function(data)
+         {
+            $('.file_center_title').html(''+data.groupname+' - File');
+            $('.file_table_body').html('');
+           deploy.file_deploy(data);
+         })); */
+         //action.group_suggest("object",6);
+         $('#news_json').addClass('selected');
+      }
       else if (page == 'group_settings')
       {
          $('#profileid_hidden').attr('value', profileid);
@@ -2820,6 +2895,41 @@ var deploy = (function()
          param.action = 'event_doc_fetch';
          param.eventid = profileid;
          window.increment = 20;
+         $('.video_table_body').html('');
+      /*   window.ajax_queue.push($.getJSON(url, param, function(data)
+         {
+            $('.file_center_title').html(''+data.groupname+' - File');
+            $('.file_table_body').html('');
+           deploy.file_deploy(data);
+         })); */
+         //action.group_suggest("object",6);
+         $('#news_json').addClass('selected');
+      }
+        else if (page == 'event_video')
+      {
+         $('#profileid_hidden').attr('value', profileid);
+         if (!state.pop)
+         {
+            if (window.history)
+            {
+               var st =
+               {
+                  url: state.url,
+                  page: page,
+                  param: param,
+                  me: "object"
+               };
+               window.history.pushState(st, 'HTML5', 'event.php?id=' + profileid + "&hl=video");
+            }
+            else
+            {
+               window.location.hash = 'event.php?id=' + profileid + "&hl=video";
+            }
+         }
+         url = 'ajax/write.php';
+         param.action = 'event_video_fetch';
+         param.eventid = profileid;
+         window.increment = 20;
          $('.file_table_body').html('');
       /*   window.ajax_queue.push($.getJSON(url, param, function(data)
          {
@@ -2937,7 +3047,7 @@ var deploy = (function()
             }
          }
          $('.row').html('');
-         $('.row').append('<div class="col-xs-6 col-md-2 left" id="left"></div><div id="center" class="col-md-6 center"></div><div id="right" class="col-md-3 right"></div>');
+         $('.row').append('<div class="col-md-2 left" id="left"></div><div id="center" class="col-md-6 center"></div><div id="right" class="col-md-3 right"></div>');
          url = 'ajax/write.php';
          param.action = 'profile_details_fetch';
          param.profileid = profileid;
@@ -2954,7 +3064,7 @@ var deploy = (function()
             
             
             $(document).attr('title', data.info.name);
-            if (data.info.profile_relation == 2)
+            if (data.info.friendship_status == 2)
             {
                $('#left').append('<div style="margin-top:2em;text-align:center;"><a style="color:#003399;" href="#" onclick="ui.unfriend(this) " >Unfollow ' + data.info.name + '</a></div>');
             }
@@ -3261,23 +3371,11 @@ var deploy = (function()
          window.increment = 20;
          var profile_name = $('#profilename_hidden').attr('value');
         // $(document).attr('title', profile_name + ' - Files');
-         $('#left').html('<div class="panel-group" id="parentfolder"><div class="panel panel-default"><div class="panel-heading pointer heading_left_padding_off" data-toggle="collapse" data-parent="#parentfolder" href="#allsub" ><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">All</h4></div><div id="allsub" class="panel-collapse collapse in"><div class="panel-body left_right_padding_off"><div class="panel panel-default ajax_nav" href="profile.php?id='+profileid+'&hl=file"><div class="panel-heading pointer"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">Files</h4></div></div><div class="panel panel-default" href="profile.php?id='+profileid+'&hl=video"><div class="panel-heading pointer"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">Video</h4></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading pointer heading_left_padding_off" data-toggle="collapse" data-parent="#parentfolder" href="#groupsub"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">Group</h4></div><div id="groupsub" class="panel-collapse collapse"><div class="panel-body group_body"></div></div></div><div class="panel panel-default"><div class="panel-heading pointer heading_left_padding_off" data-toggle="collapse" data-parent="#parentfolder" href="#eventsub"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">Event</h4></div><div id="eventsub" class="panel-collapse collapse "><div class="panel-body event_body"></div></div></div></div>'); 
+         $('#left').html('<div class="panel-group" id="parentfolder"><div class="panel panel-default"><div class="panel-heading pointer heading_left_padding_off" data-toggle="collapse" data-parent="#parentfolder" href="#allsub" ><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">All</h4></div><div id="allsub" class="panel-collapse collapse in"><div class="panel-body left_right_padding_off"><div class="panel panel-default ajax_nav" href="profile.php?id='+profileid+'&hl=file"><div class="panel-heading pointer"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">Files</h4></div></div><div class="panel panel-default ajax_nav" href="profile.php?id='+profileid+'&hl=video"><div class="panel-heading pointer"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">Video</h4></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading pointer heading_left_padding_off" data-toggle="collapse" data-parent="#parentfolder" href="#groupsub"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">Group</h4></div><div id="groupsub" class="panel-collapse collapse"><div class="panel-body group_body"></div></div></div><div class="panel panel-default"><div class="panel-heading pointer heading_left_padding_off" data-toggle="collapse" data-parent="#parentfolder" href="#eventsub"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">Event</h4></div><div id="eventsub" class="panel-collapse collapse "><div class="panel-body event_body"></div></div></div></div>'); 
          $('#center').html('<div id="prev"></div>');
-         $('#prev').html('<div class="panel-heading top1"><span style="font-size:1.3em;font-weight:bold" class="file_center_title">All Files</span><span data-toggle="modal"  data-target="#uploadfilemodal"><input type="submit" class="theme_button rfloat" style="width:8em;" value="+Upload File" /></span></div><ul role="tablist" class="nav nav-tabs top1"><li class="active"><a href="#">Files</a></li>  <li><a href="#">Videos</a></li><li><form role="search"><div><input type="text" class="form-control search_doc_form" placeholder="Search"></div></form></li></ul><table style="width:100%"> <thead><tr><th style="width:40%">Name</th><th style="width: 15%;">Last Updated by</th><th style="width: 15%;">Last Updated On</th><th style="width: 15%;">Shared with</th><th style="width: 15%;">Action</th></tr></thead><tbody class="file_table_body"></tbody></table></div>');
+         $('#prev').html('<div class="panel-heading top1"><span style="font-size:1.3em;font-weight:bold" class="file_center_title">All Files</span><span data-toggle="modal"  data-target="#uploadfilemodal"><input type="submit" class="theme_button rfloat" style="width:8em;" value="+Upload File" /></span></div><ul role="tablist" class="nav nav-tabs top1"><li class="active"><a class="ajav_nav" href="profile.php?id='+profileid+'&hl=file">Files</a></li>  <li><a class="ajax_nav" href="profile.php?id='+profileid+'&hl=video">Videos</a></li><li><form role="search"><div><input type="text" class="form-control search_doc_form" placeholder="Search"></div></form></li></ul><table style="width:100%"> <thead><tr><th style="width:40%">Name</th><th style="width: 15%;">Last Updated by</th><th style="width: 15%;">Last Updated On</th><th style="width: 15%;">Shared with</th><th style="width: 15%;">Action</th></tr></thead><tbody class="file_table_body"></tbody></table></div>');
          $('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Files" />');
-         
-    $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
-    $('.tree li.parent_li > span').on('click', function (e) {
-        var children = $(this).parent('li.parent_li').find(' > ul > li');
-        if (children.is(":visible")) {
-            children.hide('fast');
-            $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
-        } else {
-            children.show('fast');
-            $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
-        }
-        e.stopPropagation();
-    });
+ 
       }
       else if (page == 'video')
       {
@@ -3303,11 +3401,15 @@ var deploy = (function()
          url = 'ajax/write.php';
          param.action = 'video_fetch';
          param.profileid = profileid;
-         window.increment = 25;
+         window.increment = 20;
          var profile_name = $('#profilename_hidden').attr('value');
-         $(document).attr('title', profile_name + ' - Photo');
+         action.group_and_event_select(this);
+         $('#left').html('<div class="panel-group" id="parentfolder"><div class="panel panel-default"><div class="panel-heading pointer heading_left_padding_off" data-toggle="collapse" data-parent="#parentfolder" href="#allsub" ><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">All</h4></div><div id="allsub" class="panel-collapse collapse in"><div class="panel-body left_right_padding_off"><div class="panel panel-default ajax_nav" href="profile.php?id='+profileid+'&hl=file"><div class="panel-heading pointer"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">Files</h4></div></div><div class="panel panel-default ajax_nav" href="profile.php?id='+profileid+'&hl=video"><div class="panel-heading pointer"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">Video</h4></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading pointer heading_left_padding_off" data-toggle="collapse" data-parent="#parentfolder" href="#groupsub"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">Group</h4></div><div id="groupsub" class="panel-collapse collapse"><div class="panel-body group_body"></div></div></div><div class="panel panel-default"><div class="panel-heading pointer heading_left_padding_off" data-toggle="collapse" data-parent="#parentfolder" href="#eventsub"><img src="'+icon_cdn+'/folder.png" width="20" height="20" /><h4 class="panel-title">Event</h4></div><div id="eventsub" class="panel-collapse collapse "><div class="panel-body event_body"></div></div></div></div>'); 
+         
          $('#center').html('<div id="prev"></div>');
-         $('#prev').html('<h1 class="page_title">' + profile_name + ' - Videos</h1>');
+         $('#center').html('<div id="prev"></div>');
+         $('#prev').html('<div class="panel-heading top1"><span style="font-size:1.3em;font-weight:bold" class="file_center_title">All Videos</span><span data-toggle="modal"  data-target="#uploadfilemodal"><input type="submit" class="theme_button rfloat" style="width:8em;" value="+Upload Video" /></span></div><ul role="tablist" class="nav nav-tabs top1"><li ><a class="ajax_nav" href="profile.php?id='+profileid+'&hl=file">Files</a></li>  <li class="active"><a class="ajax_nav" href="profile.php?id='+profileid+'&hl=video">Videos</a></li><li><form role="search"><div><input type="text" class="form-control search_doc_form" placeholder="Search"></div></form></li></ul><table style="width:100%"><tbody class="video_table_body"></tbody></table></div>');
+         $('#center').append('<input type="submit" id="load_more" style="height:30px;width:150px;margin-left:200px;display:none;" value="Show More Videos" />');
       }
       else if (page == 'new_user')
       {
@@ -3333,7 +3435,7 @@ var deploy = (function()
          url = 'ajax/write.php';
          param.action = 'people_fetch';
          param.new_user = 'new_user';
-         window.increment = 25;
+         window.increment = 10;
          $(document).attr('title', 'Quipmate - People Directory');
          $('#center').html('<div id="prev"></div>');
          $('#prev').html('<h1 class="page_title">Co-workers</h1>');
@@ -3433,7 +3535,7 @@ var deploy = (function()
             $('#left').html('<ul class=" nav nav-pills nav-stacked"><li class="links"><a class="ajax_nav" id="profile_json" href="profile.php?id=' + profileid + '&hl=diary" title="Your activities"><span class="name_20">Diary</span></a></li><li class="links"><a class="ajax_nav" id="bio" href="profile.php?id=' + profileid + '&hl=bio" title="Your Bio"><span class="name_20">Bio</span></a></li><li class="links"><a class="ajax_nav" id="praise" href="profile.php?id=' + profileid + '&hl=praise" title="Your Praises"><span class="name_20">Praises</span></a></li><li class="links"><a class="ajax_nav" id="pphoto" href="profile.php?id=' + profileid + '&hl=image" title="Your Photos"><span class="name_20">Photos</span></a></li><li class="links"><a  class="ajax_nav" id="following" href="profile.php?id=' + profileid + '&hl=following" title="You are following"><span class="name_20">Following (' + data.info.following_count + ')</span></a></li><li class="links"><a  class="ajax_nav" id="followers" href="profile.php?id=' + profileid + '&hl=followers" title="Your followers"><span class="name_20">Followers (' + data.info.followers_count + ')</span></a></li></ul><div id="friend_event" class="right_item" style="margin:1em 0em 0em 0em;padding:0em;"></div>');
             $('#profilename_hidden').attr('value', data.info.name);
             $(document).attr('value', data.info.name);
-            if (data.info.profile_relation == 2)
+            if (data.info.friendship_status == 2)
             {
                $('#left').append('<div style="margin-top:2em;text-align:center;"><a style="color:#003399;" href="#" onclick="ui.unfriend(this) " >Unfollow ' + data.info.name + '</a></div>');
             }
@@ -3461,7 +3563,7 @@ var deploy = (function()
       param.lastScrollTopfeed = $(window).scrollTop();
       $('#page_hidden').attr('value', page);
             
-        if(page == 'bio' || page == 'file' || page == 'group_file' || page == 'event_file')
+        if(page == 'bio' || page == 'file' || page == 'group_file' || page == 'event_file' || page == 'video' || page == 'group_video' || page == 'event_video')
         {
         
         $('#center').removeClass('col-md-6');

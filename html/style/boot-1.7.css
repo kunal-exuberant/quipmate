@@ -1,3 +1,66 @@
+.video_tr{
+    padding:1em;
+    border-bottom:1px solid #ccc;
+}
+.name_profile li{
+    font-weight: bold;
+}
+#profile{
+    padding-left:0.2em !important;
+}
+.praise_texts{
+    min-height: 7em;
+    margin-left: 7em;
+}
+#badge_picker li a {
+text-decoration: none;
+}
+#badge_picker li img {
+margin: 0.75em 0;
+}
+.badge_chooser{
+    width:100%;
+}
+#badge_picker li .badge_name {
+font-size: 1.167em;
+font-weight: bold;
+word-wrap: break-word;
+line-height: 16px;
+}
+
+#badge_picker li .badge_description {
+word-wrap: break-word;
+margin: 0.75em 0;
+color: #363b40;
+}
+
+#badge_picker li {
+background: none;
+position: relative;
+width: 32.334%;
+height: 150px;
+line-height: 1;
+text-align: center;
+display:inline-flex;
+padding: 5px 12px;
+border-width: 0 1px 1px 0; 
+border-style: solid;
+border-color: #e6ebec;
+white-space: normal;
+font-weight: normal;
+}
+
+.dropdown_wrapper,.dropdown_menu {
+background-color:#fff;
+width: 512px;
+max-width: inherit;
+left: 10px;
+padding: 0;
+z-index: 3;
+}
+
+
+
 .group_body,.event_body,.left_right_padding_off{
     padding: 0.3em 0em 0.3em 0.4em ;
 }
