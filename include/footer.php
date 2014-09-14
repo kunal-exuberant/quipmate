@@ -123,6 +123,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary theme_button" data-toggle="modal" data-target="#praisemodalbadge" data-dismiss="modal" >Back</button>
                 <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary theme_button" id="share_actionid" data="" onclick="action.praise_send(this)">Share</button>
 			</div>

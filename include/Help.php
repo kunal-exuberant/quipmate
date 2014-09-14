@@ -1078,6 +1078,7 @@ class Help
 				case '2500': $rtype = '2511'; break;
 				case '2600': $rtype = '2611'; break;
 				case '2800': $rtype = '2811'; break;
+                case '900': $rtype = '911'; break;
 				default : $rtype = '63'; 
 			}
 		}
@@ -1167,6 +1168,7 @@ class Help
 				case '2500': $ctype = '2502'; break;
 				case '2600': $ctype = '2602'; break;
 				case '2800': $ctype = '2802'; break;
+                case '900': $ctype = '902'; break;
 			}
 		}	
 		return $ctype;
@@ -1366,7 +1368,7 @@ class Help
 	
 	
 	
-	function register_user($email,$identifier,$name,$password,$gender,$day,$month,$year)
+	function register_user($email,$identifier,$name,$password,$gender,$day,$month,$year,$designation,$team)
 	{
 		$email = strtolower($email);
 	
@@ -1400,6 +1402,8 @@ class Help
 					$mname = $n[1];
 					$lname = $n[2];
 					$result = $database->bio_insert($profileid,$email,$name,$fname,$mname,$lname,$gender,$birthday);
+                    //des =239 , team =234
+                    
 					if($result)
 					{ 
 						$_SESSION['EMAIL'] = $email;
@@ -1424,6 +1428,24 @@ class Help
 							$this->friend_memcache_update($fid, $database, $memcache);
 							$this->friend_memcache_update($profileid, $database, $memcache);
 						}
+/* +1  9/11/2014*/
+
+                     if(!($desid = $database->diaryid_select(239, $designation)))
+                     {
+                        $desid = $database->mydiary_create_wo_admin(239, $designation);
+                     }
+                     if(!($teamid = $database->diaryid_select(234, $team)))
+                     {
+                        $teamid = $database->mydiary_create_wo_admin(234,$team);
+                     }
+                     $actioniddes = $database->get_actionid($profileid, 239);
+                     $ret = $database->bio_item_add($actioniddes, $profileid,239,$desid);
+                     
+                     $actionidteam = $database->get_actionid($profileid, 234);
+                     
+                     $ret = $database->bio_item_add($actionidteam, $profileid,234,$teamid);
+                     $result = $database->team_member_add($actionidteam, $profileid,$team);
+/* -1 */                        
                         $ret = $database->subscribe_broadcast_pages($actionid,$profileid);
 						$image = $this->pimage_fetch($profileid, $memcache, $database);
 						$_SESSION['pimage'] = $image;

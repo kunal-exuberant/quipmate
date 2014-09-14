@@ -1,3 +1,7 @@
+#badge_container{
+    clear:right;
+    margin-top: 0.5em;
+}
 .video_tr{
     padding:1em;
     border-bottom:1px solid #ccc;

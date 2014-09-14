@@ -210,6 +210,10 @@ class Feed
 		{
 			$this->praise_complete_encode($k,$json,$help,$encode,$database,$memcache,2411,2402);
 		}
+		else if($action[$k]['actiontype']== 900)
+		{
+			$this->star_complete_encode($k,$json,$help,$encode,$database,$memcache,911,902);
+		}        
 		else if($action[$k]['actiontype']==2500)
 		{
 			$this->video_complete_encode($k,$json,$help,$encode,$database,$memcache,2511,2502);
@@ -335,6 +339,11 @@ class Feed
 			$this->parent_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
 			$this->praise_complete_encode($k,$json,$help,$encode,$database,$memcache,2411,2402);
 		}		
+		else if($action[$k]['actiontype']== 902 || $action[$k]['actiontype'] == 911)
+		{
+			$this->parent_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
+			$this->star_complete_encode($k,$json,$help,$encode,$database,$memcache,911,902);
+		}        
 		else if($action[$k]['actiontype']==2511 || $action[$k]['actiontype']==2502)
 		{    
 			$this->parent_encode($NROW,$k,$json,$help,$encode,$database,$memcache);
@@ -648,6 +657,12 @@ class Feed
 		$action[$k]['file'] = $mood['file'];
 		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
 	}
+	function star_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
+	{   global $action;
+//		$action[$k]['sex'] = $database->sex_select($action[$k]['postby']);
+		$action[$k]['page'] = $encode->star_encode($action[$k]['pageid'],$database);	
+		$this->response_comment_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype);	 
+	}    
 	function page_complete_encode($k,$json,$help,$encode,$database,$memcache,$rtype,$ctype)
 	{   global $action;
 		$action[$k]['page'] = $encode->page_encode($action[$k]['pageid'],$database);	

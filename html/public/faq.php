@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-<title>Quipmate Blog</title>
+<title>Quipmate | FAQs</title>
 <style>
 *{font-size:11px;margin:0em;padding:0em;}
 body{font-family:tahoma;verdana;background-color:#ededed}
@@ -37,6 +37,7 @@ li{margin-left:2em;}
 	require_once('../../include/File.php');
 	$file = new File();
 	$file->script_jquery_public();
+    $icon_cdn ='https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com';
 ?>
 <script>
 	function feature_toggle(me)
@@ -46,7 +47,7 @@ li{margin-left:2em;}
 </script>
 	<div id="header">
 		<div id="header-wrapper">
-				<a id="website_logo" href="/" title="Your Online Identity">Quipmate Blog</a>
+				<a id="website_logo" href="/" title="Your Online Identity">Quipmate FAQs</a>
 		</div>
 	</div>
 	<div id="wrapper">	
@@ -158,12 +159,13 @@ li{margin-left:2em;}
 				
 			
 				<div style="background-color:#336699;padding:0.5em 0.5em 0.5em 1.5em;color:#ffffff;font-size:2em;">Quipmate Feature List</div>
-				<div class="feature_each">	
+                
+                <!--<div class="feature_each">	
 					<div class="feature_title" onclick="feature_toggle(this)">
 						1.	Direct to MD
 					</div>
 					<div class="feature_detail" style="display:block;">
-						<img class="lfloat" src="<?php echo $icon_cdn?>/direct-to-md-1.png" />
+						<img class="lfloat" src="<?php //echo $icon_cdn?>/direct-to-md-1.png" />
 						<div class="text_500">
 							Write an open/close letter to the managing director of the company. The associate writing the letter can chose if the letter is open/close. In case of an open letter it goes to the feed of all associates, who can put their opinions regarding the content of the letter. In case of a close letter the letter is received only by the managing director in their inbox and the rest of the person do not come to know about the letter.
 						</div>
@@ -174,15 +176,16 @@ li{margin-left:2em;}
 						2.	Director’s Blog
 					</div>
 					<div class="feature_detail">
-						<img class="lfloat" src="<?php echo $icon_cdn?>/blog-2.png" />
+						<img class="lfloat" src="<?php// echo $icon_cdn?>/blog-2.png" />
 						<div class="text_500">
 							Directors/senior management of the organization can write blogs on significant issues concerning the organization. This blog is viewed by all the associates of the organization and they can pitch they views on them.
 						</div>	
 					</div>
 				</div>		
+				-->
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						3.	Group for each team/technical/non-technical groups
+						1.	Group for each team/technical/non-technical groups
 					</div>
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/group-3.png" />
@@ -194,7 +197,7 @@ li{margin-left:2em;}
 				</div>
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						4.	Profile
+						2.	Profile
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/profile-21.png" />
@@ -205,7 +208,7 @@ li{margin-left:2em;}
 				</div>					
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						5.	Praise a fellow associate publicly
+						3.	Praise a fellow associate publicly
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/praise-4.png" />
@@ -216,7 +219,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						6.	Poll/ Question
+						4.	Poll/ Question
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/question-5.png" />
@@ -227,7 +230,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						7.	Events
+						5.	Events
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/event-6.png" />
@@ -238,7 +241,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						8.	Moderation
+						6.	Moderation
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/moderation-7.png" />
@@ -251,7 +254,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						9.	News Feed
+						7.	News Feed
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/news-feed-8.png" />
@@ -263,7 +266,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						10.	Live Feed
+						8.	Live Feed
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/live-feed-9.png" />
@@ -274,7 +277,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						11.	Bio/Resume Sharing
+						9.	Bio/Resume Sharing
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/bio-10.png" />
@@ -285,7 +288,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						12.	Event/Birthday reminders
+						10.	Event/Birthday reminders
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/event-reminder-11.png" />
@@ -296,7 +299,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						13.	Link sharing 
+						11.	Link sharing 
 					</div>	
 						<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/link-sharing-12.png" />
@@ -307,7 +310,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						14.	Photo/album/doc/video sharing
+						12.	Photo/album/doc/video sharing
 					</div>	
 						<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/photo-13.png" />
@@ -318,7 +321,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						15.	Broadcast news to all employees
+						13.	Broadcast news to all employees
 					</div>	
 						<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/news-feed-8.png" />
@@ -329,7 +332,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						16.	Personal messaging/chat
+						14.	Personal messaging/chat
 					</div>	
 						<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/chat-14.png" />
@@ -340,7 +343,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						17.	Miss U
+						15.	Miss U
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/missu-15.png" />
@@ -351,7 +354,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						18.	Mood sharing
+						16.	Mood sharing
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/mood-16.png" />
@@ -362,7 +365,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						19.	Notification on mail/website (configurable by user)
+						17.	Notification on mail/website (configurable by user)
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/notification-17.png" />
@@ -374,7 +377,7 @@ li{margin-left:2em;}
 				</div>
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						20.	Exciting/ comment on all features
+						18.	Exciting/ comment on all features
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/comment-response-23.png" />
@@ -385,7 +388,7 @@ li{margin-left:2em;}
 				</div>				
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						21.	Sending virtual gifts
+						19.	Sending virtual gifts
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/gift-22.png" />
@@ -396,7 +399,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						22.	Search(skill, projects, tools including complete bio etc)
+						20.	Search(skill, projects, tools including complete bio etc)
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/search-19.png" />
@@ -407,7 +410,7 @@ li{margin-left:2em;}
 				</div>	
 				<div class="feature_each">
 					<div class="feature_title" onclick="feature_toggle(this)">
-						23.	Privacy
+						21.	Privacy
 					</div>	
 					<div class="feature_detail">
 						<img class="lfloat" src="<?php echo $icon_cdn?>/privacy-20.png" />
@@ -417,41 +420,6 @@ li{margin-left:2em;}
 					</div>
 				</div>					
 			
-				<div style="background-color:#336699;padding:0.5em 0.5em 0.5em 3.5em;color:#ffffff;font-size:2em;">How Quipmate helps in employee engagement?</div>
-				<div class="technology_each">
-					<img src="<?php echo $icon_cdn?>/title-1.png" />
-				</div>				
-				<div class="technology_each">
-					<img src="<?php echo $icon_cdn?>/goal-2.png" />
-				</div>
-				<div class="technology_each">
-					<img src="<?php echo $icon_cdn?>/why-3.png" />
-				</div>
-				<div class="technology_each">
-					<img src="<?php echo $icon_cdn?>/ee-feature-4.png" />
-				</div>
-				<div class="technology_each">
-					<img src="<?php echo $icon_cdn?>/model-5.png" />
-				</div><div class="technology_each">
-					<img src="<?php echo $icon_cdn?>/one-one--6.png" />
-				</div><div class="technology_each">
-					<img src="<?php echo $icon_cdn?>/one-group-7.png" />
-				</div>
-				<div class="technology_each">
-					<img src="<?php echo $icon_cdn?>/group-one-8.png" />
-				</div>
-				<div class="technology_each">
-					<img src="<?php echo $icon_cdn?>/group-group-9.png" />
-				</div>
-				<div class="technology_each">
-					<img src="<?php echo $icon_cdn?>/benefits-10.png" />
-				</div>
-				<div class="technology_each">
-					<img src="<?php echo $icon_cdn?>/outcome-11.png" />
-				</div>
-				<div class="technology_each">
-					<img src="<?php echo $icon_cdn?>/sales-12.png" />
-				</div>
 				<div style="background-color:#336699;text-align:center;padding:0.5em;"><a target="_blank" style="text-decoration:none;color:#ffffff;" href="<?php echo $doc_cdn;?>/How%20Quipmate%20helps%20in%20employee%20engagement.pdf">Download a copy</a></div>				
 			</div>
 		</div>

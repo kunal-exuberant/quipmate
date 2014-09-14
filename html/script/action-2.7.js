@@ -21,7 +21,7 @@ var action = (function()
       window.ajax_queue.push($.getJSON(url, param, function(data)
       {
         console.log(page);
-        if (page == 'search' || data.action.length > 0)
+        if (page == 'search' ||  data.action.length > 0)
         {
           window.load = true;
           switch (page)
@@ -108,7 +108,7 @@ var action = (function()
             callback.search('a', data);
             break;
           default:
-            $("#prev").html(data);
+            $("#prev").append(data);
             break;
           }
           var oldh = $("#prev").height();
@@ -303,6 +303,7 @@ var action = (function()
       var me = $(me).parent().prev();
       //trying to make comment before ack from server .
       $(me).append('<div class="cclass_json" data="' + comment_time + '" id="nf_post_' + comment_time + '"><a class="ajax_nav" href="profile.php?id=' + myprofileid + '"><img class="lfloat" src =' + myphoto + ' height="32" width="32" /></a><div class="name_35"><div><a class="bold ajax_nav" style="margin-right:0.4em;" href="profile.php?id=' + myprofileid + '" >' + myname + '</a><pre>' + ui.get_smiley(ui.link_highlight(comment)) + '</pre></div><div><a class="comment_time_json" href="action.php?actionid=' + pageid + '&life_is_fun=0b79e9873e5cfb160d3720845df2ba4c63919f9a"><img src="' + icon_cdn + '/clock.png" width="6" /><span class="time" data="' + Math.floor((new Date()).getTime() / 1000) + '">' + ui.time_difference(Math.floor((new Date()).getTime() / 1000)) + '</span></a><span data=' + myprofileid + ' class = "comment_excite_json" onclick="action.response(this)">Exciting</span><span class="more_excite_json" onclick="action.response_fetch(this)" data="0"></span><span id ="' + comment_time + '" class="glyphicon glyphicon-time rfloat" style="color:#ccc;"></span></div></div><span class="comment_setting" onclick="ui.post_delete(this)" >x</span></div>');
+      $('.commentbox').css({"height":"2.5em"});
       ajax.getJSON_ajax(url, param, me, callback.comment);
     }
     else
@@ -390,7 +391,7 @@ var action = (function()
         $('#session_name_hidden').attr('value', JSON.stringify($.extend(global_name, data.name)));
         $('#session_pimage_hidden').attr('value', JSON.stringify($.extend(global_pimage, data.pimage)));
         $('#session_skill_hidden').attr('value', JSON.stringify(data.skillname));
-        $('#session_group_hidden').attr('value', JSON.stringify($.extend(global_group, data.groupname)));
+        $('#session_group_hidden').attr('value', JSON.stringify(data.groupname));
         global_name = JSON.parse($('#session_name_hidden').attr('value'));
                 
         global_skill = JSON.parse($('#session_skill_hidden').attr('value'));
@@ -499,7 +500,7 @@ var action = (function()
                   var search_name = value.toLowerCase().split(" ");
                   for (var i = 0; i < search_name.length; i++)
                   {
-                    if ((count_g < 5) && (search_name[i].toLowerCase().search('^' + q.toLowerCase()) != -1))
+                    if ((count_g < 5) && (search_name[i].toLowerCase().search(q.toLowerCase()) != -1))
                     {
                       $('#search_' + index).remove();
                       $('#result_group td:last').append('<div class="search_items container_50 ajax_nav" href="group.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="group.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="group.php?id=' + index + '">' + value + '</a></div></div>');
@@ -511,7 +512,7 @@ var action = (function()
                 }
                 else
                 {
-                  if ((count_g < 5) && (value.toLowerCase().search('^' + q.toLowerCase()) != -1))
+                  if ((count_g < 5) && (value.toLowerCase().search(q.toLowerCase()) != -1))
                   {
                     $('#search_' + index).remove();
                     $('#result_group td:last').append('<div class="search_items container_50 ajax_nav" href="group.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="group.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="group.php?id=' + index + '">' + value + '</a></div></div>');
@@ -613,7 +614,7 @@ var action = (function()
             var search_name = value.toLowerCase().split(" ");
             for (var i = 0; i < search_name.length; i++)
             {
-              if ((count_g < 5) && (search_name[i].toLowerCase().search('^' + q.toLowerCase()) != -1))
+              if ((count_g < 5) && (search_name[i].toLowerCase().search(q.toLowerCase()) != -1))
               {
                 $('#search_' + index).remove();
                 $('#result_group td:last').append('<div class="search_items container_50 ajax_nav" href="group.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="group.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="group.php?id=' + index + '">' + value + '</a></div></div>');
@@ -625,7 +626,7 @@ var action = (function()
           }
           else
           {
-            if ((count_g < 5) && (value.toLowerCase().search('^' + q.toLowerCase()) != -1))
+            if ((count_g < 5) && (value.toLowerCase().search(q.toLowerCase()) != -1))
             {
               $('#search_' + index).remove();
               $('#result_group td:last').append('<div class="search_items container_50 ajax_nav" href="group.php?id=' + index + '"  id="search_' + index + '" data="' + index + '"><a class="ajax_nav" href="group.php?id=' + index + '"><img class="lfloat" src=' + global_pimage[index] + ' width="40" height="40" /></a><div class="left4"><a class="bold ajax_nav" href="group.php?id=' + index + '">' + value + '</a></div></div>');
@@ -1852,7 +1853,9 @@ var action = (function()
     param.gender = $('#signup_gender').val();
     param.day = $('#day').val();
     param.month = $('#month').val();
-    param.year = $('#year').val();
+    //param.year = $('#year').val();
+    param.designation = $('#signup_designation').val();
+    param.team = $('#signup_team').val();
     ajax.postJSON_ajax(url, param, me, callback.register);
   }
 
@@ -1943,6 +1946,7 @@ var action = (function()
       }
     //Append the message before ack comes from server .
    $(me).parent().children().eq(3).append('<div class="message_each" id="message_' + chat_sent_time + '"><img class="message_each_photo" title="' + name + '" height="50" width=50 src="' + photo + '"><div class="message_each_message"><pre>' + ui.get_smiley(ui.link_highlight(message)) + '</pre></div><div style="text-align:right;color:gray;" class="message_time_other"><img width="6" src="' + icon_cdn + '/clock.png"><span style="color:gray;" class="time" data="' +chat_sent_time + '">' + ui.time_difference(chat_sent_time) + '</span></div><span id="' + chat_sent_time + '" class="glyphicon glyphicon-time rfloat" style="color:#ccc;"></span></div>');
+  $('.sendbox').css({"height": "3em"}); 
    
       $.postJSON('/chat/chat_new', param, function(data)
       {
@@ -1950,10 +1954,6 @@ var action = (function()
         {
           action.last_chat_time = value.time;
           $('#chat_' + value.actionid).remove();
-          /* $('.chatbox').css(
-           {
-              "height": "2.7em"
-           }); */
            $('#message_' + value.chat_sent_time).attr('id',value.actionid);
            //$('#chat_time_' + value.chat_sent_time).attr('data', value.time);
           // $('#chat_time_' + value.chat_sent_time).html('' + ui.time_difference(value.time) + '');

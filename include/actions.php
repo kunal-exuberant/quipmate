@@ -22,7 +22,7 @@ else if($page == 'event_json')
 ?>
 <div id="upload_box"> 
 	<ol class="breadcrumb">
-	  <li id="status_link" ><a href="#">Post</a></li>
+	  <li id="status_link" ><a href="#">Discussion</a></li>
 	  <li id="photo_link" ><a href="#">File</a></li>
 	</ol>
 	<div  id="uploader">  
@@ -37,7 +37,7 @@ else if($page == 'page_json' && $profile_relation == 0 )
 ?>
 <div id="upload_box"> 
 	<ol class="breadcrumb">
-	  <li id="status_link" ><a href="#">Post</a></li>
+	  <li id="status_link" ><a href="#">Discussion</a></li>
 	  <li id="photo_link" ><a href="#">File</a></li>
 	</ol>
 	<div  id="uploader">  
@@ -63,7 +63,7 @@ else if($profile_relation == 0)
 ?>
 <div id="upload_box"> 
 	<ol class="breadcrumb">
-	  <li id="status_link" ><a href="#">Status</a></li>
+	  <li id="status_link" ><a href="#">Discussion</a></li>
 	  <li id="photo_link" ><a href="#">File</a></li>
 	  <li id="moment_link" ><a href="#">Album</a></li>
 	  <li id="question_link" ><a href="#">Question</a></li>
@@ -90,10 +90,10 @@ else if($profile_relation == 1)
 ?>
 <div id="upload_box"> 
 	<ol class="breadcrumb">
-	  <li id="status_link" ><a href="#">Post</a></li>
+	  <li id="status_link" ><a href="#">Discussion</a></li>
 	  <li id="photo_link" ><a href="#">File</a></li>
 	  <li id="moment_link" ><a href="#">Album</a></li>
-	  <li onclick="ui.praise(this,event)" ><a href="#">Praise</a></li>			
+	  <li data-toggle="modal"  data-target="#praisemodalbadge" ><a href="#">Praise</a></li>			
 	</ol>
 	<div  id="uploader">  
 	<!--	<input type="text" id="status_box" value="" placeholder="Post in <?php //echo $profile_name;?>'s diary"/>

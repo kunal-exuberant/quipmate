@@ -1539,6 +1539,12 @@ LIMIT 0 , 30");
       $result = $this->con->query("SELECT COMMENT,PAGE,MOOD,FILENAME from `comment` INNER JOIN  `diary` on `diary`.ACTIONID = `comment`.ACTIONID INNER JOIN `map` on map.actionid = `comment`.actionid INNER JOIN mood on mood.MOODID = map.MAPID Where `comment`.ACTIONID = '$actionid' ");
       return $result->fetch_array();
    }
+   function praise_select_all($profileid)
+   {
+     $profileid = $this->con->real_escape_string($profileid);
+     return $this->con->query("select mood.mood as badgename, mood.filename as file from map inner join mood on map.mapid = mood.moodid inner join action on map.actionid = action.actionid where action.profileid ='$profileid' and action.actiontype =2400");
+   }
+   
    function info_fetch($profileid, $type)
    {
       $result = $this->con->query("SELECT IF ( EXISTS (SELECT `diaryid` FROM `bio_history` WHERE PROFILEID= '$profileid' AND type= '$type'),1,0 ) as result  ");
@@ -1652,6 +1658,13 @@ LIMIT 0 , 30");
 
       return $result;
    }
+   function star_select($actionid)
+   {
+      $actionid = $this->con->real_escape_string($actionid);
+      $result = $this->con->query("SELECT * FROM `star_of_the_week` WHERE star_id = '$actionid'");
+
+      return $result->fetch_array();
+   }
    function star_remove($profileid)
    {
       $profileid = $this->con->real_escape_string($profileid);
@@ -1743,9 +1756,10 @@ LIMIT 0 , 30");
       $limit = $this->con->real_escape_string($limit);
       $count = $this->con->real_escape_string($count);
       $result = $this->con->query("SELECT  A.ACTIONID,A.ACTIONBY,A.ACTIONTYPE,A.PAGEID,A.VISIBLE,A.PROFILEID,A.TIMESTAMP 
-FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action INNER JOIN subscribe as sub ON CASE WHEN action.profileid <1000000000 THEN action.PROFILEID ELSE action.ACTIONBY END = sub.FRIENDID INNER JOIN actiontype on actiontype.actiontypeid = action.ACTIONTYPE WHERE sub.PROFILEID='$profileid' AND actiontype.news_feed ='1' group by pageid ORDER BY action.ACTIONID DESC LIMIT $limit,$count) AS B  ON A.ACTIONID = B.ACTIONID ");
+FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action LEFT JOIN subscribe as sub ON CASE WHEN action.profileid <1000000000 THEN action.PROFILEID ELSE action.ACTIONBY END = sub.FRIENDID INNER JOIN actiontype on actiontype.actiontypeid = action.ACTIONTYPE WHERE sub.PROFILEID='$profileid' AND actiontype.news_feed ='1' group by pageid ORDER BY action.ACTIONID DESC LIMIT $limit,$count) AS B  ON A.ACTIONID = B.ACTIONID ");
       return $result;
    }
+ //Removed this condition .. (sub.PROFILEID='$profileid' OR actiontype.global_feed='1')   
    function action_select($actionid)
    {
       $actionid = $this->con->real_escape_string($actionid);
@@ -2794,7 +2808,13 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
       $result = $this->con->query("DELETE FROM subscribe WHERE PROFILEID='$frndreq' AND FRIENDID ='$profileid'");
       return $result;
    }
-
+   function friend_request_delete($profileid, $frndreq)
+   {
+      $profileid = $this->con->real_escape_string($profileid); 
+      $frndreq = $this->con->real_escape_string($frndreq);
+      $result = $this->con->query("DELETE FROM friend_request WHERE PROFILEID='$profileid' AND FRIENDID ='$frndreq'");
+      return $result;
+   }
    function friend_check($profileid1, $profileid2)
    {
 

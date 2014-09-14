@@ -148,18 +148,16 @@ if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) 
 			  <option value="11">NOV</option>
 			  <option value="12">DEC</option>		
 			</select>
-			<select size="1" id="year">
-			  <option value="-1">Year</option>
-			  <?php
-
-                for ($i = 2002; $i >= 1901; $i--)
-                {
-                    echo '<option value="' . $i . '">' . $i . '</option>';
-                }
-
-?>
-			</select>
+            <span class="hint">this will be used for birthday updates . </span>
 			</div>
+            <div >
+			<label id ="signup_name_label">Designation:</label>
+			<input type="text" id="signup_designation" value="" />
+			</div>
+            <div >
+			<label id ="signup_name_label">Team:</label>
+			<input type="text" id="signup_team" value="" />
+			</div>          
 			<div id="signup_button_container">
 			<input type="hidden" id="email_hidden" value="<?php
 
@@ -468,9 +466,7 @@ if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) 
 </div>
 <div id="footer"> 
 	<a href="#" target="_blank">&copy; Quipmate</a><span class="separator">|</span>
-	<a href="public/blog.php" target="_blank">Blog</a><span class="separator">|</span>
 	<a href="public/faq.php" target="_blank">FAQ</a><span class="separator">|</span>
-	<a href="public/help.php" target="_blank">Help</a><span class="separator">|</span>
 	<a href="public/team.php" target="_blank">Team</a><span class="separator">|</span>
 	<a href="public/terms.php" target="_blank">Terms of Use</a><span class="separator">|</span>
 	<a href="public/security.php" target="_blank">Security &amp; Compliance</a><span class="separator">|</span>

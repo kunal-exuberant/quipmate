@@ -208,7 +208,14 @@ function reply_encode($actionid, $help, $database, $memcache)
 	{
 			$return = array();
 			$rw = $database->get_action($pageid);
-			$return['postby'] = $rw['ACTIONBY'];
+//In case of praise and star of the week it's ACTIONON's post not ACTIONBY's , So it these two case will take actionon in post by 
+     /*      if($rw['ACTIONTYPE'] == '2400' || $rw['ACTIONTYPE'] == '900')
+            {
+                $return['postby'] = $rw['PROFILEID'];    
+            }
+            else
+            {   */                      
+                $return['postby'] = $rw['ACTIONBY'];
 			$return['visible'] = $rw['VISIBLE'];
 			$return['parenttype'] = $rw['ACTIONTYPE'];
 			$return['time'] =  $help->get_utc($rw['TIMESTAMP']);		
@@ -297,7 +304,12 @@ function reply_encode($actionid, $help, $database, $memcache)
 		$d['caption'] = $row['caption'];
 		return $d;
 	}
-	
+	function star_encode($actionid,$database)
+    {
+         $row = $database->star_select($actionid);
+         return stripslashes($row['CONTRIBUTION']);
+        
+    }
 	function group_doc_encode($actionid,$database)
 	{
 		$result = $database->group_doc_select($actionid);

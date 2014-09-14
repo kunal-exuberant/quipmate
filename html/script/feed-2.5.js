@@ -168,6 +168,10 @@ var feed = (function()
             {
                praise_decode(value, data.name, data.pimage, container, dom_id);
             }
+            else if (value.actiontype == 900 || value.actiontype == 902 || value.actiontype == 911)
+            {
+               star_decode(value, data.name, data.pimage, container, dom_id);
+            }            
             else if (value.actiontype == 2500 || value.actiontype == 2511 || value.actiontype == 2502)
             {
                video_decode(value, data.name, data.pimage, container, dom_id);
@@ -227,10 +231,10 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="1"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a><div class="pclass_json"><pre>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</pre></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a><div class="pclass_json"><pre>' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</pre></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -252,7 +256,7 @@ var feed = (function()
       postid.append('<div data="' + value.actionid + '" class="pageclass_json"><input type="hidden" value="' + value.actionon + '" /><input type="hidden" value="' + value.parenttype + '"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> ' + str + '<div class="pclass_json"></div></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -261,10 +265,10 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="1900"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.actionon + '"><img class="lfloat" src =' + pimage[value.actionon] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.actionon + '">' + name[value.actionon] + '</a> was birthday wished by <a class="ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a></div><div class="pclass_json"><pre>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</pre></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.actionon + '"><img class="lfloat" src =' + pimage[value.actionon] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.actionon + '">' + name[value.actionon] + '</a> was birthday wished by <a class="ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a></div><div class="pclass_json"><pre>' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</pre></div></div>');
       if (value.actionby == myprofileid)
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -276,7 +280,7 @@ var feed = (function()
       postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' "><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> is now following <a class="ajax_nav" href="profile.php?id=' + value.actionon + ' " >' + name[value.actionon] + '</a></div><div></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -285,7 +289,7 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="300"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' "><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> created the group <a class="ajax_nav" href="group.php?id=' + value.groupid + '">' + value.group_name + '</a></div><div><div style="margin:0.5em 0em">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.group_description))) + '</div></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' "><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> created the group <a class="ajax_nav" href="group.php?id=' + value.groupid + '">' + value.group_name + '</a></div><div><div style="margin:0.5em 0em">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.group_description))) + '</div></div></div>');
    }
 
    function quipmate_joined_decode(value, name, pimage, container, dom_id)
@@ -309,7 +313,7 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="400"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' "><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> cancelled the event <a class="ajax_nav" href="event.php?id=' + value.eventid + '">' + value.event_name + '</a></div><div><div style="margin:0.5em 0em">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.event_description))) + '</div><div style="margin:0.5em 0em">' + value.date + ' ' + value.timing + '</div><div style="margin:0.5em 0em">' + value.venue + '</div></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' "><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> cancelled the event <a class="ajax_nav" href="event.php?id=' + value.eventid + '">' + value.event_name + '</a></div><div><div style="margin:0.5em 0em">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.event_description))) + '</div><div style="margin:0.5em 0em">' + value.date + ' ' + value.timing + '</div><div style="margin:0.5em 0em">' + value.venue + '</div></div></div>');
    }
 
    function group_event_created_decode(value, name, pimage, container, dom_id)
@@ -317,7 +321,7 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
       postid.append('<div data=' + value.pageid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="400"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' "><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> invited group <a class="ajax_nav" href="group.php?id=' + value.groupid + '">' + value.group_name + '</a> to the event <a class="ajax_nav" href="event.php?id=' + value.eventid + '">' + value.event_name + '</a></div><div><div style="margin:0.5em 0em">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.event_description))) + '</div><div style="margin:0.5em 0em">' + value.date + ' ' + value.timing + '</div><div style="margin:0.5em 0em">' + value.venue + '</div></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' "><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> invited group <a class="ajax_nav" href="group.php?id=' + value.groupid + '">' + value.group_name + '</a> to the event <a class="ajax_nav" href="event.php?id=' + value.eventid + '">' + value.event_name + '</a></div><div><div style="margin:0.5em 0em">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.event_description))) + '</div><div style="margin:0.5em 0em">' + value.date + ' ' + value.timing + '</div><div style="margin:0.5em 0em">' + value.venue + '</div></div></div>');
    }
 
    function event_created_decode(value, name, pimage, container, dom_id)
@@ -325,7 +329,7 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
       postid.append('<div data=' + value.pageid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="400"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' "><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> created the event <a class="ajax_nav" href="event.php?id=' + value.eventid + '">' + value.event_name + '</a></div><div><div style="margin:0.5em 0em">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.event_description))) + '</div><div style="margin:0.5em 0em">' + value.date + ' ' + value.timing + '</div><div style="margin:0.5em 0em">' + value.venue + '</div></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' "><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> created the event <a class="ajax_nav" href="event.php?id=' + value.eventid + '">' + value.event_name + '</a></div><div><div style="margin:0.5em 0em">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.event_description))) + '</div><div style="margin:0.5em 0em">' + value.date + ' ' + value.timing + '</div><div style="margin:0.5em 0em">' + value.venue + '</div></div></div>');
    }
 
    function event_joined_decode(value, name, pimage, container, dom_id)
@@ -354,10 +358,10 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var file = image_cdn + '/' + value.file;
-      postid.append('<div data="' + value.actionid + '" class="pageclass_json"><input type="hidden" value="' + value.actionon + '" /><input type="hidden" value="1401"/><a class="ajax_nav" href="profile.php?id=' + value.actionon + ' " ><img class="lfloat" src =' + pimage[value.actionon] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.actionon + ' " >' + name[value.actionon] + '</a> received ' + value.gift + ' as gift from <a class="acolor ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a></div><div><div class="pclass_json">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><img src="' + file + '" /></div></div></div>');
+      postid.append('<div data="' + value.actionid + '" class="pageclass_json"><input type="hidden" value="' + value.actionon + '" /><input type="hidden" value="1401"/><a class="ajax_nav" href="profile.php?id=' + value.actionon + ' " ><img class="lfloat" src =' + pimage[value.actionon] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.actionon + ' " >' + name[value.actionon] + '</a> received ' + value.gift + ' as gift from <a class="acolor ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a></div><div><div class="pclass_json">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><img src="' + file + '" /></div></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -368,10 +372,10 @@ var feed = (function()
       var file = image_cdn + '/' + value.file;
       var pronoun = 'his';
       if (value.sex == 0) pronoun = 'her';
-      postid.append('<div data="' + value.actionid + '" class="pageclass_json"><input type="hidden" value="' + value.actionon + '" /><input type="hidden" value="1201"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> changed ' + pronoun + ' mood to ' + value.mood + '</div><div><div style="margin-top:0.5em;">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><img src="' + file + '" /></div></div></div>');
+      postid.append('<div data="' + value.actionid + '" class="pageclass_json"><input type="hidden" value="' + value.actionon + '" /><input type="hidden" value="1201"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> changed ' + pronoun + ' mood to ' + value.mood + '</div><div><div style="margin-top:0.5em;">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><img src="' + file + '" /></div></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -379,7 +383,7 @@ var feed = (function()
    {
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /><input type="hidden" value="5"/><a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added ' + value.count + ' photo to the album ' + value.mname + '<div class="pclass_json"><input type="hidden" value=' + value.life_is_fun + ' /><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.desc))) + '</div></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /><input type="hidden" value="5"/><a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added ' + value.count + ' photo to the album ' + value.mname + '<div class="pclass_json"><input type="hidden" value=' + value.life_is_fun + ' /><div>' + ui.get_smiley(ui.see_more(ui.link_highlight(value.desc))) + '</div></div></div></div>');
       $.each(value.photo, function(i, v)
       {
          var f = v.file;
@@ -387,7 +391,7 @@ var feed = (function()
       });
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -396,10 +400,10 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var file = value.file;
       var myprofileid = $('#myprofileid_hidden').attr('value');
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="6"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> published a blog<div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.blog_title))) + '</div><img src ="thumbnail.php?file=' + file + '&maxw=368&maxh=400"class="nf_thumb" data="' + file + '"  onclick="action.image_viewer(this)" id="' + value.pageid + ' " /><div class="pclass_json"><pre>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.blog_content))) + '</pre></div></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="6"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> published a blog<div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.blog_title))) + '</div><img src ="thumbnail.php?file=' + file + '&maxw=368&maxh=400"class="nf_thumb" data="' + file + '"  onclick="action.image_viewer(this)" id="' + value.pageid + ' " /><div class="pclass_json"><pre>' + ui.get_smiley(ui.see_more(ui.link_highlight(value.blog_content))) + '</pre></div></div></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -408,10 +412,10 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var file = value.file;
       var myprofileid = $('#myprofileid_hidden').attr('value');
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /><input type="hidden" value="6"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a photo in the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><img src ="thumbnail.php?file=' + file + '&maxw=368&maxh=400"class="nf_thumb" data="' + file + '" onclick="action.image_viewer(this)" id="' + value.pageid + ' " /></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /><input type="hidden" value="6"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a photo in the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><img src ="thumbnail.php?file=' + file + '&maxw=368&maxh=400"class="nf_thumb" data="' + file + '" onclick="action.image_viewer(this)" id="' + value.pageid + ' " /></div></div></div>');
       if (value.postby == myprofileid || value.remove == 1 || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -420,7 +424,7 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var file = value.file;
       var myprofileid = $('#myprofileid_hidden').attr('value');
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2500"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a video in the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div id="' + dom_id + 'video_' + value.actionid + '"></div></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2500"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a video in the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><div id="' + dom_id + 'video_' + value.actionid + '"></div></div></div></div>');
       jwplayer(dom_id + "video_" + value.actionid).setup(
       {
          file: value.file,
@@ -433,7 +437,7 @@ var feed = (function()
       });
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -443,10 +447,10 @@ var feed = (function()
       var file = value.file;
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var page_image = icon_cdn + '/broadcast.png';
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /><input type="hidden" value="6"/><a class="ajax_nav" href="page.php?id=' + value.page_pageid + ' " ><img class="lfloat" src =' + page_image + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="page.php?id=' + value.page_pageid + ' " >' + value.page_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><img src ="thumbnail.php?file=' + file + '&maxw=368&maxh=400"class="nf_thumb" data="' + file + '"  onclick="action.image_viewer(this)" id="' + value.pageid + ' " /></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /><input type="hidden" value="6"/><a class="ajax_nav" href="page.php?id=' + value.page_pageid + ' " ><img class="lfloat" src =' + page_image + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="page.php?id=' + value.page_pageid + ' " >' + value.page_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><img src ="thumbnail.php?file=' + file + '&maxw=368&maxh=400"class="nf_thumb" data="' + file + '"  onclick="action.image_viewer(this)" id="' + value.pageid + ' " /></div></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -456,7 +460,7 @@ var feed = (function()
       var file = value.file;
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var page_image = icon_cdn + '/broadcast.png';
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2500"/><a class="ajax_nav" href="page.php?id=' + value.page_pageid + ' " ><img class="lfloat" src =' + page_image + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="page.php?id=' + value.page_pageid + ' " >' + value.page_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div id="' + dom_id + 'video_' + value.actionid + '"></div></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2500"/><a class="ajax_nav" href="page.php?id=' + value.page_pageid + ' " ><img class="lfloat" src =' + page_image + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="page.php?id=' + value.page_pageid + ' " >' + value.page_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><div id="' + dom_id + 'video_' + value.actionid + '"></div></div></div></div>');
       jwplayer(dom_id + "video_" + value.actionid).setup(
       {
          file: value.file,
@@ -469,7 +473,7 @@ var feed = (function()
       });
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -480,10 +484,10 @@ var feed = (function()
       var ext = value.caption.split('.').pop();
       var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
       var page_image = icon_cdn + '/broadcast.png';
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2600"/><a class="ajax_nav" href="page.php?id=' + value.page_pageid + ' " ><img class="lfloat" src =' + page_image + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="page.php?id=' + value.page_pageid + ' " >' + value.page_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><img class="lfloat" src=' + fileimage + ' height="50" width="50" /><div id="doc_name"><a href=' + value.file + ' data="' + value.file + '" target="_blank">' + value.caption + '</a></div><br class="bclear"></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2600"/><a class="ajax_nav" href="page.php?id=' + value.page_pageid + ' " ><img class="lfloat" src =' + page_image + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="page.php?id=' + value.page_pageid + ' " >' + value.page_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><img class="lfloat" src=' + fileimage + ' height="50" width="50" /><div id="doc_name"><a href=' + value.file + ' data="' + value.file + '" target="_blank">' + value.caption + '</a></div><br class="bclear"></div></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -493,10 +497,10 @@ var feed = (function()
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var ext = value.caption.split('.').pop();
       var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2600"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a doc in the event <a class="ajax_nav" href="event.php?id=' + value.eventid + ' " >' + value.event_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><img class="lfloat" src=' + fileimage + ' height="50" width="50" /><div id="doc_name"><a href=' + value.file + ' data="' + value.file + '" target="_blank">' + value.caption + '</a></div><br class="bclear"></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2600"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a doc in the event <a class="ajax_nav" href="event.php?id=' + value.eventid + ' " >' + value.event_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><img class="lfloat" src=' + fileimage + ' height="50" width="50" /><div id="doc_name"><a href=' + value.file + ' data="' + value.file + '" target="_blank">' + value.caption + '</a></div><br class="bclear"></div></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -504,7 +508,7 @@ var feed = (function()
    {
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2600"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a doc in the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><br class="bclear"></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2600"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a doc in the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><br class="bclear"></div></div></div>');
       $.each(value.version, function(i, v)
       {
          var ext = v.caption.split('.').pop();
@@ -513,7 +517,7 @@ var feed = (function()
       });
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -523,10 +527,10 @@ var feed = (function()
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var ext = value.caption.split('.').pop();
       var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2600"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a doc<div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><img class="lfloat" src=' + fileimage + ' height="50" width="50" /><div id="doc_name"><a href=' + value.file + ' data="' + value.file + '" target="_blank">' + value.caption + '</a></div><br class="bclear"></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2600"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a doc<div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><img class="lfloat" src=' + fileimage + ' height="50" width="50" /><div id="doc_name"><a href=' + value.file + ' data="' + value.file + '" target="_blank">' + value.caption + '</a></div><br class="bclear"></div></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -535,10 +539,10 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var file = value.file;
       var myprofileid = $('#myprofileid_hidden').attr('value');
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="6"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a photo in the event <a class="ajax_nav" href="event.php?id=' + value.eventid + ' " >' + value.event_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><img src ="thumbnail.php?file=' + file + '&maxw=368&maxh=400" class="nf_thumb" data="' + file + '"  onclick="action.image_viewer(this)" id="' + value.pageid + ' " /></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="6"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a photo in the event <a class="ajax_nav" href="event.php?id=' + value.eventid + ' " >' + value.event_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><img src ="thumbnail.php?file=' + file + '&maxw=368&maxh=400" class="nf_thumb" data="' + file + '"  onclick="action.image_viewer(this)" id="' + value.pageid + ' " /></div></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -547,7 +551,7 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var file = value.file;
       var myprofileid = $('#myprofileid_hidden').attr('value');
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2500"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a video in the event <a class="ajax_nav" href="event.php?id=' + value.eventid + ' " >' + value.event_name + '</a><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div id="' + dom_id + 'video_' + value.actionid + '"></div></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2500"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a video in the event <a class="ajax_nav" href="event.php?id=' + value.eventid + ' " >' + value.event_name + '</a><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><div id="' + dom_id + 'video_' + value.actionid + '"></div></div></div></div>');
       jwplayer(dom_id + "video_" + value.actionid).setup(
       {
          file: value.file,
@@ -560,7 +564,7 @@ var feed = (function()
       });
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -569,7 +573,7 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var file = value.file;
       var myprofileid = $('#myprofileid_hidden').attr('value');
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2500"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a video<div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div id="' + dom_id + 'video_' + value.actionid + '"></div></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2500"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a video<div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><div id="' + dom_id + 'video_' + value.actionid + '"></div></div></div></div>');
       jwplayer(dom_id + "video_" + value.actionid).setup(
       {
          file: value.file,
@@ -582,7 +586,7 @@ var feed = (function()
       });
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -605,10 +609,10 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var file = value.file;
       var myprofileid = $('#myprofileid_hidden').attr('value');
-      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="6"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a photo<div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><img src ="thumbnail.php?file=' + file + '&maxw=368&maxh=400" class="nf_thumb" data="' + file + '"  onclick="action.image_viewer(this)" id="' + value.pageid + ' " /></div></div></div>');
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="6"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a photo<div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><img src ="thumbnail.php?file=' + file + '&maxw=368&maxh=400" class="nf_thumb" data="' + file + '"  onclick="action.image_viewer(this)" id="' + value.pageid + ' " /></div></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -622,7 +626,7 @@ var feed = (function()
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="50"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> changed ' + pronoun + ' profile photo<div style="margin-top:1em;"><input type="hidden" value="' + value.life_is_fun + '" /><img src ="thumbnail.php?file=' + file + '&maxw=368&maxh=400"class="nf_thumb" data="' + file + '"  onclick="action.image_viewer(this)" id="' + value.pageid + ' "/></div></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -633,10 +637,10 @@ var feed = (function()
       var file = icon_cdn + '/tag.gif';
       var pronoun = 'his';
       if (value.sex == 0) pronoun = 'her';
-      postid.append('<div data="' + value.actionid + '" class="pageclass_json"><input type="hidden" value="' + value.actionon + '" /><input type="hidden" value="800"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> changed ' + pronoun + ' tagline <div class="pclass_json"><img src="' + file + '" /> ' + ui.see_more(ui.get_smiley(ui.link_highlight(value.tagline))) + '</div></div></div>');
+      postid.append('<div data="' + value.actionid + '" class="pageclass_json"><input type="hidden" value="' + value.actionon + '" /><input type="hidden" value="800"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> changed ' + pronoun + ' tagline <div class="pclass_json"><img src="' + file + '" /> ' + ui.get_smiley(ui.see_more(ui.link_highlight(value.tagline))) + '</div></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -645,10 +649,10 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="1"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a> wrote an open letter to the Managing Director<div class="pclass_json"><pre class="nf_page">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.letter_title))) + '</pre><pre  class="nf_page" style="margin:0.5em 0em;display:block;">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.letter_content))) + '</pre></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a> wrote an open letter to the Managing Director<div class="pclass_json"><pre class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.letter_title))) + '</pre><pre  class="nf_page" style="margin:0.5em 0em;display:block;">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.letter_content))) + '</pre></div></div>');
       if (value.postby == myprofileid)
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -659,24 +663,38 @@ var feed = (function()
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var file = icon_cdn+'/'+value.file;
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="1"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.actionon + '"><img class="lfloat" src =' + pimage[value.actionon] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.actionon + '">' + name[value.actionon] + '</a> was praised by <a class="ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a></div><div class="lfloat"><img src="'+file+'" width="70" height="70" /><div class="text-center"><strong>'+value.mood+'</strong></div></div><div class="praise_texts"><pre class="nf_page"><strong>For: '+ ui.see_more(ui.get_smiley(ui.link_highlight(value.letter_title))) + '</strong></pre><pre style="margin:0.5em 0em;display:block;"><strong>Praise: </strong>'+ ui.see_more(ui.get_smiley(ui.link_highlight(value.letter_content))) + '</pre></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.actionon + '"><img class="lfloat" src =' + pimage[value.actionon] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.actionon + '">' + name[value.actionon] + '</a> was praised by <a class="ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a></div><div class="lfloat"><img src="'+file+'" width="70" height="70" /><div class="text-center"><strong>'+value.mood+'</strong></div></div><div class="praise_texts"><pre class="nf_page"><strong>For: '+ ui.get_smiley(ui.see_more(ui.link_highlight(value.letter_title))) + '</strong></pre><pre style="margin:0.5em 0em;display:block;"><strong>Praise: </strong>'+ ui.get_smiley(ui.see_more(ui.link_highlight(value.letter_content))) + '</pre></div></div>');
       
       
       if (value.postby == myprofileid)
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
-
+   function star_decode(value, name, pimage, container, dom_id)
+   {
+      var icon_cdn = $('#icon_cdn').attr('value');
+      var postid = $('#' + dom_id);
+      var myprofileid = $('#myprofileid_hidden').attr('value');
+      var file = icon_cdn+'/'+'star.png';
+      postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="1"/></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.actionon + '"><img class="lfloat" src =' + pimage[value.actionon] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.actionon + '">' + name[value.actionon] + '</a> was awarded as <strong>Star of the week</strong></div><div class="lfloat"><img src="'+file+'" width="90" height="90" /></div><div class="praise_texts"><pre class="nf_page">'+ ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</pre></div></div>');
+      
+      
+      if (value.postby == myprofileid)
+      {
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
+      }
+   }
    function group_page_decode(value, name, pimage, container, dom_id)
    {
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="1"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a> posted in the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div><div class="pclass_json"><pre>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</pre></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a> posted in the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div><div class="pclass_json"><pre>' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</pre></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -686,10 +704,10 @@ var feed = (function()
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var page_image = icon_cdn + "/broadcast.png";
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="1"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="page.php?id=' + value.page_pageid + '"><img class="lfloat" src =' + page_image + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="page.php?id=' + value.page_pageid + '">' + value.page_name + '</a></div><div class="pclass_json"><pre>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</pre></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="page.php?id=' + value.page_pageid + '"><img class="lfloat" src =' + page_image + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="page.php?id=' + value.page_pageid + '">' + value.page_name + '</a></div><div class="pclass_json"><pre>' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</pre></div></div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -698,16 +716,16 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /><input type="hidden" value="2801"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a> asked a question to the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div><div class="pclass_json"><pre style="margin-bottom:0.6em;">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.question))) + '</pre></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a> asked a question to the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div><div class="pclass_json"><pre style="margin-bottom:0.6em;">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.question))) + '</pre></div></div>');
       $.each(value.option, function(i, v)
       {
          if (v.mine == 1)
          {
-            postid.children().eq(1).children().eq(3).children().eq(1).append('<div class="option"><div class="option_percentage" id =' + v.optid + '><input type="checkbox" style="margin-right:0.5em" onchange="action.answer(this, ' + value.actionid + ', ' + v.optid + ')" checked/>' + ui.see_more(ui.get_smiley(ui.link_highlight(v.opt))) + '<span class="rfloat tcolor" onclick="action.answer_people_fetch(this,' + v.optid + ')">' + v.count + ' vote, ' + (Math.round(v.percent * 100) / 100) + '% </span></div></div>');
+            postid.children().eq(1).children().eq(3).children().eq(1).append('<div class="option"><div class="option_percentage" id =' + v.optid + '><input type="checkbox" style="margin-right:0.5em" onchange="action.answer(this, ' + value.actionid + ', ' + v.optid + ')" checked/>' + ui.get_smiley(ui.see_more(ui.link_highlight(v.opt))) + '<span class="rfloat tcolor" onclick="action.answer_people_fetch(this,' + v.optid + ')">' + v.count + ' vote, ' + (Math.round(v.percent * 100) / 100) + '% </span></div></div>');
          }
          else
          {
-            postid.children().eq(1).children().eq(3).children().eq(1).append('<div class="option"><div class="option_percentage" id =' + v.optid + '><input type="checkbox" style="margin-right:0.5em" onchange="action.answer(this, ' + value.actionid + ', ' + v.optid + ')"/>' + ui.see_more(ui.get_smiley(ui.link_highlight(v.opt))) + '<span class="rfloat tcolor" onclick="action.answer_people_fetch(this,' + v.optid + ')">' + v.count + ' vote, ' + v.percent + '% </span></div></div>');
+            postid.children().eq(1).children().eq(3).children().eq(1).append('<div class="option"><div class="option_percentage" id =' + v.optid + '><input type="checkbox" style="margin-right:0.5em" onchange="action.answer(this, ' + value.actionid + ', ' + v.optid + ')"/>' + ui.get_smiley(ui.see_more(ui.link_highlight(v.opt))) + '<span class="rfloat tcolor" onclick="action.answer_people_fetch(this,' + v.optid + ')">' + v.count + ' vote, ' + v.percent + '% </span></div></div>');
          }
          if (v.percent > 0)
          {
@@ -721,7 +739,7 @@ var feed = (function()
       postid.children().eq(1).children().eq(3).children().eq(1).append('<div><input type="text" placeholder="+Add answer" value="" class="option" onkeydown="action.option_add(this,event)"><div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -730,10 +748,10 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /><input type="hidden" value="1"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a> posted in the event <a class="ajax_nav" href="event.php?id=' + value.eventid + ' " >' + value.event_name + '</a></div><div class="pclass_json"><pre>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</pre></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a> posted in the event <a class="ajax_nav" href="event.php?id=' + value.eventid + ' " >' + value.event_name + '</a></div><div class="pclass_json"><pre>' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</pre></div></div>');
       if (value.postby == myprofileid)
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -745,15 +763,15 @@ var feed = (function()
       postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> shared <a href="' + value.link + '" target="_blank">' + value.title + '</a> in the event <a class="ajax_nav" href="event.php?id=' + value.eventid + ' " > ' + value.event_name + '</a></div></div>');
       if (value.video)
       {
-         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="https://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div>' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div>' + value.meta + '</div></div><br class="bclear"/></div>');
+         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="https://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><div>' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div>' + value.meta + '</div></div><br class="bclear"/></div>');
       }
       else
       {
-         postid.children().eq(1).children().eq(3).append('<div style="margin:1em 0em 0em 0em;">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div class="link_title">' + value.title + '</div><div ><a href="' + value.link + '"  target="_blank">' + value.host + '</a></div><div class="link_meta">' + value.meta + '</div></div></div>');
+         postid.children().eq(1).children().eq(3).append('<div style="margin:1em 0em 0em 0em;">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div class="link_title">' + value.title + '</div><div ><a href="' + value.link + '"  target="_blank">' + value.host + '</a></div><div class="link_meta">' + value.meta + '</div></div></div>');
       }
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -766,15 +784,15 @@ var feed = (function()
       postid.children().eq(1).append('<a class="ajax_nav" href="page.php?id=' + value.page_pageid + ' " ><img class="lfloat" src =' + page_image + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="page.php?id=' + value.page_pageid + ' " >' + value.page_name + '</a></div></div>');
       if (value.video)
       {
-         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="https://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div>' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div>' + value.meta + '</div></div><br class="bclear"/></div>');
+         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="https://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><div>' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div>' + value.meta + '</div></div><br class="bclear"/></div>');
       }
       else
       {
-        postid.children().eq(1).children().eq(3).append('<div style="margin:1em 0em 0em 0em;">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div class="link_title">' + value.title + '</div><div ><a href="' + value.link + '"  target="_blank">' + value.host + '</a></div><div class="link_meta">' + value.meta + '</div></div></div>');
+        postid.children().eq(1).children().eq(3).append('<div style="margin:1em 0em 0em 0em;">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div class="link_title">' + value.title + '</div><div ><a href="' + value.link + '"  target="_blank">' + value.host + '</a></div><div class="link_meta">' + value.meta + '</div></div></div>');
       }
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -786,15 +804,15 @@ var feed = (function()
       postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> shared <a href="' + value.link + '" target="_blank">' + value.title + '</a> in the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div></div>');
       if (value.video)
       {
-         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="https://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div>' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div>' + value.meta + '</div></div><br class="bclear"/></div>');
+         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="https://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><div>' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div>' + value.meta + '</div></div><br class="bclear"/></div>');
       }
       else
       {
-         postid.children().eq(1).children().eq(3).append('<div style="margin:1em 0em 0em 0em;">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div class="link_title">' + value.title + '</div><div ><a href="' + value.link + '"  target="_blank">' + value.host + '</a></div><div class="link_meta">' + value.meta + '</div></div></div>');
+         postid.children().eq(1).children().eq(3).append('<div style="margin:1em 0em 0em 0em;">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div class="link_title">' + value.title + '</div><div ><a href="' + value.link + '"  target="_blank">' + value.host + '</a></div><div class="link_meta">' + value.meta + '</div></div></div>');
       }
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -806,15 +824,15 @@ var feed = (function()
       postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> shared <a href="' + value.link + '" target="_blank">' + value.title + '</a></div></div>');
       if (value.video)
       {
-         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="https://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div class="link_title">' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div class="link_meta">' + value.meta + '</div></div><br class="bclear"/></div>');
+         postid.children().eq(1).children().eq(3).append('<div class="rposition"><input type="hidden" value="' + value.file + '" /><img class="video_play lfloat nf_video"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="https://img.youtube.com/vi/' + value.file + '/default.jpg" /><img class="video_play nf_video_icon"  onclick="action.image_viewer(this)" id="' + value.actionid + '" src="' + icon_cdn + '/video_play_icon.png" /><div style="margin:2em 0em 0em 0em;"><div>' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><div class="link_title">' + value.title + '</div><a href="' + value.link + '" target="_blank">' + value.host + '</a><div class="link_meta">' + value.meta + '</div></div><br class="bclear"/></div>');
       }
       else
       {
-         postid.children().eq(1).children().eq(3).append('<div style="margin:1em 0em 0em 0em;">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.page))) + '</div><div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div class="link_title">' + value.title + '</div><div ><a href="' + value.link + '"  target="_blank">' + value.host + '</a></div><div class="link_meta">' + value.meta + '</div></div></div>');
+         postid.children().eq(1).children().eq(3).append('<div style="margin:1em 0em 0em 0em;">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><div><img class="lfloat nf_link_thumb" src="' + value.file + '" ><div class="link_title">' + value.title + '</div><div ><a href="' + value.link + '"  target="_blank">' + value.host + '</a></div><div class="link_meta">' + value.meta + '</div></div></div>');
       }
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -823,7 +841,7 @@ var feed = (function()
       var postid = $('#' + dom_id);
       var myprofileid = $('#myprofileid_hidden').attr('value');
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2801"/></div>');
-      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a> asked a question<div class="pclass_json"><pre style="margin-bottom:0.6em;">' + ui.see_more(ui.get_smiley(ui.link_highlight(value.question))) + '</pre></div></div>');
+      postid.children().eq(1).append('<a class="ajax_nav" href="profile.php?id=' + value.postby + '"><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.postby + '">' + name[value.postby] + '</a> asked a question<div class="pclass_json"><pre style="margin-bottom:0.6em;">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.question))) + '</pre></div></div>');
       $.each(value.option, function(i, v)
       {
          if (v.mine == 1)
@@ -846,7 +864,7 @@ var feed = (function()
       postid.children().eq(1).children().eq(3).children().eq(1).append('<div><input type="text" placeholder="+Add answer" value="" class="option" onkeydown="action.option_add(this,event)"><div>');
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
-         postid.append('<span onclick="ui.post_delete(this)" class="post_setting"></span>');
+         postid.append('<span onclick="ui.post_delete(this)" title="Delete this post"  class="post_setting"></span>');
       }
    }
 
@@ -932,29 +950,30 @@ var feed = (function()
             exciting = 'Unpinch';
          }
       }
-      postid.children().eq(1).children().eq(3).append('<div class="likeclass_json"><span class="excited_people"></span><span class="post_pointer"></span></div>');
+      postid.children().eq(1).children().eq(3).append('<div class="likeclass_json"><span class="excited_people" id="excited_people_'+value.actionid+'"></span><span class="post_pointer"></span></div>');
       var excited_count = 0;
       var flag = 0;
+      var excited_show_div =  $('#excited_people_'+value.actionid);
       if (pos != -1)
       {
          value.excited.splice(pos, 1);
          if (value.excited.length > 1)
          {
-            postid.children().eq(1).children().eq(3).children().eq(3).children().eq(0).append('<span>You, </span>');
+            excited_show_div.append('<span>You, </span>');
          }
          else if (value.excited.length == 1)
          {
-            postid.children().eq(1).children().eq(3).children().eq(3).children().eq(0).append('<span>You and </span>');
+            excited_show_div.append('<span>You and </span>');
          }
          else
          {
             if (value.actiontype == 50 || value.actiontype == 16 || value.actiontype == 25)
             {
-               postid.children().eq(1).children().eq(3).children().eq(3).children().eq(0).append('<span>You have new-pinched</span>');
+               excited_show_div.append('<span>You have new-pinched</span>');
             }
             else
             {
-               postid.children().eq(1).children().eq(3).children().eq(3).children().eq(0).append('<span>You are excited at this</span>');
+               excited_show_div.append('<span>You are excited at this</span>');
             }
             flag = 1;
          }
@@ -964,31 +983,31 @@ var feed = (function()
       {
          if (index < 3)
          {
-            postid.children().eq(1).children().eq(3).children().eq(3).children().eq(0).append('<a class="ajax_nav" href="profile.php?id=' + v + '">' + name[v] + '</a>');
+            excited_show_div.append('<a class="ajax_nav" href="profile.php?id=' + v + '">' + name[v] + '</a>');
             if (index == value.excited.length - 2 && index < 2)
             {
-               postid.children().eq(1).children().eq(3).children().eq(3).children().eq(0).append(' and ');
+               excited_show_div.append(' and ');
                flag = 2;
             }
             else if (value.excited.length > 2 && index != value.excited.length - 2 && index < 1)
             {
-               postid.children().eq(1).children().eq(3).children().eq(3).children().eq(0).append(', ');
+               excited_show_div.append(', ');
                flag = 2;
             }
             else if (index < value.excited.length - 2 && index == 1)
             {
-               postid.children().eq(1).children().eq(3).children().eq(3).children().eq(0).append(', ');
+               excited_show_div.append(', ');
                flag = 2;
             }
          }
          else if (excited_count == 1)
          {
-            postid.children().eq(1).children().eq(3).children().eq(3).children().eq(0).append(' and <a class="ajax_nav" href="profile.php?id=' + v + '">' + name[v] + '</a> are excited at this');
+            excited_show_div.append(' and <a class="ajax_nav" href="profile.php?id=' + v + '">' + name[v] + '</a> are excited at this');
             flag = 1;
          }
       });
-      if (flag == 0 && excited_count > -1) postid.children().eq(1).children().eq(3).children().eq(3).children().eq(0).append(' are excited at this');
-      else if (flag == 2) postid.children().eq(1).children().eq(3).children().eq(3).children().eq(0).append(' are excited at this');
+      if (flag == 0 && excited_count > -1) excited_show_div.append(' are excited at this');
+      else if (flag == 2) excited_show_div.append(' are excited at this');
    }
 
    function comment_decode(value, name, pimage, myprofileid, dom_id)
@@ -1011,7 +1030,7 @@ var feed = (function()
          }
          var userid = com.comment.substring(com.comment.indexOf('@[') + 2, com.comment.indexOf(']'));
          com.comment = com.comment.replace('@[' + userid + ']', '<a class="ajax_nav" href="profile.php?id=' + userid + '">' + name[userid] + '</a>');
-         postid.children().eq(1).children().eq(3).append('<div class="cclass_json" id="' + comid + '" data="' + com.com_actionid + '" ><a class="ajax_nav" href="profile.php?id=' + com.commentby + '" target="_parent"><img class="lfloat" src =' + pimage[com.commentby] + ' height="32" width="32" /></a><div class="name_35"><div><a class="bold ajax_nav" style="margin-right:0.4em;" href="profile.php?id=' + com.commentby + '" target="_parent">' + name[com.commentby] + '</a><pre>' + ui.see_more(ui.get_smiley(ui.link_highlight(com.comment))) + '</pre></div><div><a class="comment_time_json" href="action.php?actionid=' + value.pageid + '&life_is_fun=' + value.life_is_fun + '"><img src="' + icon_cdn + '/clock.png" width="6" /><span class="time" data="' + com.com_time + '">' + ui.time_difference(com.com_time) + '</span></a><span data=' + com.commentby + ' class = "comment_excite_json" onclick="' + fun + '">' + exciting + '</span></div></div></div>');
+         postid.children().eq(1).children().eq(3).append('<div class="cclass_json" id="' + comid + '" data="' + com.com_actionid + '" ><a class="ajax_nav" href="profile.php?id=' + com.commentby + '" target="_parent"><img class="lfloat" src =' + pimage[com.commentby] + ' height="32" width="32" /></a><div class="name_35"><div><a class="bold ajax_nav" style="margin-right:0.4em;" href="profile.php?id=' + com.commentby + '" target="_parent">' + name[com.commentby] + '</a><pre>' + ui.get_smiley(ui.see_more(ui.link_highlight(com.comment))) + '</pre></div><div><a class="comment_time_json" href="action.php?actionid=' + value.pageid + '&life_is_fun=' + value.life_is_fun + '"><img src="' + icon_cdn + '/clock.png" width="6" /><span class="time" data="' + com.com_time + '">' + ui.time_difference(com.com_time) + '</span></a><span data=' + com.commentby + ' class = "comment_excite_json" onclick="' + fun + '">' + exciting + '</span></div></div></div>');
          if (com.com_excited)
          {
             $("#" + comid).children().eq(1).children().eq(1).append('<span style="margin-left:0.5em;font-size:0.9em;cursor:pointer;" data="' + com.com_excited + '" onclick="action.response_fetch(this)" >' + com.com_excited + ' excited</span>');
@@ -1022,7 +1041,7 @@ var feed = (function()
          }
          if (value.postby == myprofileid || com.remove == 1 || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
          {
-            $("#" + comid).append('<span onclick="ui.post_delete(this)" class="comment_setting">x</span>');
+            $("#" + comid).append('<span onclick="ui.post_delete(this)" title="Delete this comment"  class="comment_setting">x</span>');
          }
       });
    }

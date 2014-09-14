@@ -1227,7 +1227,7 @@ class Api
                               $help->friend_memcache_update($myprofileid, $database, $memcached);
                               $help->friend_memcache_update($profileid, $database, $memcached);
                               $res = 0;
-                              $res = $database->friend_invite_delete($myprofileid, $profileid);
+                              $res = $database->friend_request_delete($myprofileid, $profileid);
                               if($res == 1)
                               {
                                  $visible_id = $_SESSION['visible'];
@@ -4729,13 +4729,14 @@ class Api
    function info_update()
    {
       global $help;
+      global $database;
       if(isset($_GET['infoadd']) && isset($_GET['infotype']))
       {
          if(!empty($_GET['infoadd']) && !empty($_GET['infotype']))
          {
+            $myprofileid = $_SESSION['userid'];
             if($database->moderator_check($myprofileid))
             {
-               global $database;
 
                $info_name = $_GET['infoadd'];
                $type = $_GET['infotype'];
@@ -4932,7 +4933,7 @@ function preview_doc()
             if($size < 500)
             {
                $current_date = gmDate("Y-m-d");
-               $actiontype = 2450;
+               $actiontype = 900;
                $actionid = $database->get_actionid($profileid, $actiontype);
                if($actionid)
                {
@@ -5611,7 +5612,50 @@ function preview_doc()
       }
    }
 
-   function news_feed()
+ function news_feed_mobile()
+   {
+      global $help;
+      if(isset($_GET['start']))
+      {
+         if(isset($_GET['start']))
+         {
+            global $action, $name, $pimage;
+            global $feed;
+            global $database;
+            global $memcached;
+            global $json;
+            global $encode;
+            $myprofileid = $_SESSION['userid'];
+            $start = $_GET['start'];
+            $res = $database->new_friend_action_select($myprofileid, $start, 3);
+            $k = 0;
+            while ($NROW = $res->fetch_array())
+            {
+
+               $feed->actiontype_encode($NROW, $k, $json, $help, $encode, $database, $memcached);
+               $k++;
+            }
+            $data['action'] = $help->feed_privacy_filter($action, $myprofileid, $database);
+            $data['myprofileid'] = $_SESSION['USERID'];
+            $name[$data['myprofileid']] = $help->name_fetch($data['myprofileid'], $memcached,$database);
+            $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached,$database);
+            $data['name'] = $name;
+            $data['pimage'] = $pimage;
+            $data['tag'] = $_SESSION['tag_json'];
+            echo json_encode($data);
+         } else
+         {
+            $help->error_description(18);
+         }
+      } else
+      {
+         $help->error_description(9);
+      }
+   }
+
+
+   
+function news_feed()
    {
       global $help;
       if(isset($_GET['start']))
@@ -5636,8 +5680,8 @@ function preview_doc()
             }
             $data['action'] = $help->feed_privacy_filter($action, $myprofileid, $database);
             $data['myprofileid'] = $_SESSION['USERID'];
-            $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached,
-               $database);
+            $name[$data['myprofileid']] = $help->name_fetch($data['myprofileid'], $memcached,$database);
+            $pimage[$data['myprofileid']] = $help->pimage_fetch($data['myprofileid'], $memcached,$database);
             $data['name'] = $name;
             $data['pimage'] = $pimage;
             $data['tag'] = $_SESSION['tag_json'];
@@ -9737,11 +9781,11 @@ function preview_doc()
       global $help;
       if(isset($_POST['email']) && isset($_POST['identifier']) && isset($_POST['name']) &&
          isset($_POST['password']) && isset($_POST['gender']) && isset($_POST['day']) &&
-         isset($_POST['month']) && isset($_POST['year']))
+         isset($_POST['month']) && isset($_POST['designation']) && isset($_POST['team']))
       {
          if(!empty($_POST['email']) && !empty($_POST['identifier']) && !empty($_POST['name']) &&
             !empty($_POST['password']) && $_POST['gender'] != '' && !empty($_POST['day']) &&
-            !empty($_POST['month']) && !empty($_POST['year']))
+            !empty($_POST['month']) && !empty($_POST['designation']) && !empty($_POST['team']))
          {
             $email = $_POST['email'];
             $identifier = $_POST['identifier'];
@@ -9750,9 +9794,9 @@ function preview_doc()
             $gender = trim($_POST['gender']);
             $day = trim($_POST['day']);
             $month = trim($_POST['month']);
-            $year = trim($_POST['year']);
-            if($name != '' && $password != '' && $gender != -1 && $day != -1 && $month != -
-               1 && $year != -1)
+            $designation = trim($_POST['designation']);
+            $team = trim($_POST['team']);
+            if($name != '' && $password != '' && $gender != -1 && $day != -1 && $month != -1 && $designation != '' && $team != '')
             {
                if(preg_match("/^[[:space:]]*[a-zA-Z]+[[:space:]]*[a-zA-Z]*[[:space:]]*[a-zA-Z]*$/",
                   $name))
@@ -9776,8 +9820,7 @@ function preview_doc()
                               case 8:
                               case 10:
                               case 12:
-                                 $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,
-                                    $year);
+                                 $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,'0000',$designation,$team);
                                  exit;
                               default:
                                  $help->error_description(28);
@@ -9790,8 +9833,7 @@ function preview_doc()
                                  case 2:
                                     $help->error_description(28);
                                  default:
-                                    $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,
-                                       $year);
+                                    $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,'0000',$designation,$team);
                                     exit;
                               }
 
@@ -9801,7 +9843,7 @@ function preview_doc()
                                  switch ($month)
                                  {
                                     case 2:
-                                       if($year % 400 == 0)
+                                      /* if($year % 400 == 0)
                                        {
                                           $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,
                                              $year);
@@ -9817,20 +9859,17 @@ function preview_doc()
                                                    $year);
                                                 exit;
                                              } else
-                                             {
-                                                $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,
-                                                   $year);
+                                             { */
+                                                $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,'0000',$designation,$team);
                                                 exit;
-                                             }
                                           default:
-                                             $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,
-                                                $year);
-                                       exit;
+                                             $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,'0000',$designation,$team);
+                                                exit;
                                  }
-                              } else
+                              } 
+                              else
                               {
-                                 $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,
-                                    $year);
+                                 $help->register_user($email, $identifier, $name, $password, $gender, $day, $month,'0000',$designation,$team);
                               }
                      } else
                      {
@@ -11582,7 +11621,7 @@ function preview_doc()
 ?>
 			<div id="upload_box"> 
 				<ol class="breadcrumb">
-				  <li id="status_link" ><a href="#">Post</a></li>
+				  <li id="status_link" ><a href="#">Discussion</a></li>
 				  <li id="photo_link" ><a href="#">File</a></li>
 				</ol>
 				<div  id="uploader">  
@@ -11621,7 +11660,7 @@ function preview_doc()
 ?>
 				<div id="upload_box"> 
 					<ol class="breadcrumb">
-					  <li id="status_link" ><a href="#">Status</a></li>
+					  <li id="status_link" ><a href="#">Discussion</a></li>
 					  <li id="photo_link" ><a href="#">File</a></li>
 					  <li id="moment_link" ><a href="#">Album</a></li>
 					  <li id="question_link" ><a href="#">Question</a></li>
@@ -11658,10 +11697,10 @@ function preview_doc()
 ?>
 				<div id="upload_box"> 
 					<ol class="breadcrumb">
-					  <li id="status_link" ><a href="#">Post</a></li>
+					  <li id="status_link" ><a href="#">Discussion</a></li>
 					  <li id="photo_link" ><a href="#">File</a></li>
 					  <li id="moment_link" ><a href="#">Album</a></li>
-					  <li onclick="ui.praise(this,event)" ><a href="#">Praise</a></li>			
+					  <li data-toggle="modal"  data-target="#praisemodalbadge" ><a href="#">Praise</a></li>			
 					</ol>
 					<div  id="uploader">  
 					<!--	<input type="text" id="status_box" value="" placeholder="Post in <?php
@@ -12023,6 +12062,8 @@ function preview_doc()
             $book = array();
             $city = array();
             $hobby = array();
+            $badge = array();
+            
             $flag_des = 0;
             $flag = 0;
             $profession = '';
@@ -12192,6 +12233,15 @@ function preview_doc()
                                                                            $t++;
                                                                         }
             }
+            $x= 0;
+            $res = $database->praise_select_all($profileid);
+            While($ret = $res->fetch_array())
+            {
+                $badge[$x]['name'] = $ret['badgename'];
+                $badge[$x]['file'] = $ret['file'];
+                $x++;
+            }
+            
             $data['company'] = $company;
             $data['profession'] = $profession;
             $data['designation'] = $designation;
@@ -12213,6 +12263,7 @@ function preview_doc()
             $data['tool'] = $tool;
             $data['extension'] = $extension;
             $data['info'] = $info;
+            $data['badge'] = $badge;
 
             $row = $database->privacy_select($profileid);
 

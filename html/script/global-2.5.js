@@ -13,7 +13,7 @@ jQuery.postJSON = function(url, args, callback)
       },
       error: function(response)
       {
-         console.log("ERROR:", response)
+         console.log("ERROR:", response);
       }
    });
 };
@@ -31,15 +31,18 @@ $(function()
    }
    window.addEventListener('popstate', function(event)
    {
-      var st =
-      {
-         url: event.state.url,
-         page: event.state.page,
-         param: event.state.param,
-         me: "object",
-         pop: 1
-      };
-      deploy.ajax_navigation(st, event.state.param, 0);
+   if(event.state != null)
+       {
+          var st =
+          {
+             url: event.state.url,
+             page: event.state.page,
+             param: event.state.param,
+             me: "object",
+             pop: 1
+          };
+          deploy.ajax_navigation(st, event.state.param, 0);
+       }  
    });
    var width = $(window).width();
    if (width < 1180)
@@ -119,6 +122,7 @@ $(function()
       }
    });
    // auto update value of feed time************************
+
    action.individualChat();
    action.real_time();
    setInterval(function()
@@ -1013,6 +1017,7 @@ $(function()
             var page = $('#page_hidden').attr('value');
             if (data.ack == '1' && page != 'file' && page != 'group_file' && page != 'event_file' && page != 'video' && page != 'group_video' && page != 'event_video')
             { 
+              
                var postid = $('#' + dom_id);
                var file = data.file;
                var myprofileid = $('#myprofileid_hidden').attr('value');

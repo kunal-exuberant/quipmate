@@ -540,7 +540,7 @@ var callback = (function()
       $('#right').append('<div id="sotw_box" class="panel panel-default"><div class="panel-heading">Star Of The Week</div><div id="sotw_box2" class="panel-body"></div></div>');
       $.each(data.star, function(index, value)
       {
-        $('#sotw_box2').append('<div><img class="lfloat"  src="' + data.pimage[value.profileid] + '" width="35" height="32" style="padding-bottom:5px; "/><div class="name_32" ><a class="ajax_nav" style="color:#336699;font-weight:bold;" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a><div>' + value.contribution + '</div></div></br></div>');
+        $('#sotw_box2').append('<div><img class="lfloat"  src="' + data.pimage[value.profileid] + '" width="35" height="32" style="padding-bottom:5px; "/><div class="name_32" ><a class="ajax_nav" style="color:#336699;font-weight:bold;" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a><div>' + ui.see_more(ui.get_smiley(ui.link_highlight(value.contribution))) + '</div></div></br></div>');
       });
     }
   }
@@ -570,11 +570,19 @@ var callback = (function()
   {
       var icon_cdn = $('#icon_cdn').attr('value');
       var myprofileid = $('#myprofileid_hidden').attr('value');
+  if(data.action.length)
+  { 
+    
     $.each(data.action, function(index, value)
     {
       var file = icon_cdn+'/'+value.file;
-      $('#center').append('<div style="height:8em;clear:both;padding:1.5em;"><a class="ajax_nav" href="profile.php?id=' + value.actionby_profileid + '"><img class="lfloat" src="' + data.pimage[value.actionby_profileid] + '" height="50" width="50"></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.actionby_profileid + '">' + value.actionby + '</a>  praised </div><div class="lfloat"><img src="'+file+'" width="70" height="70" /><div class="text-center"><strong>'+value.mood+'</strong></div></div><div class="praise_texts"><pre class="nf_page"><strong>For: '+ ui.see_more(ui.get_smiley(ui.link_highlight(value.title))) + '</strong></pre><pre style="margin:0.5em 0em;display:block;"><strong>Praise: </strong>'+ ui.see_more(ui.get_smiley(ui.link_highlight(value.comment))) + '</pre></div></div>');
+      $('#prev').append('<div style="height:8em;clear:both;padding:1.5em;"><a class="ajax_nav" href="profile.php?id=' + value.actionby_profileid + '"><img class="lfloat" src="' + data.pimage[value.actionby_profileid] + '" height="50" width="50"></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.actionby_profileid + '">' + value.actionby + '</a>  praised </div><div class="lfloat"><img src="'+file+'" width="70" height="70" /><div class="text-center"><strong>'+value.mood+'</strong></div></div><div class="praise_texts"><pre class="nf_page"><strong>For: '+ ui.see_more(ui.get_smiley(ui.link_highlight(value.title))) + '</strong></pre><pre style="margin:0.5em 0em;display:block;"><strong>Praise: </strong>'+ ui.see_more(ui.get_smiley(ui.link_highlight(value.comment))) + '</pre></div></div>');
     });
+  }
+  else
+  {
+    $('.load_more').show();
+  }
   }
 
   function groups_fetch(me, data)

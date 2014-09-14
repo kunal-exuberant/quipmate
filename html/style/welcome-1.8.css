@@ -36,8 +36,9 @@ form input{padding:.5em;}
 #register_box div{margin:1em;}
 #register_box label{color:#003399;}
 #signup_gender,#day,#month,#year{border:.1em solid #336699;padding:.5em;margin:0.5em 0em 0em 2.2em;}
-#signup_name{width:20em;padding:.5em;margin-left:4em;border:.1em solid #336699;}
-#signup_password{width:20em;padding:.5em;margin:0.5em 0em 0em 1.8em;;border:.1em solid #336699;}
+#signup_name,#signup_team{width:20em;padding:.5em;margin-left:4em;margin-top:0.5em;border:.1em solid #336699;}
+#signup_designation{width:20em;padding:.5em;margin:0.5em 0em 0em 0.5em;border:.1em solid #336699;}
+#signup_password{width:20em;padding:.5em;margin:0.5em 0em 0em 1.8em;border:.1em solid #336699;}
 #signup_gender{margin-left:3em;}
 #day{margin-left:2.5em;}
 #signup_button{background-color:#7cd35d;color:white;font-weight:bold;cursor:pointer;padding:.5em;margin-top:1em;}

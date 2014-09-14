@@ -15,7 +15,7 @@ class File
 		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'bootstrap.min.css'; ?>" charset="utf-8"/>
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'jquery-ui.css'; ?>" charset="utf-8"/>
-        <link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'boot-1.7.css'; ?>" charset="utf-8"/>
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'boot-1.8.css'; ?>" charset="utf-8"/>
 		
 	<?php	
 	} 
@@ -24,7 +24,7 @@ class File
 	{
 		?>
 		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'bootstrap.min.css'; ?>" charset="utf-8"/>
-		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'welcome-1.5.css'; ?>" charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'welcome-1.6.css'; ?>" charset="utf-8" />
 		<?php
 	}
 	
@@ -39,13 +39,13 @@ class File
 	function script_footer()
 	{
 		?>
-        	<script type="text/javascript" src="<?php echo $this->script_cdn.'global-2.4.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'action-2.6.js'; ?>" charset="utf-8"></script>
+        	<script type="text/javascript" src="<?php echo $this->script_cdn.'global-2.5.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'action-2.7.js'; ?>" charset="utf-8"></script>
             <script type="text/javascript" src="<?php echo $this->script_cdn.'ajax-1.0.js'; ?>" charset="utf-8"></script>
-            <script type="text/javascript" src="<?php echo $this->script_cdn.'feed-2.4.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'callback-2.6.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'ui-2.5.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'deploy-2.7.js'; ?>" charset="utf-8"></script>
+            <script type="text/javascript" src="<?php echo $this->script_cdn.'feed-2.5.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'callback-2.7.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'ui-2.6.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'deploy-2.8.js'; ?>" charset="utf-8"></script>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'jquery.form.min.js'; ?>" charset="utf-8"></script>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'eigonFGtEeONACIACqoGtw.js'; ?>" charset="utf-8"></script>
             <script type="text/javascript" src="<?php echo $this->script_cdn.'jquery-ui-1.10.4.min.js'; ?>" charset="utf-8"></script>
@@ -59,9 +59,9 @@ class File
 		?>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'jquery-1.8.2.min.js'; ?>" charset="utf-8"></script>
             <script type="text/javascript" src="<?php echo $this->script_cdn.'bootstrap.min.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'action-2.6.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'callback-2.6.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'ui-2.5.js'; ?>" charset="utf-8"></script> 
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'action-2.7.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'callback-2.7.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'ui-2.6.js'; ?>" charset="utf-8"></script> 
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'ajax-1.0.js'; ?>" charset="utf-8"></script>	
 		<?php
 	}	

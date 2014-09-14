@@ -430,6 +430,10 @@ if(isset($_SESSION['auth']) && $_SESSION['STEP'] != -1 )
 			{
 				$api->mutual_friend();
 			}
+                        else if($_GET['action'] == 'news_feed_mobile')
+                        {
+                                $api->news_feed_mobile();
+                        }
 			else if($_GET['action'] == 'news_feed')
 			{
 				$api->news_feed();
@@ -910,10 +914,6 @@ else if($_GET['action'] == 'contact')
 else if($_GET['action'] == 'login_get')
 {
 	$api->login_get();
-}
-else if($_GET['action'] == 'analytics')
-{
-    
 }
 else
 {
