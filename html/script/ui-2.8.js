@@ -739,6 +739,7 @@ var ui = (function()
         $("#upload_progress").html('<div id="progressbox" style="display:none;"><div id="progressbar"></div ><div id="statustxt">0%</div></div><div id="output"></div>');    
     }
       //Progress bar
+      $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight); //to make the uploader visible 
       $('#progressbox').css(
       {
          "display": "block"
@@ -749,7 +750,6 @@ var ui = (function()
          "width": percentComplete + '%',
          "background": "#cccccc"
       });
-      console.log(percentComplete);
       $('#statustxt').html('' + percentComplete + '%');
       if (percentComplete > 50)
       {
@@ -1056,10 +1056,6 @@ var ui = (function()
 
    function message()
    {
-      var profileid = $('#profileid_hidden').attr('value');
-      var myname = $('#myprofilename_hidden').attr('value');
-      var myprofileid = $('#myprofileid_hidden').attr('value');
-      var myphoto = $('#myprofileimage_hidden').attr('value');
       $('#message_container').remove();
       $('.bg_hide_cover').remove();
       $('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
@@ -1586,6 +1582,24 @@ var ui = (function()
       var placeholder = '';
       switch (code)
       {
+      case 215:
+         placeholder = 'Add your mobile';
+         break        
+      case 237:
+         placeholder = 'Add your office extension';
+         break        
+      case 201:
+         placeholder = 'Add your city';
+         break        
+      case 236:
+         placeholder = 'Add tools your worked on';
+         break        
+      case 235:
+         placeholder = 'Add your major';
+         break        
+      case 239:
+         placeholder = 'Add your designation';
+         break        
       case 205:
          placeholder = 'Add your company';
          break;
@@ -1683,12 +1697,14 @@ var ui = (function()
 
    function chat_time_hide(me)
    {
-      $('.chat_time').hide();
+      var id = $(me).attr('id');
+      $('#'+id+' .chat_time').hide();
    }
 
    function chat_time_show(me)
    {
-      $('.chat_time').show();
+      var id = $(me).attr('id');
+      $('#'+id+' .chat_time').show();
    }
 
    function timerIncrement()
@@ -1699,11 +1715,23 @@ var ui = (function()
          sound_flag = 1; // set the flag after 1 min of inactivity
       }
    }
-
+   function add_people_chat()
+   {
+    $('#chat_search_box').focus();
+    $('#chat_search_box').attr('placeholder','Search and select ');
+    $('.chat_user').addClass('chat_add');
+    $('.chatboxui_title').after('<div><input type="text" style="width:80%" id="chat_group_people"/><input type="submit" value="Done" style="width:20%"/></div>')
+   }
    function createChatBoxUI(user, name, is_online)
    {
       var icon_cdn = $('#icon_cdn').attr('value');
-      $('#chatbox_container').append('<div id="chatbox_' + user + '" class="chatboxui" ><input type="hidden" value="' + user + '"/><span class="chatbox_close">x</span><div class="chatboxui_title"><span><a class="ajax_nav" href="profile.php?id=' + user + ' ">' + name + '</a></span></div><div class="chatboxui_msg"></div><textarea class="chatbox"></textarea><input type="hidden" value="10"/></div>');
+      var myprofileid = $('#myprofileid_hidden').attr('value');
+      var myname = $('#myprofilename_hidden').attr('value');
+      var photo = $('#myprofileimage_hidden').attr('value');
+      var chat_sent_time = new Date().getTime();
+      var database = $('#database_hidden').attr('value');
+      
+      $('#chatbox_container').append('<div id="chatbox_' + user + '" class="chatboxui" ><input type="hidden" value="' + user + '"/><div><ul class="navbar-nav navbar-right"><li class="glyphicon"><a data-toggle="dropdown" class="dropdown-toggle" href="#"><b class="glyphicon glyphicon-cog" style="color:#000;margin-top:.5em;margin-right:2em;"></b></a><ul class="dropdown-menu chat_dropdown"><li><form action="/chat/chat_new" enctype="multipart/form-data" method="post" id="chatfileform" style="margin-left:1.5em"><a href="#" class="word_space_less"><input type="file" style="opacity:0;position:absolute;" id="chat_send_file" name="chat_send_file" />Send File</a><input type="hidden" name="userid" value="'+user+'"/><input type="hidden" name="profileid" value="'+myprofileid+'"/><input type="hidden" name="name" value="'+myname+'"/><input type="hidden" name="photo" value="'+photo+'"/><input type="hidden" id="chat_sent_time" name="chat_sent_time" value="'+chat_sent_time+'"/><input type="hidden" name="database" value="'+database+'"/><input type="hidden" name="message" value="file sending"/></form></li><li onclick="ui.redirect_to_inbox('+user+')"><a href="#" class="ajax_nav word_space_less">See Full Conversations</a></li></ul></li></ul><span class="chatbox_close">x</span></div><div class="chatboxui_title"><span><a class="ajax_nav" href="profile.php?id=' + user + ' ">' + name + '</a></span></div><div class="chatboxui_msg"></div><textarea class="chatbox"></textarea><input type="hidden" value="10"/></div>');
       $('#chatbox_' + user).children().eq(4).focus();
       if (is_online) $('#chatbox_' + user).children().eq(2).prepend('<img class="chatbox_online_icon" src="' + icon_cdn + '/online.png" />');
       var lastScrollTopchat = $('#chatbox_' + user).children().eq(3).get(0).scrollTop;
@@ -1828,6 +1856,7 @@ var ui = (function()
        } 
    }
    return {
+      add_people_chat:add_people_chat,
     central_repo_heading:central_repo_heading,
       popup_close: popup_close,
       share_post: share_post,

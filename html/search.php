@@ -13,7 +13,7 @@ require_once '../include/header.php';
 <?php 
 $filter = ''; 
 if(isset($_GET['filter']))
-{
+{ 
 	$filter = $_GET['filter']; 
 }
 	function link_echo($filter, $type)

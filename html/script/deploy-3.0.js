@@ -1440,10 +1440,13 @@ var deploy = (function()
       {
     callback.bio_item_deply('bio_each_profession',data.team, data.privacy.team,data.edit,'Team','team_edit_link',234,'Team');
       }
-      if (myprofileid == profileid || data.profession.length > 0)
+  /*    
+  Removing Profession
+  if (myprofileid == profileid || data.profession.length > 0)
       {
         callback.bio_item_deply('bio_each_profession',data.profession, data.privacy.profession,data.edit,'Profession','profession_edit_link',202,'Profession');
       }
+      */
       if (myprofileid == profileid || data.designation.length > 0)
       {
          callback.bio_item_deply('bio_each_profession',data.designation, data.privacy.designation,data.edit,'Designation','designation_edit_link',239,'Designation');
@@ -2966,7 +2969,7 @@ $('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="vi
          param.action = 'event_doc_fetch';
          param.eventid = profileid;
          window.increment = 20;
-         $('.video_table_body').html('');
+         $('.file_table_body').html('');
       /*   window.ajax_queue.push($.getJSON(url, param, function(data)
          {
             $('.file_center_title').html(''+data.groupname+' - File');
@@ -3001,7 +3004,7 @@ $('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="vi
          param.action = 'event_video_fetch';
          param.eventid = profileid;
          window.increment = 20;
-         $('.file_table_body').html('');
+         $('.video_table_body').html('');
       /*   window.ajax_queue.push($.getJSON(url, param, function(data)
          {
             $('.file_center_title').html(''+data.groupname+' - File');
@@ -3637,19 +3640,19 @@ $('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="vi
       param.lastScrollTopfeed = $(window).scrollTop();
       $('#page_hidden').attr('value', page);
             
-       /* if(page == 'bio' || page == 'file' || page == 'group_file' || page == 'event_file' || page == 'video' || page == 'group_video' || page == 'event_video')
+        if(page == 'file' || page == 'group_file' || page == 'event_file' || page == 'video' || page == 'group_video' || page == 'event_video')
         {
         
         $('#center').removeClass('col-md-6');
         $('#center').addClass('col-md-8');
         $('#right').hide();
         }
-        else
+        /*else
         {
         $('#center').removeClass('col-md-8');
         $('#center').addClass('col-md-6');
         $('#right').show();
-        } */
+        }*/ 
       
       return false;
    }

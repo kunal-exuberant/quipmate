@@ -14,61 +14,63 @@ if (isset($_SESSION))
         exit;
     }
 }
+$image_cdn = 'https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com';
 ob_start();
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
-<html>
-<head>
-<meta name="description" content="Quipmate is private social network for your company. It is a communication software for your employees which facilitates knowledge sharing and collaboration within your company "/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
-<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-<meta name= "url" content="http://www.quipmate.com"/>
-<meta name= "keywords" content="enterprise social network, social, profile, collaboration, team, files sharing, project, idea sharing, innovation, creativity, conversation, knowledge management, engagement platform, identify hidden experts, breakdown silos, improve transparency, poll, questions, democratic decision making, enterprise 2.0, microblogging, employee engagement, groups, bottom-up communication, human capital"/>
-<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"> 
+    <meta charset="UTF-8" content="text/html" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Quipmate is private social network for your company. It is a communication software for your employees which facilitates knowledge sharing and collaboration within your company" name="description">
+    <meta content="Quipmate - Team" name="author">
+    <meta content="http://www.quipmate.com" name="url">
+    <meta content="enterprise social network, social, profile, collaboration, team, files sharing, project, idea sharing, innovation, creativity, conversation, knowledge management, engagement platform, identify hidden experts, breakdown silos, improve transparency, poll, questions, democratic decision making, enterprise 2.0, microblogging, employee engagement, groups, bottom-up communication, human capital" name="keywords">
+    <title>Quipmate | Enterprise Social Network</title>
+    <link href="favicon.ico" rel="shortcut icon">
 <?php
 
 $file = new File();
 $file->style_welcome();
 $file->google_analytics();
 
-?>
-<title>Welcome To Quipmate | Enterprise Social Network</title>
-</head>
-<body>
-<div class="container">
-<div class="row" >
-<div id="header" class="container">
-	<div  class="col-md-6">
-		<a href="/"><img src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/trans_shad_logo.png" width="250" alt="Quipmate" /></a>
-	</div>
-	<div  class="col-md-6">
-		<form class="top1" name="input" method="post" action ="login_submit.php" target="_parent">
-			<input type="email" name="email" placeholder="Email" id="login_email" value="<?php
+?>        
+</head><!--/head-->
 
-if (isset($_COOKIE['quip_e']))
-    echo $_COOKIE['quip_e'];
-
-?>">
-			<input type="password" name="password"  placeholder="Password"  id="login_pass" value=""> 
-			<input type="submit" name="login" value="LOGIN" id = "login_button">
-			<div id="remember_forgot">
-				<input id="remember_checkbox" type="checkbox" name="remember" checked />Remember Me
-				<a id="forgot_link" href="welcome.php?click=forgot_password" >Forgot Password</a>
-			</div>
-		</form> 
-	</div>
-</div>
-<div class="col-md-6 thumbnail thumbnail_welcome" >
-	<img src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/ccc.jpg" style="height:20em;"/>
-	<h4 class="text-center">Connect &middot; Create &middot; Collaborate</h4>
-</div>
-<div class="col-md-6 thumbnail thumbnail_welcome">
-<?php
-
+<body data-offset="0" data-target="#navbar" data-spy="scroll" class="">
+    <header role="banner" id="header">
+        <div class="container">
+            <div class="navbar navbar-default" id="navbar">
+                <div class="navbar-header">
+                    <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="/" class="navbar-brand"></a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#main-slider"><i class="fa fa-home"></i></a></li>
+                        <li class=""><a href="#problems">Problems</a></li>
+                        <li class=""><a href="#solution">Solution</a></li>
+                        <li class=""><a href="#pricing">Pricing</a></li>
+                        <li class=""><a href="#about-us">Team</a></li>
+                        <li class=""><a href="#contact">Contact</a></li>
+                    </ul>
+				<ul class="pull-right list-none">
+					<li><button data-toggle="modal" data-target="#loginmodal" title="Log In" class="btn pad1 top1 btn-primary bold">Login</button></li>
+				</ul>
+                </div>
+            </div>
+        </div>
+    </header><!--/#header-->
+<?php 
 if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) !='')
 {
-    require_once ('../include/Session.php');
+require_once ('../include/Session.php');
     require_once ('../include/Help.php');
     $session = new Session();
     $database = new Database();
@@ -95,34 +97,34 @@ if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) 
                 $new_member = $nr[0];
 
 ?>
-		<div style="margin-left:3em;">
-			<h3><?php
-
-                echo 'Hi ' . $new_member . ',';
-
-?></h3>
+<div class="container">
+   <div class="row">
+	<div class="top2 pad1">
+		<div class="col-md-3"></div>
+        <div class="col-md-6 col-sm-12 dynamic-top">
+			<h3><?php  echo 'Hi ' . $new_member . ',';?></h3>
 			<h4>Welcome to the Quipmate community !</h4>
 			<h5>Please provide these details :</h5>
-			<div id="info"></div>
-			<div >
-			<label id ="signup_name_label">Name:</label>
-			<input type="text" id="signup_name" value="" title="Full Name" >
+			<div class="form-group">
+			<label class="text-left" >Name</label>
+			<input type="text" id="signup_name" value="" title="Full Name" class="form-control" />
 			</div>
-			<div id="password_container">
-			<label id ="signup_password_label">Password:</label>
-			<input type="password" id="signup_password" value="" size="32" title="Password" >
+			<div class="form-group">
+			<label class="text-left">Password</label>
+			<input type="password" id="signup_password" value=""  title="Password" class="form-control"/>
 			</div>
-			<div id="gender_container">
-			<label id ="signup_gender_label">Gender:</label>
-			<select id="signup_gender">
+			<div class="form-group">
+			<label class="text-left">Gender</label>
+			<select class="form-control" id="signup_gender">
 			<option value="-1">Gender</option>
 			<option value="0">Female</option>
 			<option value="1">Male</option>
 			</select>
 			</div>
-			<div id="birthday_container">
-			<label id="signup_birthday_label">Birthday:</label> 
-			<select size="1" id="day">
+			<div class="form-group">
+			<label class="text-left">Birthday</label> 
+			<div class="form-control">
+            <select size="1" id="day" >
 			  <option value="-1">Day</option>
 			  <?php
 
@@ -133,7 +135,7 @@ if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) 
 
 ?>
 			</select>
-			<select id="month">
+			<select id="month" >
 			  <option value="-1">Month</option>
 			  <option value="01">JAN</option>
 			  <option value="02">FEB</option>
@@ -148,70 +150,73 @@ if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) 
 			  <option value="11">NOV</option>
 			  <option value="12">DEC</option>		
 			</select>
-            <span class="hint">this will be used for birthday updates . </span>
+            </div>
+            <div class="hint">this date will be used for birthday updates.</div>
 			</div>
-            <div >
-			<label id ="signup_name_label">Designation:</label>
-			<input type="text" id="signup_designation" value="" />
+            <div class="form-group" >
+			<label class="text-left">Designation</label>
+			<input type="text" id="signup_designation" value="" class="form-control" />
 			</div>
-            <div >
-			<label id ="signup_name_label">Team:</label>
-			<input type="text" id="signup_team" value="" />
+            <div  class="form-group">
+			<label class="text-left">Team</label>
+			<input type="text" id="signup_team" value="" class="form-control" />
 			</div>          
-			<div id="signup_button_container">
-			<input type="hidden" id="email_hidden" value="<?php
-
-                echo $email;
-
-?>" />
-			<input type="hidden" id="identifier_hidden" value="<?php
-
-                echo $identifier;
-
-?>" />
-			<input id ="signup_button" type="submit" value="SIGNUP" onclick="action.register(this)" />
+			<div class="form-group">
+			<input type="hidden" id="email_hidden" value="<?php echo $email; ?>" />
+			<input type="hidden" id="identifier_hidden" value="<?php  echo $identifier;?>" />
+			<button onclick="action.register(this)" class="btn btn-success top1 form-control bold" >SIGNUP</button>
 			</div>
 			<span id="icon"></span>
-			<?php
-
-                $file->script_welcome();
-
-?>
+			<div id="info" class="top1"></div>
 			</div>
+         </div>
+      </div>
+</div>            
 			
-		<?php
-
-            } else
-            {
-
-?>
-		<h1 id="register_title"><?php
-
-                echo 'The invitation link sent to you seems to be broken. Please try again.';
-
-?></h1>
-	<?php
-
+		<?php                
             }
-        } else
-        {
-
-?>
-	<div id="qm_description">
-	<h3>Welcome To Quipmate.</h3>
-	<h5>You are already a part of Quipmate</h5>
-	<h5>Please Login using your email and password.</h5>
-	<h5>If you forgot your password, please use forgot password link to recover it.</h5>
-	</div>
-<?php
-
-        }
-        $file->script_jquery();
-    } else
+    else
     {
-
+?>
+<div class="container">
+   <div class="row">
+	<div class="top2 pad1">
+        <div class="tex-center dynamic-top">
+			<div class="alert alert-danger" role="alert"><h5>The invitation link sent to you seems to be broken. Please try again.</h5></div>
+        </div>  
+     </div>   
+    </div>   
+</div>    
+<?php        
+        
+    }                
+       }
+    else
+    {
+?>
+<div class="container">
+   <div class="row">
+	<div class="top2 pad1">
+        <div class="text-center dynamic-top">
+    	<h3>Welcome To Quipmate.</h3>
+    	<h5>You are already a part of Quipmate</h5>
+    	<h5>Please Login using your email and password.</h5>
+    	<h5>If you forgot your password, please use forgot password link to recover it.</h5>
+        </div>  
+    </div>
+   </div>
+</div>         
+<?php        
     }
-} else
+           
+  }
+  else
+  {
+    
+  }     
+
+}
+else 
     if (isset($_GET['id']) && isset($_GET['email']) && isset($_GET['click']))
     {
         $click = $_GET['click'];
@@ -234,247 +239,492 @@ if (isset($_GET['email']) && isset($_GET['identifier']) && trim($_GET['email']) 
             $uniqueid = $database->select_uniqueid($email);
             if ($uniqueid == $id)
             {
-
 ?>
-			<div id="recover_password_box"> 
-				<h3>Reset your password</h3>
-				<div id="recover_new_password_container">
-					<span style="padding-right:20px;">New Password:</span>
-					<input style="border:0.1em solid gray;width:20em;margin:1em;" type="password" name="pass" id = "pass"/>
+<div class="container">
+   <div class="row">
+	<div class="top2 pad1">
+		<div class="col-md-3"></div>
+        <div class="col-md-6 col-sm-12 dynamic-top"><h3>Reset your password</h3>
+				<div class="form-group">
+					<label class="text-left" >New Password</label>
+					<input type="password" name="pass" id = "pass" class="form-control"/>
 				</div>
-				<input type="hidden" id="recover_password_email" value="<?php
-
-                echo $email;
-
-?>" />
-				<input type="hidden" id="recover_password_uniqueid" value="<?php
-
-                echo $id;
-
-?>" />
-				<div id="recover_confirm_password_container">
-					<span>Confirm Password:</span>
-					<input style="border:0.1em solid gray;width:20em;margin:1em;" type="password" name="confirmpass" id = "confirmpass"/>
+				<input type="hidden" id="recover_password_email" value="<?php echo $email;?>" />
+				<input type="hidden" id="recover_password_uniqueid" value="<?php  echo $id;?>" />
+				<div class="form-group top1">
+					<label class="text-left">Confirm Password</label>
+					<input class="form-control" type="password" name="confirmpass" id = "confirmpass"/>
 				</div>
-				<div style="margin:2em 0em 0em 6em;">
-					<input class="theme_button" type="submit" name="change" value="Reset Password" id = "change" onclick="action.recover_password(this)"/>
-					<span id = "recover_password_info" style="color:#336699;margin-left:1.2em;"></span>
-				</div>
-			</div>
-		<?php
-
-            } else
+				<button class="btn btn-success" name="change" id = "change" onclick="action.recover_password(this)">Reset Password</button>
+				<div class="top1"><div id = "recover_password_info" ></div></div>
+		</div>
+      </div>
+    </div>
+</div>           
+<?php                
+            }
+             else
             {
 
 ?>
-			<div style="position:relative;top:7em;left:5em;">
-			<br/><h5>Invalid Account or Probably the link has been out-dated .</h5>
-			</div>
-		<?php
+<div class="container">
+   <div class="row">
+	<div class="top2 pad1">
+        <div class="col-md-6 col-sm-12 dynamic-top"><h3>Invalid Account or Probably the link has been out-dated.</h3>
+	    </div>
+    </div>
+ </div>
+</div>         
+<?php
 
             }
             $file->script_welcome();
-        } else
+        } 
+        else
         {
 
 ?>
-			<div style="position:relative;top:7em;left:5em;">
-			<br/><h5>Invalid Link</span></h5>
-			</div>
-		<?php
+<div class="container">
+   <div class="row">
+	<div class="top2 pad1">
+        <div class="col-md-6 col-sm-12 dynamic-top"><h3>Invalid Link.</h3>
+	    </div>
+    </div>
+ </div>
+</div> 
+<?php
 
         }
-    } else
-        if (isset($_GET['click']) && $_GET['click'] == 'forgot_password')
-        {
+    }
+else
+    if (isset($_GET['click']) && $_GET['click'] == 'forgot_password')
+    {
             require_once ('../include/Session.php');
             $session = new Session();
             $session->start();
-
-?>
-	<div >
-		<div class="well well-sm"><h3>Forgot your password?<h3></div>
-		<div class="panel-body">
-			<span>Enter your Email:*</span>
-			<input type="text" style="border:0.1em solid gray;width:18em;padding:0.5em;" id = "forgot_password_email" /> 
-			<input class="theme_button" type="submit" name="submit" value="Submit" onclick="action.forgot_password(this)" id = "forgot_password_button"/>
+ ?>
+<div class="container">
+   <div class="row">
+	<div class="top2 pad1">
+		<div class="col-md-3"></div>
+        <div class="col-md-6 col-sm-12 dynamic-top"><h3>Forgot your password?</h3>
+		<div >
+			<label class="text-left">Enter your Email</label>
+			<input type="text" class="form-control text-left" id = "forgot_password_email" /> 
+			<button class="btn btn-primary bold top1" onclick="action.forgot_password(this)" id = "forgot_password_button">Recover Password</button>
 		</div>
-		<span id = "forgot_password_info"></span>
+		<div id="forgot_password_info" class="pad1 top1"></div>
+        </div>
 	</div>
-<?php
-
-            $file->script_welcome();
-        } else
-            if (isset($_GET['error']) && $_GET['error'] == 'empty')
-            {
-                echo '<div id="qm_description"><h5 style="color:#770000">Please enter both email and password.</h5></div>';
-            } else
-                if (isset($_GET['error']) && $_GET['error'] == 'incorrect_email_or_password')
-                {
-                    echo '<div id="qm_description"><h5 style="color:#770000">Incorrect email or password. Please try again.</h5></div>';
-                } else
-                {
-                    setcookie("console", "did not get all get values", time() + 3600000, '/',
-                        '.quipmate.com');
-
-?>
-	<div class="text-center"><h3>Join and Invite your Peers to Quipmate</h3></div>
-
-	<div class="caption thumbnail_welcome_box">
-		<h4 class="caption text-center" id="signup_info">Making Professional Lives a bit Personal</h3>
-		<div class="panel-body text-center">
-		<input type="text" value="" placeholder="Enter your email address" id="signup_email" style="border: 0.1em solid #aaaaaa;font-weight:bold;padding:0.8em;width:22em;background-color:#ffffff;" />
-		<input type="submit" value="SignUp" id="signup_email_button" style="border:0.1em solid #EEF4DD;color:#ffffff;cursor:pointer;background-color:#339970;padding:0.8em;font-weight:bold;" onclick="action.self_invite(this)"/>
+    </div>
+</div>    
+<?php           
+    }
+else
+    {            
+?>    
+    <section class="carousel" id="main-slider">
+        <div class="carousel-inner">
+            <div class="item">
+                <div class="container">
+                    <div class="carousel-content">
+                        <h1>Employee Social Network</h1>
+                        <p class="lead">Quipmate helps tap the collective power of employees,<br> free flow of ideas and knowledge in an organization.
+</p>
+                    </div>
+                </div>
+            </div><!--/.item-->
+            <div class="item active">
+                <div class="container">
+                    <div class="carousel-content">
+                        <h1>Communication Platform </h1>
+                        <p class="lead">It is communication platform for employees and facilitates knowledge sharing <br>and collaboration within an organization.</p>
+                    </div>
+                </div>
+            </div><!--/.item-->
+        </div><!--/.carousel-inner-->
+        <a data-slide="prev" href="#main-slider" class="prev"><i class="fa fa-chevron-left"></i></a>
+        <a data-slide="next" href="#main-slider" class="next"><i class="fa fa-chevron-right"></i></a>
+		<div id="headerwrap" class="container">
+          <div class="row">
+            <div class="span12">
+              <h2>Join and invite your peers to Quipmate</h2>
+			  <h4 id="signup_info"></h4>
+              <input type="text" name="your-email" placeholder="Please enter your work email" id="signup_email">
+              <input type="submit" onclick="action.self_invite(this)" value="Signup" id="signup_email_button">
+            </div>
+          </div>
+          
+        </div>
+    </section><!--/#main-slider-->
+<?php 
+}
+?>    
+    <section id="problems">
+        <div class="container">
+            <div class="box first ">
+                <div class="row ">
+				    <div class="text-center"><h2></h2><h3 class="bold">Improve awareness inside organization</h3></div>
+					<div class="col-md-6 col-sm-12">
+						<div class="center">
+						<img width="350" height="350" class="" max-width="" src="<?php echo $image_cdn;?>/Picture2.png">
+						</div>
+					</div>	
+					<div class="col-md-6 col-sm-12">
+					<div class="pad1"><h4><i class="fa fa-check-square-o fa-2x pull-left"></i>An employee may not be aware of what the person sitting five desk apart is working on.</h4>
+					</div>
+					<div class="pad1">
+					<h4><i class="fa fa-check-square-o  fa-2x pull-left"></i>He might be working on the same problem that this employee worked on last month.</h4>
+					</div>
+					<div class="pad1"> 
+					<h4><i class="fa fa-check-square-o  fa-2x pull-left"></i>Prevent this re-inventing the wheel in your  organization.</h4>
+					</div>
+					</div>					
+				</div>	
+			</div>
 		</div>
-	</div>
-	    <?php
+		<div class="container top1">
+			<div class="box">
+				<div class="row">
+				   <div class="text-center"><h3 class="bold">Speed up the flow of information</h3></div>
+					<div class="col-md-6 col-sm-12">
+					<div class="pad1"><h4><i class="fa fa-check-square-o fa-2x pull-left"></i>Information does not flow at the speed of twitter in your organization.</h4>
+					</div>
+					<div class="pad1">
+					<h4><i class="fa fa-check-square-o  fa-2x pull-left"></i>Any information that you want to share with employees does not get across at that speed.</h4>
+					</div>
+					<div class="pad1"> 
+					<h4><i class="fa fa-check-square-o  fa-2x pull-left"></i>Take decisions at speed of light.</h4>
+					</div>
+					</div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="center">
+                            <img width="350" height="350" class="" src="<?php echo $image_cdn;?>/Picture3.jpg">
+                        </div>
+					</div>					
+                </div><!--/.row-->
+            </div><!--/.box-->
+        </div><!--/.container-->
+		 <div class="container top1">
+			<div class="box">
+				<div class="row">
+				<div class="text-center"><h3 class="bold">Mobility</h3></div>
+				    <div class="col-md-6 col-sm-12">
+                        <div class="center">
+                            <img width="350" height="350" class="" src="<?php echo $image_cdn;?>/Picture1.jpg">
+                        </div>
+					</div>	
+					<div class="col-md-6 col-sm-12">
+					<div class="pad1"><h4><i class="fa fa-check-square-o fa-2x pull-left"></i>More and more work is done these days when the employees are away from the desk.</h4>
+					</div>
+					<div class="pad1">
+					<h4><i class="fa fa-check-square-o  fa-2x pull-left"></i>It is important that they are connected with the work they are doing in office from their mobile phone.</h4>
+					</div>
+					<div class="pad1"> 
+					<h4><i class="fa fa-check-square-o  fa-2x pull-left"></i>Work from anywhere.</h4>
+					</div>
+					</div>
+				
+                </div><!--/.row-->
+            </div><!--/.box-->
+        </div><!--/.container-->
+		<div class="container top1">
+			<div class="box">
+				<div class="row">
+				   <div class="text-center"><h3 class="bold">Capture Knowledge</h3></div>
+					<div class="col-md-6 col-sm-12">
+					<div class="pad1"><h4><i class="fa fa-check-square-o fa-2x pull-left"></i>Capture the cycle of evolution of a product which is as much important as the final product itself.</h4>
+					</div>
+					<div class="pad1">
+					<h4><i class="fa fa-check-square-o  fa-2x pull-left"></i>It should be captured and retained so that you are not dependent on any employee leaving the company.</h4>
+					</div>
+					</div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="center">
+                            <img width="350" height="350" class="" src="<?php echo $image_cdn;?>/Picture4.jpg">
+                        </div>
+					</div>					
+                </div><!--/.row-->
+            </div><!--/.box-->
+        </div><!--/.container-->	
+		 <div class="container top1">
+			<div class="box">
+				<div class="row">
+				<div class="text-center"><h3 class="bold">Culture</h3></div>
+				    <div class="col-md-6 col-sm-12">
+                        <div class="center">
+                            <img width="350" height="350" class="" src="<?php echo $image_cdn;?>/Picture5.jpg">
+                        </div>
+					</div>	
+					<div class="col-md-6 col-sm-12">
+					<div class="pad1"><h4><i class="fa fa-check-square-o fa-2x pull-left"></i>Your employees mostly would be operating in silos - everyone is like a different system.</h4>
+					</div>
+					<div class="pad1">
+					<h4><i class="fa fa-check-square-o  fa-2x pull-left"></i>They need a way to share, organize and retain the information.</h4>
+					</div>
+					</div>
+				
+                </div><!--/.row-->
+            </div><!--/.box-->
+        </div><!--/.container-->		
+    </section><!--/#services-->
 
-                    $file->script_welcome();
-                }
+    <section id="solution">
+        <div class="container top1">
+			<div class="box">
+				<div class="row ">
+					<div class="center">
+						<h2>Solution</h2>
+						<h3 class="top0 bold">Private Social Network for your company</h3>
+					</div><!--/.center-->
+					<div class="col-md-6 col-sm-12">
+					<div><h3>Using Quipmate your employees -</h3>
+					</div>					
+					<div class="pad1"><h4><i class="fa fa-check-square-o fa-2x pull-left"></i>Know whom they are working with.</h4>
+					</div>
+					<div class="pad1">
+					<h4><i class="fa fa-check-square-o  fa-2x pull-left"></i>Know what other employees are working on.</h4>
+					</div>
+					<div class="pad1">
+					<h4><i class="fa fa-check-square-o  fa-2x pull-left"></i>They are always connected with every other person in the organization.</h4>
+					</div>
+					<div class="pad1">
+					<h4><i class="fa fa-check-square-o  fa-2x pull-left"></i>Always have access to everything - the company files, tools, expertise and history wherever they are and whenever they need.</h4>
+					</div>
+					</div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="center">
+                            <img width="350" height="350" class="" src="<?php echo $image_cdn;?>/Picture6.jpg">
+                        </div>
+					</div>					
+                </div><!--/.row-->
+            </div><!--/.box-->
+        </div><!--/.container-->
+    </section><!--/#portfolio-->
 
-?>
+    <section id="pricing">
+        <div class="container">
+            <div class="box">
+                <div class="center">
+                    <h2>Quipmate pricing</h2>
+                </div><!--/.center-->   
+                <div class="row" id="pricing-table">
+                    <div class="col-sm-4">
+                    </div><!--/.col-sm-4-->
+                    <div class="col-sm-4">
+                        <ul class="plan featured">
+                            <!--<li class="plan-name">Premium</li>-->
+                            <li class="plan-price"><i class="fa fa-inr"></i>&nbsp;5 <br /><h4 style="color: white;">Per employee per day</h4></li>
+                            <li>1 Month free</li>
+                            <li>Full Features</li>
+                            <li>Unlimited Bandwidth</li>
+                            <li>Unlimited Storage</li>
+                            <li>Customer Support</li>
+                            <li class="plan-action"><a class="btn btn-primary btn-lg" href="#main-slider">Signup</a></li>
+                        </ul>
+                    </div><!--/.col-sm-4-->
+                    <div class="col-sm-4">
+                    </div><!--/.col-sm-4-->
+                </div> 
+            </div> 
+        </div>
+    </section><!--/#pricing-->
 
-</div>
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_social_networking.png" style=" height: 100px;">
-<div class="caption">
-<h4 style="margin-top:0;margin-bottom:6px;">Enterprise Social Networking</h4>
-<ul><li><div>Private Messages</div></li><li><div>Employee Profile</div></li><li><div>Chat</div></li><li><div>Groups</div></li><li><div>Email Updates</div></li><li><div>Notifications</div></li></ul>
-</div>
-</div>
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_team_collaboration.png" style=" height: 100px;">
-<div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">Team Collaboration</h4>
-<ul><li><div>Public/Private Groups</div></li><li><div>File Sharing</div></li><li><div>Praise/Recommend Peers</div></li><li><div>Link Sharing</div></li><li><div>Questions/Polls</div></li><li><div>Ideas</div></li></ul></div>
-</div>
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_admin_control.png" style=" height: 100px;"><div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">Admin Control</h4><ul><li><div>Invite/Remove User</div></li><li><div>Design</div></li><li><div>Broadcast Messages</div></li><li><div>Data Export</div></li></ul></div>
-</div>
-<!--
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_enterprise_integration_0.png" style=" height: 100px;"><div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">External Api Integration</h4><ul><li><div>Linkedin</div></li><li><div>Evernote</div></li><li><div>Google</div></li><li><div>Dropbox</div></li><li><div>Box</div></li></ul></div>
-</div>
--->
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_mobile_desktop.png" style=" height: 100px;"><div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">Mobile &amp; Desktop</h4><ul><li><div>Chat/Messenger</div></li><li><div>Android</div></li></ul></div>
-</div>
-</tr>
-<tr>
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_deployment_options.png" style=" height: 100px;"><div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">Deployment Options</h4><ul><li><div>Cloud Hosted</div></li><li><div>On Premise/Intranet</div></li></ul></div>
-</div>
+    <section id="about-us">
+        <div class="container">
+            <div class="box">
+                <div class="center">
+                    <h2>Our passionate team</h2>
+                </div>
+                <div class="carousel scale" id="team-scroller">
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <div class="row">
+                                  <div class="col-sm-4">
+                                    <div class="member">
+                                        <p><img alt="" src="https://media.licdn.com/mpr/mpr/shrink_240_240/p/6/005/077/22c/0bf071b.jpg" class="img-responsive img-thumbnail img-circle"></p>
+                                        <h3>Kunal Singh<small class="designation">Co-Founder, CEO</small></h3>
+                                        <ul class="social">
+                                        <li><a href="https://www.linkedin.com/in/exuberant" target="_blank"><i class="fa fa-linkedin icon-linkedin icon-social"></i></a></li>
+                                        </ul>
+                                        
+                                    </div>
+                                </div>                               
+							   <div class="col-sm-4">
+                                    <div class="member">
+                                        <p><img alt="" src="https://media.licdn.com/media/p/5/005/079/2c1/0fde188.jpg" class="img-responsive img-thumbnail img-circle"></p>
+                                        <h3>Brijesh Kushwaha<small class="designation">CTO &amp; Co-Founder</small></h3>
+                                        <ul class="social">
+                                        <li><a href="https://www.linkedin.com/in/brijeshkushwaha" target="_blank"><i class="fa fa-linkedin icon-linkedin icon-social"></i></a></li>
+                                        </ul>                                        
+                                    </div>
+                                </div>      
+                                <div class="col-sm-4">
+                                    <div class="member">
+                                        <p><img alt="" src="https://media.licdn.com/media/p/7/005/037/201/0429a09.jpg" class="img-responsive img-thumbnail img-circle"></p>
+                                        <h3>Vijay Kumar<small class="designation">Chairman, Director</small></h3>
+                                        <ul class="social">
+                                        <li><a href="https://www.linkedin.com/in/vijayjaiswal" target="_blank"><i class="fa fa-linkedin icon-linkedin icon-social"></i></a></li>
+                                        </ul>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="member">
+                                        <p><img alt="" src="https://media.licdn.com/mpr/mpr/shrink_200_200/p/3/000/014/260/3b128d5.jpg" class="img-responsive img-thumbnail img-circle"></p>
+                                        <h3>Ambar Kumar<small class="designation">Director</small></h3>
+                                        <ul class="social">
+                                        <li><a href="https://www.linkedin.com/in/ambarkumar" target="_blank"><i class="fa fa-linkedin icon-linkedin icon-social"></i></a></li>
+                                        </ul>                                        
+                                    </div>
+                                </div>   
+                                <div class="col-sm-4">
+                                    <div class="member">
+                                        <p><img alt="" src="https://media.licdn.com/mpr/mpr/shrink_200_200/p/3/000/095/1aa/2211aba.jpg" class="img-responsive img-thumbnail img-circle"></p>
+                                        <h3>Sunil Maheshwari<small class="designation">Advisor</small></h3>
+                                        <ul class="social">
+                                        <li><a href="https://www.linkedin.com/in/sunilm" target="_blank"><i class="fa fa-linkedin icon-linkedin icon-social"></i></a></li>
+                                        </ul>                                        
+                                    </div>
+                                </div>     
+                            </div>
+                        </div>
+                    </div>
+                    <a data-slide="prev" href="#team-scroller" class="left-arrow">
+                        <i class="fa fa-angle-left fa-4x"></i>
+                    </a>
+                    <a data-slide="next" href="#team-scroller" class="right-arrow">
+                        <i class="fa fa-angle-right fa-4x"></i>
+                    </a>
+                </div><!--/.carousel-->
+            </div><!--/.box-->
+        </div><!--/.container-->
+    </section><!--/#about-us-->
 
+    <section id="contact">
+        <div class="container">
+            <div class="box last">
+			<h2></h2>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3>Contact Form</h3>
+                        <p>We are always glad to hear from you .Please fill the details in below form and submit .</p>
+                        <div style="display: none" class="status alert alert-success"></div>
+                        <form role="form" action="ajax/write.php" method="post" name="contact-form" class="contact-form" id="contact_form">
+                            <input type="hidden" id="contact" value="contact" name="action">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input type="text" name="contact_name" placeholder="Name" required="required" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input type="text" name="contact_email" placeholder="Email address" required="required" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <textarea placeholder="Message" rows="8" class="form-control" required="required" name="contact_message"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <button id="contact_send" class="btn btn-danger btn-lg" type="submit">Send Message</button>
+                                    </div>
+                                    <div id="contact_info"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!--/.col-sm-6-->
+                    <div class="col-sm-6">
+                        <h3>Our Address</h3>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <address>
+                                    <strong>Quipmate Enterprise Solutions Pvt. Ltd.</strong><br/>
+                                    418, South Block <br/>
+                                    Manipal Center, Dickenson Road<br/>
+                                    Bangalore - 560042<br/>
+                                    India<br/>
+                                    Email : contact@quipmate.com<br/>
+                                    <abbr title="Phone">Mob:</abbr> +91-9535880638
+                                </address>
+                            </div>
+                        </div>
+                        <h3>Connect with us</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="social">
+                                    <li><a href="https://www.facebook.com/quipmate"><i class="fa fa-facebook icon-facebook icon-social fa-2x"></i> Facebook</a></li>
+                                    <li><a href="https://plus.google.com/103861395293185727168/about"><i class="fa fa-google-plus icon-google-plus icon-social fa-2x"></i> Google Plus</a></li>
+                                    <li><a href="https://in.pinterest.com/quipmate/"><i class="fa fa-pinterest icon-pinterest icon-social fa-2x"></i> Pinterest</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="social">
+                                    <li><a href="https://www.linkedin.com/company/quipmate"><i class="fa fa-linkedin icon-linkedin icon-social fa-2x"></i> Linkedin</a></li>
+                                    <li><a href="https://twitter.com/quipmate"><i class="fa fa-twitter icon-twitter icon-social fa-2x"></i> Twitter</a></li>
+                                    <li><a href="https://www.youtube.com/channel/UCef6CYLPQRXCuc_xC28dtUw"><i class="fa fa-youtube icon-youtube icon-social fa-2x"></i> Youtube</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--/.col-sm-6-->
+                </div><!--/.row-->
+            </div><!--/.box-->
+        </div><!--/.container-->
+    </section><!--/#contact-->
 
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_security_compliance4.png" style=" height: 100px;"><div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">Security &amp; Compliance</h4><ul><li><div>Keyword Monitoring</div></li><li><div>Delete Any content</div></li><li><div>Admin Notifications</div></li><li><div>Password Policy</div></li></ul></div>
-</div>
+    <footer id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    &copy; Quipmate Enterprise Solutions Private Limited. All Rights Reserved.
+                </div>
+                <div class="col-sm-6">
+                	<a target="_blank" href="public/faq.php">FAQ</a><span class="separator">|</span>
+                	<a target="_blank" href="public/terms.php">Terms of Use</a><span class="separator">|</span>
+                	<a target="_blank" href="public/security.php">Security &amp; Compliance</a><span class="separator">|</span>
+                	<a target="_blank" href="public/privacy.php">Privacy Policy</a><span class="separator">|</span>
+                    <a target="_blank" href="public/getting_started.php">Getting Started</a>
+                </div>
+            </div>
+        </div>
+            <div aria-labelledby="basicModal" role="dialog" aria-hidden="true" class="modal" id="loginmodal" style="display: none;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button aria-hidden="true" data-dismiss="modal" class="close" type="button">x</button>
+                            <h3>Sign Into Quipmate</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                <form id="login_form" action="ajax/write.php" method="post">
+                                    <div>
+                                        <p><input type="email" autocomplete="off" placeholder="Email address" value="" tabindex="5" class="input-lg form-control" name="email" id="login_email">
+                                        </p>
+                                        <!--label class="error error-container" for="popup-login-email">Please use a valid email address</label-->
+                                        <p><input type="password" autocomplete="off" placeholder="Password" tabindex="5" class="input-lg form-control" name="password" id="login_pass"></p>
+                                        <!--label class="error error-container" for="popup-login-password">Password required</label-->
+                                    </div>
+                                    <input type="hidden" id="action" value="login" name="action">
+                                    <p style="text-align:right; font-size:12px;"><a href="welcome.php?click=forgot_password">Forgot your password?</a></p>
+            
+                                    <p><input type="submit" autocomplete="off" value="Sign in" tabindex="6" title="Login to Quipmate" class="btn btn-block btn-large btn-primary btn-home bold" name="login" id="login_button"></p>
+            
+                                </form>
+                            </div>
+                        <div id="login_response" class="top1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>	
+<?php 
+     $file->script_welcome();
+?>		            
+    </footer><!--/#footer-->
 
-
-<!--
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/direct_to_md_welcome.jpg">
-<div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">Direct to MD</h4></div>
-<div >Write open or private letter to the Executive body of the organization</div>
-</div>
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box"> 
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/directors_blog_welcome.jpg">
-<div class="caption"><h4>Director’s Blog</h4></div>
-<div >Write blogs on daily/weekly basis relating to technical breakthrough, what is the goal of the product and how the contribution of every single person in that project is mapped to the customer’s needs</div>
-</div>
--->
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/group_welcome.jpg" ><div class="caption"><h4>Group</h4></div>
-<div >Keep essential API, product documents for the whole team. Access everyone’s contribution on daily basis and encourage team to participate in problem solving</div>
-</div>
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/profile_welcome.jpg"><div class="caption"><h4>Profile</h4></div>
-<div >Brief personal and professional background of that person, the groups he attended, praises he received.</div>
-</div>
-
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/praise_welcome.jpg"/p><div class="caption"><h4>Praise/Recommend </h4></div><div >Whatever gets measured and awarded gets done. So praise your peers for their contributions and recognize their talents</div>
-</div>
-
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/poll_question_welcome.jpg"><div class="caption"><h4>Poll/Question</h4></div><div >Trainees use Questions feature to ask questions to their team to learn about the product and company culture and methodology, procedures quickly</div>
-</div>
-
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/event_welcome.jpg"><div class="caption"><h4>Events</h4></div><div >Organize your company events like annual day or thanks giving day in highly efficient way</div>
-</div>
-
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/moderation_welcome.jpg"><div class="caption"><h4>Moderation</h4></div><div >Broadcast content. Remove any user. Remove any content. Set On/Off features for whole network. System configurable for any number of moderators.</div>
-</div>
-
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/news_feed_welcome.jpg"><div class="caption"><h4>News Feed </h4></div><div >Get updates on latest updates in your company.</div>
-</div>
-
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/live_feed_welcome.jpg"><div class="caption"><h4>Live Feed</h4></div><div >Instant update/visibility on every minor action done in the company</div>
-</div>
-
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/link_sharing_welcome.jpg"><div class="caption"><h4>Link Sharing</h4></div><div >Share any link/website on the internet/intranet with people in your organization</div>
-</div>
-
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/file_sharing_welcome.jpg"><div class="caption"><h4>File Sharing</h4></div><div >File/video/photo sharing and version management</div>
-</div>
-
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/mood_welcome.jpg" ><div class="caption"><h4>Mood Meter</h4></div><div >Analyse the mood of the organization</div>
-</div>
-
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/notification_welcome.jpg"><div class="caption"><h4>Notification</h4></div><div >Notification on email and website</div>
-</div>
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/birthday_reminder.jpg"><div class="caption"><h4>Birthday Updates</h4></div><div >Birthday/anniversary and important events updates from all people in your network</div>
-</div>
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" rel="lightbox" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/pricing_analytics.png" style=" height: 100px;">
-<div class="caption"><h4 style="margin-top:0;margin-bottom:6px;">Analytics</h4><ul><li><div>Periodic Usage</div></li><li><div>Reporting</div></li></ul></div>
-</div>
-
-
-
-<div class="col-md-12"><div class="well well-sm text-center"><h4>How do we price ourselves?</h4></div>
-</div>
-
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/free_welcome.jpg">
-<h4 style="margin-top:0;margin-bottom:6px;">Free</h4>
-<ul><li><div>First Month for all</div></li><li><div>Always if Employee strength < 50</div></li><li><div>Only for Cloud Hosted</div></li></ul>
-</div>
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/basic_welcome.png">
-<h4>Basic</h4>
-<ul><li><div>$1 per employee per month</div></li><li><div>Free 3 Months Trial</div></li></ul>
-</div>
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/premium_welcome.jpg" >
-<h4>Premium</h4>
-<ul><li><div>$2 per employee per month</div></li><li><div>Free 3 Months Trial</div></li></ul>
-</div>
-<div class="col-md-3 thumbnail thumbnail_welcome thumbnail_welcome_box">
-<img alt="" style="height:100px;" src="https://deb50923b530b51a8716-94183f92489d153831b49a81e18a1b54.ssl.cf2.rackcdn.com/premises_welcome.png"><h4>Premises</h4>
-<ul><li><div>Additional price of $3 per employee per month</div></li></ul>
-</div>
-
-</div>
-<div id="footer"> 
-	<a href="#" target="_blank">&copy; Quipmate</a><span class="separator">|</span>
-	<a href="public/faq.php" target="_blank">FAQ</a><span class="separator">|</span>
-	<a href="public/team.php" target="_blank">Team</a><span class="separator">|</span>
-	<a href="public/terms.php" target="_blank">Terms of Use</a><span class="separator">|</span>
-	<a href="public/security.php" target="_blank">Security &amp; Compliance</a><span class="separator">|</span>
-	<a href="public/privacy.php" target="_blank">Privacy Policy</a><span class="separator">|</span>
-    <a href="public/getting_started.php" target="_blank">Getting Started</a>
-</div>
-<div style="position:fixed;bottom:0em;right:2em;background-color:#dddddd;" id="message_leave">
-	<div id="message_leave_title" onclick="ui.message_leave_grow(this)" style="cursor:pointer;font-size:1.2em;padding:0.5em;width:14em;background-color:#4c66a4;color:#ffffff;font-weight:bold;">Leave a message<img src="https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/downarrow.gif" style="float:right;" /></div>
-</div>
-</body>
-</html>
+</body></html>

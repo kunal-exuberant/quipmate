@@ -254,28 +254,28 @@ var callback = (function()
   {
     if (data.ack == 1)
     {
-      $('#forgot_password_info').html('We just sent you an email. Please follow the instructions in the email to reset your password.');
+      $('#forgot_password_info').html('<div class="alert alert-success top1 pad1" role="alert">We just sent you an email. Please follow the instructions in the email to reset your password.</div>');
       $('#forgot_password_email').attr('value', '');
     }
     else if (data.error.code == 16)
     {
-      $('#forgot_password_info').html('Sorry, we could not search you. Please enter your correct email.');
+      $('#forgot_password_info').html('<div class="alert alert-warning top1 pad1" role="alert">Sorry, we could not search you. Please enter your correct email.</div>');
     }
     else if (data.error.code == 23)
     {
-      $('#forgot_password_info').html('Please enter a valid email');
+      $('#forgot_password_info').html('<div class="alert alert-warning top1 pad1" role="alert">Please enter a valid email</div>');
     }
     else if (data.ack == 15)
     {
-      $('#forgot_password_info').html('Sorry, an error occured while reaching Quipmate. Please try again.');
+      $('#forgot_password_info').html('<div class="alert alert-warning top1 pad1" role="alert">Sorry, an error occured while reaching Quipmate. Please try again.</div>');
     }
     else if (data.ack == 17)
     {
-      $('#forgot_password_info').html('Sorry, an error occured while sending the email.');
+      $('#forgot_password_info').html('<div class="alert alert-warning top1 pad1" role="alert">Sorry, an error occured while sending the email.</div>');
     }
     else
     {
-      $('#forgot_password_info').html('Please try again');
+      $('#forgot_password_info').html('<div class="alert alert-warning top1 pad1" role="alert">Please try again</div>');
     }
   }
 
@@ -529,7 +529,7 @@ var callback = (function()
     }
     else
     {
-      $('.prompt_content').html('Error performing the action, please try again');
+      $('.prompt_content').html('<div class="alert alert-warning" role="alert">Error performing the action, please try again</div>');
     }
   }
 
@@ -721,7 +721,7 @@ var callback = (function()
     }
     else
     {
-      $('.prompt_content').html('Error performing the action, please try again');
+      $('.prompt_content').html('<div class="alert alert-warning" role="alert">Error performing the action, please try again</div>');
     }
   }
 
@@ -762,7 +762,7 @@ var callback = (function()
     }
     else
     {
-      $('.prompt_content').html('Error performing the action, please try again');
+      $('.prompt_content').html('<div class="alert alert-warning" role="alert">Error performing the action, please try again</div>');
     }
   }
 
@@ -1392,7 +1392,7 @@ var callback = (function()
     }
     else
     {
-      $('.prompt_content').html('Error performing the action, please try again');
+      $('.prompt_content').html('<div class="alert alert-warning" role="alert">Error performing the action, please try again</div>');
     }
   }
 
@@ -1407,7 +1407,7 @@ var callback = (function()
     }
     else
     {
-      $('.prompt_content').html('Error performing the action, please try again');
+      $('.prompt_content').html('<div class="alert alert-warning" role="alert">Error performing the action, please try again</div>');
     }
   }
 
@@ -1421,11 +1421,11 @@ var callback = (function()
   {
     if (data == 2)
     {
-      $('#recover_password_box').html('<h1>Your password has been updated successfully.</h1><h1>Please login to continue.</h1>');
+      $('#recover_password_box').html('<div class="alert alert-success" role="alert">Your password has been updated successfully.Please login to continue.</div>');
     }
     else
     {
-      $('#recover_password_info').html(data.error.message);
+      $('#recover_password_info').html('<div class="alert alert-warning" role="alert">'+data.error.message+'</div>');
     }
   }
 
@@ -1433,11 +1433,11 @@ var callback = (function()
   {
     if (data == 2)
     {
-      $('#change_password_info').html('Your password has been updated successfully');
+      $('#change_password_info').html('<div class="alert alert-success" role="alert">Your password has been updated successfully</div>');
     }
     else
     {
-      $('#change_password_info').html(data.error.message);
+      $('#change_password_info').html('<div class="alert alert-danger" role="alert">'+data.error.message+'</div>');
     }
   }
 
@@ -1445,12 +1445,12 @@ var callback = (function()
   {
     if (data.ack)
     {
-      $('#signup_info').html(data.message);
+      $('#signup_info').html('<div class="alert alert-success" role="alert">'+data.message+'</div>');
       $('#signup_email').val('');
     }
     else
     {
-      $('#signup_info').html(data.error.message);
+      $('#signup_info').html('<div class="alert alert-warning" role="alert">'+data.error.message+'</div>');
     }
   }
 
@@ -1458,12 +1458,12 @@ var callback = (function()
   {
     if ($.trim(data.ack) == 1)
     {
-      $('#info').html("<span style=color:#00ff00>Fine</span>");
+      $('#info').html('<div class="alert alert-success" role="alert">Registering .Please wait ...</div>');
       window.location = '/';
     }
     else
     {
-      $('#info').html('<span style="color:#ff2222">' + data.error.message + '</span>');
+      $('#info').html('<div class="alert alert-warning" role="alert">'+ data.error.message + '</div>');
       $("#loading").remove();
       $(me).show();
     }
@@ -1479,7 +1479,7 @@ var callback = (function()
     }
     else
     {
-      $('.prompt_content').html('Error performing the action, please try again');
+      $('.prompt_content').html('<div class="alert alert-warning" role="alert">Error performing the action, please try again</div>');
     }
   }
 
@@ -1493,7 +1493,7 @@ var callback = (function()
     }
     else
     {
-      $('.prompt_content').html('Error performing the action, please try again');
+      $('.prompt_content').html('<div class="alert alert-warning" role="alert">Error performing the action, please try again</div>');
     }
   }
 
@@ -1507,7 +1507,7 @@ var callback = (function()
     }
     else
     {
-      $('.prompt_content').html('Error performing the action, please try again');
+      $('.prompt_content').html('<div class="alert alert-warning" role="alert">Error performing the action, please try again</div>');
     }
   }
 
@@ -1522,7 +1522,7 @@ var callback = (function()
     }
     else
     {
-      $('.prompt_content').html('Error performing the action, please try again');
+      $('.prompt_content').html('<div class="alert alert-warning" role="alert">Error performing the action, please try again</div>');
     }
   }
 

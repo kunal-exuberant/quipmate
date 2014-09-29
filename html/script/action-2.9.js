@@ -1773,6 +1773,8 @@ var action = (function()
 
   function message(me)
   {
+    var profileid = $('#profileid_hidden').attr('value');
+    param.profileid = profileid;
     param.action = 'message';
     param.message = $.trim($('#message_textarea').val());
     if (param.message != '')
@@ -1947,7 +1949,7 @@ var action = (function()
     //Append the message before ack comes from server .
    $(me).parent().children().eq(3).append('<div class="message_each" id="message_' + chat_sent_time + '"><img class="message_each_photo" title="' + name + '" height="50" width=50 src="' + photo + '"><div class="message_each_message"><pre>' + ui.get_smiley(ui.link_highlight(message)) + '</pre></div><div style="text-align:right;color:gray;" class="message_time_other"><img width="6" src="' + icon_cdn + '/clock.png"><span style="color:gray;" class="time" data="' +chat_sent_time + '">' + ui.time_difference(chat_sent_time) + '</span></div><span id="' + chat_sent_time + '" class="glyphicon glyphicon-time rfloat" style="color:#ccc;"></span></div>');
   $('.sendbox').css({"height": "3em"}); 
-   
+   $(me).parent().children().eq(3).scrollTop($('.inboxui_msg').get(0).scrollHeight);
       $.postJSON('/chat/chat_new', param, function(data)
       {
         $.each(data.action, function(index, value)
@@ -2040,8 +2042,21 @@ var action = (function()
     {
       $.each(data.action, function(index, value)
       {
-        $('#inbox_' + user).children().eq(3).prepend('<div class="message_each" id=' + value.actionid + '><img class="message_each_photo" title="' + data.name[value.actionby] + '" height="50" width="50" src="' + data.pimage[value.actionby] + '"><div class="message_each_message">' + ui.get_smiley(ui.link_highlight(value.message)) + '</div><div style="text-align:right;color:gray;"><img src="' + icon_cdn + '/clock.png" width="6" /><span style="color:gray;" class="time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></a></div><span onclick="ui.message_delete(this,' + value.actionid + ')" class="post_setting"></span></div>');
-      });
+        $('#inbox_' + user).children().eq(3).prepend('<div class="message_each" id=' + value.actionid + '><img class="message_each_photo" title="' + data.name[value.actionby] + '" height="50" width="50" src="' + data.pimage[value.actionby] + '"><div class="message_each_message"></div><div style="text-align:right;color:gray;"><img src="' + icon_cdn + '/clock.png" width="6" /><span style="color:gray;" class="time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></a></div><span onclick="ui.message_delete(this,' + value.actionid + ')" class="post_setting"></span></div>');
+              
+        if(value.file == 1)
+        {
+            var icon_cdn = $('#icon_cdn').attr('value');
+            var ext = value.message.split('.').pop();
+            var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
+            $('#'+ value.actionid+' .message_each_message').append('<pre><img class="lfloat" src="'+fileimage+'" width="25" height="25" /><div><a href="/uploads/'+value.message+'">'+value.message+'</a></div></pre>');
+        }
+        else
+        {
+            $('#'+ value.actionid+' .message_each_message').append('<pre>' + ui.get_smiley(ui.link_highlight(value.message)) + '</pre>');
+        }
+      
+    });   
       if (opening)
       {
         if ($('.inboxui_msg').length > 0)
@@ -2398,11 +2413,22 @@ var action = (function()
         $('#chat_' + value.actionid).remove();
         if (value.actionby == myprofileid)
         {
-          $('#chatbox_' + user).children().eq(3).prepend('<div class="chat_each" id="chat_' + value.actionid + '" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><div class="chat_each_message chat_actionbyme"><pre>' + ui.get_smiley(ui.link_highlight(value.message)) + '</pre></div><span class="time chat_time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></div>');
+          $('#chatbox_' + user).children().eq(3).prepend('<div class="chat_each" id="chat_' + value.actionid + '" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><div class="chat_each_message chat_actionbyme"></div><span class="time chat_time glyphicon glyphicon-time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></div>');
         }
         else
         {
-          $('#chatbox_' + user).children().eq(3).prepend('<div class="chat_each" id="chat_' + value.actionid + '" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><div class="chat_each_message chat_actiononme"><pre>' + ui.get_smiley(ui.link_highlight(value.message)) + '</pre></div><span class="time chat_time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></div>');
+          $('#chatbox_' + user).children().eq(3).prepend('<div class="chat_each" id="chat_' + value.actionid + '" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><img class="img-thumbnail" src="'+data.pimage[value.actionby]+'" width="35" heigth="35"/><div class="chat_each_message chat_actiononme"></div><span class="time chat_time glyphicon glyphicon-time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></div>');
+        }
+        if(value.file == 1)
+        {
+            var icon_cdn = $('#icon_cdn').attr('value');
+            var ext = value.message.split('.').pop();
+            var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
+            $('#chat_'+ value.actionid+' .chat_each_message').append('<pre><img class="lfloat" src="'+fileimage+'" width="25" height="25" /><div><a href="/uploads/'+value.message+'">'+value.message+'</a></div></pre>');
+        }
+        else
+        {
+            $('#chat_'+ value.actionid+' .chat_each_message').append('<pre>' + ui.get_smiley(ui.link_highlight(value.message)) + '</pre>');
         }
 /* Old code
                         	 $('#chatbox_'+user).children().eq(3).prepend('<div class="chat_each" id="chat_'+value.actionid+'" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><img class="chat_each_photo" title="'+data.name[value.actionby]+'" height="25" width="25" src="'+data.pimage[value.actionby]+'"><div class="chat_each_message"><pre>'+ui.get_smiley(ui.link_highlight(value.message))+'</pre></div><span class="time chat_time" data="'+value.time+'">'+ui.time_difference(value.time)+'</span></div>'); 
@@ -2505,20 +2531,21 @@ var action = (function()
     $.postJSON('/chat/chat_update', param, function(data)
     {
       var chat_notify = false;
+      var icon_cdn = $('#icon_cdn').attr('value');
       $.each(data.action, function(index, value)
       {
         if (value.type == 1)
         {
           if ($('#chatbox_' + value.sentto).length != 0)
           {
-            $('#chatbox_' + value.sentto).children().eq(2).html('<img class="chatbox_online_icon" src="' + icon_cdn + '/online.png" /><a class="ajax_nav" href="profile.php?id=' + value.sentby + ' ">' + data.name[value.sentby] + '</a> saw your message');
+            $('#chatbox_' + value.sentto).children().eq(2).html('<img class="chatbox_online_icon" src="https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/online.png" /><a class="ajax_nav" href="profile.php?id=' + value.sentby + ' ">' + data.name[value.sentby] + '</a> saw your message');
           }
         }
         else if (value.type == 2)
         {
           if ($('#chatbox_' + value.sentby).length != 0)
           {
-            $('#chatbox_' + value.sentby).children().eq(2).html('<img class="chatbox_online_icon" src="' + icon_cdn + '/online.png" /><a class="ajax_nav" href="profile.php?id=' + value.sentby + ' ">' + data.name[value.sentby] + '</a> is typing');
+            $('#chatbox_' + value.sentby).children().eq(2).html('<img class="chatbox_online_icon" src="https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/online.png" /><a class="ajax_nav" href="profile.php?id=' + value.sentby + ' ">' + data.name[value.sentby] + '</a> is typing');
           }
         }
         else if (value.type == 3)
@@ -2551,7 +2578,7 @@ var action = (function()
           }
           else
           {
-            $('#chatbox_' + value.you).children().eq(2).html('<img class="chatbox_online_icon" src="' + icon_cdn + '/online.png" /><a class="ajax_nav" href="profile.php?id=' + you + ' ">' + data.name[you] + '</a>');
+            $('#chatbox_' + value.you).children().eq(2).html('<img class="chatbox_online_icon" src="https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/online.png" /><a class="ajax_nav" href="profile.php?id=' + you + ' ">' + data.name[you] + '</a>');
             $('#chat_' + value.actionid).remove();
             if (value.sentby == myprofileid)
             {
@@ -2559,12 +2586,23 @@ var action = (function()
             }
             else
             {
-              $('#chatbox_' + you).children().eq(3).append('<div class="chat_each" id="chat_' + value.actionid + '" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><div class="chat_each_message chat_actiononme"><pre>' + ui.get_smiley(ui.link_highlight(value.message)) + '</pre></div><span class="time chat_time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></div>');
+              if(value.file)
+              {
+                var icon_cdn = $('#icon_cdn').attr('value');
+                var filename = value.message;
+                var ext = filename.split('.').pop();
+                var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
+                $('#chatbox_' + you).children().eq(3).append('<div class="chat_each" id="chat_' + value.actionid + '" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><img class="img-thumbnail" src="'+data.photo[value.sentby]+'" width="35" heigth="35"/><div class="chat_each_message chat_actiononme"><pre><img class="lfloat" src="'+fileimage+'" width="25" height="25" /><a href="/uploads/'+value.message+'"><div>'+value.message+'</div></a></pre></div><span class="time chat_time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></div>');  
+              } 
+              else
+              {
+              $('#chatbox_' + you).children().eq(3).append('<div class="chat_each" id="chat_' + value.actionid + '" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><img class="img-thumbnail" src="'+data.photo[value.sentby]+'" width="35" heigth="35"/><div class="chat_each_message chat_actiononme"><pre>' + ui.get_smiley(ui.link_highlight(value.message)) + '</pre></div><span class="time chat_time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></div>');
+              }
             }
             $('#chatbox_' + you).children().eq(3).scrollTop($('.chatboxui_msg').get(0).scrollHeight);
             if (!$('#chatbox_' + you).is(':focus') && unread == 1) ui.chat_unread(you);
           }
-          last_chat_time = value.time;
+          action.last_chat_time = value.time;
         }
 
       });

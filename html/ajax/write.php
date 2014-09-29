@@ -904,7 +904,7 @@ else if($_GET['action'] == 'self_invite_mobile')
 {
 	$api->self_invite_mobile();
 }
-else if($_GET['action'] == 'contact')
+else if($_POST['action'] == 'contact')
 {
 	$api->contact();
 }else if($_POST['action'] == 'login')

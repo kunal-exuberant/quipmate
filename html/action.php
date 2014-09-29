@@ -39,9 +39,8 @@ else if(isset($_GET['fine']))
 else
 {
 	?>
-	<div class="col-xs-6 col-md-1 " id="left"></div>
-	<div id="center" class="col-md-8 center"></div>
-	<div id="right" class="col-md-3 right"></div> 
+	<div class="col-md-2 left" id="left"></div>
+	<div id="center" class="col-md-8 center"></div> 
 <?php
 }
 ?>

@@ -162,7 +162,20 @@ class Help
 		return true;
 
 	}
-	
+	function file_get_contents_curl($url)
+    {
+        $ch = curl_init();
+    
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+    
+        $data = curl_exec($ch);
+        curl_close($ch);
+    
+        return $data;
+    }
 	function generate_image_thumbnail($source_image_path, $THUMBNAIL_IMAGE_MAX_WIDTH,$THUMBNAIL_IMAGE_MAX_HEIGHT)
 	{
 		list($source_image_width, $source_image_height, $source_image_type) = getimagesize($source_image_path);

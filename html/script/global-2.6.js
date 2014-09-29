@@ -22,7 +22,7 @@ var last_poll_time_rt = -1;
 var global_time = Math.floor((new Date()).getTime() / 1000);
 var icon_cdn = $('#icon_cdn').attr('value');
 $(function()
-{  
+{      
    if (window.location.hash) // when the user's browser does not support the html5 it will fall back to hash
    { //in that case when fresh page will load this code will revert browser to non-hash euivalent of the page
       var hash_part = window.location.hash.substring(1);
@@ -630,6 +630,7 @@ $(function()
          }
          //Append the chat before ack comes from server .
          me.parent().children().eq(3).append('<div class="chat_each" id="chat_' + chat_sent_time + '" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><div class="chat_each_message chat_actionbyme"><pre>' + ui.get_smiley(ui.link_highlight(message)) + '</pre></div><span class="time chat_time" id="chat_time_' + chat_sent_time + '" data="' + chat_sent_time + '"></span><span id="' + chat_sent_time + '" class="glyphicon glyphicon-time rfloat" style="color:#ccc;"></span></div>');
+         $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight);
          $.postJSON('/chat/chat_new', param, function(data)
          {
             $.each(data.action, function(index, value)
@@ -645,7 +646,6 @@ $(function()
                $('#chat_time_' + value.chat_sent_time).html('' + ui.time_difference(value.time) + '');
                $('#' + value.chat_sent_time).removeClass('glyphicon-time');
                $('#' + value.chat_sent_time).addClass('glyphicon-ok');
-               me.parent().children().eq(3).scrollTop($('.chatboxui_msg').get(0).scrollHeight);
             });
          });
          me.focus();
@@ -681,8 +681,8 @@ $(function()
    });
    $('.chatbox_close').live('click', function()
    {
-      $(this).parent().remove();
-      var user = $(this).parent().children().eq(0).attr('value');
+      var user = $(this).parent().parent().children().eq(0).attr('value');
+      $('#chatbox_' + user).remove();
       $('#chatbox_' + user).children().eq(3).unbind('scroll');
       open_chatbox.splice($.inArray(user, open_chatbox), 1);
       action.cookie_delete('chatbox');
@@ -803,6 +803,55 @@ $(function()
       $(this).next().toggle();
       $(this).next().next().toggle();
    });
+   $('#chatfileform input[name=chat_send_file]').live('change',function(){
+    var icon_cdn = $('#icon_cdn').attr('value');
+    var chat_sent_time = new Date().getTime();
+    $('#chatfileform input[name=chat_sent_time]').attr('value',chat_sent_time);
+    var filename = $(this).val();
+    var ext = filename.split('.').pop();
+    var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
+    $('.chatboxui_msg').append('<div class="chat_each" id="chat_'+chat_sent_time+'" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><div class="chat_each_message chat_actionbyme"><pre><img class="lfloat" src="'+fileimage+'" width="25" height="25" /><div>' +filename+ '</div><div id="upload_progress"></div></pre></div><span class="time chat_time" id="chat_time_' + chat_sent_time + '" data="' + chat_sent_time + '"></span><span id="'+chat_sent_time+'" class="glyphicon glyphicon-time rfloat" style="color:#ccc;"></span></div><div id="upload_progress"></div>');
+    $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight);
+    
+   $('#chatfileform').ajaxForm(function(){  });
+      $("#chatfileform").ajaxSubmit(
+      {
+         type: 'post',
+         dataType: 'json',
+         uploadProgress: ui.OnProgress,
+         success: function(data)
+         {
+                    $('#upload_progress').remove();
+                    $.each(data.action, function(index, value)
+                    {
+                       if(value.ack == 0)
+                        {
+                           $('#upload_progress').remove();
+                           $('#chat_'+chat_sent_time+' .chat_each_message pre').append('<span style="color:red;font-size:1em;">*this file format in not supported.</span>');
+                           $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight);
+                        }
+                        else
+                        {
+                           action.last_chat_time = value.time;
+                           $('#chat_' + value.chat_sent_time).attr('id',value.actionid);
+                           $('#' + value.chat_sent_time).removeClass('glyphicon-time');
+                           $('#' + value.chat_sent_time).addClass('glyphicon-ok');
+                           $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight);
+                        }
+                    });
+         },
+         error: function(data)
+         {
+             $('#upload_progress').remove();
+             $('#chat_'+chat_sent_time).append('<span style="color:red;font-size:1em;">*file was not sent , some error occured . </span>');
+             $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight);
+         }
+         
+      });
+      return false;
+  });
+   
+   
 });
 $('.chatboxui').live('mousedown keydown input', function()
 {
@@ -1555,4 +1604,18 @@ $('.badge_chooser').click(function(){
   me_badge=this;
   $("img:first",'#praisebody').html('');
   $('#badge_image').html(($("img:first",me_badge).clone().addClass('lfloat')));
+});  
+  //*************************Group chat
+$('.chat_add').live('mouseover',function(){
+    $('.chat_add_select').remove();
+    $(this).append('<input type="submit" class="chat_add_select theme_button" value="Add" />');
 });
+/*$('.chat_add').mouseout(function(){
+    $('.chat_add_select').remove();
+});
+*/
+
+//********************************************    
+
+
+

@@ -43,7 +43,7 @@ class Api
    }
 
    function action_fetch_life_is_not_always_fun()
-   {
+   { 
       global $help;
       if(isset($_GET['actionid']) && isset($_GET['life_is_fun']))
       {
@@ -3658,8 +3658,11 @@ class Api
             {
                $data['actiontype'] = 1;
                echo json_encode($data);
-            } else
+            }
+             else
             {
+              // $html = $help->file_get_contents_curl($link);
+              
                $dom = new DOMDocument();
                $src = array();
                if(@$dom->loadHTMLFile($link))
@@ -3854,11 +3857,12 @@ class Api
                $k = 0;
                while ($row = $result->fetch_array())
                {
-                  $message[$k]['profileid'] = $row['ACTIONON'];
+                  $message[$k]['profileid'] = $row['ACTIONON']; 
                   $message[$k]['actionid'] = $row['ACTIONID'];
                   $message[$k]['pageid'] = $row['ACTIONID'];
                   $message[$k]['actionby'] = $row['ACTIONBY'];
                   $message[$k]['actionon'] = $row['ACTIONON'];
+                  $message[$k]['file'] = $row['file'];
                   $message[$k]['actiontype'] = 401;
                   $message[$k]['time'] = $row['TIME'];
                   $message[$k]['message'] = utf8_encode($row['MESSAGE']);
@@ -9485,15 +9489,14 @@ function news_feed()
    function contact()
    {
       global $help;
-      if(isset($_GET['email']))
+      if(isset($_POST['contact_email']))
       {
-         if(!empty($_GET['email']))
-         {
+         if(!empty($_POST['contact_email']) && !empty($_POST['contact_name']) && !empty($_POST['contact_message']))
+         { 
             global $database;
-            $name = $_GET['name'];
-            $message = $_GET['message'];
-            $email = $_GET['email'];
-            $contact = $_GET['contact'];
+            $name = $_POST['contact_name'];
+            $message = $_POST['contact_message'];
+            $email = $_POST['contact_email'];
             if($actionid = $database->contact_insert($name, $email, $contact, $message))
             {
                $data['ack'] = 1;
@@ -11479,15 +11482,16 @@ function news_feed()
    }
    function login()
    {
-      global $help, $memcached;
+      global $help, $memcached,$database;
       if(isset($_POST['email']) && isset($_POST['password']))
       {
          if(!empty($_POST['email']) && !empty($_POST['password']))
          {
+            setcookie("quip_e",$email,time()+3600000,'/','.quipmate.com'); 
             $email = trim($_REQUEST['email']);
             $password = trim($_REQUEST['password']);
             $password = sha1($email . $password);
-            $database_old = new Database();
+            $database_old = $database;
             $help->assign_database($email, $database_old);
             $database_old = null;
             $database = new Database();
@@ -11500,6 +11504,25 @@ function news_feed()
                $_SESSION['userid'] = $_SESSION['USERID'] = $row['USERID'];
                $sid = session_id();
                setcookie(session_name(), $sid, time() + 3600000, '/');
+               
+               	$imgrow=$database->get_image($myprofileid);
+		      	$prow=$database->bio_select($myprofileid);
+    			$pri = $database->privacy_select($myprofileid);
+    			$help->session_init($row,$prow,$imgrow,$email,$pri,$database);
+    			if(isset($_SESSION['auth'])) 
+    			{
+    				if(isset($_COOKIE['quip_r']))
+    				{ 
+    					$redirect = $_COOKIE['quip_r'];
+    					setcookie("quip_r",'',time()-3600,'/','.quipmate.com');
+                        $data['redirect']='https://www.quipmate.com'.$redirect;
+    				} 
+    				else
+    				{
+    					$data['redirect']='/'; 
+    				}
+    			}          
+                
                $data['ack'] = 1;
                $data['message'] = 'Login Successful';
                $data['myprofileid'] = $row['USERID'];

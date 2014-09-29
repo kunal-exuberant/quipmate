@@ -202,7 +202,7 @@ $relation = $newrow['RELATION'];
 			<?php
 
 bio_item_deploy($profile_relation, 234, 'Team', $team, $teamid, 'team_edit_link', $help, $row['team']);
-bio_single_deploy($profile_relation, 202, 'Profession', $profession, $professionid,'profession_edit_link', $help, $row['profession']);
+//bio_single_deploy($profile_relation, 202, 'Profession', $profession, $professionid,'profession_edit_link', $help, $row['profession']);
 bio_single_deploy($profile_relation, 239, 'Designation', $designation, $designationid,'designation_edit_link', $help, $row['designation']);
 bio_item_deploy($profile_relation, 235, 'Major', $major, $majorid,'major_edit_link', $help, $row['major']);
 bio_item_deploy($profile_relation, 230, 'Skill', $skill, $skillid,'skill_edit_link', $help, $row['skill']);

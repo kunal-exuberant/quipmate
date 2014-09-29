@@ -443,6 +443,7 @@ var feed = (function()
 
    function page_image_decode(value, name, pimage, container, dom_id)
    {
+      var icon_cdn = $('#icon_cdn').attr('value');
       var postid = $('#' + dom_id);
       var file = value.file;
       var myprofileid = $('#myprofileid_hidden').attr('value');
@@ -457,6 +458,7 @@ var feed = (function()
    function page_video_decode(value, name, pimage, container, dom_id)
    {
       var postid = $('#' + dom_id);
+      var icon_cdn = $('#icon_cdn').attr('value');
       var file = value.file;
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var page_image = icon_cdn + '/broadcast.png';
@@ -480,6 +482,7 @@ var feed = (function()
    function page_doc_decode(value, name, pimage, container, dom_id)
    {
       var postid = $('#' + dom_id);
+      var icon_cdn = $('#icon_cdn').attr('value');
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var ext = value.caption.split('.').pop();
       var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
@@ -494,6 +497,7 @@ var feed = (function()
    function event_doc_decode(value, name, pimage, container, dom_id)
    {
       var postid = $('#' + dom_id);
+      var icon_cdn = $('#icon_cdn').attr('value');
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var ext = value.caption.split('.').pop();
       var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
@@ -507,6 +511,7 @@ var feed = (function()
    function group_doc_decode(value, name, pimage, container, dom_id)
    {
       var postid = $('#' + dom_id);
+      var icon_cdn = $('#icon_cdn').attr('value');
       var myprofileid = $('#myprofileid_hidden').attr('value');
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2600"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a doc in the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><br class="bclear"></div></div></div>');
       $.each(value.version, function(i, v)
@@ -524,6 +529,7 @@ var feed = (function()
    function doc_decode(value, name, pimage, container, dom_id)
    {
       var postid = $('#' + dom_id);
+      var icon_cdn = $('#icon_cdn').attr('value');
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var ext = value.caption.split('.').pop();
       var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
@@ -633,6 +639,7 @@ var feed = (function()
    function tagline_decode(value, name, pimage, container, dom_id)
    {
       var postid = $('#' + dom_id);
+      var icon_cdn = $('#icon_cdn').attr('value');
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var file = icon_cdn + '/tag.gif';
       var pronoun = 'his';
@@ -701,6 +708,7 @@ var feed = (function()
    function page_page_decode(value, name, pimage, container, dom_id)
    {
       var postid = $('#' + dom_id);
+      var icon_cdn = $('#icon_cdn').attr('value');
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var page_image = icon_cdn + "/broadcast.png";
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="1"/></div>');
@@ -778,6 +786,7 @@ var feed = (function()
    function page_link_decode(value, name, pimage, container, dom_id)
    {
       var postid = $('#' + dom_id);
+      var icon_cdn = $('#icon_cdn').attr('value');
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var page_image = icon_cdn + '/broadcast.png';
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="1600"/></div>');
@@ -1013,6 +1022,7 @@ var feed = (function()
    function comment_decode(value, name, pimage, myprofileid, dom_id)
    {
       var postid = $('#' + dom_id);
+      var icon_cdn = $('#icon_cdn').attr('value');
       var icon_cdn = $('#icon_cdn').attr('value');
       if (value.comment_count > 3)
       {
