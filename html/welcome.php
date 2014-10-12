@@ -106,12 +106,12 @@ require_once ('../include/Session.php');
 			<h4>Welcome to the Quipmate community !</h4>
 			<h5>Please provide these details :</h5>
 			<div class="form-group">
-			<label class="text-left" >Name</label>
-			<input type="text" id="signup_name" value="" title="Full Name" class="form-control" />
+			<label class="text-left" >Full Name</label>
+			<input type="text" id="signup_name" value="" title="Full Name" class="form-control" placeholder="Enter First and Last Name" />
 			</div>
 			<div class="form-group">
-			<label class="text-left">Password</label>
-			<input type="password" id="signup_password" value=""  title="Password" class="form-control"/>
+			<label class="text-left">Choose Password</label>
+			<input type="password" id="signup_password" value=""  title="Password" class="form-control" placeholder="Choose a new password"/>
 			</div>
 			<div class="form-group">
 			<label class="text-left">Gender</label>
@@ -155,11 +155,11 @@ require_once ('../include/Session.php');
 			</div>
             <div class="form-group" >
 			<label class="text-left">Designation</label>
-			<input type="text" id="signup_designation" value="" class="form-control" />
+			<input type="text" id="signup_designation" value="" class="form-control" placeholder="Your designation in the company" />
 			</div>
             <div  class="form-group">
 			<label class="text-left">Team</label>
-			<input type="text" id="signup_team" value="" class="form-control" />
+			<input type="text" id="signup_team" value="" class="form-control" placeholder="Your team in the company" />
 			</div>          
 			<div class="form-group">
 			<input type="hidden" id="email_hidden" value="<?php echo $email; ?>" />
@@ -367,7 +367,7 @@ else
 				    <div class="text-center"><h2></h2><h3 class="bold">Improve awareness inside organization</h3></div>
 					<div class="col-md-6 col-sm-12">
 						<div class="center">
-						<img width="350" height="350" class="" max-width="" src="<?php echo $image_cdn;?>/Picture2.png">
+						<img width="80%" height="auto" class="" src="<?php echo $image_cdn;?>/Picture2.png">
 						</div>
 					</div>	
 					<div class="col-md-6 col-sm-12">
@@ -399,7 +399,7 @@ else
 					</div>
                     <div class="col-md-6 col-sm-12">
                         <div class="center">
-                            <img width="350" height="350" class="" src="<?php echo $image_cdn;?>/Picture3.jpg">
+                            <img width="80%" height="auto" class="" src="<?php echo $image_cdn;?>/Picture3.jpg">
                         </div>
 					</div>					
                 </div><!--/.row-->
@@ -411,7 +411,7 @@ else
 				<div class="text-center"><h3 class="bold">Mobility</h3></div>
 				    <div class="col-md-6 col-sm-12">
                         <div class="center">
-                            <img width="350" height="350" class="" src="<?php echo $image_cdn;?>/Picture1.jpg">
+                            <img width="250" height="350" class="" src="<?php echo $image_cdn;?>/Screenshot.png"/>
                         </div>
 					</div>	
 					<div class="col-md-6 col-sm-12">
@@ -441,7 +441,7 @@ else
 					</div>
                     <div class="col-md-6 col-sm-12">
                         <div class="center">
-                            <img width="350" height="350" class="" src="<?php echo $image_cdn;?>/Picture4.jpg">
+                            <img width="80%" height="auto" class="" src="<?php echo $image_cdn;?>/Picture4.jpg">
                         </div>
 					</div>					
                 </div><!--/.row-->
@@ -453,7 +453,7 @@ else
 				<div class="text-center"><h3 class="bold">Culture</h3></div>
 				    <div class="col-md-6 col-sm-12">
                         <div class="center">
-                            <img width="350" height="350" class="" src="<?php echo $image_cdn;?>/Picture5.jpg">
+                            <img width="80%" height="auto" class="" src="<?php echo $image_cdn;?>/Picture5.jpg">
                         </div>
 					</div>	
 					<div class="col-md-6 col-sm-12">
@@ -494,7 +494,7 @@ else
 					</div>
                     <div class="col-md-6 col-sm-12">
                         <div class="center">
-                            <img width="350" height="350" class="" src="<?php echo $image_cdn;?>/Picture6.jpg">
+                            <img width="80%" height="auto" class="" src="<?php echo $image_cdn;?>/Picture6.jpg">
                         </div>
 					</div>					
                 </div><!--/.row-->
@@ -519,6 +519,7 @@ else
                             <li>Full Features</li>
                             <li>Unlimited Bandwidth</li>
                             <li>Unlimited Storage</li>
+                            <li>Free Mobile App</li>
                             <li>Customer Support</li>
                             <li class="plan-action"><a class="btn btn-primary btn-lg" href="#main-slider">Signup</a></li>
                         </ul>

@@ -162,6 +162,27 @@
 </div>
 
 <!-- **************************************************************************************** -->
+<!--  ****************************************Prompt modal ********************************************-->
+<div class="modal fade" id="promptmodal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div>
+            <h4 class="modal-title text-center" id="prompt_heading">Share on your timeline</h4>
+            </div>
+            <div class="modal-body">
+				<div id="prompt_center">
+
+				</div>
+                <div id="share_content">
+				</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+			</div>
+    </div>
+  </div>
+</div>
+<!-- **************************************************************************************************-->
 
 <?php
 	$file->script_footer();

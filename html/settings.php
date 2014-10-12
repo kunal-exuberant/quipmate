@@ -11,6 +11,8 @@ $myprofileid = $_SESSION['userid'];
 <div class="container">
   <div class="row" >
     <div class="col-md-2 left" id="left">
+    <div class="panel panel-default">
+    <div class="panel-body">
 	<ul  class="nav nav-pills nav-stacked"> 
 		<li>
 			<a class="links" <?php if($page == 'notification') echo 'class="selected"'; ?> href="?hl=notification_settings" title="Notification Settings">Notification Settings</a>
@@ -25,14 +27,16 @@ $myprofileid = $_SESSION['userid'];
 			<a class="links" <?php if($page == 'privacy') echo 'class="selected"'; ?> href="?hl=privacy_settings" title="Account Settings">Privacy Settings</a>
 		</li>
 	</ul>
+    </div>
+    </div>
 	</div>
-	<div id="center"  class="col-md-6 center">
+	<div id="center"  class="col-md-6 center panel panel-default">
 	<?php if($page == 'notification')
 		{
 			$row = $database->setting_notice_select($myprofileid);
 	?>
-		<h1 class="profile_edit_title" id="basic">Notification Settings</h1>
-		<div class="profile_edit_container">
+		<div class="panel-heading">Notification Settings</div>
+		<div class="profile_edit_container panel-body">
 			<div class="setting_each">
 				<span class="setting_category_name"> New follower:</span>
 				<?php $help->setting_checkbox('friend_request', $row['friend_request']); ?>
@@ -108,8 +112,8 @@ $myprofileid = $_SESSION['userid'];
 		{
 			$row = $database->setting_email_select($myprofileid);
 	?>
-		<h1 class="profile_edit_title" id="basic">Email Settings</h1>
-		<div class="profile_edit_container">
+		<div class="panel-heading">Email Settings</div>
+		<div class="profile_edit_container panel-body">
 			<div class="setting_each">
 				<span class="setting_category_name"> New follower:</span>
 				<?php $help->setting_checkbox('friend_request', $row['friend_request'],0); ?>
@@ -185,8 +189,8 @@ $myprofileid = $_SESSION['userid'];
 		{
 			$row = $database->privacy_select($myprofileid);
 		?>
-			<h1 class="profile_edit_title" id="basic">Profile Privacy Settings</h1>
-			<div class="profile_edit_container">
+			<div class="panel-heading">Profile Privacy Settings</div>
+			<div class="profile_edit_container panel-body">
 				<div class="setting_each">
 					<span class="setting_category_name"> What is the privacy of your next post:</span>
 					<?php $help->privacy_level('profile_post_next', $row['profile_post_next']); ?>
@@ -212,8 +216,8 @@ $myprofileid = $_SESSION['userid'];
 		else if($page == 'account')
 		{
 			?>
-			<h1 class="profile_edit_title" id="basic">Change your password</h1>
-			<div id="recover_password_box"> 
+			<div class="panel-heading">Change your password</div>
+			<div id="recover_password_box" class="panel-body"> 
 			<div id = "change_password_info" style="color:#ff0000;text-align:center;margin:1em 0em;"></div>
 				<div class="setting_each">
 					<span class="setting_category_name">Current Password:</span>

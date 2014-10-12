@@ -514,11 +514,19 @@ var feed = (function()
       var icon_cdn = $('#icon_cdn').attr('value');
       var myprofileid = $('#myprofileid_hidden').attr('value');
       postid.append('<div data=' + value.actionid + ' class="pageclass_json"><input type="hidden" value=' + value.actionon + ' /> <input type="hidden" value="2600"/><a class="ajax_nav" href="profile.php?id=' + value.postby + ' " ><img class="lfloat" src =' + pimage[value.postby] + ' height="50" width="50" /></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.postby + ' " >' + name[value.postby] + '</a> added a doc in the group <a class="ajax_nav" href="group.php?id=' + value.groupid + ' " >' + value.group_name + '</a></div><div><input type="hidden" value="' + value.life_is_fun + '" /><div class="nf_page">' + ui.get_smiley(ui.see_more(ui.link_highlight(value.page))) + '</div><br class="bclear"></div></div></div>');
+      var doc_number = value.version.length;      
       $.each(value.version, function(i, v)
       {
          var ext = v.caption.split('.').pop();
          var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
-         postid.children().children().children().eq(2).append('<a href="https://docs.google.com/viewer?url=' + v.file + '" target="_blank"><img class="lfloat" src=' + fileimage + ' height="50" width="50" /></a><div id="doc_name" style="margin-bottom:2em;"><a href="https://docs.google.com/viewer?url=' + v.file + '" data="' + v.file + '" target="_blank">' + v.caption + '</a></div><div style="margin:1em 0em 0em 5.4em;"><a style="color:#808080;" target="_blank" href="https://docs.google.com/viewer?url=' + v.file + '">Preview</a><a style="color:#808080;margin-left:1em;" href=' + v.file + ' data="' + v.file + '" target="_blank">Download</a><a style="color:#808080;margin-left:1em;" class="new_version" href="#" onclick="action.new_version_upload(this)">Upload new version</a><form action="/ajax/write.php" enctype="multipart/form-data" style="display:none;" method="post" id="pform"><input type="file" id="photo_box" name="photo_box" size="30"><input type="submit" value="Upload" id="new_version_upload_button" name="upload"><input type="hidden" value="' + value.groupid + '" name="photo_hidden_profileid" id="photo_hidden_profileid"><input type="hidden" value="new_version_upload" name="action"><input type="hidden" value="' + value.pageid + '" name="pageid"></form></div>');
+         postid.children().children().children().eq(2).append('<a href="https://docs.google.com/viewer?url=' + v.file + '" target="_blank"><img class="lfloat" src=' + fileimage + ' height="50" width="50" /></a><div id="doc_name" style="margin-bottom:2em;"><a href="https://docs.google.com/viewer?url=' + v.file + '" data="' + v.file + '" target="_blank">' + v.caption + '</a></div><div style="margin:1em 0em 0em 5.4em;" id="version_'+value.pageid+'"><a style="color:#808080;" target="_blank" href="https://docs.google.com/viewer?url=' + v.file + '">Preview</a><a style="color:#808080;margin-left:1em;" href=' + v.file + ' data="' + v.file + '" target="_blank">Download</a></div>');
+         doc_number = doc_number - 1;
+         if(doc_number == 0)
+         {
+            console.log(doc_number);
+            $('#version_'+value.pageid).append('<a style="color:#808080;margin-left:1em;" class="new_version" href="#" onclick="action.new_version_upload(this,event)">Upload new version</a><form action="/ajax/write.php" enctype="multipart/form-data" style="display:none;" method="post" id="pform"><input type="file" id="photo_box" name="photo_box" size="30"><input type="submit" value="Upload" id="new_version_upload_button" name="upload"><input type="hidden" value="' + value.groupid + '" name="photo_hidden_profileid" id="photo_hidden_profileid"><input type="hidden" value="new_version_upload" name="action"><input type="hidden" value="' + value.pageid + '" name="pageid"></form>');
+         }
+         
       });
       if ((value.postby == myprofileid) || (value.hasOwnProperty('admin_feed') && value.admin_feed == 1))
       {
@@ -959,10 +967,10 @@ var feed = (function()
             exciting = 'Unpinch';
          }
       }
-      postid.children().eq(1).children().eq(3).append('<div class="likeclass_json"><span class="excited_people" id="excited_people_'+value.actionid+'"></span><span class="post_pointer"></span></div>');
+      postid.children().eq(1).children().eq(3).append('<div class="likeclass_json"><span class="excited_people" id="excited_people_'+value.actionid+dom_id+'"></span><span class="post_pointer"></span></div>');
       var excited_count = 0;
       var flag = 0;
-      var excited_show_div =  $('#excited_people_'+value.actionid);
+      var excited_show_div =  $('#excited_people_'+value.actionid+dom_id);
       if (pos != -1)
       {
          value.excited.splice(pos, 1);

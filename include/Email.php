@@ -327,6 +327,22 @@ class Email
 			$message .= ' please click <a style="text-decoration:none;" href="https://www.quipmate.com/group.php?id='.$groupid.'">here</a>.';
 			$additionalHeaders .= 'From:'.$irow['NAME'].'<member@quipmate.com>';
 		}
+    	else if($email_type == 'contact_us')
+	    {
+			$senderemail = $param['email'];
+            $email = 'contact@quipmate.com';
+			$name = $param['name'];
+            $page = $param['message'];
+			$subject='Contact to Quipmate';
+			$message .= '<br /><br />';
+			$message .='<div style="">';
+			$message .= $page;
+			$message .='</div>';
+			$message .= '<br /><br />';
+            $message .= 'Name :'.$name.'<br/><br/>';
+            $message .= 'Email :'.$senderemail.'<br/><br/>';
+			$additionalHeaders .= 'From:Quipmate<admin@quipmate.com>';
+		}      
 		else if($email_type == 'page_post')
 		{
 			$page_name = $param['page_name'] ;
@@ -539,9 +555,10 @@ class Email
 			$profileid = $param['profileid'];
 			$friendid = $param['friendid'];
 			$brow = $database->bio_complete_select($friendid);
+           	$irow = $database->get_name($profileid);
 			$email = $brow['EMAIL'];
 			$name = $brow['NAME'];
-            $subject=$name.' is also following you at Quipmate';
+            $subject=$irow['NAME'].' is also following you at Quipmate';
 			$message .= 'Hi ';
 			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $friendid; 
@@ -561,7 +578,6 @@ class Email
 			$message .='<a style="text-decoration:none;" href="https://www.quipmate.com/profile.php?id=';
 			$message .= $profileid; 
 			$message .= '">'; 
-			$irow = $database->get_name($profileid);
 			$message .= $irow['NAME'];
 			$message .= '</a>';
 			$message .='</div>'; 

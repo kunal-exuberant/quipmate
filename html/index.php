@@ -10,15 +10,20 @@ $mcount = $database->unread_message_select($profileid,$college);
 <div class="container">
   <div class="row" >
     <div class="col-md-2 col-lg-2 left " id="left">
+    <div class="panel panel-default">
+    <div class="panel-body">
 	<ul  class=" nav nav-pills nav-stacked ">  
-		<li ><a class="links ajax_nav<?php if($page=='news_json') echo ' selected'; ?>" id="news_json" href="?hl=update" title="Updates from your followings"><span class="name_20">News Feed</span></a></li>
-		<!--<li ><a class="ajax_nav<?php// if($page=='tech_json') echo ' selected'; ?>" id="tech_json" href="?hl=technical" title="Feed from all technical groups that you have joined"><span class="name_20">Technical Feed</span></a></li>-->
-		<li ><a  class="links ajax_nav<?php if($page=='inbox') echo ' selected'; ?>" id="inbox" href="?hl=inbox" title="Messages from your colleagues"><span class="name_20"><?php if($mcount) echo 'Messages('.$mcount.')'; else echo 'Messages'; ?></span></a></li>
-		<li ><a class="links ajax_nav<?php if($page=='file') echo ' selected'; ?>" id="photo" href="profile.php?hl=file" title="Central location for all files on your network"><span class="name_20">Knowledge Base</span></a></li>  
-		<li ><a class="links ajax_nav<?php if($page=='new_user') echo ' selected'; ?>" id="new_user" href="?hl=new_user" title="Find out who joined Quipmate after you"><span class="name_20">Co-workers</span></a></li>
-	</ul> 
-	<div style="margin-top:2em;">
-	<span style="font-weight:bold;font-size:1em;color:gray">Groups</span>
+		<li ><a class="links ajax_nav<?php if($page=='news_json') echo ' selected'; ?>" id="news_json" href="?hl=update" title="Updates from your followings"><span >News Feed</span></a></li>
+		<!--<li ><a class="ajax_nav<?php// if($page=='tech_json') echo ' selected'; ?>" id="tech_json" href="?hl=technical" title="Feed from all technical groups that you have joined"><span >Technical Feed</span></a></li>-->
+		<li ><a  class="links ajax_nav<?php if($page=='inbox') echo ' selected'; ?>" id="inbox" href="?hl=inbox" title="Messages from your colleagues"><span ><?php if($mcount) echo 'Messages('.$mcount.')'; else echo 'Messages'; ?></span></a></li>
+		<li ><a class="links ajax_nav<?php if($page=='file') echo ' selected'; ?>" id="photo" href="profile.php?hl=file" title="Central location for all files on your network"><span >Knowledge Base</span></a></li>  
+		<li ><a class="links ajax_nav<?php if($page=='new_user') echo ' selected'; ?>" id="new_user" href="?hl=new_user" title="Find out who joined Quipmate after you"><span >Co-workers</span></a></li>
+	</ul>
+    </div> 
+    </div>
+	<div class="panel panel-default">
+	<div class="panel-heading">Groups</div>
+    <div class="panel-body">
 	<ul class="nav nav-pills nav-stacked">
 		<?php						
 		$result = $database->mygroup_select($myprofileid);
@@ -36,9 +41,11 @@ $mcount = $database->unread_message_select($profileid,$college);
 	  </li>
 	  <li class=""><a  href="register.php?hl=group_suggest" title="Groups"><span class="badge pull-right ellipsis "></span>Browse Groups</a></li>
 	</ul>
+    </div>
 	</div>					
-	<div style="margin-top:2em;">
-	<span style="font-weight:bold;font-size:1em;color:gray">Events</span>
+	<div class="panel panel-default">
+	<div class="panel-heading">Events</div>
+    <div class="panel-body">
 	<ul class="nav nav-pills nav-stacked">
 		<?php
 	$result = $database->myevent_select($myprofileid,time());
@@ -56,6 +63,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 	</li>
 
 	</ul>
+    </div>
 	</div>
 	<div id="friend_event" class="panel panel-default"><div id="friend_event_body" class="panel-body"></div></div>
 	<div style="margin-top:1em;padding-top:.5em;border-top:.1em solid #cccccc;">

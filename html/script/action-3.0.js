@@ -154,8 +154,8 @@ var action = (function()
 					ajax.getJSON_ajax(url, param, me, callback.gift_preview); */
       param.actiontype = 800;
       ajax.getJSON_ajax(url, param, me, callback.tagline_preview);
-      param.actiontype = 8;
-      ajax.getJSON_ajax(url, param, me, callback.friendship_preview);
+/*      param.actiontype = 8;
+      ajax.getJSON_ajax(url, param, me, callback.friendship_preview); */
     }
   }
 
@@ -167,8 +167,9 @@ var action = (function()
     ajax.getJSON_ajax(url, param, me, callback.group_join);
   }
 
-  function new_version_upload(me)
+  function new_version_upload(me,event)
   {
+    event.preventDefault();
     $('#photo_box').click();
     $('#pform').show();
     $('#new_version_upload_button').show();
@@ -390,8 +391,8 @@ var action = (function()
         var global_group = JSON.parse($('#session_group_hidden').attr('value'));
         $('#session_name_hidden').attr('value', JSON.stringify($.extend(global_name, data.name)));
         $('#session_pimage_hidden').attr('value', JSON.stringify($.extend(global_pimage, data.pimage)));
-        $('#session_skill_hidden').attr('value', JSON.stringify(data.skillname));
-        $('#session_group_hidden').attr('value', JSON.stringify(data.groupname));
+        $('#session_skill_hidden').attr('value', JSON.stringify($.extend({},global_skill,data.skillname)));
+        $('#session_group_hidden').attr('value', JSON.stringify($.extend({},global_group,data.groupname)));
         global_name = JSON.parse($('#session_name_hidden').attr('value'));
                 
         global_skill = JSON.parse($('#session_skill_hidden').attr('value'));
@@ -669,8 +670,10 @@ var action = (function()
       {
         var global_name = JSON.parse($('#session_name_hidden').attr('value'));
         var global_pimage = JSON.parse($('#session_pimage_hidden').attr('value'));
-        $('#session_name_hidden').attr('value', JSON.stringify($.extend(global_name, data.name)));
-        $('#session_pimage_hidden').attr('value', JSON.stringify($.extend(global_pimage, data.pimage)));
+        var global_tagline = JSON.parse($('#session_tagline_hidden').attr('value'));
+        $('#session_name_hidden').attr('value', JSON.stringify($.extend({},global_name, data.name)));
+        $('#session_pimage_hidden').attr('value', JSON.stringify($.extend({},global_pimage, data.pimage)));
+        $('#session_tagline_hidden').attr('value', JSON.stringify($.extend({},global_tagline, data.tagline)));
         global_name = JSON.parse($('#session_name_hidden').attr('value'));
         global_pimage = JSON.parse($('#session_pimage_hidden').attr('value'));
         var count = 0;
@@ -689,7 +692,7 @@ var action = (function()
                   var name = global_name[index];
                   $('#friend_' + index).remove();
                   $('.online_user').append('<div class="chat_user" data="'+index+'" id="friend_'+index+'"><img class="online_photo" height="30" width="30" src="'+global_pimage[index]+'"><span class="online_name">'+global_name[index]+'</span><input type="hidden" value="'+global_name[index]+'"></div>');
-                  count++;
+                  count++;                
                 }
               }
             }
@@ -1849,6 +1852,7 @@ var action = (function()
     param.email = $(me).parent().children(0).attr('value');
     param.identifier = $('#identifier_hidden').val();
     $(me).hide();
+    $('#info').html('<div class="alert alert-success" role="alert">Registering .Please wait ...</div>');
     $('#signup_button_container').append('<img src="https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/loading.gif"  alt="Signing Up..." id ="loading"  />');
     param.name = $('#signup_name').val();
     param.password = $('#signup_password').val();
@@ -1921,7 +1925,7 @@ var action = (function()
     param.filter = $('#filter_hidden').attr('value');
     ajax.getJSON_ajax(url, param, me, callback.search);
   }
-
+  
   function message_send(me, event)
   {
     var icon_cdn = $('#icon_cdn').attr('value');
@@ -2376,12 +2380,16 @@ var action = (function()
       {
         $('#myfriends_name_hidden').attr('value', JSON.stringify(data.name));
         $('#myfriends_pimage_hidden').attr('value', JSON.stringify(data.pimage));
+        $('#session_tagline_hidden').attr('value', JSON.stringify(data.tagline));
         var global_name = JSON.parse($('#session_name_hidden').attr('value'));
         var global_pimage = JSON.parse($('#session_pimage_hidden').attr('value'));
+      //  var global_tagline = JSON.parse($('#session_tagline_hidden').attr('value'));
         var friend_name = JSON.parse($('#myfriends_name_hidden').attr('value'));
         var friend_pimage = JSON.parse($('#myfriends_pimage_hidden').attr('value'));
+      //  var friend_tagline = JSON.parse($('#myfriends_tagline_hidden').attr('value'));
         $('#session_name_hidden').attr('value', JSON.stringify($.extend(global_name, friend_name)));
         $('#session_pimage_hidden').attr('value', JSON.stringify($.extend(global_pimage, friend_pimage)));
+      //  $('#session_tagline_hidden').attr('value', JSON.stringify(friend_tagline));
         $.each(data.action, function(index, value)
         {
           id = "friend_" + value;
@@ -2458,6 +2466,8 @@ var action = (function()
     {
       global_time = Math.floor((new Date()).getTime() / 1000);
       $('#online_hidden').attr('value', JSON.stringify(data.user));
+     var tagline = JSON.parse($('#session_tagline_hidden').attr('value'));
+     $('#session_tagline_hidden').attr('value', JSON.stringify($.extend({},tagline,data.tag)));
       $('.online_icon').remove();
       $('.chatbox_online_icon').remove();
       if (data.ack)
@@ -2552,8 +2562,8 @@ var action = (function()
         {
           if ((!document.hasFocus() || sound_flag == 1) && value.sentto == myprofileid)
           {
-            chat_notify = true;
-            ui.chat_new_notify(data.name[value.sentby], value.message,chat_notify);
+            ui.chat_notify = true;
+            ui.chat_new_notify(data.name[value.sentby], value.message,ui.chat_notify);
             ui.chat_sound_play();
             sound_flag = 0;
           }
@@ -2592,7 +2602,7 @@ var action = (function()
                 var filename = value.message;
                 var ext = filename.split('.').pop();
                 var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
-                $('#chatbox_' + you).children().eq(3).append('<div class="chat_each" id="chat_' + value.actionid + '" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><img class="img-thumbnail" src="'+data.photo[value.sentby]+'" width="35" heigth="35"/><div class="chat_each_message chat_actiononme"><pre><img class="lfloat" src="'+fileimage+'" width="25" height="25" /><a href="/uploads/'+value.message+'"><div>'+value.message+'</div></a></pre></div><span class="time chat_time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></div>');  
+                $('#chatbox_' + you).children().eq(3).append('<div class="chat_each" id="chat_' + value.actionid + '" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><img class="img-thumbnail" src="'+data.photo[value.sentby]+'" width="35" heigth="35"/><div class="chat_each_message chat_actiononme"><pre><img class="lfloat" src="'+fileimage+'" width="25" height="25" /><a href="/uploads/'+value.message+'" target="_blank"><div>'+value.message+'</div></a></pre></div><span class="time chat_time" data="' + value.time + '">' + ui.time_difference(value.time) + '</span></div>');  
               } 
               else
               {

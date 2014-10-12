@@ -438,13 +438,11 @@ class Api
          }
          $count--;
       }
-
       global $database;
       $aid = $database->get_actionid($profileid, $actiontype, 0, $visible_id);
       $count = $_POST['moment_photo_count'];
       $c = $count + 1;
-      $momentid = $database->moment_insert($profileid, $aid, $c, $moment_name, $desc =
-         '');
+      $momentid = $database->moment_insert($profileid, $aid, $c, $moment_name,$desc='');
       $data = array();
       $data['actionid'] = $aid;
       $data['life_is_fun'] = sha1($aid . 'pass1reset!');
@@ -790,6 +788,7 @@ class Api
       $friend = array();
       $name = array();
       $pimage = array();
+      $tagline = array();
       $value = $memcached->get($_SESSION['database'] . '_friend_' . $profileid);
       if($value)
       {
@@ -798,6 +797,7 @@ class Api
          {
             $name[$f] = $help->name_fetch($f, $memcached, $database);
             $pimage[$f] = $help->pimage_fetch($f, $memcached, $database);
+            $tagline[$f] = $help->tagline_fetch($f, $memcached, $database);
          }
       } else
       {
@@ -812,6 +812,7 @@ class Api
                      $friend[] = $NROW['ACTIONON'];
                      $name[$friend[$k]] = $help->name_fetch($friend[$k], $memcached, $database);
                      $pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcached, $database);
+                     $tagline[$friend[$k]] = $help->tagline_fetch($friend[$k], $memcached, $database);
                      $k++;
                   }
                }
@@ -825,6 +826,7 @@ class Api
                         $friend[] = $NROW['ACTIONBY'];
                         $name[$friend[$k]] = $help->name_fetch($friend[$k], $memcached, $database);
                         $pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcached, $database);
+                        $tagline[$friend[$k]] = $help->tagline_fetch($friend[$k], $memcached, $database);
                         $k++;
                      }
                   }
@@ -838,6 +840,7 @@ class Api
                $friend[] = $NROW['FRIENDID'];
                $name[$friend[$k]] = $help->name_fetch($friend[$k], $memcached, $database);
                $pimage[$friend[$k]] = $help->pimage_fetch($friend[$k], $memcached, $database);
+               $tagline[$friend[$k]] = $help->tagline_fetch($friend[$k], $memcached, $database);
                $k++;
             }
          }
@@ -848,6 +851,7 @@ class Api
       $data['friend_count'] = count($friend);
       $data['name'] = $name;
       $data['pimage'] = $pimage;
+      $data['tagline'] = $tagline;
       echo json_encode($data);
    }
 
@@ -2610,6 +2614,7 @@ class Api
                         if($er)
                         {
                            $data['ack'] = 2;
+                           $data['email']=$email;
                            echo json_encode($data);
                         }
                      }
@@ -9501,6 +9506,12 @@ function news_feed()
             {
                $data['ack'] = 1;
                $data['message'] = 'Message Dropped';
+                  $email_object = new Email();
+                  $param['type'] = 'contact_us';
+                  $param['email'] = $email;
+                  $param['name'] = $name;
+                  $param['message'] = $message;
+                  $er = $email_object->email_sample($param);
                echo json_encode($data);
             } else
             {
@@ -10055,6 +10066,7 @@ function news_feed()
                $start = 0;
             }
          //   $search['error'] ='String to make action not null'; // Description says it all .
+            $data['start'] = $start;
             if($filter == 'people')
             {
                if($help->is_email($q))
@@ -10543,6 +10555,52 @@ function news_feed()
             {
                $fres = $database->profile_email_search($q);
                $email = 1;
+            }
+             else
+            {
+               $fres = $database->profile_search($q, 0);
+            }
+
+            $k = 0;
+            while ($frow = $fres->fetch_array())
+            {
+               $search[$k] = $frow['PROFILEID'];
+               $name[$search[$k]] = $help->name_fetch($search[$k], $memcached, $database);
+               $pimage[$search[$k]] = $help->pimage_fetch($search[$k], $memcached, $database);
+               $tagline[$search[$k]] = $help->tagline_fetch($search[$k], $memcached, $database);
+               $k++;
+            }
+            $data['action'] = $search;
+            $data['name'] = $name;
+            $data['pimage'] = $pimage;
+            $data['tagline'] = $tagline;
+            $data['email'] = $email;
+            echo json_encode($data);
+         } else
+         {
+            $help->error_description(18);
+         }
+      } else
+      {
+         $help->error_description(9);
+      }
+   }
+   function search_everything()
+   {
+      global $help;
+      if(isset($_GET['q']))
+      {
+         if(!empty($_GET['q']))
+         {
+            $q = $_GET['q'];
+            $email = 0;
+            global $database;
+            global $memcached;
+
+            if($help->is_email($q))
+            {
+               $fres = $database->profile_email_search($q);
+               $email = 1;
             } else
             {
                $fres = $database->profile_search($q, 0);
@@ -10594,7 +10652,6 @@ function news_feed()
          $help->error_description(9);
       }
    }
-
    function setting_save()
    {
       if(isset($_GET['key']) && isset($_GET['value']))
@@ -10974,7 +11031,7 @@ function news_feed()
 
    function tagline_set()
    {
-      global $help;
+      global $help,$memcached;
       if(isset($_GET['tagline']))
       {
          if(!empty($_GET['tagline']))
@@ -10990,6 +11047,7 @@ function news_feed()
                {
                   $result = $database->set_tag($tagline);
                   $result = $database->diary_insert($actionid, $tagline);
+                  $help->tagline_memcache_update($profileid,$tagline,$memcached);
                   echo json_encode(1);
                } else
                {

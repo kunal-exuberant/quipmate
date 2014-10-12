@@ -427,76 +427,55 @@ var callback = (function()
     //$('#inviting').attr('id','invite_button');
     $('#employee_invite_button').attr('value', 'Invite');
     $('#employee_invite_box').attr('value', '');
-    $('.prompt_container').remove();
-    $('.bg_hide_cover').remove();
-    $('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
-    $('body').append('<div class="prompt_container"><div class="prompt_title">Invite Prompt</div><div class="prompt_content" id="invite_prompt_text"></div><div class="prompt_button"><input class="prompt_positive theme_button" type="submit" value="OK" onclick="ui.bg_hide()" /></div></div>');
-    $('body').css('overflow', 'hidden');
+    $('#prompt_center').html('<div id="invite_prompt_text"></div>');    
     if (data.ack == 1)
     {
-      $('#invite_prompt_text').append('Invitation completed.Please see details on page !');
+      $('#prompt_heading').html('<div class="alert alert-success" role="alert">Invitation Successfull !</div>');  
+      $('#invite_prompt_text').append('Invitation completed. Invited will recieve email having registration link .Below are the details:');
     }
-    $('.prompt_positive').live('click', function()
-    {
-      $('.prompt_container').remove();
-      $('.bg_hide_cover').remove();
-    });
     if (!(data.invited.length == 0))
     {
-      $('#center').append('<h1 id="invited" class="invite_heading">People invited this time.</>');
+      $('#invite_prompt_text').append('<h1 id="invited" class="invite_heading">People invited:</>');
       $.each(data.invited, function(index, value)
       {
-        $('#center').append('<div class="show_emails" >' + value + '</div>');
-      });
-    }
-    if (!(data.already_invited.length == 0))
-    {
-      $('#center').append('<h1 id="already_invited" class="invite_heading">People already invited .</>');
-      $.each(data.already_invited, function(index, value)
-      {
-        $('#center').append('<div class="show_emails" >' + value + '</div>');
+        $('#invite_prompt_text').append('<div class="show_emails" >' + value + '</div>');
       });
     }
     if (!(data.existing.length == 0))
     {
-      $('#center').append('<h1 id="existing" class="invite_heading" >Already joined.</>');
+      $('#invite_prompt_text').append('<h1 id="existing" class="invite_heading" >Already joined Quipmate:</>');
       $.each(data.existing, function(index, value)
       {
-        $('#center').append('<div class="show_emails" >' + value + '</div>');
+        $('#invite_prompt_text').append('<div class="show_emails" >' + value + '</div>');
       });
     }
     if (!(data.invalid.length == 0))
     {
-      $('#center').append('<h1 id="invalid" class="invite_heading">Invalid Emails</>');
+      $('#invite_prompt_text').append('<h1 id="invalid" class="invite_heading">Invalid Emails:</>');
       $.each(data.invalid, function(index, value)
       {
-        $('#center').append('<div class="show_emails" >' + value + '</div>');
+        $('#invite_prompt_text').append('<div class="show_emails" >' + value + '</div>');
       });
     }
+    $('#promptmodal').modal('show');
   }
 
   function usefullinks(me, data)
   {
     //$('#posting').attr('id','invite_button');
     $('#usefullinks_button').attr('value', 'Post');
-    $('.prompt_container').remove();
-    $('.bg_hide_cover').remove();
-    $('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
-    $('body').append('<div class="prompt_container"><div class="prompt_title">Post Prompt</div><div class="prompt_content" id="post_prompt_text"></div><div class="prompt_button"><input class="prompt_positive theme_button" type="submit" value="OK" onclick="ui.bg_hide()" /></div></div>');
-    $('body').css('overflow', 'hidden');
+    $('#prompt_center').html('<div class="post_prompt_text"></div>')
     if (data.ack == 1)
     {
-      $('#post_prompt_text').append(' Links Posted.Please see details on page !');
+      $('#prompt_heading').html('<div class="alert alert-success" role="alert">Link suceesfully added !</div>')  
+      $('#post_prompt_text').append(' Links Posted. Links shared from where will appear on home page of each person in the company network .');
     }
     else
     {
-      $('#post_prompt_text').append(data.error.message);
+      $('#prompt_heading').html('<div class="alert alert-danger" role="alert">Link not posted .</div>')   
+      $('#post_prompt_text').append('<div class="alert alert-warning" role="alert">'+data.error.message+'</div>');
     }
-    $('.prompt_positive').live('click', function()
-    {
-      $('.prompt_container').remove();
-      $('.bg_hide_cover').remove();
-    });
+    $('#promptmodal').modal('show');
   }
 
   function usefullinks_fetch(me, data)
@@ -576,7 +555,7 @@ var callback = (function()
     $.each(data.action, function(index, value)
     {
       var file = icon_cdn+'/'+value.file;
-      $('#prev').append('<div style="height:8em;clear:both;padding:1.5em;"><a class="ajax_nav" href="profile.php?id=' + value.actionby_profileid + '"><img class="lfloat" src="' + data.pimage[value.actionby_profileid] + '" height="50" width="50"></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.actionby_profileid + '">' + value.actionby + '</a>  praised </div><div class="lfloat"><img src="'+file+'" width="70" height="70" /><div class="text-center"><strong>'+value.mood+'</strong></div></div><div class="praise_texts"><pre class="nf_page"><strong>For: '+ ui.see_more(ui.get_smiley(ui.link_highlight(value.title))) + '</strong></pre><pre style="margin:0.5em 0em;display:block;"><strong>Praise: </strong>'+ ui.see_more(ui.get_smiley(ui.link_highlight(value.comment))) + '</pre></div></div>');
+      $('#prev').append('<div class="praise_indiv white"><a class="ajax_nav" href="profile.php?id=' + value.actionby_profileid + '"><img class="lfloat" src="' + data.pimage[value.actionby_profileid] + '" height="50" width="50"></a><div class="name_50"><div><a class="bold ajax_nav" href="profile.php?id=' + value.actionby_profileid + '">' + value.actionby + '</a>  praised </div><div class="lfloat"><img src="'+file+'" width="70" height="70" /><div class="text-center"><strong>'+value.mood+'</strong></div></div><div class="praise_texts"><pre class="nf_page"><strong>For: '+ ui.see_more(ui.get_smiley(ui.link_highlight(value.title))) + '</strong></pre><pre style="margin:0.5em 0em;display:block;"><strong>Praise: </strong>'+ ui.see_more(ui.get_smiley(ui.link_highlight(value.comment))) + '</pre></div></div>');
     });
   }
   else
@@ -774,7 +753,7 @@ var callback = (function()
     if (data.ack == 1)
     {
       $('#add_star_button').attr('value', 'Add');
-      $('#post_prompt_text').append(' Star Added.Please see details on page !');
+      $('#post_prompt_text').append(' Star added successfully!');
     }
     else
     {
@@ -821,36 +800,34 @@ var callback = (function()
     $('#inviting').attr('id', 'invite_button');
     $('#invite_button').attr('value', 'Invite');
     $('#invite_box').attr('value', '');
-    $('.prompt_container').remove();
-    $('.bg_hide_cover').remove();
-    $('body').append('<div class="bg_hide_cover" onClick="ui.bg_hide()"></div>');
-    $('body').append('<div class="prompt_container"><div class="prompt_title">Invite Prompt</div><div class="prompt_content" id="invite_prompt_text"></div><div class="prompt_button"><input class="prompt_positive" type="submit" value="OK" onclick="ui.bg_hide()" /></div></div>');
-    $('body').css('overflow', 'hidden');
-    if (data.ack == 0)
+    $('#prompt_center').html('<div id="invite_prompt_text"></div>');
+
+    if (data.ack == 0) 
     {
+      $('#prompt_heading').html('<div class="alert alert-warning" role="alert">Invitation not successfull !</div>')
       $('#invite_prompt_text').append('Ohhh come on! You cannot invite yourself. Try a different email address.');
     }
     else if (data.ack == 1)
     {
-      $('#invite_prompt_text').append('Your friend having this email address has already joined Quipmate.');
+      $('#prompt_heading').html('<div class="alert alert-warning" role="alert">Invitation not successfull !</div>')
+      $('#invite_prompt_text').append('Person having this email address has already joined Quipmate.');
     }
     else if (data.ack == 2)
     {
-      $('#invite_prompt_text').append('You have successfully invited your friend to join Quipmate.');
+      $('#prompt_heading').html('<div class="alert alert-success" role="alert">Invitation Successfull !</div>')
+      $('#invite_prompt_text').append('You have successfully invited '+data.email+' to join Quipmate.');
     }
     else if (data.ack == 3)
     {
+      $('#prompt_heading').html('<div class="alert alert-warning" role="alert">Invitation not successfull !</div>')
       $('#invite_prompt_text').append('Sorry this email address seems to be invalid. Please check for any possible mistake.');
     }
     else if (data.error)
     {
-      $('#invite_prompt_text').append(data.error.message);
+      $('#prompt_heading').html('<div class="alert alert-danger" role="alert">Invitation not successfull !</div>')  
+      $('#invite_prompt_text').append('<div class="alert alert-warning" role="alert">'+data.error.message+'</div>');
     }
-    $('#invite_song_ok_button').live('click', function()
-    {
-      $('#invite_popup_container').remove();
-      $('#bg_first').remove();
-    });
+    $('#promptmodal').modal('show');
   }
 
   function friend_request_fetch(me, data)
@@ -1313,22 +1290,25 @@ var callback = (function()
     var icon_cdn = $('#icon_cdn').attr('value');
     if (data.count >= 0)
     {
-        console.log('cominng'+data.filter);
+
+    if(data.start == 0) //These headings are valid only for first request 
+    {
       $('#to').attr('value', data.key);
       if (data.count > 1)
       {
-        $('#search_count').html('Search results :' + data.filter + ' matches for ' + data.key);
+        $('#search_count').html('<div class="alert alert-success" role="alert">Search results :'+ data.filter + ' matches for ' + data.key+'</div>');
       }
       else if (data.count == 1)
       {
-        $('#search_count').html('Search result :' + data.filter + ' match for ' + data.key);
+        $('#search_count').html('<div class="alert alert-success" role="alert">Search result :'+ data.filter + ' match for ' + data.key+'</div>');
       }
       else
       {
-        $('#search_count').html('Search result : No ' + data.filter + ' match for ' + data.key);
+        $('#search_count').html('<div class="alert alert-warning" role="alert">Search result : No ' + data.filter + ' match for ' + data.key+'</div>');
         $('#center').append('<div style="text-align:center;margin:12em 0em;"><img src="' + icon_cdn + '/search_no_result.jpg"></div>');
       }
       //$('#search_result').html(''); 
+     } 
       $.each(data.action, function(index, value)
       {
         if (data.filter == 'people')
@@ -1421,7 +1401,7 @@ var callback = (function()
   {
     if (data == 2)
     {
-      $('#recover_password_box').html('<div class="alert alert-success" role="alert">Your password has been updated successfully.Please login to continue.</div>');
+      $('#recover_password_info').html('<div class="alert alert-success" role="alert">Your password has been updated successfully.Please login to continue.</div>');
     }
     else
     {
@@ -1458,7 +1438,6 @@ var callback = (function()
   {
     if ($.trim(data.ack) == 1)
     {
-      $('#info').html('<div class="alert alert-success" role="alert">Registering .Please wait ...</div>');
       window.location = '/';
     }
     else

@@ -199,7 +199,7 @@ $(function()
          {
             'position': 'fixed',
             'padding-right': '5em',
-            'margin-left': '' + (centerwidth + leftwidth) + 'px'
+            'margin-left': '' + (centerwidth + leftwidth+4) + 'px'
          });
          if (rightBottom > $(window).height()) // ($(window).height()-$('.navbar').height()))
          {
@@ -226,7 +226,7 @@ $(function()
          {
             'position': 'absolute',
             'bottom': 'auto',
-            'margin-left': '' + (centerwidth + leftwidth) + 'px',
+            'margin-left': '' + (centerwidth + leftwidth+4) + 'px',
             'padding-right': '5em',
          });
       } 
@@ -317,8 +317,8 @@ $(function()
    $('.chat_user').live('mouseover', function()
    {
       var profileid = $(this).attr('data');
-      var pname = JSON.parse($('#myfriends_name_hidden').attr('value'));
-      var pphoto = JSON.parse($('#myfriends_pimage_hidden').attr('value'));
+      var pname = JSON.parse($('#session_name_hidden').attr('value'));
+      var pphoto = JSON.parse($('#session_pimage_hidden').attr('value'));
       var ptagline = JSON.parse($('#session_tagline_hidden').attr('value'));
       var pic = pphoto[profileid];
       var nm = pname[profileid];
@@ -329,7 +329,7 @@ $(function()
       }
       me = $(this);
       $('.people_status').remove();
-      $('body').append('<div class="people_status"><div class="people_pointer"></div><a class="ajax_nav" href="profile.php?id=' + profileid + '"><img class="lfloat" src="' + pic + '" height="80" width="80"/></a><div class="name_80"><a class="bold ajax_nav" href="profile.php?id=' + profileid + '">' + nm + '</a><div>' + tag + '</div></div></div>');
+      $('body').append('<div class="people_status"><div class="people_pointer"></div><a class="ajax_nav" href="profile.php?id=' + profileid + '"><img class="lfloat" src="' + pic + '" height="80" width="80"/></a><div class="left7"><a class="bold ajax_nav" href="profile.php?id=' + profileid + '">' + nm + '</a><div>' + tag + '</div></div></div>');
       $('.people_status').css('top', me.position().top);
       $('.people_status').css('right', me.position().right);
    });
@@ -341,7 +341,27 @@ $(function()
    {
       var q = $('#to').attr('value');
       var filter = $('#search_filter_hidden').attr('value');
-      window.location = 'search.php?q=' + q + '&filter=' + filter;
+      $('#left').html('<div class="panel  panel-default"><div class="panel-heading">Search for :</div><div class="panel-body" id="search_left"><input type="hidden" id="search_key_hidden" value="'+q+'"><input type="hidden" id="filter_hidden" value="'+filter+'"></div></div>');
+        ui.search_left_option('people',q);
+        ui.search_left_option('post',q);
+        ui.search_left_option('comment',q);
+        ui.search_left_option('group',q);
+        ui.search_left_option('event',q);
+        ui.search_left_option('skill',q);
+        ui.search_left_option('project',q);
+        ui.search_left_option('tool',q);
+        ui.search_left_option('major',q);
+        ui.search_left_option('certificate',q);
+        ui.search_left_option('award',q);
+        ui.search_left_option('company',q);
+        ui.search_left_option('college',q);
+        ui.search_left_option('school',q);
+        ui.search_left_option('profession',q);
+        ui.search_left_option('city',q);
+      $('#'+filter).addClass('selected');  
+      $('#center').html('<h1 class="page_title" id="search_count">Search results</h1><div id="search_result"></div>'); 
+      action.search();
+      window.location.hash = 'search.php?filter=' + filter + '&q='+q;
       return false;
    });
    $('body').append('<div id="search_container"></div>');
@@ -356,7 +376,7 @@ $(function()
    {
     
       filter = $('#search_filter_hidden').attr('value');
-      if (filter == '') filter = 'search_people';
+      if (filter == '') filter = 'search_everything';
       $('#search_container').show();
       action.global_search(filter, q, request);
    });
@@ -370,16 +390,20 @@ $(function()
    {
       action.star_search('search_people', q, request);
    });
-   $('#mdadd').focus(function()
+ /*
+    $('#mdadd').focus(function()
    {
       $('.search_items').show();
    });
+
    var request = []
    var q = $.trim($('#mdadd').attr('value'));
-   $('#mdadd').live('keyup mousedown input', function()
-   {
-      action.md_search('search_people', q, request);
-   });
+ 
+    $('#mdadd').live('keyup mousedown input', function()
+      {
+         action.md_search('search_people', q, request);
+      });
+   */
    $('#search_result').click(function()
    {
       var pname = $.trim($('#search_result').attr('pname'));
@@ -802,55 +826,7 @@ $(function()
    {
       $(this).next().toggle();
       $(this).next().next().toggle();
-   });
-   $('#chatfileform input[name=chat_send_file]').live('change',function(){
-    var icon_cdn = $('#icon_cdn').attr('value');
-    var chat_sent_time = new Date().getTime();
-    $('#chatfileform input[name=chat_sent_time]').attr('value',chat_sent_time);
-    var filename = $(this).val();
-    var ext = filename.split('.').pop();
-    var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
-    $('.chatboxui_msg').append('<div class="chat_each" id="chat_'+chat_sent_time+'" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><div class="chat_each_message chat_actionbyme"><pre><img class="lfloat" src="'+fileimage+'" width="25" height="25" /><div>' +filename+ '</div><div id="upload_progress"></div></pre></div><span class="time chat_time" id="chat_time_' + chat_sent_time + '" data="' + chat_sent_time + '"></span><span id="'+chat_sent_time+'" class="glyphicon glyphicon-time rfloat" style="color:#ccc;"></span></div><div id="upload_progress"></div>');
-    $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight);
-    
-   $('#chatfileform').ajaxForm(function(){  });
-      $("#chatfileform").ajaxSubmit(
-      {
-         type: 'post',
-         dataType: 'json',
-         uploadProgress: ui.OnProgress,
-         success: function(data)
-         {
-                    $('#upload_progress').remove();
-                    $.each(data.action, function(index, value)
-                    {
-                       if(value.ack == 0)
-                        {
-                           $('#upload_progress').remove();
-                           $('#chat_'+chat_sent_time+' .chat_each_message pre').append('<span style="color:red;font-size:1em;">*this file format in not supported.</span>');
-                           $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight);
-                        }
-                        else
-                        {
-                           action.last_chat_time = value.time;
-                           $('#chat_' + value.chat_sent_time).attr('id',value.actionid);
-                           $('#' + value.chat_sent_time).removeClass('glyphicon-time');
-                           $('#' + value.chat_sent_time).addClass('glyphicon-ok');
-                           $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight);
-                        }
-                    });
-         },
-         error: function(data)
-         {
-             $('#upload_progress').remove();
-             $('#chat_'+chat_sent_time).append('<span style="color:red;font-size:1em;">*file was not sent , some error occured . </span>');
-             $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight);
-         }
-         
-      });
-      return false;
-  });
-   
+   }); 
    
 });
 $('.chatboxui').live('mousedown keydown input', function()
@@ -1214,7 +1190,6 @@ $(function()
          success: function(response)
          {
             var data = $.parseJSON(response);
-            console.log(data);
             if (data.ack == '1')
             {
                var obj = document.getElementById('uploading');
@@ -1291,7 +1266,7 @@ $(function()
    {
       var icon_cdn = $('#icon_cdn').attr('value');
       var moment_name = $.trim($('#moment_name').attr('value'));
-      var photo_count = $('.file_inline').length - 2; // Reducing by 2 because count was taken from 0 and we have one extra input type where file was not selected .
+      var photo_count = $('.file_inline').length - 3; // Reducing by 2 because count was taken from 0 and we have one extra input type where file was not selected .
       $("#moment_photo_count").attr("value", photo_count);
       $("#mform").ajaxSubmit(
       {
@@ -1599,7 +1574,6 @@ $('.badge_chooser').click(function(){
  badgeid = $(this).attr('data-badge-id');
   $('#praisemodalbadge').modal('hide');
   $('#praisemodal').modal('show');
-  console.log(badgeid);
   $('#badge_id').attr('value',badgeid);
   me_badge=this;
   $("img:first",'#praisebody').html('');
@@ -1616,6 +1590,5 @@ $('.chat_add').live('mouseover',function(){
 */
 
 //********************************************    
-
 
 

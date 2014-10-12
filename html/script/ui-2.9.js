@@ -2,7 +2,7 @@ var ui = (function()
 {
    var icon_cdn = $('#icon_cdn').attr('value');
    var image_cdn = $('#image_cdn').attr('value');
-   var chat_notify = true;
+   var chat_notify ;
    bring = true;
 
    function page_call(page)
@@ -55,10 +55,9 @@ var ui = (function()
          $('#left').html('');
          $('#left').css('top', 'auto');
          $('#left').append('<h1 style="color:gray;">Messages</h1>');
-         $('#left').append('<div id="show_inbox"></div>');
+         $('#left').append('<div id="show_inbox" class="mousescroll"></div>');
          $('#show_inbox').css('height', $(window).height() - 100);
          $('#left').css('width', '206');
-         $('#show_inbox').css('overflow', 'auto');
          action.message_recent_fetch();
          action.actiontype_preview();
          //	action.friend_fetch();
@@ -81,7 +80,7 @@ var ui = (function()
          action.birthday_fetch(this);
          //	action.friend_fetch();
          action.star_of_the_week_fetch();
-         action.csv_fetch();
+         //action.csv_fetch();
       }
 /*	else if(page == 'admin_json' || page == 'admin' || page == 'invite' || page == 'remove_user' || page == 'analytics' || page == 'feature' || page == 'account' || page == 'privacy' || page == 'email_settings' || page == 'notification' || page =='profile_picture' || page=='action')
 				{
@@ -103,6 +102,10 @@ var ui = (function()
       else if (page == 'sotw')
       {
          action.sotw_load();
+      }
+      else if (page == 'group_byadmin')
+      {
+         action.groups_fetch();
       }
       else if (page == 'flashboard')
       {
@@ -229,7 +232,6 @@ var ui = (function()
       $('#friend_invite_heading').append('<div class="panel_heading" >Invite a colleague to join Quipmate</div>');
       $('#friend_invite_body').append('<div><input type="text" id="invite_box" value="" placeholder="Enter an email address" /><input type="submit" title="Invite A Friend" id="invite_button" class="theme_button" value="Invite" onclick="action.friend_invite(this)" /></div>');
    }
-
    function page_init(page, param)
    {
       if (page == 'news_json')
@@ -530,9 +532,9 @@ var ui = (function()
 
    function createMessageUI(user, name)
    {
-      $('#inbox_container').append('<div id="inbox_' + user + '" class="inboxui" ><input type="hidden" value="' + user + '"/><span ></span><div class="inboxui_title"></div><div class="inboxui_msg"></div><textarea class="sendbox" onkeypress="action.message_send(this,event)"></textarea><input type="hidden" value="10"/></div>');
+      $('#inbox_container').append('<div id="inbox_' + user + '" class="inboxui" ><input type="hidden" value="' + user + '"/><span ></span><div class="inboxui_title"></div><div class="inboxui_msg mousescroll"></div><textarea class="sendbox" onkeypress="action.message_send(this,event)"></textarea><input type="hidden" value="10"/></div>');
       $('.inboxui_msg').css('height', $(window).height() - 165);
-      $('.inboxui_msg').css('overflow', 'auto');
+     // $('.inboxui_msg').css('overflow', 'auto');
       $('#inbox_' + user).children().eq(4).focus();
       //lastScrollTopinbox = $('#inbox_'+user).children().eq(3).get(0).scrollTop;
       $('#inbox_' + user).children().eq(3).scroll(function()
@@ -738,8 +740,6 @@ var ui = (function()
     {
         $("#upload_progress").html('<div id="progressbox" style="display:none;"><div id="progressbar"></div ><div id="statustxt">0%</div></div><div id="output"></div>');    
     }
-      //Progress bar
-      $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight); //to make the uploader visible 
       $('#progressbox').css(
       {
          "display": "block"
@@ -887,6 +887,7 @@ var ui = (function()
 
    function notice_fetch(me, event)
    {
+	  event.preventDefault();
       var icon_cdn = $('#icon_cdn').attr('value');
       $(document).attr('title', 'Quipmate');
       $('#notice_container').remove();
@@ -917,6 +918,7 @@ var ui = (function()
 
    function message_fetch(me, event)
    {
+      event.preventDefault();
       var icon_cdn = $('#icon_cdn').attr('value');
       $(document).attr('title', 'Quipmate');
       $('#text').remove();
@@ -943,6 +945,7 @@ var ui = (function()
 
    function request_fetch(me, event)
    {
+      event.preventDefault();
       var icon_cdn = $('#icon_cdn').attr('value');
       $(document).attr('title', 'Quipmate');
       $('#text').remove();
@@ -999,8 +1002,8 @@ var ui = (function()
          event.stopPropagation();
       }
       $('#profile_post_privacy_drop').remove();
-      var pleft = event.pageX - 101 + 'px';
-      var ptop = event.pageY + 17 + 'px';
+      var pleft = event.pageX -60+'px';
+      var ptop = event.pageY +20+ 'px';
       $('body').append('<div id ="profile_post_privacy_drop" style="position:absolute;background-color:#ffffff;border:0.1em solid #cccccc;"><div id="menu_pointer"></div><div class="menu_each"><a class="menu_each_a" value="0" data="profile_post_next" onclick="action.profile_privacy_update(this)">Public</a></div><div class="menu_each"><a class="menu_each_a"  value="2" data="profile_post_next" onclick="action.profile_privacy_update(this)">Followers</a></div></div>');
       $('#profile_post_privacy_drop').css('left', pleft);
       $('#profile_post_privacy_drop').css('top', ptop);
@@ -1080,7 +1083,7 @@ var ui = (function()
       $('body').append('<div id="tagline_container" class="popup_container" ></div>');
       $('#tagline_container').html('<div id="tagline_title" class="prompt_title">What drives you today?</div>');
       $('#tagline_title').append('<div style="float:right;cursor:pointer;margin-right:0.5em;" onClick ="ui.tagline_close()">x</div>');
-      $('#tagline_container').append('<div style="height:9em;scroll:auto;"><input style="margin-top:2em;padding:.5em;border:0.1em solid #cccccc;height:2.5em;width:29em;" id="tagline_box" type="text" maxlength="50" placeholder="Write your tagline" /></div>');
+      $('#tagline_container').append('<div><textarea style="margin-top:2em;padding:.5em;border:0.1em solid #cccccc;" id="tagline_box" maxlength="50" placeholder="Write your tagline" ></textarea></div>');
       $('#tagline_container').append('<div style="margin: 1em 0em;"><input type="submit" value="Cancel" class="mood_button prompt_negative theme_button" onclick="ui.tagline_close(this)" /><input class="prompt_positive theme_button" type="submit" value="Set My Tagline" id="mood_done" onclick="action.tagline(this)"/></div>');
       $('#tagline_box').focus();
    }
@@ -1731,7 +1734,7 @@ var ui = (function()
       var chat_sent_time = new Date().getTime();
       var database = $('#database_hidden').attr('value');
       
-      $('#chatbox_container').append('<div id="chatbox_' + user + '" class="chatboxui" ><input type="hidden" value="' + user + '"/><div><ul class="navbar-nav navbar-right"><li class="glyphicon"><a data-toggle="dropdown" class="dropdown-toggle" href="#"><b class="glyphicon glyphicon-cog" style="color:#000;margin-top:.5em;margin-right:2em;"></b></a><ul class="dropdown-menu chat_dropdown"><li><form action="/chat/chat_new" enctype="multipart/form-data" method="post" id="chatfileform" style="margin-left:1.5em"><a href="#" class="word_space_less"><input type="file" style="opacity:0;position:absolute;" id="chat_send_file" name="chat_send_file" />Send File</a><input type="hidden" name="userid" value="'+user+'"/><input type="hidden" name="profileid" value="'+myprofileid+'"/><input type="hidden" name="name" value="'+myname+'"/><input type="hidden" name="photo" value="'+photo+'"/><input type="hidden" id="chat_sent_time" name="chat_sent_time" value="'+chat_sent_time+'"/><input type="hidden" name="database" value="'+database+'"/><input type="hidden" name="message" value="file sending"/></form></li><li onclick="ui.redirect_to_inbox('+user+')"><a href="#" class="ajax_nav word_space_less">See Full Conversations</a></li></ul></li></ul><span class="chatbox_close">x</span></div><div class="chatboxui_title"><span><a class="ajax_nav" href="profile.php?id=' + user + ' ">' + name + '</a></span></div><div class="chatboxui_msg"></div><textarea class="chatbox"></textarea><input type="hidden" value="10"/></div>');
+      $('#chatbox_container').append('<div id="chatbox_' + user + '" class="chatboxui" ><input type="hidden" value="' + user + '"/><div><ul class="navbar-nav navbar-right"><li class="glyphicon"><a data-toggle="dropdown" class="dropdown-toggle" href="#"><b class="glyphicon glyphicon-cog" style="color:#000;margin-top:.5em;margin-right:2em;"></b></a><ul class="dropdown-menu chat_dropdown"><li><form action="/chat/chat_new" enctype="multipart/form-data" method="post" id="chatfileform_'+user+'" style="margin-left:1.5em"><a href="#" class="word_space_less"><input type="file" style="opacity:0;position:absolute;" id="chat_send_file" name="chat_send_file" onchange="ui.chat_file_send(this,'+user+')" />Send File</a><input type="hidden" name="userid" id="userid" value="'+user+'"/><input type="hidden" name="profileid" value="'+myprofileid+'"/><input type="hidden" name="name" value="'+myname+'"/><input type="hidden" name="photo" value="'+photo+'"/><input type="hidden" id="chat_sent_time" name="chat_sent_time" value="'+chat_sent_time+'"/><input type="hidden" name="database" value="'+database+'"/><input type="hidden" name="message" value="file sending"/></form></li><li onclick="ui.redirect_to_inbox('+user+')"><a href="#" class="ajax_nav word_space_less">See Full Conversations</a></li></ul></li></ul><span class="chatbox_close">x</span></div><div class="chatboxui_title"><span><a class="ajax_nav" href="profile.php?id=' + user + ' ">' + name + '</a></span></div><div class="chatboxui_msg"></div><textarea class="chatbox"></textarea><input type="hidden" value="10"/></div>');
       $('#chatbox_' + user).children().eq(4).focus();
       if (is_online) $('#chatbox_' + user).children().eq(2).prepend('<img class="chatbox_online_icon" src="' + icon_cdn + '/online.png" />');
       var lastScrollTopchat = $('#chatbox_' + user).children().eq(3).get(0).scrollTop;
@@ -1740,7 +1743,56 @@ var ui = (function()
          ui.chatbox_scroll(user)
       });
    }
-
+  function chat_file_send(me,user)
+  {
+        var icon_cdn = $('#icon_cdn').attr('value');
+        var chat_sent_time = new Date().getTime();
+        $('#chatfileform_'+user+' input[name=chat_sent_time]').attr('value',chat_sent_time);
+        var filename = $('#chatfileform_'+user+' input[name=chat_send_file]').val();
+        var ext = filename.split('.').pop();
+        var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
+        //$('#chatbox_'+user+' .chatboxui_msg');    
+//        console.log('#chatbox_'+user+' .chatboxui_msg');
+        $('#chatbox_'+user+' .chatboxui_msg').append('<div class="chat_each" id="chat_'+chat_sent_time+'" onmouseover="ui.chat_time_show(this)" onmouseleave="ui.chat_time_hide(this)"><div class="chat_each_message chat_actionbyme"><pre><img class="lfloat" src="'+fileimage+'" width="25" height="25" /><div>' +filename+ '</div><div id="upload_progress"></div></pre></div><span class="time chat_time" id="chat_time_' + chat_sent_time + '" data="' + chat_sent_time + '"></span><span id="'+chat_sent_time+'" class="glyphicon glyphicon-time rfloat" style="color:#ccc;"></span></div><div id="upload_progress"></div>');
+        $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight);
+        
+       $('#chatfileform_'+user).ajaxForm(function(){  });
+          $('#chatfileform_'+user).ajaxSubmit(
+          {
+             type: 'post',
+             dataType: 'json',
+             uploadProgress: ui.OnProgress,
+             success: function(data)
+             {
+                        $('#upload_progress').remove();
+                        $.each(data.action, function(index, value)
+                        {
+                           if(value.ack == 0)
+                            {
+                               $('#upload_progress').remove();
+                               $('#chat_'+chat_sent_time+' .chat_each_message pre').append('<span style="color:red;font-size:1em;">*this file format in not supported.</span>');
+                               $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight);
+                            }
+                            else
+                            {
+                               action.last_chat_time = value.time;
+                               $('#chat_' + value.chat_sent_time).attr('id',value.actionid);
+                               $('#' + value.chat_sent_time).removeClass('glyphicon-time');
+                               $('#' + value.chat_sent_time).addClass('glyphicon-ok');
+                               $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight);
+                            }
+                        });
+             },
+             error: function(data)
+             {
+                 $('#upload_progress').remove();
+                 $('#chat_'+chat_sent_time).append('<span style="color:red;font-size:1em;">*file was not sent , some error occured . </span>');
+                 $('.chatboxui_msg').scrollTop($('.chatboxui_msg').get(0).scrollHeight);
+             }
+             
+          });
+          return false;
+  }
    function chatbox_scroll(user)
    {
       var chat_start = parseInt($('#chatbox_' + user).children().eq(5).attr('value'));
@@ -1769,12 +1821,13 @@ var ui = (function()
 
    function chat_new_notify(name, message,chat_notify)
    {
+    
       $(document).attr('title', message + ' :' + name);
       if (chat_notify)
       {
          setTimeout(function()
          {
-            ui.title_restore(name, message,chat_notify);
+            ui.title_restore(name, message,ui.chat_notify);
          }, 1000);
       }
       else
@@ -1785,11 +1838,12 @@ var ui = (function()
 
    function title_restore(name, message,chat_notify)
    {
+      $(document).attr('title','Quipmate');
       if (chat_notify)
       {
          setTimeout(function()
          {
-            ui.chat_new_notify(name, message,chat_notify);
+            ui.chat_new_notify(name, message,ui.chat_notify);
          }, 1000);
       }
       else
@@ -1855,7 +1909,14 @@ var ui = (function()
         }
        } 
    }
+   function search_left_option(type,q)
+   {
+    $('#search_left').append('<div class="links" style="margin-bottom:0.2em;"><a id="'+type+'" class="ajax_nav" href="search.php?filter='+type+'&q='+q+'" title="Search for '+type+'"><span class="name_20">'+type+'</span></a></div>');
+    
+   }
    return {
+    search_left_option:search_left_option,
+    chat_file_send:chat_file_send,
       add_people_chat:add_people_chat,
     central_repo_heading:central_repo_heading,
       popup_close: popup_close,

@@ -175,9 +175,9 @@ if(isset($_SESSION['auth']) && $_SESSION['STEP'] != -1 )
 			{
 				$api->employee_invite();
 			}
-			else if($_GET['action'] == 'friend_invite_multiple')
+			else if($_GET['action'] == 'friend_invite')
 			{
-				$api->friend_invite_multiple();
+				$api->friend_invite();
 			}
 			else if($_GET['action'] == 'friend_load')
 			{
@@ -642,6 +642,10 @@ if(isset($_SESSION['auth']) && $_SESSION['STEP'] != -1 )
 			{
 				$api->search_people();
 			}
+			else if($_GET['action'] == 'search_everything')
+			{
+				$api->search_everything();
+			}
 			else if($_GET['action'] == 'friend_suggest')
 			{
 				$api->friend_suggest();
@@ -872,52 +876,80 @@ if(isset($_SESSION['auth']) && $_SESSION['STEP'] != -1 )
 		$help->error_description(5);
 	}
 }
-else if($_POST['action'] == 'validate_user')
+else if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST))
 {
-	$api->validate_user();
-}
-else if($_POST['action'] == 'validate_user_mobile')
+		if(isset($_POST['action']))
+		{		
+			if($_POST['action'] == 'validate_user')
+			{
+				$api->validate_user();
+			}
+			else if($_POST['action'] == 'validate_user_mobile')
+			{
+				$api->validate_user_mobile();
+			}
+			else if($_POST['action'] == 'recover_password')
+			{
+				$api->recover_password();
+			}
+			else if($_POST['action'] == 'contact')
+			{
+				$api->contact();
+			}
+			else if($_POST['action'] == 'login')
+			{
+				$api->login();
+			}
+			else
+			{
+				$help->error_description(6);
+			}
+		}
+		else
+		{
+			$help->error_description(5);
+		}
+}		
+else if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET))
 {
-	$api->validate_user_mobile();
-}
-else if($_GET['action'] == 'forgot_password')
-{
-	$api->forgot_password();
-}
-else if($_GET['action'] == 'poll')
-{
-	$api->poll();
-}
-else if($_POST['action'] == 'recover_password')
-{
-	$api->recover_password();
-}
-else if($_GET['action'] == 'validate_password')
-{
-	$api->validate_password();
-}
-else if($_GET['action'] == 'self_invite')
-{
-	$api->self_invite();
-}
-else if($_GET['action'] == 'self_invite_mobile')
-{
-	$api->self_invite_mobile();
-}
-else if($_POST['action'] == 'contact')
-{
-	$api->contact();
-}else if($_POST['action'] == 'login')
-{
-	$api->login();
-}
-else if($_GET['action'] == 'login_get')
-{
-	$api->login_get();
-}
+		if(isset($_GET['action']))
+		{		
+			if($_GET['action'] == 'forgot_password')
+			{
+				$api->forgot_password();
+			}
+			else if($_GET['action'] == 'poll')
+			{
+				$api->poll();
+			}		
+			else if($_GET['action'] == 'validate_password')
+			{
+				$api->validate_password();
+			}
+			else if($_GET['action'] == 'self_invite')
+			{
+				$api->self_invite();
+			}
+			else if($_GET['action'] == 'self_invite_mobile')
+			{
+				$api->self_invite_mobile();
+			}
+			else if($_GET['action'] == 'login_get')
+			{
+				$api->login_get();
+			}
+			else
+			{
+				$help->error_description(6);
+			}
+		}
+		else
+		{
+			$help->error_description(5);
+		}
+}		
 else
 {
 	$help->error_description(4);
 }
-
 ?>

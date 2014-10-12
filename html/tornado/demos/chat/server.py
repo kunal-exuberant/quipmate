@@ -79,6 +79,11 @@ class Query(Database):
 		cursor = self.connect()
 		sql_query = "select NAME from bio where PROFILEID = '%s' " %(profileid)
 		return self.query(sql_query, cursor)
+        
+	def tag_select(self, profileid):
+		cursor = self.connect()
+		sql_query = "select TAGLINE from bio where PROFILEID = '%s' " %(profileid)
+		return self.query(sql_query, cursor)
 
 	def photo_select(self, profileid):
 		cursor = self.connect()
@@ -176,6 +181,11 @@ class BaseHandler(tornado.web.RequestHandler, Query):
 		
 	def get_name(self, profileid):
 		cursor = self.name_select(profileid)
+		for row in cursor:                 
+			return row[0]
+            
+	def get_tag(self, profileid):
+		cursor = self.tag_select(profileid)
 		for row in cursor:                 
 			return row[0]
 		 
@@ -282,6 +292,7 @@ class RealTimeHandler(BaseHandler):
     def ret_rtm(self, response, count, message_count, request_count, database, profileid, action, last_poll_time, callback=None):
 		name = {}
 		photo = {}
+		tag = {}
 		user = []
 		if self.request.connection.stream.closed():
 			return	
@@ -294,19 +305,22 @@ class RealTimeHandler(BaseHandler):
 		   user.append(row[0])	
 		   name[int(row[0])] = self.get_name(row[0])
 		   photo[int(row[0])] = self.get_photo(row[0])
+		   tag[int(row[0])] = self.get_tag(row[0])           
 		   ack = 1	
 		for i in action:
 			if i['actionby'] not in name:
 				name[i['actionby']] = self.get_name(i['actionby'])
 				photo[i['actionby']] = self.get_photo(i['actionby'])
+				tag[i['actionby']] = self.get_tag(i['actionby'])                
 			if i['actionon'] not in name:
 				name[i['actionon']] = self.get_name(i['actionon'])
-				photo[i['actionon']] = self.get_photo(i['actionon']) 
+				photo[i['actionon']] = self.get_photo(i['actionon'])
+		                tag[i['actionon']] = self.get_tag(i['actionon']) 
 		try:
 		   news = {}	
 		   if response != 0:
 				news = response.body
-		   self.finish(dict(ack=ack, user=user, response=news, count=count, message_count=message_count, request_count=request_count, action=action, name=name,photo=photo, last_poll_time=last_poll_time))
+		   self.finish(dict(ack=ack, user=user, response=news, count=count, message_count=message_count, request_count=request_count, action=action, name=name,photo=photo,tag=tag,last_poll_time=last_poll_time))
 		except Exception,e:
 			   print e							
 
@@ -368,10 +382,15 @@ class ChatNewHandler(BaseHandler, ChatMixin):
                            fileinfo = self.request.files['chat_send_file'][0]
             		   fname = fileinfo['filename']
             		   extn = os.path.splitext(fname)[1]
+		           fname = fname.replace(' ','_')
 #			   print extn
 			   if extn in valid_formats:
             		     fh = open(__UPLOADS__ + fname, 'w')
          		     fh.write(fileinfo['body'])
+#In case of production server only we copy file to web server from chat server ############
+#			     os.system('scp '+__UPLOADS__ + fname+' root@50.57.190.112:/var/www/html/uploads/')
+#			     os.remove(__UPLOADS__ + fname)
+############################################################################################
          		     message = fname
          		     chat['message'] = fname
          		     chat['file'] = 1

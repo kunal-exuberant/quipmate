@@ -202,7 +202,6 @@ $relation = $newrow['RELATION'];
 			<?php
 
 bio_item_deploy($profile_relation, 234, 'Team', $team, $teamid, 'team_edit_link', $help, $row['team']);
-//bio_single_deploy($profile_relation, 202, 'Profession', $profession, $professionid,'profession_edit_link', $help, $row['profession']);
 bio_single_deploy($profile_relation, 239, 'Designation', $designation, $designationid,'designation_edit_link', $help, $row['designation']);
 bio_item_deploy($profile_relation, 235, 'Major', $major, $majorid,'major_edit_link', $help, $row['major']);
 bio_item_deploy($profile_relation, 230, 'Skill', $skill, $skillid,'skill_edit_link', $help, $row['skill']);
@@ -221,21 +220,9 @@ bio_item_deploy($profile_relation, 205, 'Company', $company, $companyid,'company
 bio_item_deploy($profile_relation, 204, 'College', $college, $collegeid,'college_edit_link', $help, $row['college']);
 bio_item_deploy($profile_relation, 203, 'School', $school, $schoolid,'school_edit_link', $help, $row['school']);
 bio_item_deploy($profile_relation, 201, 'City', $city, $cityid, 'city_edit_link',$help, $row['city']);
-//bio_item_deploy($profile_relation, 211, 'Hobby', $hobby, $hobbyid,'hobby_edit_link', $help, $row['hobby']);
 
 ?>
 		</div>
-	<!--	<div class="bio_each col-md-6 panel panel-default">
-			<div class="bio_each_title panel-heading">Personal</div>
-			<?php
-/*
-bio_item_deploy($profile_relation, 206, 'Music', $music, $musicid, 'music_edit_link', $help, $row['music']);
-bio_item_deploy($profile_relation, 207, 'Movie', $movie, $movieid, 'movie_edit_link', $help, $row['movie']);
-bio_item_deploy($profile_relation, 208, 'Book', $book, $bookid, 'book_edit_link',$help, $row['book']);
-bio_item_deploy($profile_relation, 209, 'Sports', $sports, $sportsid,'sports_edit_link', $help, $row['sports']); */
-
-?>
-		</div> -->
 		<div class="bio_each col-md-6 panel panel-default">
 			<div class="bio_each_title ">Contact</div>
 			<?php
@@ -257,17 +244,6 @@ bio_item_deploy($profile_relation, 215, 'Mobile', $mobile, $mobileid,
 </div>
 
 	<?php
-/*
-if (isset($bday))
-{
-   if ($help->checkPrivacy('BIRTHDAY', $profileid) == 1 && $bday != "")
-      echo "<div class='item_title'>Birthday</div>" . '<div class="items">' . date('j M,Y',strtotime($bday)) . '</div>'; 
-       //Older implementation
-      if ($profileid == $myprofileid && $bday != "") //show only on my profile
-      echo "<div class='item_title'>Birthday</div>" . '<div class="items">' . date('j M,Y',
-         strtotime($bday)) . '</div>';
-}*/
-
 
 function bio_single_deploy($profile_relation, $code, $key, $value, $valueid, $id,
    $help, $privacy)
@@ -340,52 +316,3 @@ function bio_item_deploy($profile_relation, $code, $key, $value, $valueid, $id,
 
 ?>
 </div>
-<script type="text/javascript" >
-	function item_edit(container,code,key,privacy)
-	{
-		var icon_cdn = $('#icon_cdn').attr('value');
-		$('.item_edit_remove').show();
-		var placeholder ='';
-		switch(code)
-		{
-			case 205 : placeholder = 'Add your company'; break;
-			case 204 : placeholder = 'Add your college'; break;
-			case 203 : placeholder = 'Add your School'; break;
-			case 211 : placeholder = 'Add your hobby'; break;
-			case 230 : placeholder = 'Add a skill'; break;
-			case 231 : placeholder = 'Add a project'; break;
-			case 232 : placeholder = 'Add a certificate'; break;
-			case 233 : placeholder = 'Add an award'; break;
-			default : placeholder = '';
-		}
-		$('.profile_edit_each').remove();
-         if(privacy == 2)
-		{
-			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+',event)" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/></div>');
-		}
-		else
-		{
-			$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+',event)" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value = "" size="40"/></div>');
-		}		
-	} 
-	
-	function item_single_edit(container,code,value,privacy)
-	{
-		$('.item_edit_remove').show();
-		var placeholder ='';
-		switch(code)
-		{
-			case 205 : placeholder = 'Add your company'; break;
-			case 204 : placeholder = 'Add your college'; break;
-			case 203 : placeholder = 'Add your School'; break;
-			case 211 : placeholder = 'Add your hobby'; break;
-			case 230 : placeholder = 'Add a skill'; break;
-			case 231 : placeholder = 'Add a project'; break;
-			case 232 : placeholder = 'Add a certificate'; break;
-			case 233 : placeholder = 'Add an award'; break;
-			default : placeholder = '';
-		}
-		$('.profile_edit_each').remove();
-		$(container).parent().next().prepend('<div class="profile_edit_each  bgcolor"><input style="margin-left:.5em;" onkeyup="ui.diary_suggest(this,'+code+',event)" type="text" placeholder="'+placeholder+'" class="profile_edit_textbox" value ="'+value+'" size="40"/></div>');
-	}
-</script>

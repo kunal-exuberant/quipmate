@@ -403,7 +403,7 @@ $database->page_view_insert($myprofileid, $profileid, $_SERVER['HTTP_REFERER'], 
 <title style="font-family:arial;"><?php echo $title; ?></title> 
 </head>
 <body>
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+<div class="navbar navbar-default navbar-fixed-top white" role="navigation">
 	<div class="navbar-header">
 		 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 			<span class="sr-only">Toggle navigation</span>
@@ -484,6 +484,7 @@ $database->page_view_insert($myprofileid, $profileid, $_SERVER['HTTP_REFERER'], 
 	<input type="hidden" id="myprofileimage_hidden" value="<?php echo $_SESSION['pimage'];?>" />
 	<input type="hidden" id="myfriends_name_hidden" value="" />
 	<input type="hidden" id="myfriends_pimage_hidden" value="" />
+    <input type="hidden" id="myfriends_tagline_hidden" value="" />
 	<input type="hidden" id="page_hidden" value="<?php echo $page; ?>" />
 	<input type="hidden" id="session_name_hidden" value='<?php echo json_encode($_SESSION["name_json"]); ?>' />
 	<input type="hidden" id="session_pimage_hidden" value='<?php echo json_encode( $_SESSION["pimage_json"]); ?>' />
@@ -500,7 +501,7 @@ $database->page_view_insert($myprofileid, $profileid, $_SERVER['HTTP_REFERER'], 
 	<input type="hidden" id="profilename_hidden" value="<?php $database = new Database(); $row = $database->get_name($profileid); echo $row['NAME'];?>" />
 	<input type="hidden" id="friend_online_list_hidden" value="" />
 	<input type="hidden" id="chatid_hidden" value="0" />
-	<div id="random_hidden" type="hidden"></div>
+	<input type="hidden" id="random_hidden" value="0"/>
 	<!-- CDN Urls in hidden elements -----------------------------------------------	-->
 	<input type="hidden" id="doc_cdn" value="<?php echo $doc_cdn; ?>" />
 	<input type="hidden" id="video_cdn" value="<?php echo $video_cdn; ?>" />

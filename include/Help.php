@@ -489,6 +489,14 @@ class Help
 			$memcache->set($_SESSION['database'].'_pimage_'.$profileid, $pimage);	
 		}
 	}
+	function tagline_memcache_update($profileid, $tagline, $memcache)
+	{
+		$value = $memcache->get($_SESSION['database'].'_tagline_'.$profileid);
+		if($value)
+		{
+			$memcache->set($_SESSION['database'].'_tagline_'.$profileid, $tagline);	
+		}
+	}    
 	
 	function name_memcache_update($profileid, $name, $memcache)
 	{
@@ -594,6 +602,20 @@ class Help
 			return $row['NAME'];
 		}
 	}
+	function tagline_fetch($key, $memcache, $database)
+	{
+		$value = $memcache->get($_SESSION['database'].'_tagline_'.$key);
+		if($value)
+		{
+			return $value;
+		}
+		else
+		{
+			$row = $database->get_tag($key); 
+			$memcache->set($_SESSION['database'].'_tagline_'.$key, $row['TAGLINE']);
+			return $row['TAGLINE'];
+		}
+	}    
 	function skill_fetch($key, $memcache, $database)
 	{
 		$value = $memcache->get($_SESSION['database'].'_skill_');

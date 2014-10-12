@@ -1,3 +1,15 @@
+div.mousescroll {
+    overflow: hidden;
+}
+div.mousescroll:hover{
+    overflow-y: scroll;
+}
+.slimScrollDiv { border: 1px solid #ccc; }
+.praise_indiv{min-height:8em;clear:both;padding:1.5em;border-bottom: 1px solid #ccc;}
+.breadcrumb{
+    margin-bottom: 0em;
+    background: #fff;
+}
 #profile_above{
     margin-top:1em;
     
@@ -132,13 +144,14 @@ th {
 .top4{margin-top:4em;}
 .left1{margin-left:1em;}
 .left4{margin-left:4em;}
+.left7{margin-left:7em;}
 .file_inline {display:inline !important;}
 .fbold{font-weight:bold;}
 .panel{margin-bottom:0.3em !important;}
 .breadcrumb{font-weight:bold !important;}
 .imghide{display:none;}
 .imgshow{display:inline;}
-#friend_event{margin-right:0.2em;}
+/*#friend_event{margin-right:0.2em;}*/
 .more_excite_people_pic{border-bottom:0.1em solid #cccccc;clear:both;height:6em;padding:1em;}
 .closex{position:absolute;top:1em;right:1em;cursor:pointer;}
 #search_container{position:fixed;z-index:90;text-align:left;left:26.6em;top:4.2em;background-color:#ffffff;padding:0em;width:32.5em;height:auto;border:0.1em solid #aaaaaa;border-top:none;border-bottom:none;}
@@ -146,8 +159,8 @@ th {
 #search_container a:hover{text-decoration:none;}
 #message_textarea{border:0.1em solid #cccccc;color:#808080;height:5em;padding:0.5em;resize:none;width:28em;}
 .moment_text_area{border:0.1em solid #cccccc;width:30em;padding:0.5em;margin:0.5em;height:3em;}
-.friend_feed{border-bottom:0.1em solid #cccccc;clear:both;height:6em;padding:1em;}
-.people_each{border-bottom:0.1em solid #cccccc;clear:both;min-height:10em;padding:1em;}
+.friend_feed{border-bottom:0.1em solid #cccccc;clear:both;height:6em;padding:1em;background:#fff;}
+.people_each{border-bottom:0.1em solid #cccccc;clear:both;min-height:10em;padding:1em;background: #fff;}
 .add_friend{width:7em;height:2.2em;background:#ebebeb;color:#fff;font-size:1.1em;font-weight:bold;cursor:pointer;border: 0.1em solid #FFFFFF;}
 #image_con_close{float: right;font-weight: bold;font-size: 1.5em;cursor:pointer;}
 #viweable_sidebar{width:33.7em;padding:0.5em 2em 0em 0.5em;float:right;}
@@ -169,7 +182,7 @@ th {
     padding: 0.2em 0.5em 0.7em;
 }
 .rtm_each_photo {
-    cursor: pointer;
+    cursor: pointer;  
     float: left;
     margin-right: 0.5em;
     vertical-align: middle;
@@ -178,9 +191,9 @@ th {
     display: table-cell;
     line-height: 1.1;
 }
-.left,.right{padding:0em;margin-top:5em;z-index:5;}
-.right{padding-left:0.5em;padding-right:2em;}
-.center{padding:0em;margin-top:4em;border-left:0.1em solid #eeeeee;border-right:0.1em solid #eeeeee;}
+.left,.right{padding:0em;margin-top:5em;z-index:5;margin-right: 0.2em;}
+.right{padding-left:0.2em;padding-right:2em;}
+.center{padding:0em;margin-top:5em;/*border-left:0.1em solid #eeeeee;border-right:0.1em solid #eeeeee;*/}
 .suggest_container,.group_suggest_container,.event_suggest_container{clear:left;margin-bottom:2em;margin-top:0.5em;}
 .search_result{position:absolute;left:84.8em;top:3.3em;width:24em;height:auto;background:white;}
 .pageclass{margin:0em 0em 1em 0em;border:none;width:52em;position:relative;}
@@ -217,7 +230,7 @@ th {
 .privacy_drop{float:right;margin-top:0.5em}
 .nclass{margin-right:0em;padding-left:.2em;padding-top:.2em;padding-bottom:.2em;border-bottom:.1em solid #8d0785;}
 .m {color:#34ccbb;}
-.links{clear:left;position:relative;font-weight:bold;border:2px solid #fff;background-color:#f5f5f5}
+.links{clear:left;position:relative;font-weight:bold;background-color:#f5f5f5}
 .links a{display:block;padding:0.4em 0 0.5em 0.3em;}
 .links a:hover{text-decoration:none;}
 .selected{background:#ddd;color:gray;}
@@ -291,6 +304,7 @@ pre{
 .really_add_friend,.really_group_join{float: right;font-weight: bold;border: 1px solid #ccc;padding:.3em .5em;background:#ebebeb}
 .theme_button{font-weight: bold !important;border: 1px solid #ccc !important;padding:.5em !important;background:#ebebeb !important; color:#000 !important;cursor:pointer;}
 input[type=submit] {font-weight: bold !important;border: 1px solid #ccc !important;padding:.5em !important;background:#ebebeb !important; color:#000 !important;cursor:pointer; }
+input[type=text]{border:0.1em solid #cccccc;}
 .friends_birthday_show{color:#336699;padding:.3em;border:.1em solid #ddd;font-weight:bold;}
 .nf_thumb{max-width:33.5em;margin-bottom:1em;cursor:pointer;border:0.1em solid #aaaaaa;}
 .nf_page{margin:0.5em 0em;}
@@ -310,7 +324,7 @@ input[type=submit] {font-weight: bold !important;border: 1px solid #ccc !importa
 #output{	padding: 5px;	font-size: 12px;}
 .response,.responsed{	cursor:pointer;}
 .response:hover,.responsed:hover{	text-decoration:underline;}
-#upload_box{border-bottom:.1em solid #cccccc;padding:1em 0 0em 0em;text-align:center;}
+#upload_box{border-bottom:.1em solid #cccccc;padding:1em 0 0em 0em;text-align:center;background:#fff;}
 #actions{color:#336699;text-align:center;font-weight:bold;}
 .top-actions{	margin-left:0em;	margin-bottom:.5em;	padding:.3em;	color:#fff;font-weight:bold;	height:1.7em;}
 #uploader{text-align:center;position:relative;margin-bottom: 1em;}
@@ -477,8 +491,8 @@ text-align: left;
 .change_password_textbox{width:18em;float:right;}
 
 
-textarea{resize:none;width:34em;height:3em;color:gray;padding:.5em;position:relative;margin:0em;overflow:auto;}
-.page_title{padding:1em;border-bottom:0.1em solid #cccccc;}  
+textarea{resize:none;width:34em;height:3em;color:gray;padding:.5em;margin:0em;overflow:auto;}
+/*.page_title{padding:1em;border-bottom:0.1em solid #cccccc;}*/  
 h1 {font-size:1.5em;}
 #message_container{position:fixed;left:50%;margin-left:-29em;top:9em;background-color:#ffffff;width:34em;z-index:100;overflow:auto;text-align:center;}
 #drop_button{position:relative;height:1.8em;width:3.6em;background:#4488bb;color:#fff;cursor:pointer;font-size:1.3em;border-radius:.3em; }
@@ -488,7 +502,7 @@ h1 {font-size:1.5em;}
 #reply_ok{position:relative;height:1.8em;width:3.6em;background:#4488bb;color:#fff;cursor:pointer;font-size:1.3em;border-radius:3px;}
 .reply_new{width:45em;padding:0em 1em .5em .5em;background:#f2f2f2;position:relative;border:.2em solid #fff;margin-bottom:-2.7em;left:5em;top:-1.8em;}
 #prev{} 
-#show_inbox{margin-top:1em;}
+#show_inbox{margin-top:1em;background:#fff;}
 .inbox_user{min-height:4.5em;cursor:pointer;clear:both;padding:0.3em 0em 0.3em 0.4em;border-bottom:0.1em solid #ebebeb;}
 .inbox_user:hover{background-color:#f5f5f5;}
 #inbox_container{bottom:0em;text-align:left}
@@ -521,7 +535,7 @@ margin-right:0.4em;
 vertical-align:text-top;
 }
 #no_message{color:gray;text-align:center;margin-top:10em;margin-bottom:10em;}
-#message_user_name{padding:1em;color:gray;border-bottom:0.1em solid #ccc;}
+#message_user_name{padding-left:0.5em;color:gray;}
 
 #account {
 	background-color:#ffffff;
@@ -543,7 +557,7 @@ vertical-align:text-top;
 
 .menu_each_a:hover{background:#336699;color:#ffffff;text-decoration:none;}
 
-.nf_post{clear:both;position:relative;padding:1.5em;border-bottom:0.1em solid #e0e0e0;}
+.nf_post{clear:both;position:relative;padding:1.5em;border-bottom:0.1em solid #e0e0e0;background:#fff;margin-top:0.3em;}
 .pageclass_json{clear:both;}
 .pclass_json{margin:0.3em 0em;}
 .post_name{position:relative;top:-4.5em;left:5.5em;font-weight:bold;margin-bottom:.5em;}
@@ -652,6 +666,10 @@ body {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
     font-size: 12px !important;
     line-height: 20px;
+    background:#e5e5e5;
+}
+.white{
+    background: #fff;
 }
 html {
     font-size: 100%;
@@ -719,7 +737,7 @@ left: -1px;
 .chat_toolbar{border-left:0.1em solid #cccccc;}
 .if_post{position:fixed;top:1em;right:18em;width:48em;text-align:left;background-color:#f9f9f9;z-index:1030;border:0.1em solid #cccccc;}
 .rtm_pointer{position:absolute;top:1em;right:-1.1em;border-left:solid 1em #cccccc;border-top: solid 0.7em transparent;border-bottom: solid 0.7em transparent;width: 0;height: 0;} 
-.people_status{position:fixed;top:1em;right:18em;width:20em;height:8em;padding:1em 0em 0em 1em;text-align:left;background-color:#f9f9f9;z-index:95;border:0.1em solid #cccccc;}
+.people_status{position:fixed;top:1em;right:17em;width:20em;min-height:8em;padding:1em 0em 0em 1em;text-align:left;background-color:#f9f9f9;z-index:95;border:0.1em solid #cccccc;}
 .people_pointer{position:absolute;top:1em;right:-1.1em;border-left:solid 1em #cccccc;border-top: solid 0.7em transparent;border-bottom: solid 0.7em transparent;width: 0;height: 0;}
 #chat_setting{position:absolute;right:0.7em;top:0.4em;color:white;cursor:pointer;}
 #chatbox_container{position:fixed;bottom:0em;right:19.2em;z-index:20;text-align:left}

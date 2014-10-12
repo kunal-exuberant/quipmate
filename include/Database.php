@@ -1759,6 +1759,15 @@ LIMIT 0 , 30");
 FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action LEFT JOIN subscribe as sub ON CASE WHEN action.profileid <1000000000 THEN action.PROFILEID ELSE action.ACTIONBY END = sub.FRIENDID INNER JOIN actiontype on actiontype.actiontypeid = action.ACTIONTYPE WHERE sub.PROFILEID='$profileid' AND actiontype.news_feed ='1' group by pageid ORDER BY action.ACTIONID DESC LIMIT $limit,$count) AS B  ON A.ACTIONID = B.ACTIONID ");
       return $result;
    }
+   function new_friend_action_select_mobile($profileid, $limit, $count)
+   {
+      $profileid = $this->con->real_escape_string($profileid);
+      $limit = $this->con->real_escape_string($limit); 
+      $count = $this->con->real_escape_string($count);
+      $result = $this->con->query("SELECT  A.ACTIONID,A.ACTIONBY,A.ACTIONTYPE,A.PAGEID,A.VISIBLE,A.PROFILEID,A.TIMESTAMP 
+FROM action as A INNER JOIN (SELECT  MAX(ACTIONID) as ACTIONID FROM action LEFT JOIN subscribe as sub ON CASE WHEN action.profileid <1000000000 THEN action.PROFILEID ELSE action.ACTIONBY END = sub.FRIENDID INNER JOIN actiontype on actiontype.actiontypeid = action.ACTIONTYPE WHERE sub.PROFILEID='$profileid' AND actiontype.news_feed_mobile ='1' group by pageid ORDER BY action.ACTIONID DESC LIMIT $limit,$count) AS B  ON A.ACTIONID = B.ACTIONID ");
+      return $result;
+   }
  //Removed this condition .. (sub.PROFILEID='$profileid' OR actiontype.global_feed='1')   
    function action_select($actionid)
    {
@@ -2705,10 +2714,35 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
    {
       $profileid = $this->con->real_escape_string($profileid);
       $friendid = $this->con->real_escape_string($friendid);
-      $result1 = $this->con->query("INSERT INTO friend(PROFILEID,FRIENDID) VALUES('$profileid','$friendid')");
-      $result1 = $this->con->query("INSERT INTO friend(PROFILEID,FRIENDID) VALUES('$friendid','$profileid')");
-      $result1 = $this->con->query("INSERT INTO subscribe(PROFILEID,FRIENDID) VALUES('$profileid','$friendid')");
-      $result1 = $this->con->query("INSERT INTO subscribe(PROFILEID,FRIENDID) VALUES('$friendid','$profileid')");
+      $result = $this->con->query("SELECT IF ( EXISTS (SELECT * FROM `friend` WHERE PROFILEID= '$profileid' AND FRIENDID= '$friendid'),1,0 ) as result");
+      $ret = $result->fetch_array();
+      $flag = $ret['result'];
+      if($flag == 0)
+      {
+          $result1 = $this->con->query("INSERT INTO `friend`(PROFILEID,FRIENDID) VALUES('$profileid','$friendid')");
+      }
+      $result = $this->con->query("SELECT IF ( EXISTS (SELECT * FROM `friend` WHERE PROFILEID= '$friendid' AND FRIENDID= '$profileid'),1,0 )");
+      $ret = $result->fetch_array();
+      $flag = $ret['result'];
+      if($flag == 0)
+      {
+          $result1 = $this->con->query("INSERT INTO `friend`(PROFILEID,FRIENDID) VALUES('$friendid','$profileid')");  
+      }    
+      $result = $this->con->query("SELECT IF ( EXISTS (SELECT * FROM `subscribe` WHERE PROFILEID= '$profileid' AND FRIENDID= '$friendid'),1,0 )");
+      $ret = $result->fetch_array();
+      $flag = $ret['result'];
+      if($flag == 0)
+      {
+          $result1 = $this->con->query("INSERT INTO `subscribe`(PROFILEID,FRIENDID) VALUES('$profileid','$friendid')");  
+      }
+      $result = $this->con->query("SELECT IF ( EXISTS (SELECT * FROM `subscribe` WHERE PROFILEID= '$friendid' AND FRIENDID= '$profileid'),1,0 )");
+      $ret = $result->fetch_array();
+      $flag = $ret['result'];
+      if($flag == 0)
+      {
+          $result1 = $this->con->query("INSERT INTO `subscribe`(PROFILEID,FRIENDID) VALUES('$friendid','$profileid')");  
+      }
+      
       return $result1;
    }
 
@@ -2720,10 +2754,28 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
       $status = $this->check_friendship($profileid, $friendid);
       if($status == '1' || $status == '-1')
       {
-         $result1 = $this->con->query("INSERT INTO friend(PROFILEID,FRIENDID) VALUES('$profileid','$friendid')");
-         $result1 = $this->con->query("INSERT INTO friend(PROFILEID,FRIENDID) VALUES('$friendid','$profileid')");
-         $result1 = $this->con->query("INSERT INTO subscribe(PROFILEID,FRIENDID) VALUES('$profileid','$friendid')");
-         return $result1;
+          $result = $this->con->query("SELECT IF ( EXISTS (SELECT * FROM `friend` WHERE PROFILEID= '$profileid' AND FRIENDID= '$friendid'),1,0 )");
+          $ret = $result->fetch_array();
+          $flag = $ret['result'];
+          if($flag == 0)
+          {
+              $result1 = $this->con->query("INSERT INTO friend(PROFILEID,FRIENDID) VALUES('$profileid','$friendid')");
+          }
+          $result = $this->con->query("SELECT IF ( EXISTS (SELECT * FROM `friend` WHERE PROFILEID= '$friendid' AND FRIENDID= '$profileid'),1,0 )");
+          $ret = $result->fetch_array();
+          $flag = $ret['result'];
+          if($flag == 0)
+          {
+              $result1 = $this->con->query("INSERT INTO friend(PROFILEID,FRIENDID) VALUES('$friendid','$profileid')");  
+          }    
+          $result = $this->con->query("SELECT IF ( EXISTS (SELECT * FROM `subscribe` WHERE PROFILEID= '$profileid' AND FRIENDID= '$friendid'),1,0 )");
+          $ret = $result->fetch_array();
+          $flag = $ret['result'];
+          if($flag == 0)
+          {
+              $result1 = $this->con->query("INSERT INTO subscribe(PROFILEID,FRIENDID) VALUES('$profileid','$friendid')");  
+          }
+             return $result1;
       }
       else
       {

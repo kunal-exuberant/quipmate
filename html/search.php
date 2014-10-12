@@ -20,14 +20,15 @@ if(isset($_GET['filter']))
 	{
 		?>
 		<div class="links">
-			<a class="ajax_nav <?php if($type == $filter) echo ' selected'; ?>" href="search.php?filter=<?php echo $type; ?><?php if(isset($_GET['q'])) echo '&q='.$_GET['q']; ?>" title="Search for <?php echo $type; ?>"><img class="lfloat" src="http://icon.qmcdn.net/search_icon.png" height="18" width="18" /><span class="name_20"><?php echo $type; ?></span></a>
+			<a class="ajax_nav <?php if($type == $filter) echo ' selected'; ?>" href="search.php?filter=<?php echo $type; ?><?php if(isset($_GET['q'])) echo '&q='.$_GET['q']; ?>" title="Search for <?php echo $type; ?>"><span class="name_20"><?php echo $type; ?></span></a>
 		</div>
 		<?php
 	}
 ?>
 	<div class="col-md-2 left" id="left">
-		
-		<h1>Search for :</h1>
+		<div class="panel panel-default">
+		<div class="panel-heading">Search for :</div>
+        <div class="panel-body">
 		<?php
 		
 		link_echo($filter,'people');
@@ -47,7 +48,8 @@ if(isset($_GET['filter']))
 		link_echo($filter,'profession');
 		link_echo($filter,'city');
 		?>
-		
+        </div>
+	</div>	
 	</div>
 	<div id="center" class="col-md-6 center" >
 	<h1 class="page_title" id="search_count">Search results</h1>
