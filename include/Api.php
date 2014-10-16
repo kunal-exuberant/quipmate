@@ -967,6 +967,134 @@ class Api
       }
    }
 
+   function group_invite_email()
+   {
+      global $database;
+      $email_object = new Email();
+      global $help;
+	  $group_member = array();
+      $group_added = array();
+      $invited = array();
+      $invalid = array();
+      if(isset($_GET['email']) && isset($_GET['groupid']))
+      {
+         if(!empty($_GET['email']) && !empty($_GET['groupid']))
+         {
+			$data = array();
+            $email = trim($_GET['email']);
+			$email = str_replace(" ",",",$email);
+			$email = str_replace("\n",",",$email);
+			$email = str_replace("\t",",",$email);
+            $email_array = explode(',', $email);
+            foreach ($email_array as $email_value)
+            {
+			   $email_value = trim($email_value);
+               if($email_value != "")
+			   {	
+				   if($_SESSION['database'] == $help->get_database_from_email($email_value, $database))
+				   {
+					  $myname = $_SESSION['name'];
+					  $myphoto = $_SESSION['myphoto'];
+					  $myprofileid = $_SESSION['userid'];
+					  $myemail = $_SESSION['email'];
+					  if($email_value != $myemail)
+					  {
+						 if($help->is_email($email_value))
+						 {
+							$row = $database->is_already_user($email_value);
+							if($row['EMAIL'] == $email_value)
+							{		
+								global $database;
+								$myprofileid = $_SESSION['userid'];
+								$groupid = $_GET['groupid'];
+								$profileid = $row['USERID'];
+								$check = $database->is_user($profileid);
+								  $status = $database->membership_status($groupid, $profileid);
+								  if($status != 0 && $status != 1)
+								  {
+									 $res = 0;
+									 $actiontype = 308;
+									 $actionid = $database->get_actionid($groupid, $actiontype, 0, 5);
+									 $result = $database->member_insert($actionid, $groupid, $profileid, 0);
+									 $rnotice = $database->setting_notice_select($profileid);
+									 if($rnotice['group_invite'])
+									 {
+										$database->notice_insert($actionid, $profileid, $actiontype, $actionid);
+									 }
+									 $remail = $database->setting_email_select($profileid);
+									 if($remail['group_invite'])
+									 {
+										$param = array();
+										global $email;
+										$param['type'] = 'event_invite';
+										$param['actionby'] = $myprofileid;
+										$param['profileid'] = $profileid;
+										$param['groupid'] = $groupid;
+										$result = $email->email_sample($param);
+									 }
+									 $data['ack'] = 1;
+									 $data['response'] = 1;
+									 $data['message'] = 'Member added to the group';
+									 array_push($group_added, $email_value);
+								  } 
+								  else
+								  {
+									 array_push($group_member, $email_value);
+								  } 
+							} 
+							else
+							{
+							   $row = $database->is_virtual_user($email_value); 
+							   if($row['ack'])
+							   {
+								  array_push($invited, $email_value);
+								  $identifier = $row['uniqueid'];
+							   } 
+							   else
+							   {
+								  $virtualid = $database->virtual_create($email_value);
+								  $vr = $database->v_select($virtualid);
+								  $identifier = $vr['UNIQUEID'];
+								  array_push($invited, $email_value);
+							   }
+
+							   $param = array();
+							   $param['type'] = 'people_invite';
+							   $param['email'] = $email_value;
+							   $param['identifier'] = $identifier;
+							   $param['myname'] = $myname;
+							   $param['myphoto'] = $myphoto;
+							   $param['actionby'] = $myprofileid;
+							   $er = $email_object->email_sample($param);
+							}
+						 } 
+						 else
+						 {
+							array_push($invalid, $email_value);
+						 }
+						 }
+				   } else
+				   {
+					  array_push($invalid, $email_value);
+				   }
+				 }  
+            }
+            $data['invalid'] = $invalid;
+            $data['invited'] = $invited;
+            $data['group_added'] = $group_added;
+			$data['group_member'] = $group_member;
+            $data['ack'] = 1;
+            echo json_encode($data);
+         } else
+         {
+            $help->error_description(18);
+         }
+      } else
+      {
+         $help->error_description(9);
+      }
+   }
+   
    function group_invite()
    {
       global $help;
@@ -1839,7 +1967,8 @@ class Api
             global $database;
             $profileid = $_GET['profileid'];
             $check = $database->is_user($profileid);
-            if($check['USERID'] == $profileid)
+            $online = $database->is_online($profileid);
+            if($check['USERID'] == $profileid && !($online))
             {
                $message = $_GET['message'];
                $profileid = $_GET['profileid'];
@@ -2492,58 +2621,64 @@ class Api
       {
          if(!empty($_GET['email']))
          {
-            $email = $_GET['email'];
+            $email = trim($_GET['email']);
+			$email = str_replace(" ",",",$email);
+			$email = str_replace("\n",",",$email);
+			$email = str_replace("\t",",",$email);
             $email_array = explode(',', $email);
             foreach ($email_array as $email_value)
             {
-               if($_SESSION['database'] == $help->get_database_from_email($email_value, $database))
-               {
-                  $myname = $_SESSION['name'];
-                  $myphoto = $_GET['myphoto'];
-                  $myprofileid = $_SESSION['userid'];
-                  if($email_value == $myemail)
-                  {
-                     array_push($existing, $email_value);
-                  } else
-                     if($help->is_email($email_value))
-                     {
-                        $row = $database->is_already_user($email_value);
-                        if($row['EMAIL'] == $email_value)
-                        {
-                           array_push($existing, $email_value);
-                        } else
-                        {
-                           $row = $database->is_virtual_user($email_value);
-                           if($row['ack'])
-                           {
-                              array_push($invited, $email_value);
-                              $identifier = $row['uniqueid'];
-                           } else
-                           {
-                              $virtualid = $database->virtual_create($email_value);
-                              $vr = $database->v_select($virtualid);
-                              $identifier = $vr['UNIQUEID'];
-                              array_push($invited, $email_value);
-                           }
+			   $email_value = trim($email_value);
+               if($email_value != "")
+			   {	
+				   if($_SESSION['database'] == $help->get_database_from_email($email_value, $database))
+				   {
+					  $myname = $_SESSION['name'];
+					  $myphoto = $_GET['myphoto'];
+					  $myprofileid = $_SESSION['userid'];
+					  if($email_value == $myemail)
+					  {
+						 array_push($existing, $email_value);
+					  } else
+						 if($help->is_email($email_value))
+						 {
+							$row = $database->is_already_user($email_value);
+							if($row['EMAIL'] == $email_value)
+							{
+							   array_push($existing, $email_value);
+							} else
+							{
+							   $row = $database->is_virtual_user($email_value);
+							   if($row['ack'])
+							   {
+								  array_push($invited, $email_value);
+								  $identifier = $row['uniqueid'];
+							   } else
+							   {
+								  $virtualid = $database->virtual_create($email_value);
+								  $vr = $database->v_select($virtualid);
+								  $identifier = $vr['UNIQUEID'];
+								  array_push($invited, $email_value);
+							   }
 
-                           $param = array();
-                           $param['type'] = 'people_invite';
-                           $param['email'] = $email_value;
-                           $param['identifier'] = $identifier;
-                           $param['myname'] = $myname;
-                           $param['myphoto'] = $myphoto;
-                           $param['actionby'] = $myprofileid;
-                           $er = $email_object->email_sample($param);
-                        }
-                     } else
-                     {
-                        array_push($invalid, $email_value);
-                     }
-               } else
-               {
-                  array_push($invalid, $email_value);
-               }
-
+							   $param = array();
+							   $param['type'] = 'people_invite';
+							   $param['email'] = $email_value;
+							   $param['identifier'] = $identifier;
+							   $param['myname'] = $myname;
+							   $param['myphoto'] = $myphoto;
+							   $param['actionby'] = $myprofileid;
+							   $er = $email_object->email_sample($param);
+							}
+						 } else
+						 {
+							array_push($invalid, $email_value);
+						 }
+				   } else
+				   {
+					  array_push($invalid, $email_value);
+				   }
+				 }  
             }
             $data['invalid'] = $invalid;
             $data['invited'] = $invited;

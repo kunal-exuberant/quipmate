@@ -6,8 +6,10 @@
 <?php
 require_once '../include/header.php';
 ?>		
-<div class="container">
+<div class="container-fluid">
   <div class="row" >
+  <div class="col-md-10">
+    <div class="row home_row left1">
 <input type="hidden" id="search_key_hidden" value="<?php if(isset($_GET['q'])) echo $_GET['q']; ?>">
 <input type="hidden" id="filter_hidden" value="<?php if(isset($_GET['filter'])) echo $_GET['filter']; ?>">
 <?php 
@@ -58,6 +60,10 @@ if(isset($_GET['filter']))
 	<div id="right" class="col-md-3 right"></div>
 </div>
 </div>
+<div class="col-md-2">
 <?php require_once('../include/footer.php'); ?>
+</div>
+</div>
+</div>
 </body>
 </html>

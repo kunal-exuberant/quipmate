@@ -4,10 +4,12 @@
 <?php
 require_once '../include/header.php';
 ?>
-<div class="container">
+<div class="container-fluid">
   <div class="row" >
-    <div class="col-md-2 left" id="left">
-			<a class="ajax_nav" href="group.php?id=<?php echo $profileid ?>"><img class="img-thumbnail" src="<?php echo $profile_image; ?>" /></a>
+  <div class="col-md-10">
+    <div class="row home_row left1">
+    <div class="col-md-2 left panel" id="left">
+			<div class="text-center"><a class="ajax_nav" href="group.php?id=<?php echo $profileid ?>"><img src="<?php echo $profile_image; ?>" /></a></div>
 			
 			<div class="text-center">
 				<a class="ajax_nav" href="group.php?id=<?php echo $profileid; ?>" class="ellipsis"><?php echo $profile_name; ?></a>
@@ -17,35 +19,11 @@ require_once '../include/header.php';
 				<a class="ajax_nav"  href="group.php?hl=settings&id=<?php echo $profileid; ?>">Edit Group Settings</a>
 			</div>
 			<?php }?>
-			<ul class=" nav nav-pills nav-stacked"> 
-					<li class="links" <?php if($page == 'group_json') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="group_json" href="group.php?id=<?php echo $profileid.'&hl=post'?>" title="Your activities"><span class="name_20">Group Feed</span></a></li>
-					<li class="links" <?php if($page == 'group_about') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="about" href="group.php?id=<?php echo $profileid.'&hl=about'?>" title="Your Bio"><span class="name_20">About</span></a></li>
-					<li class="links" <?php if($page == 'member') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="inbox" href="group.php?id=<?php echo $profileid.'&hl=member'?>" ><span class="name_20">Members(<?php echo $database->member_count($profileid); ?>)</span></a></li>
+			<ul class=" nav nav-pills nav-stacked panel-body"> 
+					<li class="links" <?php if($page == 'group_json') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="group_json" href="group.php?id=<?php echo $profileid.'&hl=post'?>" title="Your activities"><span >Group Feed</span></a></li>
+					<li class="links" <?php if($page == 'group_about') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="about" href="group.php?id=<?php echo $profileid.'&hl=about'?>" title="Your Bio"><span >About</span></a></li>
+					<li class="links" <?php if($page == 'member') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="inbox" href="group.php?id=<?php echo $profileid.'&hl=member'?>" ><span >Members(<?php echo $database->member_count($profileid); ?>)</span></a></li>
 			</ul>
-		<script>
-		$(function(){
-		var profileid = $('#profileid_hidden').attr('value'); 
-		$.getJSON('ajax/write.php',{groupid:profileid,action:'member_load',start:0},function(data){
-			if(data.count)
-			{
-				$('#session_name_hidden').attr('value', JSON.stringify(data.name));
-				$('#session_pimage_hidden').attr('value', JSON.stringify(data.pimage));
-				var i = 0;
-				$.each(data.action,function(index,value){
-					if(i<10)
-					{
-						id = 'profile_friend_'+value.profileid;
-						if($('#'+id).length == 0)
-						{	
-						  $('#profile_active_friend_list').append('<div class="profile_active_user" style="clear:both;margin:0.5em 0;" data="'+value.profileid+'" id="'+id+'"><a href="profile.php?id='+value.profileid+'"><img class="profile_active_user_photo lfloat" style="margin-right:0.5em;" height="40" width="40" src="'+data.pimage[value.profileid]+'" /></a><div class="name_30"><a class="profile_active_user_name bold" style="display:block;padding:1.4em 0em 1.4em 0em;text-decoration:none;" href="profile.php?id='+value.profileid+'">'+data.name[value.profileid]+'</a></div></div>');
-						}
-					}	
-					i=i+1;
-				});
-			}	
-		});
-		});
-		</script>
 	<?php
 	if($profile_relation == 1)
 	{
@@ -134,11 +112,21 @@ require_once '../include/header.php';
 		if($n['invite'] == 0 || $profile_relation == 0)
 		{
 		?>
-		<div id="friend_match" style="margin-top:1em;" class="panel panel-default"></div>
-		<div id="member_request" class="panel panel-default"></div>
-		<div id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div>
-		<input type="text" id="invite_box" value="" onkeyup="ui.group_friend_invite(this)" placeholder="Add a colleague to this group" />
-		<div style="position:relative;" id="group_friend_invite" class="panel panel-default"></div>
+        <div id="friend_match" style="margin-top:1em;" class="panel panel-default"></div>
+        <div id="member_request" class="panel panel-default">
+            <div class="panel-body" id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div>
+		</div>
+		<div class="panel panel-default">
+            <div class="panel-heading">Add people to this group by email</div>		
+				<textarea placeholder="Paste a list of email address separated by space, comma or in new line" id="employee_invite_box" style="border:0.1em solid #aaaaaa;width:15em;height:6em;padding:0.5em;margin:1em 0.5em 1em 1em;"></textarea>
+				<input type="submit" style="margin-top:2em;" class="button" onclick="action.group_invite_email(this)" value="Invite" id="employee_invite_button" title="Invite" />
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Add people to this group by name</div>
+            <div class="panel-body"><input type="text" id="group_invite_box"  onkeyup="ui.group_friend_invite(this)" placeholder="Start typing a colleague's name" />
+                <div style="position:relative;" id="group_friend_invite"></div>
+            </div>
+         </div>   
 		<?php
 		}
 		?>
@@ -175,7 +163,12 @@ require_once '../include/header.php';
 	?>	
 	</div>
 </div><!--- Row Closed-->
-</div><!--- Container Closed-->
+</div>
+</div>
+<div class="col-md-2">
 <?php require_once('../include/footer.php'); ?>
+</div>
+</div>
+</div>
 </body>
 </html>

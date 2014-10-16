@@ -4,10 +4,12 @@
 <?php
 require_once '../include/header.php';
 ?>
-<div class="container">
+<div class="container-fluid">
   <div class="row" >
-    <div class="col-md-2 left" id="left">
-			<a href="event.php?id=<?php echo $profileid ?>"><img class="img-thumbnail" src="<?php echo $profile_image; ?>" /></a>
+  <div class="col-md-10">
+    <div class="row home_row left1">
+    <div class="col-md-2 left panel" id="left">
+			<div class="text-center"><a href="event.php?id=<?php echo $profileid ?>"><img class="img-thumbnail" src="<?php echo $profile_image; ?>" /></a></div>
 			
 			<div class="text-center">
 				<a class="ajax_nav" href="event.php?id=<?php echo $profileid; ?>" class="ellipsis"><?php echo $profile_name; ?></a>
@@ -17,12 +19,12 @@ require_once '../include/header.php';
 				<a  class="ajax_nav" href="event.php?hl=settings&id=<?php echo $profileid; ?>">Edit Event Settings</a>
 			</div>
 			<?php }?>
-			<ul class=" nav nav-pills nav-stacked"> 
-					<li class="links" <?php if($page == 'event_json') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="group_json" href="event.php?id=<?php echo $profileid.'&hl=post'?>" title="Event posts"><span class="name_20">Event Feed</span></a></li>
+			<ul class=" nav nav-pills nav-stacked panel-body"> 
+					<li class="links" <?php if($page == 'event_json') echo 'style="background:#ddd;"'; ?>><a class="ajax_nav" id="group_json" href="event.php?id=<?php echo $profileid.'&hl=post'?>" title="Event posts"><span >Event Feed</span></a></li>
 					
-					<li class="links" <?php if($page == 'event_about') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="about" href="event.php?id=<?php echo $profileid.'&hl=about'?>" title="About the event"><span class="name_20">About</span></a></li>
+					<li class="links" <?php if($page == 'event_about') echo 'style="background:#ddd;"'; ?>><a  class="ajax_nav" id="about" href="event.php?id=<?php echo $profileid.'&hl=about'?>" title="About the event"><span >About</span></a></li>
 
-					<li class="links" <?php if($page == 'guest') echo 'style="background:#ddd;"'; ?>><a id="inbox" href="event.php?id=<?php echo $profileid.'&hl=guest'?>" title="Guest expected"><span class="name_20">Guest expected(<?php $guest_count = $database->guest_count($profileid); echo  $guest_count; ?>)</span></a></li>
+					<li class="links" <?php if($page == 'guest') echo 'style="background:#ddd;"'; ?>><a id="inbox" href="event.php?id=<?php echo $profileid.'&hl=guest'?>" title="Guest expected"><span >Guest expected(<?php $guest_count = $database->guest_count($profileid); echo  $guest_count; ?>)</span></a></li>
 			</ul>
 	<?php
 		?>		
@@ -148,9 +150,15 @@ require_once '../include/header.php';
 			if($n['cancel'] == 0 && $n['groupid'] == 0 )
 			{
 				?>
-					<div id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div>
-					<input type="text" id="invite_box" value="" onkeyup="ui.event_friend_invite(this)" placeholder="Invite a colleague to this event" />
+					<div class="panel panel-default">
+                    <div class="panel-heading">Invite to this event</div>
+                    <div class="panel-body">                                        
+                    <div id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div>
+					<input type="text" id="group_invite_box" value="" onkeyup="ui.event_friend_invite(this)" placeholder="Invite a colleague to this event" />
+                                        
 					<div style="position:relative;" id="group_friend_invite"></div>
+                    </div>
+                    </div>                                        
 				<?php
 			}  
 	}
@@ -208,7 +216,11 @@ require_once '../include/header.php';
 		</div>
 	</div>
 </div><!-- Row Closed-->
-</div><!-- Container Closed-->
+</div>
+<div class="col-mod-2">
 <?php require_once('../include/footer.php'); ?>
+</div>
+</div>
+</div>
 </body>
 </html>

@@ -1327,9 +1327,10 @@ var deploy = (function()
    {
       var myprofileid = $('#myprofileid_hidden').attr('value');
       var profile_relation = $('#profile_relation_hidden').attr('value');
+      $('#prev').append('<div class="panel panel-default"><div class="panel-heading">Group Members</div><div class="panel-body" id="member_body"></div></div>');
       $.each(data.action, function(index, value)
       {
-         $('#prev').append('<div id="' + value.profileid + '" data="' + value.profileid + '" style="border-bottom:0.1em solid #cccccc;clear:both;height:5em;"><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src="' + data.pimage[value.profileid] + '" alt="" height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a></div></div>');
+         $('#member_body').append('<div id="' + value.profileid + '" data="' + value.profileid + '" class="guest_each"><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src="' + data.pimage[value.profileid] + '" alt="" height="50" width="50" /></a><div class="guest_name"><a class="bold ajax_nav" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a></div></div>');
          if (profile_relation == 0)
          {
             if (value.profileid == myprofileid)
@@ -1362,20 +1363,20 @@ var deploy = (function()
 
    function guest_deploy(data, container)
    {
-      if (data.action.going.length) $(container).append('<h6 class="page_title">Going</h6>');
+      if (data.action.going.length) $(container).append('<div class="panel panel-default"><div class="panel-heading">Going</div><div class="panel-body" id="going_body"></div>');
       $.each(data.action.going, function(index, value)
       {
-         $(container).append('<div id="' + value.profileid + '" style="border-bottom:0.1em solid #cccccc;clear:both;height:5em;padding:1.5em;"><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src="' + data.pimage[value.profileid] + '" alt="" height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a></div></div>');
+         $('#going_body').append('<div id="' + value.profileid + '" class="guest_each"><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src="' + data.pimage[value.profileid] + '" alt="" height="50" width="50" /></a><div class="guest_name"><a class="bold ajax_nav" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a></div></div>');
       });
-      if (data.action.declined.length) $(container).append('<h6 class="page_title">Declined</h6>');
+      if (data.action.declined.length) $(container).append('<div class="panel panel-default"><div class="panel-heading">Declined</div><div class="panel-body" id="decline_body"></div>');
       $.each(data.action.declined, function(index, value)
       {
-         $(container).append('<div id="' + value.profileid + '" style="border-bottom:0.1em solid #cccccc;clear:both;height:5em;padding:1.5em;"><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src="' + data.pimage[value.profileid] + '" alt="" height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a></div></div>');
+         $('#decline_body').append('<div id="' + value.profileid + '" class="guest_each"><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src="' + data.pimage[value.profileid] + '" alt="" height="50" width="50" /></a><div class="guest_name"><a class="bold ajax_nav" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a></div></div>');
       });
-      if (data.action.no_response.length) $(container).append('<h6 class="page_title">No Response</h6>');
+      if (data.action.no_response.length) $(container).append('<div class="panel panel-default"><div class="panel-heading">No Response</div><div class="panel-body" id="no_res_body"></div>');
       $.each(data.action.no_response, function(index, value)
       {
-         $(container).append('<div id="' + value.profileid + '" style="border-bottom:0.1em solid #cccccc;clear:both;height:5em;padding:1.5em;"><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src="' + data.pimage[value.profileid] + '" alt="" height="50" width="50" /></a><div class="name_50"><a class="bold ajax_nav" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a></div></div>');
+         $('#no_res_body').append('<div id="' + value.profileid + '" class="guest_each"><a class="ajax_nav" href="profile.php?id=' + value.profileid + '"><img class="lfloat" src="' + data.pimage[value.profileid] + '" alt="" height="50" width="50" /></a><div class="guest_name"><a class="bold ajax_nav" href="profile.php?id=' + value.profileid + '">' + data.name[value.profileid] + '</a></div></div>');
       });
    }
 
@@ -1384,7 +1385,7 @@ var deploy = (function()
       var myprofileid = $('#myprofileid_hidden').attr('value'); 
       var profileid = $('#profileid_hidden').attr('value');
       $('.bio_indiv_container').remove();
-      $('#bio_display').html('<div class="row bio_row"><div style="padding:1em 1em 1em 2em; background-image:linear-gradient(to bottom, #FFFFFF 0%, #ccc 100%), linear-gradient(to bottom, #Fff 0%, #Fff 100%); background-clip: content-box;" class="col-md-12"><input type="hidden" value="'+profileid+'" /><input type="hidden" value="50" /><img id="'+data.profile_imageid+'" data="'+data.profile_image+'" class="img-thumbnail lfloat" src="thumbnail.php?file='+data.profile_image+'&height=150&width=150" onclick="action.image_viewer(this)" /><div><span class="bold"><a class="ajax_nav" href="profile.php?id='+profileid+'" style="font-size:1.5em;">'+data.name+'</a></span><div id="profile_above"></div></div></div></div>');
+      $('#bio_display').html('<div class="row bio_row"><div class="bio_top col-md-12"><input type="hidden" value="'+profileid+'" /><input type="hidden" value="50" /><img id="'+data.profile_imageid+'" data="'+data.profile_image+'" class="img-thumbnail lfloat" src="thumbnail.php?file='+data.profile_image+'&height=150&width=150" onclick="action.image_viewer(this)" /><div><span class="bold"><a class="ajax_nav" href="profile.php?id='+profileid+'" style="font-size:1.5em;">'+data.name+'</a></span><div id="profile_above"></div></div></div></div>');
      
       if(data.designation.length>0)
       {
@@ -1407,12 +1408,12 @@ var deploy = (function()
         else if (data.info.friendship_status == 2)
         {
             $('#parent_con').append('<div style="margin-right:8em;"><div><span data-toggle="modal"  data-target="#praisemodalbadge"><input class="profile_actions_button theme_button rfloat" style="width:7.3em;" type="submit" value="Praise" /></span></div></div>');
+			$('#parent_con').append('<div style="margin-right:16em;"><input class="profile_actions_button theme_button rfloat" id="' + profileid + '" style="width:7.3em;" type="submit" value=" Following " id="' + profileid + '"/></div>');
          }   
       }
       else if(myprofileid == profileid)
       {
          $('#profile_above').prepend('<div id="parent_con" style="margin-right:2em;"><div><input type="submit" value="+Mood" style="width:7.3em;" onclick="ui.mood(this)" class="profile_actions_button theme_button rfloat"></div></div>');
-         
          $('#parent_con').append('<div style="margin-right:8em;"><div><input type="submit" value="+Tagline" style="width:8em;" onclick="ui.tagline(this)" class="profile_actions_button theme_button rfloat"></div></div>');
       }
       if (data.tagline)
@@ -1520,6 +1521,10 @@ var deploy = (function()
          if (value.status == 0)
          {
             $('#' + value.profileid).append('<div style="float:right;"><input id="' + value.profileid + '" class="add_friend theme_button" type="submit" value=" +Follow " " onclick ="action.add_friend(this,' + value.profileid + '); this.onclick=null;" /><div>');
+         }
+		 else
+         {
+            $('#' + value.profileid).append('<div style="float:right;"><input id="' + value.profileid + '" class="add_friend theme_button" type="submit" value=" Following " /><div>');
          }
       });
    }
@@ -1736,6 +1741,10 @@ $('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="vi
          {
             $('#' + value.profileid+' '+' .name_80:first').prepend('<input class="profile_actions_button theme_button" onclick="action.add_friend(this,' + value.profileid + '); this.onclick=null;" style="width:7em;" type="submit" value=" +Follow " id="' + value.profileid + '"/>');
          }
+		 else
+         {
+            $('#' + value.profileid+' '+' .name_80:first').prepend('<input class="profile_actions_button theme_button" style="width:7em;" type="submit" value=" Following " id="' + value.profileid + '"/>');
+         }
       });
    }
    var con = 'nf_post';
@@ -1777,7 +1786,7 @@ $('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="vi
       page = state.page;
       var icon_cdn = $('#icon_cdn').attr('value');
       $('#page_hidden').attr('value', page);
-      $('html').css('overflow-y', 'scroll') //hidden in case of inbox 
+//      $('html').css('overflow-y', 'scroll') //hidden in case of inbox 
       $("html,body").animate(
       {
          scrollTop: 0
@@ -2086,8 +2095,8 @@ $('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="vi
                window.location.hash = '/';
             }
          }
-         $('.row').html('');
-         $('.row').append('<div class="col-md-2 left" id="left"></div><div id="center" class="col-md-6 center"></div><div id="right" class="col-md-3 right"></div>');
+         $('.home_row').html('');
+         $('.home_row').append('<div class="col-md-2 left" id="left"></div><div id="center" class="col-md-6 center"></div><div id="right" class="col-md-3 right"></div>');
          page = 'news_json';
          url = 'ajax/write.php';
          param.action = 'news_feed';
@@ -2221,7 +2230,7 @@ $('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="vi
             }
          }
          $(document).attr('title', 'Quipmate - Admin Interface');
-         $('#center').html('<div class="panel panel-default"><div class="panel-heading">Invite Employees</div><div class="panel-body"><div style="margin:3em;"><textarea placeholder="Paste a list of email address separated by comma" id="employee_invite_box" style="border:0.1em solid #aaaaaa;width:34.6em;height:20.2em;padding:0.5em;margin-right:0.2em;"></textarea><input type="submit" onclick="action.employee_invite(this)" value="Invite" id="employee_invite_button" class="theme_button" title="Invite Employees" /></div></div></div><div class="panel panel-default"><div class="panel-heading">Attach CSV file in outlook\'s csv format.</div><div class="panel-body"><form id="csvform" method="post" enctype="multipart/form-data" action="/ajax/write.php"><textarea style="border:1px solid #cccccc;height:2.7em;padding:0.5em;margin:0.5em;width:34.6em;margin-left:3em;" type="text" placeholder="Say something about this file" maxlength="200" id="photo_description" name="photo_description"></textarea><input type="file" id="html_btn" size="40" style="margin-top:20px; margin-left:95px;" name="photo_box"/></br><input type="submit" name="upload" class="theme_button" id="csv_upload_button" value="Upload" style="margin-left:3em;"><input type="hidden" name="action" value="employee_invite_file_upload"></form><div id="upload_progress"></div></div></div>');
+         $('#center').html('<div class="panel panel-default"><div class="panel-heading">Invite Employees</div><div class="panel-body"><div style="margin:3em;"><textarea placeholder="Paste a list of email address separated by space, comma or new line" id="employee_invite_box" style="border:0.1em solid #aaaaaa;width:30.6em;height:20.2em;padding:0.5em;margin-right:0.2em;"></textarea><input type="submit" onclick="action.employee_invite(this)" value="Invite" id="employee_invite_button" class="theme_button" title="Invite Employees" /></div></div></div><div class="panel panel-default"><div class="panel-heading">Attach CSV file in outlook\'s csv format.</div><div class="panel-body"><form id="csvform" method="post" enctype="multipart/form-data" action="/ajax/write.php"><textarea style="border:1px solid #cccccc;height:2.7em;padding:0.5em;margin:0.5em;width:34.6em;margin-left:3em;" type="text" placeholder="Say something about this file" maxlength="200" id="photo_description" name="photo_description"></textarea><input type="file" id="html_btn" size="40" style="margin-top:20px; margin-left:95px;" name="photo_box"/></br><input type="submit" name="upload" class="theme_button" id="csv_upload_button" value="Upload" style="margin-left:3em;"><input type="hidden" name="action" value="employee_invite_file_upload"></form><div id="upload_progress"></div></div></div>');
       }
       else if (page == 'usefullinks')
       {
@@ -2546,7 +2555,7 @@ $('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="vi
          {
             $(document).attr('title', data.info.groupname);
             $('#profilename_hidden').attr('value', data.info.groupname);
-            $('#left').html('<a class="ajax_nav" href="group.php?id=' + data.info.groupid + '"><img class="img-thumbnail"  src="' + data.info.group_photo + '" /></a><div class="text-center"><a  class="ajax_nav" href="group.php?id=' + data.info.groupid + '" class="ellipsis">' + data.info.groupname + '</a></div><ul class=" nav nav-pills nav-stacked"> <li class="links"><a class="ajax_nav" id="group_json" href="group.php?id=' + data.info.groupid + '" title="Your activities"><span >Group Feed</span></a></li><li class="links"><a class="ajax_nav" href="group.php?id=' + data.info.groupid + '&hl=about" title="Your Bio"><span >About</span></a></li><li class="links"><a class="ajax_nav" href="group.php?id=' + data.info.groupid + '&hl=member" title="Group Members"><span >Members(' + data.info.member_count + ')</span></a></li></ul>');
+            $('#left').html('<div class="panel"><div class="text-center"><a class="ajax_nav" href="group.php?id=' + data.info.groupid + '"><img src="' + data.info.group_photo + '" /></a></div><div class="text-center"><a  class="ajax_nav" href="group.php?id=' + data.info.groupid + '" class="ellipsis">' + data.info.groupname + '</a></div><ul class=" nav nav-pills nav-stacked panel-body"> <li class="links"><a class="ajax_nav" id="group_json" href="group.php?id=' + data.info.groupid + '" title="Your activities"><span >Group Feed</span></a></li><li class="links"><a class="ajax_nav" href="group.php?id=' + data.info.groupid + '&hl=about" title="Your Bio"><span >About</span></a></li><li class="links"><a class="ajax_nav" href="group.php?id=' + data.info.groupid + '&hl=member" title="Group Members"><span >Members(' + data.info.member_count + ')</span></a></li></ul></div>');
             if (data.info.priviledge == 0)
             {
                $('#left').children().eq(1).after('<div style="margin-top:0.5em;text-align:center;"><a style="color:#003399;" class="ajax_nav" href="group.php?id=' + data.info.groupid + '&hl=settings">Edit Group Settings</a></div>');
@@ -2560,7 +2569,7 @@ $('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="vi
                $('#right').prepend('<div style="clear:both;margin:1em 0em;">You are member of ' + data.info.groupname + '</div>');
                if (data.info.invite == 0 || data.info.priviledge == 1)
                {
-                  $('#right').append('<div id="friend_match" style="margin-top:1em;" class="panel panel-default"></div><div id="member_request" class="panel panel-default"></div><div class="panel-body" id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div><input type="text" id="invite_box" value="" onkeyup="ui.group_friend_invite(this)" placeholder="Add a colleague to this group" /><div style="position:relative;" id="group_friend_invite"></div>');
+                  $('#right').append('<div id="friend_match" style="margin-top:1em;" class="panel panel-default"></div><div id="member_request" class="panel panel-default"><div class="panel-body" id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div></div><div class="panel panel-default"><div class="panel-heading">Add people to this group by email</div><textarea placeholder="Paste a list of email address separated by space, comma or in new line" id="employee_invite_box" style="border:0.1em solid #aaaaaa;width:15em;height:6em;padding:0.5em;margin:1em 0.5em 1em 1em;"></textarea><input type="submit" style="margin-top:2em;" class="button" onclick="action.group_invite_email(this)" value="Invite" id="employee_invite_button" title="Invite" /></div><div class="panel panel-default"><div class="panel-heading">Add people to this group by name</div><div class="panel-body"><input type="text" id="group_invite_box" value="" onkeyup="ui.group_friend_invite(this)" placeholder="Start typing a colleague\'s name" /><div style="position:relative;" id="group_friend_invite"></div></div></div>');
                }
                $('#right').append('<div class="panel panel-default" id="group_description"><div class="panel-heading">Group Description</div><div class="panel-body">' + data.info.description + '</div></div>');
                if (data.info.link)
@@ -2829,7 +2838,7 @@ $('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="vi
          window.ajax_queue.push($.getJSON(url, param, function(data)
          {
             $(document).attr('title', data.info.eventname);
-            $('#left').html('<a class="ajax_nav" href="event.php?id=' + data.info.eventid + '"><img class="img-thumbnail" src="' + data.info.event_photo + '" /></a><div class="text-center"><a  class="ajax_nav" href="event.php?id=' + data.info.eventid + '" class="ellipsis">' + data.info.eventname + '</a></div></div><ul class=" nav nav-pills nav-stacked"><li class="links"><a class="ajax_nav" href="event.php?id=' + data.info.eventid + '" title="Event posts"><span >Event Feed</span></a></li><li class="links"><a  class="ajax_nav" id="about" href="event.php?id=' + data.info.eventid + '&hl=about" title="About the event"><span >About</span></a></li><li class="links"><a id="inbox" href="event.php?id=' + data.info.eventid + '&hl=guest" title="Guest expected"><span >Guest expected(' + data.info.guest_count + ')</span></a></li></ul>');
+            $('#left').html('<div class="panel"><div class="text-center"><a class="ajax_nav" href="event.php?id=' + data.info.eventid + '"><img class="img-thumbnail" src="' + data.info.event_photo + '" /></a></div><div class="text-center"><a  class="ajax_nav" href="event.php?id=' + data.info.eventid + '" class="ellipsis">' + data.info.eventname + '</a></div></div><ul class=" nav nav-pills nav-stacked panel-body"><li class="links"><a class="ajax_nav" href="event.php?id=' + data.info.eventid + '" title="Event posts"><span >Event Feed</span></a></li><li class="links"><a  class="ajax_nav" id="about" href="event.php?id=' + data.info.eventid + '&hl=about" title="About the event"><span >About</span></a></li><li class="links"><a id="inbox" href="event.php?id=' + data.info.eventid + '&hl=guest" title="Guest expected"><span >Guest expected(' + data.info.guest_count + ')</span></a></li></ul></div>');
             if (data.info.priviledge == 0 && data.info.cancel == 0)
             {
                $('#left').append('<div style="margin-top:2em;text-align:center;"><a style="color:#003399;" href="#" onclick="ui.event_cancel(this)">Cancel Event </a></div>');
@@ -2852,7 +2861,7 @@ $('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="vi
                $('#right').append('<div style="clear:both;margin:1em 0em;">You are going to ' + data.info.eventname + '</div>');
                if (data.info.cancel == 0 && data.info.groupid == 1)
                {
-                  $('#right').append('<div id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div><input type="text" id="invite_box" value="" onkeyup="ui.event_friend_invite(this)" placeholder="Invite a colleague to this event" /><div style="position:relative;" id="group_friend_invite"></div>');
+                  $('#right').append('<div class="panel panel-default"><div class="panel-heading"></div><div class="panel-body"><div id="group_invite_info" style="margin:0em 0em 0.8em 0em;"></div><input type="text" id="group_invite_box" value="" onkeyup="ui.event_friend_invite(this)" placeholder="Start typing a colleague\'s name" /><div style="position:relative;" id="group_friend_invite"></div></div>');
                }
             }
             else if (data.info.priviledge == 2)
@@ -3315,7 +3324,7 @@ $('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="vi
          }
          $(document).attr('title', 'Quipmate - Messages');
          $('#center').html('<div id="inbox_container"></div>');
-         $('html').css('overflow', 'hidden')
+//         $('html').css('overflow', 'hidden')
          $('#left').html('');
          $('#left').append('<h1 style="color:gray;">Messages</h1>');
          $('#left').append('<div id="show_inbox" class="mousescroll"></div>');
@@ -3656,7 +3665,7 @@ $('.video_table_body').append('<tr class="video_tr"><div class="video_in" id="vi
         $('#center').addClass('col-md-6');
         $('#right').show();
         }*/ 
-      
+      ui.adjustLayout(page);
       return false;
    }
    return {

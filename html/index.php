@@ -7,8 +7,10 @@ $college=$_SESSION['COLLEGE'];
 $database= new Database();
 $mcount = $database->unread_message_select($profileid,$college);
 ?>
-<div class="container">
+<div class="container-fluid">
   <div class="row" >
+  <div class="col-md-10">
+    <div class="row home_row left1">
     <div class="col-md-2 col-lg-2 left " id="left">
     <div class="panel panel-default">
     <div class="panel-body">
@@ -37,7 +39,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 		}
 		?>
 	  <li class="">
-		<a href="#" onclick="ui.group_create(this)"> <span class="badge pull-right"></span> Create Group</a>
+		<a href="#" data-target="#creategroupmodal" data-toggle="modal" ><span class="badge pull-right"></span>Create Group</a>
 	  </li>
 	  <li class=""><a  href="register.php?hl=group_suggest" title="Groups"><span class="badge pull-right ellipsis "></span>Browse Groups</a></li>
 	</ul>
@@ -59,7 +61,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 	}
 	?>
 	<li class="">
-		<a href="#" onclick="ui.event_create(this)"><span class="badge pull-right"></span> Create Event</a>
+		<a href="#" onclick="ui.event_create(this,event)"><span class="badge pull-right"></span> Create Event</a>
 	</li>
 
 	</ul>
@@ -93,9 +95,13 @@ $mcount = $database->unread_message_select($profileid,$college);
 			<div id="friend_invite_body" class="panel-body"></div>
 		</div>
 	</div>
-	</div>
-</div>      <!-- wrapper closed(started in this page only)-->
-
+	</div> 
+   </div>
+      <!-- wrapper closed(started in this page only)-->
+<div class="col-md-2">
 	<?php require_once('../include/footer.php'); ?>
+</div>    
+</div>
+</div>   
 </body> 
 </html>

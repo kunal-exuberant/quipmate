@@ -421,6 +421,43 @@ var callback = (function()
       $('#invite_prompt_text').append('Posted successfully in your diary !');
     }
   }
+  
+  function group_invite_email(me, data)
+  {
+    //$('#inviting').attr('id','invite_button');
+    $('#employee_invite_button').attr('value', 'Invite');
+    $('#employee_invite_box').attr('value', '');
+    $('#prompt_center').html('<div id="invite_prompt_text"></div>');    
+    if (data.ack == 1)
+    {
+      $('#prompt_heading').html('<div class="alert alert-success" role="alert">Invitation Successfull</div>');  
+    }
+	if (!(data.group_added.length == 0))
+    {
+      $('#invite_prompt_text').append('<h1 id="existing" class="invite_heading"  style="color:#000000;">People added to the group</>');
+      $.each(data.group_added, function(index, value)
+      {
+        $('#invite_prompt_text').append('<div class="show_emails" ><span style="margin-right:0.5em;color:#00ff00;" class="glyphicon glyphicon-plus"></span>' + value + '</div>');
+      });
+    }
+    if (!(data.invited.length == 0))
+    {
+      $('#invite_prompt_text').append('<h1 id="invited" class="invite_heading" style="color:#000000;">People not on Quipmate - An invitation link sent to these emails</>');
+      $.each(data.invited, function(index, value)
+      {
+        $('#invite_prompt_text').append('<div class="show_emails" ><span style="margin-right:0.5em;color:#006400;" class="glyphicon glyphicon-ok"></span>' + value + '</div>');
+      });
+    }
+    if (!(data.invalid.length == 0)) 
+    {
+      $('#invite_prompt_text').append('<h1 id="invalid" class="invite_heading" style="color:#000000;">Invalid Emails - Please check these emails for error</>');
+      $.each(data.invalid, function(index, value)
+      {
+        $('#invite_prompt_text').append('<div class="show_emails" ><span style="margin-right:0.5em;color:#ff0000;" class="glyphicon glyphicon-remove"></span>' + value + '</div>');
+      });
+    }
+    $('#promptmodal').modal('show');
+  }
 
   function employee_invite(me, data)
   {
@@ -430,31 +467,30 @@ var callback = (function()
     $('#prompt_center').html('<div id="invite_prompt_text"></div>');    
     if (data.ack == 1)
     {
-      $('#prompt_heading').html('<div class="alert alert-success" role="alert">Invitation Successfull !</div>');  
-      $('#invite_prompt_text').append('Invitation completed. Invited will recieve email having registration link .Below are the details:');
+      $('#prompt_heading').html('<div class="alert alert-success" role="alert">Invitation Successfull</div>');  
     }
     if (!(data.invited.length == 0))
     {
-      $('#invite_prompt_text').append('<h1 id="invited" class="invite_heading">People invited:</>');
+      $('#invite_prompt_text').append('<h1 id="invited" class="invite_heading" style="color:#000000">People invited - Invitation link Sent to these emails</>');
       $.each(data.invited, function(index, value)
       {
-        $('#invite_prompt_text').append('<div class="show_emails" >' + value + '</div>');
+        $('#invite_prompt_text').append('<div class="show_emails" ><span style="margin-right:0.5em;color:#006400;" class="glyphicon glyphicon-ok"></span>' + value + '</div>');
       });
     }
     if (!(data.existing.length == 0))
     {
-      $('#invite_prompt_text').append('<h1 id="existing" class="invite_heading" >Already joined Quipmate:</>');
+      $('#invite_prompt_text').append('<h1 id="existing" class="invite_heading" style="color:#000000;">Already joined Quipmate</>');
       $.each(data.existing, function(index, value)
       {
-        $('#invite_prompt_text').append('<div class="show_emails" >' + value + '</div>');
+        $('#invite_prompt_text').append('<div class="show_emails" ><span style="margin-right:0.5em;color:#00ff00;" class="glyphicon glyphicon-repeat"></span>' + value + '</div>');
       });
     }
     if (!(data.invalid.length == 0))
     {
-      $('#invite_prompt_text').append('<h1 id="invalid" class="invite_heading">Invalid Emails:</>');
+      $('#invite_prompt_text').append('<h1 id="invalid" class="invite_heading" style="color:#000000;">Invalid Emails - Please check these emails for error</>');
       $.each(data.invalid, function(index, value)
       {
-        $('#invite_prompt_text').append('<div class="show_emails" >' + value + '</div>');
+        $('#invite_prompt_text').append('<div class="show_emails" ><span style="margin-right:0.5em;color:#ff0000;" class="glyphicon glyphicon-remove"></span>' + value + '</div>');
       });
     }
     $('#promptmodal').modal('show');
@@ -1641,12 +1677,12 @@ var callback = (function()
     {
       $('#events_append').append('<li class="links"><a class="ajax_nav" href="event.php?id=' + value.eventid + '" title="Events"><span class="badge pull-right ellipsis "></span>' + value.eventname + '</a></li>');
     });
-    $('#events_append').append('<li class=""><a href="#" onclick="ui.event_create(this)" title="Create an event"><span class="badge pull-right ellipsis "></span>Create Event</a></li>');
+    $('#events_append').append('<li class=""><a href="#" onclick="ui.event_create(this,event)"><span class="badge pull-right"></span> Create Event</a></li>');
     $.each(data.group, function(index, value)
     {
       $('#groups_append').append('<li class="links"><a class="ajax_nav" href="group.php?id=' + value.groupid + '" title="Events"><span class="badge pull-right ellipsis"></span>' + value.groupname + '</a></li>');
     });
-    $('#groups_append').append('<li class=""><a href="#" onclick="ui.group_create(this)" title="Create a group for people with a specific interest"><span class="badge pull-right ellipsis "></span>Create Group</a></li><li class=""><a  href="register.php?hl=group_suggest" title="Groups"><span class="badge pull-right ellipsis "></span>Browse Groups</a></li>');
+    $('#groups_append').append('<li class=""><a href="#" data-target="#creategroupmodal" data-toggle="modal" ><span class="badge pull-right"></span>Create Group</a></li><li class=""><a  href="register.php?hl=group_suggest" title="Groups"><span class="badge pull-right ellipsis "></span>Browse Groups</a></li>');
   }
 
   function group_and_event_select_file(me, data)
@@ -1732,6 +1768,7 @@ var callback = (function()
     contact: contact,
     getanalyticdetails: getanalyticdetails,
     employee_invite: employee_invite,
+	group_invite_email:group_invite_email,
     usefullinks: usefullinks,
     usefullinks_fetch: usefullinks_fetch,
     usefullinks_load: usefullinks_load,

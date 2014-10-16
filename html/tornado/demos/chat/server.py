@@ -97,7 +97,7 @@ class Query(Database):
 
 	def online_select(self, profileid):
 		cursor = self.connect()
-		sql_query = "SELECT friend.FRIENDID,callback FROM friend inner join online ON friend.FRIENDID = online.profileid WHERE friend.PROFILEID = '%s' and online.time <> '0' " %(profileid)
+		sql_query = "SELECT friend.FRIENDID,callback FROM friend inner join online ON friend.FRIENDID = online.profileid WHERE friend.PROFILEID = '%s' and online.time <> '0' union select distinct online.profileid as friendid,online.callback from online inner join inbox on CASE WHEN inbox.actionon = '%s' then  inbox.actionby  when inbox.actionby = '%s' then inbox.actionon  end = online.profileid and online.profileid<>'%s'" %(profileid,profileid,profileid,profileid)
 		return self.query(sql_query, cursor)
 
 	def online_replace(self, profileid, time, callback=""):

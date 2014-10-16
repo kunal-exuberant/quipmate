@@ -4,6 +4,11 @@ div.mousescroll {
 div.mousescroll:hover{
     overflow-y: scroll;
 }
+.bio_top{
+padding:0em 2em 1em 2em;
+background-image:linear-gradient(to bottom, #FFFFFF 0%, #ccc 100%), linear-gradient(to bottom, #Fff 0%, #Fff 100%);
+background-clip: content-box;
+}
 .slimScrollDiv { border: 1px solid #ccc; }
 .praise_indiv{min-height:8em;clear:both;padding:1.5em;border-bottom: 1px solid #ccc;}
 .breadcrumb{
@@ -192,7 +197,7 @@ th {
     line-height: 1.1;
 }
 .left,.right{padding:0em;margin-top:5em;z-index:5;margin-right: 0.2em;}
-.right{padding-left:0.2em;padding-right:2em;}
+.right{padding-left:0.2em;/*padding-right:2em;*/}
 .center{padding:0em;margin-top:5em;/*border-left:0.1em solid #eeeeee;border-right:0.1em solid #eeeeee;*/}
 .suggest_container,.group_suggest_container,.event_suggest_container{clear:left;margin-bottom:2em;margin-top:0.5em;}
 .search_result{position:absolute;left:84.8em;top:3.3em;width:24em;height:auto;background:white;}
@@ -369,6 +374,9 @@ color:#ffffff;
 #designation_delete_button{background:#4C66A4;color:#ffffff;height:2.6em;width:5em;cursor:pointer;border: 0.1em solid #FFFFFF;font-weight:bold;}
 #invite_button{background-color:#ebebeb;color:#333333;width:5em;cursor:pointer;border: 0.1em solid #cccccc;font-weight:bold;padding:0.5em;}
 #invite_box{width:14em;padding:0.5em;margin-right:0.2em;}
+#group_invite_box{width:100%;padding:0.5em;margin-right:0.2em;}
+.guest_each{border-bottom:0.1em solid #cccccc;clear:both;min-height:5em;padding:0.5em 0em;background: #fff;}
+.guest_name{margin-left:5.4em;}
 .option_add
 {
 margin-left:2.5em;padding: 0.5em;margin-bottom:0.5em;width: 20em;
@@ -667,6 +675,7 @@ body {
     font-size: 12px !important;
     line-height: 20px;
     background:#e5e5e5;
+    overflow-x: hidden;
 }
 .white{
     background: #fff;
@@ -676,7 +685,6 @@ html {
 }
 #rtm_container {
     height: 55%;
-    overflow-y: auto; 
 	border-left:0.1em solid #cccccc;
 }
 /* --------------------------- Chat Css ----------------------------------*/

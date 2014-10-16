@@ -170,12 +170,53 @@ $relation = $newrow['RELATION'];
 
 ?>
 <div class="row">
-<div style="padding:1em 1em 1em 2em; background-image:linear-gradient(to bottom, #FFFFFF 0%, #ccc 100%), linear-gradient(to bottom, #Fff 0%, #Fff 100%);
-    background-clip: content-box, padding-box;" class="col-md-12">	
+<div class="col-md-12 bio_top">	
     <input type="hidden" value="<?php echo $profileid; ?>" />
     <input type="hidden" value="50" />
     <img id="<?php echo $profile_imageid; ?>" data="<?php echo $profile_image; ?>" class="img-thumbnail lfloat" src="thumbnail.php?file=<?php echo $profile_image; ?>&height=150&width=150" onclick="action.image_viewer(this)" />
 	<span class="bold left1"><a  href="profile.php?id=<?php echo $profileid; ?>" style="font-size:1.5em;"><?php echo $profile_name; ?></a></span>
+	<?php
+		$frnd_status = $database->check_friendship($myprofileid, $profileid);
+		if($frnd_status == 3) // own profile
+		{
+		?>
+			<div id="parent_con" style="margin-right:2em;"><div><input type="submit" value="+Mood" style="width:7.3em;" onclick="ui.mood(this)" class="profile_actions_button theme_button rfloat"></div></div>
+			<div style="margin-right:11em;"><div><input type="submit" value="+Tagline" style="width:8em;" onclick="ui.tagline(this)" class="profile_actions_button theme_button rfloat"></div></div>
+		<?php	
+		}
+		else if($frnd_status == 2) // friend profile
+		{
+		?>
+			<div><input class="profile_actions_button theme_button rfloat " onclick="ui.message(this)" style="width:7.3em;" type="submit" value="+Message" /></div>
+			<div style="margin-right:8em;"><div><span data-toggle="modal"  data-target="#praisemodalbadge"><input class="profile_actions_button theme_button rfloat" style="width:7.3em;" type="submit" value="Praise" /></span></div></div>
+			<div style="margin-right:16em;"><input class="profile_actions_button theme_button rfloat" id="<?php echo $profileid; ?>" style="width:7.3em;" type="submit" value=" Following " id="<?php echo $profileid; ?>"/></div>
+		<?php
+		}
+		else if($frnd_status == 1) //
+		{
+		?>	
+			<div><input class="profile_actions_button theme_button rfloat " onclick="ui.message(this)" style="width:7.3em;" type="submit" value="+Message" /></div>
+			<div style="margin-right:8em;"><input class="profile_actions_button theme_button rfloat" id="<?php echo $profileid; ?>" style="width:7.3em;" onclick="action.friend_accept(this,1); this.click=null;" type="submit" value=" +Follow " id="<?php echo $profileid; ?>" data="follow_back"/></div>
+			
+		<?php	
+		}
+		else if($frnd_status == -1)
+		{
+		?>	
+			<div><input class="profile_actions_button theme_button rfloat " onclick="ui.message(this)" style="width:7.3em;" type="submit" value="+Message" /></div>
+			<div style="margin-right:8em;"><input class="profile_actions_button theme_button rfloat" id="<?php echo $profileid; ?>" style="width:7.3em;" type="submit" value=" Following " id="<?php echo $profileid; ?>"/></div>
+			
+		<?php	
+		}
+		else if($frnd_status == 0)
+		{
+		?>	
+			<div><input class="profile_actions_button theme_button rfloat " onclick="ui.message(this)" style="width:7.3em;" type="submit" value="+Message" /></div>
+			<div style="margin-right:8em;"><input class="profile_actions_button theme_button rfloat" id="<?php echo $profileid; ?>" style="width:7.3em;" onclick="action.add_friend(this,<?php echo $profileid; ?>); this.click=null;" type="submit" value=" +Follow " id="<?php echo $profileid; ?>"/></div>
+			
+		<?php	
+		}
+	?>
     <div style="margin-top:6em;margin-left:14em;">
      <div><span class="glyphicon glyphicon-envelope "></span>:<a href=mailto:<?php echo $email; ?> ><?php echo $email; ?></a></div>
     <?php
@@ -195,6 +236,8 @@ $relation = $newrow['RELATION'];
 	}
 	?>
     </div>
+	
+	
 </div>
 <div class="bio_indiv_container">
 		<div class="bio_each col-md-6 panel panel-default">

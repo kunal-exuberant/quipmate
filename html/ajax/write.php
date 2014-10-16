@@ -175,6 +175,10 @@ if(isset($_SESSION['auth']) && $_SESSION['STEP'] != -1 )
 			{
 				$api->employee_invite();
 			}
+			else if($_GET['action'] == 'group_invite_email')
+			{
+				$api->group_invite_email();
+			}
 			else if($_GET['action'] == 'friend_invite')
 			{
 				$api->friend_invite();

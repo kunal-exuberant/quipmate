@@ -1258,10 +1258,22 @@ var action = (function()
   {
     param.action = 'employee_invite';
     param.email = $('#employee_invite_box').attr('value');
-    if (param.email != '')
+    if (param.email != '')ui.chat_time_show(this)
     {
       $(me).attr('value', 'Inviting');
       ajax.getJSON_ajax(url, param, me, callback.employee_invite);
+    }
+  }
+  
+  function group_invite_email(me)
+  {
+    param.action = 'group_invite_email';
+    param.email = $('#employee_invite_box').attr('value');
+	param.groupid = $('#profileid_hidden').attr('value');
+    if (param.email != '')
+    {
+      $(me).attr('value', 'Inviting');
+      ajax.getJSON_ajax(url, param, me, callback.group_invite_email);
     }
   }
 
@@ -2432,7 +2444,7 @@ var action = (function()
             var icon_cdn = $('#icon_cdn').attr('value');
             var ext = value.message.split('.').pop();
             var fileimage = icon_cdn + '/' + ext.toLowerCase() + '.ico';
-            $('#chat_'+ value.actionid+' .chat_each_message').append('<pre><img class="lfloat" src="'+fileimage+'" width="25" height="25" /><div><a href="/uploads/'+value.message+'">'+value.message+'</a></div></pre>');
+            $('#chat_'+ value.actionid+' .chat_each_message').append('<pre><img class="lfloat" src="'+fileimage+'" width="25" height="25" /><div><a  target="_blank" href="/uploads/'+value.message+'">'+value.message+'</a></div></pre>');
         }
         else
         {
@@ -2888,6 +2900,7 @@ var action = (function()
     first_loader: first_loader,
     getanalyticdetails: getanalyticdetails,
     employee_invite: employee_invite,
+	group_invite_email:group_invite_email,
     moderator_remove: moderator_remove,
     make_moderator: make_moderator,
     feature_setting_update: feature_setting_update,

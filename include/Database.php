@@ -1551,7 +1551,12 @@ LIMIT 0 , 30");
       $ret = $result->fetch_array();
       return $ret['result'];
    }
-
+   function is_online($profileid)
+   {
+      $result = $this->con->query("SELECT IF ( EXISTS (SELECT profileid FROM `online` WHERE PROFILEID= '$profileid' ),1,0 ) as result  ");
+      $ret = $result->fetch_array();
+      return $ret['result'];
+   }
    function group_fetch()
    {
       return $this->con->query("SELECT * FROM `group`   ORDER BY `groupid` ASC");
@@ -2187,7 +2192,7 @@ FROM action as A INNER JOIN (SELECT MAX(ACTIONID)  AS ACTIONID FROM action INNER
    {
       $profileid = $this->con->real_escape_string($profileid);
       $limit = $this->con->real_escape_string($limit);
-      $result = $this->con->query("SELECT PROFILEID FROM bio WHERE PROFILEID NOT IN ( SELECT FRIENDID FROM friend WHERE PROFILEID ='$profileid' UNION SELECT FRIENDID FROM friend_request WHERE PROFILEID ='$profileid') AND PROFILEID <>'$profileid' ORDER BY RAND() LIMIT $limit");
+      $result = $this->con->query("SELECT PROFILEID FROM bio WHERE PROFILEID NOT IN ( SELECT FRIENDID FROM friend WHERE PROFILEID ='$profileid' UNION SELECT PROFILEID FROM friend_request WHERE FRIENDID ='$profileid') AND PROFILEID <>'$profileid' ORDER BY RAND() LIMIT $limit");
       return $result;
    }
    function event_suggest($profileid, $limit)

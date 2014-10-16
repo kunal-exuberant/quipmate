@@ -19,8 +19,10 @@ $( "#startdate" ).datepicker();
 $( "#enddate" ).datepicker();
 });*/
 </script> 
-<div class="container">
+<div class="container-fluid">
   <div class="row" >
+  <div class="col-md-10">
+    <div class="row home_row left1">
     <div class="col-md-2 left" id="left">
       <div class="panel panel-default">
        <div class="panel-body">
@@ -76,7 +78,7 @@ $( "#enddate" ).datepicker();
 				<div class="panel-heading">Invite Employees</div>
                 <div class="panel-body">
 					<div style="margin:3em;">
-						<textarea placeholder="Paste a list of email address separated by comma" id="employee_invite_box" style="border:0.1em solid #aaaaaa;width:34.6em;height:20.2em;padding:0.5em;margin-right:0.2em;"></textarea>
+						<textarea placeholder="Paste a list of email address separated by space, comma or in new line" id="employee_invite_box" style="border:0.1em solid #aaaaaa;width:30.6em;height:20.2em;padding:0.5em;margin-right:0.2em;"></textarea>
 						<input type="submit" class="button" onclick="action.employee_invite(this)" value="Invite" id="employee_invite_button" title="Invite" />
 					</div>
             <div class="panel panel-default">        
@@ -298,9 +300,13 @@ $( "#enddate" ).datepicker();
 	?>
 	<div id="right" class="col-md-3 right">
 	</div>
-</div><!--- Row Closed-->
-</div><!--- Container Closed-->
+    </div>
+    </div>
+<div class="col-md-2">
 	<?php require_once('../include/footer.php'); ?>
+</div>  
+</div><!--- Row Closed-->
+</div><!--- Container Closed-->  
 </body> 
 </html>
 

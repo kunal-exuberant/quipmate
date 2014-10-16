@@ -4,8 +4,10 @@
 <?php
 require_once '../include/header.php';
 ?>
-<div class="container">
+<div class="container-fluid">
   <div class="row" >
+  <div class="col-md-10">
+    <div class="row home_row left1">
     <div class="col-md-2 left" id="left">
 			<a class="ajax_nav" href="page.php?id=<?php echo $profileid ?>"><img class="img-thumbnail" src="<?php echo $profile_image; ?>" /></a>
 			
@@ -68,6 +70,10 @@ require_once '../include/header.php';
 	</div>
 </div>
 </div>
+<div class="col-md-2">
 <?php require_once('../include/footer.php'); ?>
+</div>
+</div>
+</div>
 </body>
 </html>

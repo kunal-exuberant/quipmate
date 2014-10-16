@@ -68,7 +68,7 @@ $(function(){
 		{
 	?>
     
-<div class="panel-heading"><h4 class=""><?php echo $_SESSION['NAME']; ?>, Please follow some people on your network. </h4>
+<div class="panel-heading"><h4 class=""><?php echo $_SESSION['NAME']; ?>, Please follow some people on your network </h4>
 </div>
 
 	<div id="friend_suggest" class="panel-body"></div>
@@ -77,7 +77,7 @@ $(function(){
 		else if($page == 'group_suggest')
 		{
 	?>
-<div class="panel-heading"><h4 class=""><?php echo $_SESSION['NAME']; ?>, Groups you can join .</h4></div>
+<div class="panel-heading"><h4 class=""><?php echo $_SESSION['NAME']; ?>, Groups you can join </h4></div>
 	<div id="group_suggest" class="panel-body"></div>
 	<?php
 		}

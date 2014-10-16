@@ -4,8 +4,10 @@
 <?php
 require_once '../include/header.php';
 ?>
-<div class="container">
+<div class="container-fluid">
   <div class="row" >
+  <div class="col-md-10">
+    <div class="row home_row left1">
    <div class="col-md-2 left" id="left">
    <div class="panel panel-default">
     <div class="panel-body">
@@ -56,8 +58,12 @@ require_once '../include/header.php';
 
  ?>
  </div> <!---row closed -->	
-</div> <!---Container closed -->
+</div>
+<div class="col-md-2">
 <?php require_once('../include/footer.php'); ?>
+</div>
+</div>
+</div>
 </body>
 </html>
 

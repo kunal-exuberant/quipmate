@@ -101,7 +101,7 @@ $(function()
     {
         $('#right').hide();
     }
-      
+      ui.adjustLayout(page);
    });
    //Chat after windows minimised 	
    $('.friend_status_small').live('click', function()
@@ -182,56 +182,7 @@ $(function()
             }
          }
       }
-    /*###############  Make right section static when window scrolls and right content reached to its bottom#############*/
-      var winTop = $(window).scrollTop(),
-          winBottom = winTop + $(window).height(),
-          right = $('#right'),
-          rightBottom = right.height();
-      var leftwidth = $('.left').width();
-      var centerwidth = $('.center').width();
-      //when the user reached the bottom of '#right' set its position to fixed 
-      //to prevent it from moving on scroll 
-    if(page != 'bio' || page != 'file' || page != 'group_file' || page != 'event_file' || page != 'video' || page != 'group_video' || page != 'event_video')
-    {
-      if (winBottom >= rightBottom)
-      {
-         right.css(
-         {
-            'position': 'fixed',
-            'padding-right': '5em',
-            'margin-left': '' + (centerwidth + leftwidth+4) + 'px'
-         });
-         if (rightBottom > $(window).height()) // ($(window).height()-$('.navbar').height()))
-         {
-            right.css(
-            {
-               'bottom': '0px',
-               'top': ''
-            });
-         }
-         else
-         {
-            right.css(
-            {
-               'bottom': '',
-               'top': '0px'
-            });
-         }
-      }
-      else
-      {
-         //when the user scrolls back up revert its position to relative
-         // to make it move up together with '#right'
-         right.css(
-         {
-            'position': 'absolute',
-            'bottom': 'auto',
-            'margin-left': '' + (centerwidth + leftwidth+4) + 'px',
-            'padding-right': '5em',
-         });
-      } 
-     } 
-      /*#######################################################################################*/
+   ui.adjustLayout(page);
    });
    var rtm_load = true;
    var start = 0;

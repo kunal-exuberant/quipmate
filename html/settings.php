@@ -8,8 +8,10 @@ $help = new Help();
 $database = new Database();
 $myprofileid = $_SESSION['userid'];
 ?>
-<div class="container">
+<div class="container-fluid">
   <div class="row" >
+  <div class="col-md-10">
+    <div class="row home_row left1">
     <div class="col-md-2 left" id="left">
     <div class="panel panel-default">
     <div class="panel-body">
@@ -41,10 +43,6 @@ $myprofileid = $_SESSION['userid'];
 				<span class="setting_category_name"> New follower:</span>
 				<?php $help->setting_checkbox('friend_request', $row['friend_request']); ?>
 			</div>	
-			<div class="setting_each bgcolor">
-				<span class="setting_category_name"> Miss U:</span>
-				<?php $help->setting_checkbox('missu', $row['missu']); ?>
-			</div>
 			<div class="setting_each">
 				<span class="setting_category_name"> Posts on your profile:</span>
 				<?php $help->setting_checkbox('profile_post', $row['profile_post']); ?>
@@ -80,10 +78,6 @@ $myprofileid = $_SESSION['userid'];
 			<div class="setting_each">
 				<span class="setting_category_name"> Response on your post:</span>
 				<?php $help->setting_checkbox('post_response', $row['post_response']); ?>
-			</div>
-			<div class="setting_each bgcolor">
-				<span class="setting_category_name">Someone sends you a gift:</span>
-				<?php $help->setting_checkbox('gift', $row['gift']); ?>
 			</div>	
 			<div class="setting_each">
 				<span class="setting_category_name"> You are made admin of a group:</span>
@@ -93,10 +87,6 @@ $myprofileid = $_SESSION['userid'];
 				<span class="setting_category_name"> You are praised :</span>
 				<?php $help->setting_checkbox('praise', $row['praise']); ?>
 			</div>	
-			<div class="setting_each">
-				<span class="setting_category_name"> Some one sends you a direct letter:</span>
-				<?php $help->setting_checkbox('direct_letter', $row['direct_letter']); ?>
-			</div>
 			<div class="setting_each bgcolor">
 				<span class="setting_category_name"> Somebody answers your question:</span>
 				<?php $help->setting_checkbox('answer', $row['answer']); ?>
@@ -118,10 +108,6 @@ $myprofileid = $_SESSION['userid'];
 				<span class="setting_category_name"> New follower:</span>
 				<?php $help->setting_checkbox('friend_request', $row['friend_request'],0); ?>
 			</div>	
-			<div class="setting_each bgcolor">
-				<span class="setting_category_name"> Miss U:</span>
-				<?php $help->setting_checkbox('missu', $row['missu'],0); ?>
-			</div>
 			<div class="setting_each">
 				<span class="setting_category_name">Posts on your profile:</span>
 				<?php $help->setting_checkbox('profile_post', $row['profile_post'],0); ?>
@@ -158,10 +144,6 @@ $myprofileid = $_SESSION['userid'];
 				<span class="setting_category_name"> Response on your post:</span>
 				<?php $help->setting_checkbox('post_response', $row['post_response'],0); ?>
 			</div>
-			<div class="setting_each bgcolor">
-				<span class="setting_category_name"> Someone sends you a gift:</span>
-				<?php $help->setting_checkbox('gift', $row['gift'],0); ?>
-			</div>	
 			<div class="setting_each">
 				<span class="setting_category_name"> You are made admin of a group:</span>
 				<?php $help->setting_checkbox('group_admin', $row['group_admin'],0); ?>
@@ -170,10 +152,6 @@ $myprofileid = $_SESSION['userid'];
 				<span class="setting_category_name"> You are praised :</span>
 				<?php $help->setting_checkbox('praise', $row['praise'],0); ?>
 			</div>	
-			<div class="setting_each">
-				<span class="setting_category_name"> Some one sends you a direct letter:</span>
-				<?php $help->setting_checkbox('direct_letter', $row['direct_letter'],0); ?>
-			</div>
 			<div class="setting_each bgcolor">
 				<span class="setting_category_name"> Somebody answers your question:</span>
 				<?php $help->setting_checkbox('answer', $row['answer'],0); ?>
@@ -239,7 +217,11 @@ $myprofileid = $_SESSION['userid'];
 	</div>
 </div>	
 </div>
-<?php require_once('../include/footer.php'); ?>	
+<div class="col-md-2">
+<?php require_once('../include/footer.php'); ?>
+</div>
+</div>
+</div>	
 </body>
 </html>
 
