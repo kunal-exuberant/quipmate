@@ -1631,7 +1631,7 @@ var callback = (function()
       }
       if (data.action.length > 0)
       {
-        $('#friend_event').prepend('<div class="panel-heading">Upcoming Events<span onclick="action.see_all_birthday(this)" style="float:right;cursor:pointer;font-size:.8em;margin:0.3em 1.5em 0 0;color:#336688;">More</span></div>');
+        $('#friend_event').prepend('<div class="panel-heading">Upcoming Events<span onclick="action.see_all_birthday(this)" class="upcoming_more">More</span></div>');
       }
       else
       {

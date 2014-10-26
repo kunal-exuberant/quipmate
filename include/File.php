@@ -15,7 +15,7 @@ class File
 		<link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'bootstrap.min-1.0.css'; ?>" charset="utf-8"/>
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'jquery-ui.css'; ?>" charset="utf-8"/>
-        <link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'boot-2.1.css'; ?>" charset="utf-8"/>
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->style_cdn.'boot-2.2.css'; ?>" charset="utf-8"/>
 		
 	<?php	
 	} 
@@ -45,9 +45,9 @@ class File
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'action-3.1.js'; ?>" charset="utf-8"></script>
             <script type="text/javascript" src="<?php echo $this->script_cdn.'ajax-1.0.js'; ?>" charset="utf-8"></script>
             <script type="text/javascript" src="<?php echo $this->script_cdn.'feed-2.8.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'callback-3.0.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'ui-3.0.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'deploy-3.3.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'callback-3.1.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'ui-3.1.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'deploy-3.4.js'; ?>" charset="utf-8"></script>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'jquery.form.min.js'; ?>" charset="utf-8"></script>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'eigonFGtEeONACIACqoGtw.js'; ?>" charset="utf-8"></script>
             <script type="text/javascript" src="<?php echo $this->script_cdn.'jquery-ui-1.10.4.min.js'; ?>" charset="utf-8"></script>
@@ -62,7 +62,7 @@ class File
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'jquery-1.8.2.min.js'; ?>" charset="utf-8"></script>
             <script type="text/javascript" src="<?php echo $this->script_cdn.'bootstrap.min.js'; ?>" charset="utf-8"></script>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'action-3.1.js'; ?>" charset="utf-8"></script>
-			<script type="text/javascript" src="<?php echo $this->script_cdn.'callback-3.0.js'; ?>" charset="utf-8"></script>
+			<script type="text/javascript" src="<?php echo $this->script_cdn.'callback-3.1.js'; ?>" charset="utf-8"></script>
 			<script type="text/javascript" src="<?php echo $this->script_cdn.'ajax-1.0.js'; ?>" charset="utf-8"></script>
             <script type="text/javascript" src="<?php echo $this->script_cdn.'welcome.js'; ?>" charset="utf-8"></script>
             <script type="text/javascript" src="<?php echo $this->script_cdn.'jquery.form.min.js'; ?>" charset="utf-8"></script>	

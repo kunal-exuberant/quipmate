@@ -26,7 +26,7 @@ var ui = (function()
          //	action.friend_fetch();
          var profileid = $('#profileid_hidden').attr('value');
          var groupid = profileid;
-         action.doc_load(this, groupid);
+        // action.doc_load(this, groupid);
       }
       else if (page == 'page_json' || page == 'Followers' || page == 'page_about' || page == 'page_settings')
       {
@@ -1931,6 +1931,10 @@ var ui = (function()
    }
    function adjustLayout(page)
    {
+    //Do Nothing
+   }
+   function adjustLayout_Old(page)
+   {
       /*###############  Make right section static when window scrolls and right content reached to its bottom#############*/
       var winTop = $(window).scrollTop(),
           winBottom = winTop + $(window).height(),
@@ -1967,18 +1971,19 @@ var ui = (function()
             });
          }
       }
-      else
-      {
-         //when the user scrolls back up revert its position to relative
-         // to make it move up together with '#right'
-         right.css(
-         {
-            'position': 'absolute',
-            'bottom': 'auto',
-            'margin-left': '' + (centerwidth + leftwidth+4) + 'px',
-            'padding-right': '0em',
-         });
-      } 
+       else
+       {
+          //when the user scrolls back up revert its position to relative
+          // to make it move up together with '#right'
+          right.css(
+          {
+             'position': 'absolute',
+             'bottom': 'auto',
+             'margin-left': '' + (centerwidth + leftwidth+4) + 'px',
+             'padding-right': '0em',
+          });
+       } 
+
      } 
       /*#######################################################################################*/
    }

@@ -13,7 +13,7 @@ $mcount = $database->unread_message_select($profileid,$college);
     <div class="row home_row left1">
     <div class="col-md-2 col-lg-2 left " id="left">
     <div class="panel panel-default">
-    <div class="panel-body">
+    <div class="panel-body left_option">
 	<ul  class=" nav nav-pills nav-stacked ">  
 		<li ><a class="links ajax_nav<?php if($page=='news_json') echo ' selected'; ?>" id="news_json" href="?hl=update" title="Updates from your followings"><span >News Feed</span></a></li>
 		<!--<li ><a class="ajax_nav<?php// if($page=='tech_json') echo ' selected'; ?>" id="tech_json" href="?hl=technical" title="Feed from all technical groups that you have joined"><span >Technical Feed</span></a></li>-->
@@ -25,7 +25,7 @@ $mcount = $database->unread_message_select($profileid,$college);
     </div>
 	<div class="panel panel-default">
 	<div class="panel-heading">Groups</div>
-    <div class="panel-body">
+    <div class="panel-body left_option">
 	<ul class="nav nav-pills nav-stacked">
 		<?php						
 		$result = $database->mygroup_select($myprofileid);
@@ -47,7 +47,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 	</div>					
 	<div class="panel panel-default">
 	<div class="panel-heading">Events</div>
-    <div class="panel-body">
+    <div class="panel-body left_option">
 	<ul class="nav nav-pills nav-stacked">
 		<?php
 	$result = $database->myevent_select($myprofileid,time());
@@ -67,7 +67,7 @@ $mcount = $database->unread_message_select($profileid,$college);
 	</ul>
     </div>
 	</div>
-	<div id="friend_event" class="panel panel-default"><div id="friend_event_body" class="panel-body"></div></div>
+	<div id="friend_event" class="panel panel-default"><div id="friend_event_body" class="panel-body left_option"></div></div>
 	<div style="margin-top:1em;padding-top:.5em;border-top:.1em solid #cccccc;">
 		<a href="#" target="_blank"><small>&copy; Quipmate</small></a><span class="separator">|</span>
 		<a href="public/help.php" target="_blank"><small>Help</small></a><span class="separator">|</span>

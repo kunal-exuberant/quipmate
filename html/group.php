@@ -39,11 +39,11 @@ require_once '../include/header.php';
 			if($page == 'group_about')
 			{
 				echo '<div id="center" class="col-md-6 center" >';
-				echo '<div style="padding:1em;font-size:1.6em;font-weight:bold">'.$profile_name.'</div>';
-				echo '<div style="padding:1em;font-size:1.4em;">'.$n['description'].'</div>';
+				echo '<div class="panel panel-default"><div class="panel-heading">About this group</div><div class="panel-body"><h4 class="bold">'.$profile_name.'</h4>';
+				echo '<div><h6>'.$n['description'].'</h6></div>';
 				$row = $database->get_name($n['createdby']);
-				echo '<div style="padding:1em;font-size:1.3em;">';?>
-				<a style="font-size:1em;" href="profile.php?id=<?php echo $n['createdby']; ?>"> <?php echo $row['NAME']; ?></a> created this group</div></div>
+				echo '<div><h6>';?>
+				<a style="font-size:1em;" href="profile.php?id=<?php echo $n['createdby']; ?>"> <?php echo $row['NAME']; ?></a> created this group</div></h6></div>
 				<?php
 			}
 			else if($page == 'group_json')
@@ -54,48 +54,58 @@ require_once '../include/header.php';
 			}
 			else if($page == 'group_settings')
 			{
-				echo '<div id="center" class="col-md-6 center"><div class="text-center">';
+				echo '<div id="center" class="col-md-6 center">';
 				?>
-				<h1 class="page_title">Group Settings</h1>
+                <div class="panel panel-default">
+				<div class="panel-heading">Group Settings</div>
+                <div class="panel-body">
 					<div id="group_info"></div>
-					<div>
-						<span style="margin:1em 0em;padding:0.5em;">Group Name :</span>
-						<span style="margin:1em 0em;padding:0.5em;"><?php echo $n['name']; ?></span>
+					<div ><h4 class="bold"><?php echo $n['name']; ?></h4>
+					</div>
+					<div class="form-group" >
+						<textarea class="form-control" id="group_description" ><?php echo $n['description']; ?></textarea>
 					</div>
 					<div>
-						<textarea style="margin: 1em 0em;padding:0.5em;" id="group_description" placeholder="What is this group about ?"><?php echo $n['description']; ?></textarea>
+						<div class="form-group">
+                            <label>Privacy:</label> 
+                            <select id="group_privacy" class="form-control">
+                            <option <?php if($n['visible'] == 0) echo 'selected'; ?> value="0">Public</option>
+                            <option <?php if($n['visible'] == 1) echo 'selected'; ?> value="1">Private</option>
+                            </select>
+                        </div>
+						<?php if($n['technical'] == 1) echo '<div class="form-group" ><h5>This group is for technical discussions</h5></div>'; ?>
 					</div>
-					<div>
-						<div style="margin:1em 0em;">Privacy: <select id="group_privacy"><option <?php if($n['visible'] == 0) echo 'selected'; ?> value="0">Public</option><option <?php if($n['visible'] == 1) echo 'selected'; ?> value="1">Private</option></select></div>
-						<?php if($n['technical'] == 1) echo '<div style="margin:1em 0em">This group is for technical discussions</div>'; ?>
-					</div>
-					<div>
-						<textarea style="margin: 1em 0em;padding:0.5em;" id="group_link" placeholder="Relevant links"><?php echo $n['link']; ?></textarea>
+					<div class="form-group">
+						<textarea class="form-control" id="group_link" placeholder="Relevant links"><?php echo $n['link']; ?></textarea>
 					</div>
 					<?php 
 					if($n['invite'] == 1)
 					{
 					?>
-					<div style="margin:1em 0em"><input type="checkbox" id="group_invite" checked> Only group admin can add or approve membership requests</div>
+					<div class="form-group">
+                    <label><input type="checkbox" id="group_invite" checked> Only group admin can add or approve membership requests
+                    </label>
+                    </div>
 					<?php 
 					}
 					else
 					{
 					?>
-					<div style="margin:1em 0em"><input type="checkbox" id="group_invite"> Only group admin can add or approve membership requests</div>
+					<div class="form-group">
+                    <label>
+                    <input type="checkbox" id="group_invite"> Only group admin can add or approve membership requests
+                    </label>
+                    </div>
 					<?php 					
 					}
 					?>
-					<div class="group_create_button">
-						<input style="margin:0em 1em" type="submit" onclick="action.group_settings_save(this)" value="Save" class="group_create_positive">
+					<div class="form-group">
+						<button onclick="action.group_settings_save(this)" class="btn btn-primary">Save</button>
 					</div>
-					
-					<h1 class="page_title">Attach Document</h1><form id="flashform" method="post" enctype="multipart/form-data" action="/ajax/write.php"><textarea style="border:1px solid #cccccc;height:2.7em;padding:0.5em;margin:0.5em;width:34.6em;margin-left:3em;" type="text" placeholder="Say something about this file" maxlength="200" id="photo_description" name="doc_description"></textarea><div id="vish_Btn" style="position: relative;top: 10px;font-family: calibri;width: 180px;height:100px;padding-top:35px;-webkit-border-radius: 5px;-moz-border-radius: 5px;border: 1px dashed #BBB; text-align: center;background-color:#DDD;cursor:pointer; margin-left:18em;">Upload Document</div><input type="file" id="html_btn" size="40" style="margin-top:-20px; margin-left:95px; display:none;" name="doc"/></br><input type="submit" name="upload" id="flash_upload_button" class="imgshow"  value="Upload" style="margin-left:3em;"><img src="https://372a66a66bee4b5f4c15-ab04d5978fd374d95bde5ab402b5a60b.ssl.cf2.rackcdn.com/upload.gif" class="imghide"  id="uploading"/><input type="hidden" name="action" value="group_pinned_doc_upload"><input type="hidden" name="doc_hidden_profileid" value="<?php echo $profileid ?>"></form>
-					
-					
-					
-				<?php
-				echo '</div></div>';
+                </div>	
+              </div>   
+              </div> <!-- Center Closed !!! -->   
+           <?php
 			}
 			else
 			{

@@ -58,8 +58,10 @@ $(function(){
 </script>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
   <div class="row" >
+  <div class="col-md-10">
+    <div class="row home_row left1">
 	<div class="col-xs-6 col-md-2 " id="left"></div>
 	<div id="center" class="col-md-6 center top7">
  <div class="panel panel-default">
@@ -104,7 +106,11 @@ $(function(){
 	</div>
 </div>
 </div>
+<div class="col-md-2">
 <input type="hidden" id="step_hidden" value="<?php echo $_SESSION['STEP']; ?>"/>
 <?php require_once('../include/footer.php'); ?>
+</div>
+</div>
+</div>
 </body>
 </html>
