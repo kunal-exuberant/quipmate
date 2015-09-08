@@ -1,0 +1,23 @@
+<!Doctype>
+<html>
+<head>
+<title> Welcome To Tornaodo Chat </title>
+</head>
+<body>
+	<div id="login_container">
+	     <form action="/login_submit" method="post">	
+		     <div id="email_container">
+	  		   <input type="email" name="email_box" placeholder="Email"/>	
+		     </div>
+		     <div id="password_container">
+	  		   <input type="password" name="password_box"  placeholder="Password"/>	
+		     </div>
+	  		   <input type="hidden" name="source"  value="web"/>	
+		     <div id="login_button_container">
+	  		   <input type="submit" value="Login"/>	
+		     </div>
+                    {{ xsrf_form_html() }}
+             </form>
+        </div>
+</body>
+</html>
